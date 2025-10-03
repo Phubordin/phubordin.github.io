@@ -29,6 +29,20 @@ const certificates = [
         certificateLink: "https://www.skooldio.com/certificate/b2d8f435-7e96-46e9-a85f-6dc066d83f0e"
     },
     
+    // 13. Exploratory Data Analysis with Excel
+    {
+        id: 13,
+        image: "certificate-excel-skooldio.webp",
+        title: "Exploratory Data Analysis with Excel",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "transform data, analyze data, visualize data, ฟังก์ชันต่างๆที่ใช้สำหรับวิเคราะห์ข้อมูล รวมถึง stats เบื้องต้น, การกระจายตัว มีการทำโปรเจกต์เพื่อหาว่าโพสต์แบบนี้เป็นโพสต์ของใครโดยเอาข้อมูล 2 เพจมาวิเคราะห์เชิงสำรวจ ดูเพิ่มได้ที่ notion นะครับ",
+        notionLink: "https://www.notion.so/second-brain-phubordin/Exploratory-Data-Analysis-with-Excel-ce575bebc1544b04bc1391dc6c3e7a63?source=copy_link",
+        cost: "฿2,990 ($88)",
+        costlink: "https://www.skooldio.com/courses/eda-excel",
+        certificateLink: "https://www.skooldio.com/certificate/df89e17f-455a-43ad-9cc6-fbac091e0fcb"
+    },
+    
     // 12. Data Analytics Program by W3School
     {
         id: 12,
@@ -248,7 +262,7 @@ function populateSchoolSelector() {
     if (!schoolSelector) return;
 
     const schools = [...new Set(certificates.map(cert => cert.school))];
-    schoolSelector.innerHTML = '<option value="all">All Schools</option>';
+    schoolSelector.innerHTML = '<option value="all">All Schools (Update : Oct 2025)</option>';
     schools.forEach(school => {
         const option = document.createElement('option');
         option.value = school;
