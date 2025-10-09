@@ -15,18 +15,18 @@ const certificates = [
         certificateLink: "https://api.badgr.io/public/assertions/99CX-fsTQ02SPkihaDTINQ?identity__email=poorider02%40gmail.com"
     },
     
-    // 2. Intro to Data Science
+    // 14last. SQL for Data Analytics
     {
-        id: 2,
-        image: "certificate-Intro-to-data-science-skoodio.webp",
-        title: "Intro to Data Science",
+        id: 14,
+        image: "certificate-sql-da-skooldio.webp",
+        title: "SQL for Data Analytics",
         school: "Skooldio",
         schoolLink: "https://www.skooldio.com/",
-        description: "โลกของ Data Science, ศึกษากรณีตัวอย่างเพื่อใช้ข้อมูลขับเคลื่อนธุรกิจ, ศึกษา metric framework tools ต่างๆเพื่อใช้วัดผลเชิงธุรกิจ (Click-through Rate, Conversion Rate, AARRR!, A/B Testing), กระบวนการทำงาน Data Science(7 steps), การทำ Data Product อ่านต่อเพื่มได้ที่ notion นะครับ",
-        notionLink: "https://second-brain-phubordin.notion.site/Intro-to-Data-Science-1aa2ea218a15805fa846c84d26145085?pvs=4",
-        cost: "฿1,490 ($44)",
-        costlink: "https://www.skooldio.com/courses/data-science-01",
-        certificateLink: "https://www.skooldio.com/certificate/b2d8f435-7e96-46e9-a85f-6dc066d83f0e"
+        description: "จากการเรียน SQL for Data Analytics 1) พื้นฐาน SQL สำหรับดึงข้อมูล (SELECT, WHERE, ORDER BY) 2) การแปลงข้อมูลด้วยฟังก์ชันคณิตศาสตร์ วันที่และข้อความ 3) การรวมกลุ่มและวิเคราะห์ข้อมูล (GROUP BY, HAVING, Aggregate functions) 4) การเชื่อมตารางเพื่อรวมข้อมูลจากหลายแหล่ง (JOIN, Subqueries) ดูเพิ่มได้ที่ notion นะครับ",
+        notionLink: "https://www.notion.so/second-brain-phubordin/SQL-for-Data-Analytics-f779565d864c4b8abcf09b1e2e86cd92?source=copy_link",
+        cost: "฿2,990 ($88)",
+        costlink: "https://www.skooldio.com/courses/sql-data-analytics",
+        certificateLink: "https://www.skooldio.com/certificate/5d520564-764e-492f-a6a8-4fb38b395fbb"
     },
     
     // 13. Exploratory Data Analysis with Excel
@@ -41,6 +41,20 @@ const certificates = [
         cost: "฿2,990 ($88)",
         costlink: "https://www.skooldio.com/courses/eda-excel",
         certificateLink: "https://www.skooldio.com/certificate/df89e17f-455a-43ad-9cc6-fbac091e0fcb"
+    },
+    
+    // 2. Intro to Data Science
+    {
+        id: 2,
+        image: "certificate-Intro-to-data-science-skoodio.webp",
+        title: "Intro to Data Science",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "โลกของ Data Science, ศึกษากรณีตัวอย่างเพื่อใช้ข้อมูลขับเคลื่อนธุรกิจ, ศึกษา metric framework tools ต่างๆเพื่อใช้วัดผลเชิงธุรกิจ (Click-through Rate, Conversion Rate, AARRR!, A/B Testing), กระบวนการทำงาน Data Science(7 steps), การทำ Data Product อ่านต่อเพื่มได้ที่ notion นะครับ",
+        notionLink: "https://second-brain-phubordin.notion.site/Intro-to-Data-Science-1aa2ea218a15805fa846c84d26145085?pvs=4",
+        cost: "฿1,490 ($44)",
+        costlink: "https://www.skooldio.com/courses/data-science-01",
+        certificateLink: "https://www.skooldio.com/certificate/b2d8f435-7e96-46e9-a85f-6dc066d83f0e"
     },
     
     // 12. Data Analytics Program by W3School
