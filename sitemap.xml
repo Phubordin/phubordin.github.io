@@ -1,9 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <!-- index -->
   <url>
     <loc>https://phubordin.github.io/</loc>
     <lastmod>2025-10-12</lastmod>
     <priority>1.0</priority>
+  </url>
+  <!-- home -->
+  <url>
+    <loc>https://phubordin.github.io/home.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- about -->
+  <url>
+    <loc>https://phubordin.github.io/about.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- experience -->
+  <url>
+    <loc>https://phubordin.github.io/experience.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- experience_leowood -->
+  <url>
+    <loc>https://phubordin.github.io/experience_leowood.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project -->
+  <url>
+    <loc>https://phubordin.github.io/project.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_ggsheet_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_ggsheet_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_cafe_r_sql_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_cafe_r_sql_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_rfm_py_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_rfm_py_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_pyc_r_py_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_pyc_r_py_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_nycflight13_23_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_nycflight13_23_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_vizdimond_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_vizdimond_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_titanic_glm_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_titanic_glm_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_looker_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_looker_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_pizza_chatbot_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_pizza_chatbot_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_atm_oop_py_dsb10 -->
+  <url>
+    <loc>https://phubordin.github.io/project_atm_oop_py_dsb10.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_mini_api_py -->
+  <url>
+    <loc>https://phubordin.github.io/project_mini_api_py.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- project_mini_xml_cafe -->
+  <url>
+    <loc>https://phubordin.github.io/project_mini_xml_cafe.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- certificate -->
+  <url>
+    <loc>https://phubordin.github.io/certificate.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- contact -->
+  <url>
+    <loc>https://phubordin.github.io/contact.html</loc>
+    <lastmod>2025-10-12</lastmod>
+    <priority>0.8</priority>
   </url>
 </urlset>
