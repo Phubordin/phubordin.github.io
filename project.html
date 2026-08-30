@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,292 +29,606 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project ที่ใช้เครื่องมือในการวิเคราะห์ข้อมูล R, Python, SQL, Looker Studio, Google Sheets อื่นๆเชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list"></ul>
-</aside>
-
-<body class="fade-slide-in project-page">
+<body class="fade-slide-in project-page" data-toc="flat">
     <header>
         <div class="header-background"></div>
-        <span class= "link-cursor strong1">Projec Overview</span>
+        <span class= "link-cursor strong1">Project Overview</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"> SQL</a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img
-                                src="python.png" style="vertical-align:middle" width="25"> Python</a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-            <nav aria-label="เมนูมือถือ">
-                <ul>
-                    <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                    <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                    <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                    <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                    <!-- Work Experience Dropdown -->
-                    <li class="dropdown">
-                        <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                        <ul class="dropdown-menu">
-                            <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                        </ul>
-                    </li>
-
-                    <!-- Projects Dropdown -->
-                    <li class="dropdown">
-                        <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                        <ul class="dropdown-menu">
-                            <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                    <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                            <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                                    Using <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                        style="vertical-align:middle" width="25"> SQL</a></li>
-                            <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                    <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                        style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                            <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                    Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img
-                                        src="python.png" style="vertical-align:middle" width="25"> Python</a></li>
-                            <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                    Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                            </li>
-                            <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                    Using <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                            <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R R</a></li>
-                            <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                    Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                    Studio</a></li>
-                            <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                    Business Using <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                            </li>
-                            <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                    Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                                    OOP</a></li>
-                            <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                        src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                                    Analytics</a></li>
-                            <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                        src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                    <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-    
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section1">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents <span
             class="text-description link-cursor">(⭐️ Recommended)</span></p>
-            <div id="toc-marker"></div>
+
             <div id="toc-section1"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
         </section>
-    
-    <!-- P1 -->
-    <section id="name-project1">
-        <h2 class="link-cursor">P1 : Data Exploration and Transformation with <img src="sheets.png"
-                style="vertical-align:middle" width="25"> Google Sheets</h2>
+
+    <!-- P13 -->
+    <section id="name-project13">
+        <h2 class="link-cursor">⭐️ P13 : Pokemon Card - Skooldio Project</h2>
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            ใช้เครื่องมือใน Google Sheets จัดการและสำรวจข้อมูลตัวอย่างพนักงานจากบริษัทแห่งหนึ่ง
+            Pokemom Card มือใหม่อยากเก็บสะสมการ์ดโปเกมอน ควรพิจารณาเรื่องไหนบ้าง ไปดู..
         </p>
-        <ul class="link-cursor">
-            <li><code class="inline-code">Filter()</code>, <code class="inline-code">Sort()</code>, Dropdown List แบบ
-                Dynamic</li>
-            <li><mark>Highlight Conditional Formatting</mark>โดยที่ Highlight 4 รูปแบบตามเงื่อนไข</li>
-            <li>Dymamic Query ใช้ฟังก์ชัน <code class="inline-code">Query()</code> ในการ filter ข้อมูลพนักงาน</li>
-            <li><code class="inline-code">VLOOKUP()</code> ใช้ return ข้อมูลพนักงานเพิ่มเติมจากอีก Table</li>
-            <li>Convert Date แปลงวันที่ภาษาไทยเป็นวันที่มาตรฐานสากล ISO <code class="inline-code">yyyy-mm-dd</code></li>
-            <li>
-                Regular Expression ใช้ฟังก์ชัน <code class="inline-code">REGEXEXTRACT()</code> กับ <code
-                    class="inline-code">REGEXMATCH()</code>
-                หา Pattern ของข้อมูลพนักงาน เช่น Email, Phone Number, ID Card ต่างๆเพื่อที่จะตรวจสอลว่ามีหรือไม่มี
-                หรือเพื่อดึงข้อมูลที่ต้องการออกมา....<img
+        <div class="corner-text" onclick="go('p13_pokemon_card.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P12 -->
+    <section id="name-project12">
+        <h2 class="link-cursor">Mini P12 : Cafe Menu Data Structure with <img src="xml.png"
+                style="vertical-align:middle" width="25"> XML
+        </h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            สำหรับโปรเจกต์นี้ผมจะมาลองสร้างเมนูอาหารต่างๆ ด้วยภาษา XML ง่ายๆ ซึ่งภาษา XML ไว้ใช้แลกเปลี่ยน/เก็บข้อมูลคุยกันระหว่างคอมพิวเตอร์ เชิญรับชมได้เลยครับ....<img
                 src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b><mark> Raw XML Code ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p12-xml-code.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p12-xml-code.gif')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_mini_xml_cafe.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P11 -->
+    <section id="name-project11">
+        <h2 class="link-cursor">Mini P11 : Extracting Public API Data with <img src="python.png"
+                style="vertical-align:middle" width="25"> Python: Air Quality Analytics</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            สำหรับโปรเจกต์นี้ผมจะดึงข้อมูล API PUBLIC ของ Open-Meteo
+            ข้อมูลที่จะดึงคือคุณภาพอากาศฝุ่น PM10 และ PM2.5 ที่กรุงเทพมหานคร ประเทศไทย ย้อนหลัง 90 วันรายชั่วโมงเก็บอยู่ในรูปตารางและไว้ในไฟล์ Excel สามารถรับชมได้ครับ....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b><mark> กำหนดพิกัดละติจูด (latitude) และลองจิจูด (longitude) ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p11-lad-log.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p11-lad-log.png')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b><mark> Coding : Retrieve Data for the Past 90 Days ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p11-code-process.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p11-code-process.png')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_mini_api_py.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P10 -->
+    <section id="name-project10">
+        <h2 class="link-cursor">P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"
+                style="vertical-align:middle" width="25"> Python OOP</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            เขียน Python<mark>Object-Oriented Programming (OOP)</mark> สร้างระบบ ATM ที่สามารถจำลองธุรกรรมทางการเงิน โดยมี ชื่อผู้ใช้ (name), ธนาคาร (bank), ยอดเงินคงเหลือ (balance), และ รายการธุรกรรม (statement)
+            ผมจำลองถอนเงิน (withdraw), ชำระบิล (paybills), และ ฝากเงิน (deposit) และบันทึกธุรกรรมทั้งหมดอยู่ในรูป dict พร้อมแปลงเป็น Dataframe ด้วย Pandas เพื่อนำไปวิเคราะห์ต่อได้....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b><mark> Simulate Transactions ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p10-simulate-transactions.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-simulate-transactions.png')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b><mark> Convert into Dataframe ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p10-convert-dataframe.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-convert-dataframe.png')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b><mark> Verify Transactions ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p10-verify-balance.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-verify-balance.png')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_atm_oop_py_dsb10.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P9 -->
+    <section id="name-project9">
+        <h2 class="link-cursor">P9 : Chatbot Development for a Pizza Business Using <img src="R.png"
+                style="vertical-align:middle" width="25"> R Programming</h2>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            โปรเจกต์นี้จะ<mark>สร้าง Chatbot ง่ายๆ สำหรับร้านพิซซ่า โดยใช้ R Programming</mark> เน้นทบกวน Workflow (while loop, if-else)
+            เป็นหลัก มี 15 เมนูหลากหลายให้เลือก เช่น pizza, เครื่องดื่ม, ของหวาน รวมถึง Scenario ทั้งหมดที่เป็นไปได้
+            เช่น ดูเมนู (<code class="inline-code">menu</code>), เช็คของในตระกร้าพร้อมเช็คบิล (<code class="inline-code">check</code>), ล้างตระกร้า (<code class="inline-code">reorder</code>), หยุดการสั่งซื้อ (<code class="inline-code">stop</code>)....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b><mark> Workflow ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p9-work-flow.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p9-work-flow.gif')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b><mark> Chatbot ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p9-simulate-order.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p9-simulate-order.gif')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_pizza_chatbot_dsb10.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P8 -->
+    <section id="name-project8">
+        <h2 class="link-cursor">⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"
+                style="vertical-align:middle" width="25">Looker Studio</h2>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            โปรเจกต์นี้เป็นการสร้าง Dashboard ด้วย Looker Studio จากชุดข้อมูลจำลองการขายของ USA-Superstore ที่มาจาก Tableau Public นะครับ
+            ผมจะนำไปสร้าง Dashboard 3 Page โดยแต่ละ Page จะมีจุดประสงค์ในการสำรวจที่แตกต่างกัน โดยแบ่งเป็น 3 pages ครับ
+        </p>
+
+        <ol>
+            <li class="link-cursor">🔥 Product Sales : ดูสินค้าที่ขายเป็นหลัก เช่น Top-Sell สินค้า, Net Profit, จำนวนขายออกแต่ละกลุ่ม, Timeline จำนวนขายออก ฯลฯ</li>
+            <li class="link-cursor">🔥 Zone Area Sales : ดูยอดขายของลูกค้าตาม ภูมิภาค, รัฐต่างๆในอเมริกา เช่น ลูกค้าคนไหนทำช่วงกำไรหรือใช้จ่ายให้เรามากน้อยเพียงใด, ลูกค้าคนไหนทำ Metric RFM ที่เหมาะสม, ยอดขายส่วนใหย่มากจากรัฐไหน ฯลฯ</li>
+            <li class="link-cursor">🔥 Logistic : ดูเวลาในการจัดส่งสินค้า เช่น เวลาการจัดส่งต่อออเดอร์ นานวันเข้าควรที่ในสเกลที่เหมาะสมไม่มากหรือน้อยจนเกินไป, ช่วงเวลานำส่งสินค้าไหนที่มีจำนวนออเดอร์สูงสุด, การจัดส่งประเภทไหนที่มีเวลานำส่งต่อออเดอร์น้อยและมีจำนวนออเดอร์ที่น้อย ฯลฯ</li>
+        </ol>
+
+        <p class="link-cursor" style="text-align: justify;">
+            การทำ Data-Diven ดูหลายๆมุมของข้อมูลด้วยภาพที่ Interactive ด้วย Looker Studio ทั้งหมดนี้สามารถเข้ามาดูเต็มๆ ได้ที่....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> OverView ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p8-looker-overview.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-looker-overview.gif')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Product Sales ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p8-product-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-product-sales-overall.png')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Zone Area Sales ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p8-zone-area-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-overall.png')">
+                </div>
+
+                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Logistic ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p8-logitic-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-logitic-overall.png')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_looker_dsb10.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P7 -->
+    <section id="name-project7">
+        <h2 class="link-cursor">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</h2>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            โปรเจกต์นี้เป็นการวิเคราะห์ข้อมูลการเดินทางของผู้โดยสารบนเรือ Titanic โดยใช้ข้อมูลจริงจาก Kaggle และ R
+            <mark>เพื่อทำนายว่าผู้โดยสารจะรอดชีวิตหรือไม่</mark> โดยใช้เทคนิคการวิเคราะห์ข้อมูลเชิงสำรวจ (EDA) และการสร้างโมเดล Machine Learning
+            <mark>เปรียบเทียบโมเดล Classification หลายตัว</mark> เช่น
+        </p>
+
+        <ol>
+            <li class="link-cursor">🔥 K-Nearest Neighbors (KNN)</li>
+            <li class="link-cursor">🔥 Logistic Regression</li>
+            <li class="link-cursor">🔥 Ridge/Lasso Regression</li>
+            <li class="link-cursor">🔥 Decision Tree</li>
+            <li class="link-cursor">🔥 Random Forest</li>
+        </ol>
+
+        <p class="link-cursor" style="text-align: justify;">
+            เพื่อหาว่า<mark>โมเดลไหนให้ผลลัพธ์ที่ดีที่สุด</mark>ในการทำนายการรอดชีวิตของผู้โดยสารพร้อมกับ<mark>สำรวจข้อมูลในมุมมองต่างๆ 10 ข้อ</mark>....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+                <li class="link-cursor">🔥️🔥️ <b><mark> Comparative Analysis of Classification Models : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-evaluate-compare.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-compare.png')">
+                </div>
+
+                <li class="link-cursor"><b><mark>Preview 📸 (หน้าเว็บที่เน้นอธิบายโค้ด ใน Github ครับ) : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-preview-html.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-preview-html.gif')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Custom Age Grouping: Child, Woman, Elderly — Survival Count by Group : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Bar Chart of Survival Rates by Gender and Age Group : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-3.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-3.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Tabulated of Survival Rates by Passenger Class (Pclass) : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-4-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-4-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Horizontal Bar Chart of Survival Rates by Passenger Class (Pclass) : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-5.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-5.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Boxplot of Ticket Prices by Class and Survival on the Titanic : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-6-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-6-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-6-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-6-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Explore impact of <b>FamilySize</b> (from Parch & SibSp) on survival using histogram : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-7-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-7-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-7-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-7-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Explore impact of <b>Travel Style</b> (from Parch & SibSp) on survival using Table : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-8.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-8.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Impact of Family Travel Companions on Titanic Passenger Survival : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-9-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-9-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Visualizing Relationships Among Variables Within the Titanic Dataset : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-10-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-10-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-2.png')">
+                </div>
+
+                <li class="link-cursor">🔥️ <b><mark>Tabulated Survival Count by Age Groups : ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p7-analyze-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-1.png')">
+                </div>
+            </ul>
+        </details>
+
+        <div class="corner-text" onclick="go('project_titanic_glm_dsb10.html')"><span>Read More</span></div>
+
+    </section>
+
+    <!-- P6 -->
+    <section id="name-project6">
+        <h2 class="link-cursor">⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"
+                style="vertical-align:middle" width="25"> R and R Markdown</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            นำข้อมูล Diamonds จาก library(ggplot2) มาวิเคราะห์เชิงสำรวจด้วย R และแปลงเป็นเอกสารสวยงามด้วย R Markdown
+             ซึ่งประกอบด้วยข้อมูลเพชรกว่า 53,000 เม็ดจากบริษัทจำหน่ายเพชรจริงในสหรัฐฯ ในปี 2008
+             จุดประสงค์หลักคือใช้สำหรับการเรียนรู้การวิเคราะห์ข้อมูลและการสร้างกราฟ
+        </p>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em">
+            ผมได้<mark><b></b>ตั้งคำถามในการวิเคราะห์เชิงสำรวจข้อมูลและ Visualize มาทั้งหมด 4 ข้อใหญ่</b></mark> ต่อไปนี้
+        </p>
+
+        <ol>
+            <li class="link-cursor" style="text-align: justify">🔥 สำรวจเพชรส่วนใหญ่มีราคาอยู่ที่ช่วงเท่าไรต่อดอลลาร์</li>
+
+            <li class="link-cursor" style="text-align: justify">
+            🔥 สำรวจการกระจายตัวของราคาเพชร แบ่งตามเกรดการเจียระไนเพชร
             </li>
-        </ul>
+
+            <li class="link-cursor" style="text-align: justify">
+            🔥 สำรวจดูสัดส่วนความลึกเทียบกับเส้นผ่านศูนย์กลางเฉลี่ย กับการเจียระไน และ ราคา
+            </li>
+
+            <li class="link-cursor" style="text-align: justify">
+            🔥 สำรวจความสัมพันธ์น้ำหนักเพชร เทียบกับ ราคาเพชร แบ่งตามเกรดการเจียระไนเพชรระดับสูง
+            และแยกสี E, F, G
+            </li>
+        </ol>
+
+        <p>
+            ....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
 
         <details class="detail">
             <summary>Example</summary>
 
-            <h3 class="link-cursor">Contents</h3>
-
             <ul>
+                <li class="link-cursor"><b><mark> R Markdown Knit to PDF. : ⬇︎</mark></b></li>
 
-                <li class="link-cursor"><b><mark>Filter & Sort Dynamic</mark></b></li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p1-1-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-1-6.gif')">
+                <div class="iframe-container">
+                    <iframe
+                    width="80%"
+                    height="888px"
+                    src="https://drive.google.com/file/d/1AXv1rkCWzJpR6hvlHzx_vzImQp7SafD8/preview"
+                    frameborder="0"
+                    style="border: 0"
+                    allowfullscreen
+                    loading="lazy"
+                    sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                    >
+                    </iframe>
                 </div>
 
-                <li class="link-cursor"><b><mark>Conditional Formatting: Highlight Row</mark></b></li>
+                <li class="link-cursor"><b><mark> Distribution of price groups of diamonds by Density, Table : ⬇︎</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="hcf-filter.gif" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('hcf-filter.gif')">
+                    <img src="p6-5.1.1.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.1.1.png')">
                 </div>
-
-                <li class="link-cursor"><b><mark>Dynamic Query</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p1-3-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-3-6.gif')">
+                    <img src="p6-5.1.2.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.1.2.png')">
                 </div>
 
-                <li class="link-cursor"><b><mark>Vlookup</mark></b></li>
+                <li class="link-cursor"><b><mark> Sub-Diagram of Diamond Price Groups, Divided by cut. : ⬇︎</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p1-4-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-4-6.gif')">
+                    <img src="p6-5.2.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.2.png')">
                 </div>
 
-                <li class="link-cursor"><b><mark>Convert Date</mark></b></li>
+                <li class="link-cursor"><b><mark>Depth Distribution Across Diamond Cut Quality. : ⬇︎</mark></b>
+                </li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p1-5-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-5-6.gif')">
+                    <img src="p6-5.3.1.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.3.1.png')">
                 </div>
-
-                <li class="link-cursor"><b><mark>Regular Expression</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p1-6-6.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-6-6.png')">
+                    <img src="p6-5.3.2.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.3.2.png')">
                 </div>
 
+                <li class="link-cursor"><b><mark>Correlation Between Carat and Diamond Price. :
+                            ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p6-5.4.png" width="650" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p6-5.4.png')">
+                </div>
             </ul>
-
         </details>
-        </p>
 
-        <div class="corner-text" onclick="navigateToProject_ggsheet_dsb10()"><span>Read More</span></div>
+        <div class="corner-text" onclick="go('project_vizdimond_dsb10.html')"><span>Read More</span></div>
 
     </section>
-    <!-- P2 -->
-    <section id="name-project2">
-        <h2 class="link-cursor">P2 : Building a Café Restaurant Database Using <img src="R.png"
-                style="vertical-align:middle" width="25"> R
-            and <img src="SQL.png" style="vertical-align:middle" width="25"> SQL</h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;"><mark>สร้าง Database
-                เก็บข้อมูลร้านอาหาร</mark>ทั้งหมด 5 ตาราง<mark>ด้วยภาษา SQL และ R</mark> รวมถึงการสร้าง <mark>ER
-                Diagram</mark> ไว้ดูความสัมพันธ์โครงสร้างภายในของ Database</p>
-        <ul class="link-cursor">
-            <li>สร้าง Database ด้วยภาษา SQL และดึง Feedback ของลูกค้ามาสำรวจ และนำไป Action ต่อ</li>
-            <li>สร้าง SQLite Database ด้วย Library RSQLite</li>
-            <li>สร้าง ER Diagram ด้วยเว็บ dbdiagram.io....<img
-                src="right-down-corner-arrow.png" width="18"></li>
-        </ul>
+
+    <!-- P5 -->
+    <section id="name-project5">
+        <h2 class="link-cursor">⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"
+                style="vertical-align:middle" width="25"> R</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            ถ้าหากคุณต้องการวางแผนพักร้อน โดยการไปเที่ยวที่รัฐใด รัฐหนึ่งในสหรัฐอเมริกา และ คุณอาศัยอยู่ New York
+            หรืออยู่บริเวณใกล้ๆกับสนามบิน EWR(NJ), JFK(NY), LGA(NY) เหล่านี้ ใน R มีข้อมูลเกี่ยวกับเที่ยวบินของ New York City
+            ซึ่งเป็นข้อมูลจริง และมีทั้งหมด 2 ปี คือ 2013 และ 2023
+        </p>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            ดังนั้น เราจะมา<mark>สำรวจเพื่อวิเคราะห์ข้อมูล (EDA) เที่ยวบินของ New York City (NYC) ในปี 2013 และ 2023</mark> โดยใช้ภาษา R
+            เพื่อที่จะ <mark>make better decision </mark> ตามคำถามต่อไปนี้....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
         <details class="detail">
             <summary>Example</summary>
+
+            <ol>
+                <li class="link-cursor" style="text-align: justify;">
+                    ผมต้องการทราบว่า <mark>คนบินไปรัฐไหนบ้าง จำนวนเท่าไร</mark> (ไม่มีชื่อรัฐในฐานข้อมูล บอกว่าสนามบินปลายทางตั้งอยู่รัฐไหน ⭐️ ท้าทายมาก)
+                </li>
+
+                <li class="link-cursor" style="text-align: justify;">
+                    <mark>ไปช่วงเดือนไหนดี</mark> จะได้ลาพักร้อนล่วงหน้าได้
+                </li>
+
+                <li class="link-cursor" style="text-align: justify;">
+                    <mark>สายการบินไหนล่ะดีสุด</mark>
+                    (สมมติว่าสายการบินที่ดีที่สุดสำหรับเราคือ เงื่อนไขต่อไปนี้)
+                    <ul>
+                        <li class="link-cursor" style="text-align: justify;">ขาออกไฟต์ดีเลย์น้อย + ถึงก่อนเวลา ต่อเที่ยวบิน
+                        </li>
+                        <li class="link-cursor" style="text-align: justify;">เวลาบินน้อยสุด ต่อเที่ยวบิน</li>
+                        <li class="link-cursor" style="text-align: justify;">เราต้องมาถึงสนามบินอย่างน้อย 3 ชม.
+                            <br>(เผื่อเวลา check in, ทานข้าว, ฉุกเฉิน) ซึ่งบางเที่ยวบินออกก่อนเวลา 2 ชม.
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="link-cursor" style="text-align: justify;">
+                    เลือกไฟต์บิน <mark>กี่โมงดีที่ช่วยลดโอกาสเจอฝนตก</mark> และ<mark>สนามบินที่ดีที่สุด</mark>ระหว่าง
+                    EWR(NJ), JFK(NY), LGA(NY)
+                </li>
+
+            </ol>
+
             <ul>
 
-                <li class="link-cursor"><b><mark>Create Tables and Perform SQL INSERT with Basic Queries and
-                            Aggregation</mark></b></li>
+                <li class="link-cursor"><b><mark> People flying to which states and how many? : ⬇︎</mark></b> คนบินไปรัฐไหนบ้าง จำนวนเท่าไร </li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p2-cafe-sql1.png" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p2-cafe-sql1.png')">
+                    <img src="p5-4-4-1.png" width="400" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-4-1.png')">
                 </div>
-
-                <li class="link-cursor"><b><mark>Create Tables and Perform INSERT Using R</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p2-cafe-r.png" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p2-cafe-r.png')">
+                    <img src="p5-4-4-2.png" width="400" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-4-2.png')">
                 </div>
-
-                <li class="link-cursor"><b><mark>Create ER Diagram (DBML Code)</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="er-diagram.png" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('er-diagram.png')">
+                    <img src="p5-4-4-3.png" width="400" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-4-3.png')">
                 </div>
 
+                <li class="link-cursor"><b><mark>When is the best month to fly? : ⬇︎</mark></b> ไปช่วงเดือนไหนดี
+                </li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-42-1.png" width="400" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-42-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-42-2.png" width="400" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-42-2.png')">
+                </div>
+
+                <li class="link-cursor"><b><mark>Which airline is the best? :
+                            ⬇︎</mark></b> สายการบินไหนล่ะดีสุด</li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-43-1.png" width="750" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-43-1.png')">
+                </div>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-43-2.png" width="750" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-43-2.png')">
+                </div>
+
+                <li class="link-cursor"><b><mark>What is the best flight time to choose? :
+                            ⬇︎</mark></b> กี่โมงดีที่ช่วยลดโอกาสเจอฝนตก</li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-44-1.png" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-44-1.png')">
+                </div>
+
+                <hr>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p5-4-44-2.png" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p5-4-44-2.png')">
+                </div>
             </ul>
         </details>
-        </p>
-        <div class="corner-text" onclick="navigateToProject_cafe_r_sql_dsb10()"><span>Read More</span></div>
+
+        <div class="corner-text" onclick="go('project_nycflight13_23_dsb10.html')"><span>Read More</span></div>
 
     </section>
+
+    <!-- P4 -->
+    <section id="name-project4">
+        <h2 class="link-cursor">P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"
+                style="vertical-align:middle" width="25"> R and <img src="python.png" style="vertical-align:middle"
+                width="25"> Python</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;"> <mark>สร้างเกมเป่ายิ้งฉุบแบบหลายรอบ โดยใช้ภาษา R และ Python</mark>
+            โดยมีการเก็บสถิติการเล่นของผู้เล่นและ Computer ว่าตอนจบ 10 รอบใครจะเป็นผู้ชนะ
+            เป็นโปรเจกต์ที่<mark>ฝึกทักษะ Control Flow เป็นหลัก</mark> <code class="inline-code">if</code>, <code
+                class="inline-code">for</code>,
+            <code class="inline-code">while</code> ซึ่งเป็น Programimng ที่ส่วนใหญ่ใช้กัน....<img
+                src="right-down-corner-arrow.png" width="18">
+        </p>
+
+        <details class="detail">
+            <summary>Example</summary>
+
+            <ul>
+
+                <li class="link-cursor"><b><mark>Rock-Paper-Scissors Game WorkFlow : ⬇︎</mark></b><br></li>
+
+                <div class="iframe-container">
+                        <img src="p4-workflow.png" width="750" class="cursor-zoom-in" style="border: 2px solid #ccc; border-radius: 8px;"
+                            onclick="openGalleryModal('p4-workflow.png')">
+                </div>
+
+                <li class="link-cursor"><b><mark>A Video Simulation of Rock–Paper–Scissors Game Using <u>R</u> : ⬇︎</mark></b>
+                </li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p4-video-R.gif" width="600" class="cursor-zoom-in"
+                    onclick="openGalleryModal('p4-video-R.gif')">
+                </div>
+
+                <li class="link-cursor"><b><mark>A Video Simulation of Rock–Paper–Scissors Game Using <u>Python</u> :
+                    ⬇︎</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p4-video-Python.gif" width="600" class="cursor-zoom-in"
+                    onclick="openGalleryModal('p4-video-Python.gif')">
+                </div>
+            </ul>
+    </details>
+
+        <div class="corner-text" onclick="go('project_pyc_r_py_dsb10.html')"><span>Read More</span></div>
+
+    </section>
+
     <!-- P3 -->
     <section id="name-project3">
         <h2 class="link-cursor">⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"
@@ -320,7 +639,7 @@
                 โดยใช้แนวคิดที่เรียกว่า "RFM Model" กับข้อมูล USA - SuperStore</mark> ซึ่งเป็นการแบ่งลูกค้าออกเป็นทั้งหมด 11 กลุ่ม
             แบ่งตามพฤติกรรมทั้ง 3 อย่างของลูกค้าคือ
         </p>
-        
+
         <ul class="link-cursor">
             <li>Recently (ดูครั้งล่าสุดที่ลูกค้าใช้จ่ายกับเรา)</li>
             <li>Frequency (ดูความถี่ที่ลูกค้าใช้จ่ายกับเรา)</li>
@@ -460,583 +779,137 @@
 
         </details>
 
-        <div class="corner-text" onclick="navigateToProject_rfm_py_dsb10()"><span>Read More</span></div>
+        <div class="corner-text" onclick="go('project_rfm_py_dsb10.html')"><span>Read More</span></div>
 
     </section>
-    <!-- P4 -->
-    <section id="name-project4">
-        <h2 class="link-cursor">P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"
-                style="vertical-align:middle" width="25"> R and <img src="python.png" style="vertical-align:middle"
-                width="25"> Python</h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;"> <mark>สร้างเกมเป่ายิ้งฉุบแบบหลายรอบ โดยใช้ภาษา R และ Python</mark>
-            โดยมีการเก็บสถิติการเล่นของผู้เล่นและ Computer ว่าตอนจบ 10 รอบใครจะเป็นผู้ชนะ
-            เป็นโปรเจกต์ที่<mark>ฝึกทักษะ Control Flow เป็นหลัก</mark> <code class="inline-code">if</code>, <code
-                class="inline-code">for</code>,
-            <code class="inline-code">while</code> ซึ่งเป็น Programimng ที่ส่วนใหญ่ใช้กัน....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
+
+    <!-- P2 -->
+    <section id="name-project2">
+        <h2 class="link-cursor">P2 : Building a Café Restaurant Database Using <img src="R.png"
+                style="vertical-align:middle" width="25"> R
+            and <img src="SQL.png" style="vertical-align:middle" width="25"> SQL</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;"><mark>สร้าง Database
+                เก็บข้อมูลร้านอาหาร</mark>ทั้งหมด 5 ตาราง<mark>ด้วยภาษา SQL และ R</mark> รวมถึงการสร้าง <mark>ER
+                Diagram</mark> ไว้ดูความสัมพันธ์โครงสร้างภายในของ Database</p>
+        <ul class="link-cursor">
+            <li>สร้าง Database ด้วยภาษา SQL และดึง Feedback ของลูกค้ามาสำรวจ และนำไป Action ต่อ</li>
+            <li>สร้าง SQLite Database ด้วย Library RSQLite</li>
+            <li>สร้าง ER Diagram ด้วยเว็บ dbdiagram.io....<img
+                src="right-down-corner-arrow.png" width="18"></li>
+        </ul>
         <details class="detail">
             <summary>Example</summary>
-
             <ul>
 
-                <li class="link-cursor"><b><mark>Rock-Paper-Scissors Game WorkFlow : ⬇︎</mark></b><br></li>
-
-                <div class="iframe-container">
-                        <img src="p4-workflow.png" width="750" class="cursor-zoom-in" style="border: 2px solid #ccc; border-radius: 8px;"
-                            onclick="openGalleryModal('p4-workflow.png')">
-                </div>
-
-                <li class="link-cursor"><b><mark>A Video Simulation of Rock–Paper–Scissors Game Using <u>R</u> : ⬇︎</mark></b>
-                </li>
+                <li class="link-cursor"><b><mark>Create Tables and Perform SQL INSERT with Basic Queries and
+                            Aggregation</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p4-video-R.gif" width="600" class="cursor-zoom-in"
-                    onclick="openGalleryModal('p4-video-R.gif')">
+                    <img src="p2-cafe-sql1.png" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p2-cafe-sql1.png')">
                 </div>
-                
-                <li class="link-cursor"><b><mark>A Video Simulation of Rock–Paper–Scissors Game Using <u>Python</u> :
-                    ⬇︎</mark></b></li>
+
+                <li class="link-cursor"><b><mark>Create Tables and Perform INSERT Using R</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p4-video-Python.gif" width="600" class="cursor-zoom-in"
-                    onclick="openGalleryModal('p4-video-Python.gif')">
+                    <img src="p2-cafe-r.png" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('p2-cafe-r.png')">
                 </div>
-            </ul>
-    </details>
 
-        <div class="corner-text" onclick="navigateToProject_pyc_r_py_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P5 -->
-    <section id="name-project5">
-        <h2 class="link-cursor">⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"
-                style="vertical-align:middle" width="25"> R</h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            ถ้าหากคุณต้องการวางแผนพักร้อน โดยการไปเที่ยวที่รัฐใด รัฐหนึ่งในสหรัฐอเมริกา และ คุณอาศัยอยู่ New York
-            หรืออยู่บริเวณใกล้ๆกับสนามบิน EWR(NJ), JFK(NY), LGA(NY) เหล่านี้ ใน R มีข้อมูลเกี่ยวกับเที่ยวบินของ New York City
-            ซึ่งเป็นข้อมูลจริง และมีทั้งหมด 2 ปี คือ 2013 และ 2023
-        </p>
-        
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            ดังนั้น เราจะมา<mark>สำรวจเพื่อวิเคราะห์ข้อมูล (EDA) เที่ยวบินของ New York City (NYC) ในปี 2013 และ 2023</mark> โดยใช้ภาษา R
-            เพื่อที่จะ <mark>make better decision </mark> ตามคำถามต่อไปนี้....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-
-        <details class="detail">
-            <summary>Example</summary>
-
-            <ol>
-                <li class="link-cursor" style="text-align: justify;">
-                    ผมต้องการทราบว่า <mark>คนบินไปรัฐไหนบ้าง จำนวนเท่าไร</mark> (ไม่มีชื่อรัฐในฐานข้อมูล บอกว่าสนามบินปลายทางตั้งอยู่รัฐไหน ⭐️ ท้าทายมาก)
-                </li>
-
-                <li class="link-cursor" style="text-align: justify;">
-                    <mark>ไปช่วงเดือนไหนดี</mark> จะได้ลาพักร้อนล่วงหน้าได้
-                </li>
-
-                <li class="link-cursor" style="text-align: justify;">
-                    <mark>สายการบินไหนล่ะดีสุด</mark>
-                    (สมมติว่าสายการบินที่ดีที่สุดสำหรับเราคือ เงื่อนไขต่อไปนี้)
-                    <ul>
-                        <li class="link-cursor" style="text-align: justify;">ขาออกไฟต์ดีเลย์น้อย + ถึงก่อนเวลา ต่อเที่ยวบิน
-                        </li>
-                        <li class="link-cursor" style="text-align: justify;">เวลาบินน้อยสุด ต่อเที่ยวบิน</li>
-                        <li class="link-cursor" style="text-align: justify;">เราต้องมาถึงสนามบินอย่างน้อย 3 ชม.
-                            <br>(เผื่อเวลา check in, ทานข้าว, ฉุกเฉิน) ซึ่งบางเที่ยวบินออกก่อนเวลา 2 ชม.
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="link-cursor" style="text-align: justify;">
-                    เลือกไฟต์บิน <mark>กี่โมงดีที่ช่วยลดโอกาสเจอฝนตก</mark> และ<mark>สนามบินที่ดีที่สุด</mark>ระหว่าง
-                    EWR(NJ), JFK(NY), LGA(NY)
-                </li>
-
-            </ol>
-
-            <ul>
-
-                <li class="link-cursor"><b><mark> People flying to which states and how many? : ⬇︎</mark></b> คนบินไปรัฐไหนบ้าง จำนวนเท่าไร </li>
+                <li class="link-cursor"><b><mark>Create ER Diagram (DBML Code)</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-4-1.png" width="400" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-4-1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-4-2.png" width="400" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-4-2.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-4-3.png" width="400" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-4-3.png')">
+                    <img src="er-diagram.png" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('er-diagram.png')">
                 </div>
 
-                <li class="link-cursor"><b><mark>When is the best month to fly? : ⬇︎</mark></b> ไปช่วงเดือนไหนดี 
-                </li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-42-1.png" width="400" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-42-1.png')">
-                </div>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-42-2.png" width="400" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-42-2.png')">
-                </div>
-
-                <li class="link-cursor"><b><mark>Which airline is the best? :
-                            ⬇︎</mark></b> สายการบินไหนล่ะดีสุด</li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-43-1.png" width="750" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-43-1.png')">
-                </div>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-43-2.png" width="750" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-43-2.png')">
-                </div>
-                
-                <li class="link-cursor"><b><mark>What is the best flight time to choose? :
-                            ⬇︎</mark></b> กี่โมงดีที่ช่วยลดโอกาสเจอฝนตก</li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-44-1.png" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-44-1.png')">
-                </div>
-
-                <hr>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p5-4-44-2.png" width="600" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p5-4-44-2.png')">
-                </div>
             </ul>
         </details>
-        
-        <div class="corner-text" onclick="navigateToProject_nycflight13_23_dsb10()"><span>Read More</span></div>
+        </p>
+        <div class="corner-text" onclick="go('project_cafe_r_sql_dsb10.html')"><span>Read More</span></div>
 
     </section>
-    <!-- P6 -->
-    <section id="name-project6">
-        <h2 class="link-cursor">⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"
-                style="vertical-align:middle" width="25"> R and R Markdown</h2>
+
+    <!-- P1 -->
+    <section id="name-project1">
+        <h2 class="link-cursor">P1 : Data Exploration and Transformation with <img src="sheets.png"
+                style="vertical-align:middle" width="25"> Google Sheets</h2>
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            นำข้อมูล Diamonds จาก library(ggplot2) มาวิเคราะห์เชิงสำรวจด้วย R และแปลงเป็นเอกสารสวยงามด้วย R Markdown
-             ซึ่งประกอบด้วยข้อมูลเพชรกว่า 53,000 เม็ดจากบริษัทจำหน่ายเพชรจริงในสหรัฐฯ ในปี 2008
-             จุดประสงค์หลักคือใช้สำหรับการเรียนรู้การวิเคราะห์ข้อมูลและการสร้างกราฟ
+            ใช้เครื่องมือใน Google Sheets จัดการและสำรวจข้อมูลตัวอย่างพนักงานจากบริษัทแห่งหนึ่ง
         </p>
-
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-            ผมได้<mark><b></b>ตั้งคำถามในการวิเคราะห์เชิงสำรวจข้อมูลและ Visualize มาทั้งหมด 4 ข้อใหญ่</b></mark> ต่อไปนี้
-        </p>
-
-        <ol>
-            <li class="link-cursor" style="text-align: justify">🔥 สำรวจเพชรส่วนใหญ่มีราคาอยู่ที่ช่วงเท่าไรต่อดอลลาร์</li>
-            
-            <li class="link-cursor" style="text-align: justify">
-            🔥 สำรวจการกระจายตัวของราคาเพชร แบ่งตามเกรดการเจียระไนเพชร
+        <ul class="link-cursor">
+            <li><code class="inline-code">Filter()</code>, <code class="inline-code">Sort()</code>, Dropdown List แบบ
+                Dynamic</li>
+            <li><mark>Highlight Conditional Formatting</mark>โดยที่ Highlight 4 รูปแบบตามเงื่อนไข</li>
+            <li>Dymamic Query ใช้ฟังก์ชัน <code class="inline-code">Query()</code> ในการ filter ข้อมูลพนักงาน</li>
+            <li><code class="inline-code">VLOOKUP()</code> ใช้ return ข้อมูลพนักงานเพิ่มเติมจากอีก Table</li>
+            <li>Convert Date แปลงวันที่ภาษาไทยเป็นวันที่มาตรฐานสากล ISO <code class="inline-code">yyyy-mm-dd</code></li>
+            <li>
+                Regular Expression ใช้ฟังก์ชัน <code class="inline-code">REGEXEXTRACT()</code> กับ <code
+                    class="inline-code">REGEXMATCH()</code>
+                หา Pattern ของข้อมูลพนักงาน เช่น Email, Phone Number, ID Card ต่างๆเพื่อที่จะตรวจสอลว่ามีหรือไม่มี
+                หรือเพื่อดึงข้อมูลที่ต้องการออกมา....<img
+                src="right-down-corner-arrow.png" width="18">
             </li>
-            
-            <li class="link-cursor" style="text-align: justify">
-            🔥 สำรวจดูสัดส่วนความลึกเทียบกับเส้นผ่านศูนย์กลางเฉลี่ย กับการเจียระไน และ ราคา
-            </li>
-            
-            <li class="link-cursor" style="text-align: justify">
-            🔥 สำรวจความสัมพันธ์น้ำหนักเพชร เทียบกับ ราคาเพชร แบ่งตามเกรดการเจียระไนเพชรระดับสูง
-            และแยกสี E, F, G
-            </li>
-        </ol>
-
-        <p>
-            ....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
+        </ul>
 
         <details class="detail">
             <summary>Example</summary>
 
-            <ul>
-                <li class="link-cursor"><b><mark> R Markdown Knit to PDF. : ⬇︎</mark></b></li>
-
-                <div class="iframe-container">
-                    <iframe
-                    width="80%"
-                    height="888px"
-                    src="https://drive.google.com/file/d/1AXv1rkCWzJpR6hvlHzx_vzImQp7SafD8/preview"
-                    frameborder="0"
-                    style="border: 0"
-                    allowfullscreen
-                    loading="lazy"
-                    sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                    >
-                    </iframe>
-                </div>
-
-                <li class="link-cursor"><b><mark> Distribution of price groups of diamonds by Density, Table : ⬇︎</mark></b></li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.1.1.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.1.1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.1.2.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.1.2.png')">
-                </div>
-
-                <li class="link-cursor"><b><mark> Sub-Diagram of Diamond Price Groups, Divided by cut. : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.2.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.2.png')">
-                </div>
-
-                <li class="link-cursor"><b><mark>Depth Distribution Across Diamond Cut Quality. : ⬇︎</mark></b>
-                </li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.3.1.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.3.1.png')">
-                </div>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.3.2.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.3.2.png')">
-                </div>
-
-                <li class="link-cursor"><b><mark>Correlation Between Carat and Diamond Price. :
-                            ⬇︎</mark></b></li>
-
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p6-5.4.png" width="650" class="cursor-zoom-in"
-                        onclick="openGalleryModal('p6-5.4.png')">
-                </div>
-            </ul>
-        </details>
-
-        <div class="corner-text" onclick="navigateToProject_vizdimond_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P7 -->
-    <section id="name-project7" >
-        <h2 class="link-cursor">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</h2>
-        
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            โปรเจกต์นี้เป็นการวิเคราะห์ข้อมูลการเดินทางของผู้โดยสารบนเรือ Titanic โดยใช้ข้อมูลจริงจาก Kaggle และ R
-            <mark>เพื่อทำนายว่าผู้โดยสารจะรอดชีวิตหรือไม่</mark> โดยใช้เทคนิคการวิเคราะห์ข้อมูลเชิงสำรวจ (EDA) และการสร้างโมเดล Machine Learning
-            <mark>เปรียบเทียบโมเดล Classification หลายตัว</mark> เช่น 
-        </p>
-        
-        <ol>
-            <li class="link-cursor">🔥 K-Nearest Neighbors (KNN)</li>
-            <li class="link-cursor">🔥 Logistic Regression</li>
-            <li class="link-cursor">🔥 Ridge/Lasso Regression</li>
-            <li class="link-cursor">🔥 Decision Tree</li>
-            <li class="link-cursor">🔥 Random Forest</li>
-        </ol>
-        
-        <p class="link-cursor" style="text-align: justify;">
-            เพื่อหาว่า<mark>โมเดลไหนให้ผลลัพธ์ที่ดีที่สุด</mark>ในการทำนายการรอดชีวิตของผู้โดยสารพร้อมกับ<mark>สำรวจข้อมูลในมุมมองต่างๆ 10 ข้อ</mark>....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-
-        <details class="detail">
-            <summary>Example</summary>
+            <h3 class="link-cursor">Contents</h3>
 
             <ul>
-                <li class="link-cursor">🔥️🔥️ <b><mark> Comparative Analysis of Classification Models : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-evaluate-compare.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-compare.png')">
-                </div>
 
-                <li class="link-cursor"><b><mark>Preview 📸 (หน้าเว็บที่เน้นอธิบายโค้ด ใน Github ครับ) : ⬇︎</mark></b></li>
+                <li class="link-cursor"><b><mark>Filter & Sort Dynamic</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-preview-html.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-preview-html.gif')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Custom Age Grouping: Child, Woman, Elderly — Survival Count by Group : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-2.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Bar Chart of Survival Rates by Gender and Age Group : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-3.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-3.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Tabulated of Survival Rates by Passenger Class (Pclass) : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-4-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-4-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-2.png')">
+                    <img src="p1-1-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-1-6.gif')">
                 </div>
 
-                <li class="link-cursor">🔥️ <b><mark>Horizontal Bar Chart of Survival Rates by Passenger Class (Pclass) : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-5.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-5.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Boxplot of Ticket Prices by Class and Survival on the Titanic : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-6-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-6-1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-6-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-6-2.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Explore impact of <b>FamilySize</b> (from Parch & SibSp) on survival using histogram : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-7-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-7-1.png')">
-                </div>
+                <li class="link-cursor"><b><mark>Conditional Formatting: Highlight Row</mark></b></li>
 
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-7-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-7-2.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Explore impact of <b>Travel Style</b> (from Parch & SibSp) on survival using Table : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-8.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-8.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Impact of Family Travel Companions on Titanic Passenger Survival : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-9-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-9-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-2.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️ <b><mark>Visualizing Relationships Among Variables Within the Titanic Dataset : ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-10-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-1.png')">
-                </div>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-10-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-2.png')">
+                    <img src="hcf-filter.gif" width="600" class="cursor-zoom-in"
+                        onclick="openGalleryModal('hcf-filter.gif')">
                 </div>
 
-                <li class="link-cursor">🔥️ <b><mark>Tabulated Survival Count by Age Groups : ⬇︎</mark></b></li>
-                
+                <li class="link-cursor"><b><mark>Dynamic Query</mark></b></li>
+
                 <div class="iframe-container cursor-zoom-in">
-                    <img src="p7-analyze-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-1.png')">
+                    <img src="p1-3-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-3-6.gif')">
                 </div>
+
+                <li class="link-cursor"><b><mark>Vlookup</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p1-4-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-4-6.gif')">
+                </div>
+
+                <li class="link-cursor"><b><mark>Convert Date</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p1-5-6.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-5-6.gif')">
+                </div>
+
+                <li class="link-cursor"><b><mark>Regular Expression</mark></b></li>
+
+                <div class="iframe-container cursor-zoom-in">
+                    <img src="p1-6-6.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p1-6-6.png')">
+                </div>
+
             </ul>
+
         </details>
-
-        <div class="corner-text" onclick="navigateToProject_titanic_glm_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P8 -->
-    <section id="name-project8">
-        <h2 class="link-cursor">⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"
-                style="vertical-align:middle" width="25">Looker Studio</h2>
-        
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            โปรเจกต์นี้เป็นการสร้าง Dashboard ด้วย Looker Studio จากชุดข้อมูลจำลองการขายของ USA-Superstore ที่มาจาก Tableau Public นะครับ
-            ผมจะนำไปสร้าง Dashboard 3 Page โดยแต่ละ Page จะมีจุดประสงค์ในการสำรวจที่แตกต่างกัน โดยแบ่งเป็น 3 pages ครับ
         </p>
-        
-        <ol>
-            <li class="link-cursor">🔥 Product Sales : ดูสินค้าที่ขายเป็นหลัก เช่น Top-Sell สินค้า, Net Profit, จำนวนขายออกแต่ละกลุ่ม, Timeline จำนวนขายออก ฯลฯ</li>
-            <li class="link-cursor">🔥 Zone Area Sales : ดูยอดขายของลูกค้าตาม ภูมิภาค, รัฐต่างๆในอเมริกา เช่น ลูกค้าคนไหนทำช่วงกำไรหรือใช้จ่ายให้เรามากน้อยเพียงใด, ลูกค้าคนไหนทำ Metric RFM ที่เหมาะสม, ยอดขายส่วนใหย่มากจากรัฐไหน ฯลฯ</li>
-            <li class="link-cursor">🔥 Logistic : ดูเวลาในการจัดส่งสินค้า เช่น เวลาการจัดส่งต่อออเดอร์ นานวันเข้าควรที่ในสเกลที่เหมาะสมไม่มากหรือน้อยจนเกินไป, ช่วงเวลานำส่งสินค้าไหนที่มีจำนวนออเดอร์สูงสุด, การจัดส่งประเภทไหนที่มีเวลานำส่งต่อออเดอร์น้อยและมีจำนวนออเดอร์ที่น้อย ฯลฯ</li>
-        </ol>
-        
-        <p class="link-cursor" style="text-align: justify;">
-            การทำ Data-Diven ดูหลายๆมุมของข้อมูลด้วยภาพที่ Interactive ด้วย Looker Studio ทั้งหมดนี้สามารถเข้ามาดูเต็มๆ ได้ที่....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
-        <details class="detail">
-            <summary>Example</summary>
 
-            <ul>
-                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> OverView ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p8-looker-overview.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-looker-overview.gif')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Product Sales ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p8-product-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-product-sales-overall.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Zone Area Sales ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p8-zone-area-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-overall.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b>Page :<mark> Logistic ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p8-logitic-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-logitic-overall.png')">
-                </div>
-            </ul>
-        </details>
-
-        <div class="corner-text" onclick="navigateToProject_looker_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P9 -->
-    <section id="name-project9">
-        <h2 class="link-cursor">P9 : Chatbot Development for a Pizza Business Using <img src="R.png"
-                style="vertical-align:middle" width="25"> R Programming</h2>
-        
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            โปรเจกต์นี้จะ<mark>สร้าง Chatbot ง่ายๆ สำหรับร้านพิซซ่า โดยใช้ R Programming</mark> เน้นทบกวน Workflow (while loop, if-else)
-            เป็นหลัก มี 15 เมนูหลากหลายให้เลือก เช่น pizza, เครื่องดื่ม, ของหวาน รวมถึง Scenario ทั้งหมดที่เป็นไปได้
-            เช่น ดูเมนู (<code class="inline-code">menu</code>), เช็คของในตระกร้าพร้อมเช็คบิล (<code class="inline-code">check</code>), ล้างตระกร้า (<code class="inline-code">reorder</code>), หยุดการสั่งซื้อ (<code class="inline-code">stop</code>)....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
-        <details class="detail">
-            <summary>Example</summary>
-
-            <ul>
-                <li class="link-cursor">🔥️🔥️ <b><mark> Workflow ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p9-work-flow.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p9-work-flow.gif')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b><mark> Chatbot ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p9-simulate-order.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p9-simulate-order.gif')">
-                </div>
-            </ul>
-        </details>
-
-        <div class="corner-text" onclick="navigateToProject_pizza_chatbot_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P10 -->
-    <section id="name-project10">
-        <h2 class="link-cursor">P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"
-                style="vertical-align:middle" width="25"> Python OOP</h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            เขียน Python<mark>Object-Oriented Programming (OOP)</mark> สร้างระบบ ATM ที่สามารถจำลองธุรกรรมทางการเงิน โดยมี ชื่อผู้ใช้ (name), ธนาคาร (bank), ยอดเงินคงเหลือ (balance), และ รายการธุรกรรม (statement) 
-            ผมจำลองถอนเงิน (withdraw), ชำระบิล (paybills), และ ฝากเงิน (deposit) และบันทึกธุรกรรมทั้งหมดอยู่ในรูป dict พร้อมแปลงเป็น Dataframe ด้วย Pandas เพื่อนำไปวิเคราะห์ต่อได้....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
-        <details class="detail">
-            <summary>Example</summary>
-
-            <ul>
-                <li class="link-cursor">🔥️🔥️ <b><mark> Simulate Transactions ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p10-simulate-transactions.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-simulate-transactions.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b><mark> Convert into Dataframe ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p10-convert-dataframe.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-convert-dataframe.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b><mark> Verify Transactions ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p10-verify-balance.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p10-verify-balance.png')">
-                </div>
-            </ul>
-        </details>
-        
-        <div class="corner-text" onclick="navigateToProject_atm_oop_py_dsb10()"><span>Read More</span></div>
-
-    </section>
-    <!-- P11 -->
-    <section id="name-project11">
-        <h2 class="link-cursor">Mini P11 : Extracting Public API Data with <img src="python.png"
-                style="vertical-align:middle" width="25"> Python: Air Quality Analytics</h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            สำหรับโปรเจกต์นี้ผมจะดึงข้อมูล API PUBLIC ของ Open-Meteo
-            ข้อมูลที่จะดึงคือคุณภาพอากาศฝุ่น PM10 และ PM2.5 ที่กรุงเทพมหานคร ประเทศไทย ย้อนหลัง 90 วันรายชั่วโมงเก็บอยู่ในรูปตารางและไว้ในไฟล์ Excel สามารถรับชมได้ครับ....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
-        <details class="detail">
-            <summary>Example</summary>
-
-            <ul>
-                <li class="link-cursor">🔥️🔥️ <b><mark> กำหนดพิกัดละติจูด (latitude) และลองจิจูด (longitude) ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p11-lad-log.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p11-lad-log.png')">
-                </div>
-                
-                <li class="link-cursor">🔥️🔥️ <b><mark> Coding : Retrieve Data for the Past 90 Days ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p11-code-process.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p11-code-process.png')">
-                </div>
-            </ul>
-        </details>
-
-        <div class="corner-text" onclick="navigateToProject_mini_api_py()"><span>Read More</span></div>
-
-    </section>
-    <!-- P12 -->
-    <section id="name-project12">
-        <h2 class="link-cursor">Mini P12 : Cafe Menu Data Structure with <img src="xml.png"
-                style="vertical-align:middle" width="25"> XML
-        </h2>
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            สำหรับโปรเจกต์นี้ผมจะมาลองสร้างเมนูอาหารต่างๆ ด้วยภาษา XML ง่ายๆ ซึ่งภาษา XML ไว้ใช้แลกเปลี่ยน/เก็บข้อมูลคุยกันระหว่างคอมพิวเตอร์ เชิญรับชมได้เลยครับ....<img
-                src="right-down-corner-arrow.png" width="18">
-        </p>
-        
-        <details class="detail">
-            <summary>Example</summary>
-
-            <ul>
-                <li class="link-cursor">🔥️🔥️ <b><mark> Raw XML Code ⬇︎</mark></b></li>
-                
-                <div class="iframe-container cursor-zoom-in">
-                    <img src="p12-xml-code.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p12-xml-code.gif')">
-                </div>
-            </ul>
-        </details>
-        
-
-        <div class="corner-text" onclick="navigateToProject_mini_xml_cafe()"><span>Read More</span></div>
+        <div class="corner-text" onclick="go('project_ggsheet_dsb10.html')"><span>Read More</span></div>
 
     </section>
 
     <!-- Prism Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>
 </body>

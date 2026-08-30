@@ -1,0 +1,94 @@
+<!-- project.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MKCCGG3QF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0MKCCGG3QF');
+    </script>
+    <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
+    <meta name="author" content="Phubordin Phanyosri">
+    <title>Project - Pokemon Card</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+    <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ เขียน Python Object-Oriented Programming (OOP) สร้างระบบ ATM ที่สามารถจำลองธุรกรรมทางการเงิน โดยมี ชื่อผู้ใช้ (name), ธนาคาร (bank), ยอดเงินคงเหลือ (balance), และ รายการธุรกรรม (statement) ผมจำลองถอนเงิน (withdraw), ชำระบิล (paybills), และ ฝากเงิน (deposit) และบันทึกธุรกรรมทั้งหมดอยู่ในรูป dict พร้อมแปลงเป็น Dataframe ด้วย Pandas เพื่อนำไปวิเคราะห์ต่อได้ เชิญรับชมได้ครับ ขอบคุณครับ">
+</head>
+
+<body class="fade-slide-in project_atm-page" data-toc="deep">
+    <header>
+        <div class="header-background"></div>
+        <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 13 : </span>Pokemon Card</span>
+    </header>
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
+    <section class="toc-box">
+        <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
+
+        <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
+    </section>
+
+    <a style="text-decoration: none;" href="project.html">
+        <button class="back-button">⬅︎ </button>
+    </a>
+
+<!-- 1. Project Introduction -->
+    <section>
+        <h2 class="link-cursor">Project Introduction</h2>
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            Project ถูกสร้างมาจากการเรียน Data Analytics Bootcamp 5 เดือนเต็ม โจทย์คือให้จับกลุ่ม 3-5 คน และสร้าง Project ที่อยากจะวิเคราะห์ออกมา
+            และสิ่งที่ได้ค้นพบคือ Pokemon Card - Project
+        </p>
+
+        <ul>
+            <li class="link-cursor" style="text-align: justify;">ครบรอบ 30 ปีของ Pokemon</li>
+            <li class="link-cursor" style="text-align: justify;">ถ้าจะเข้าเล่นหรืออยากสะสม Pokemon Card ต้องเลือกจากปัจจัยอะไร?</li>
+            <li class="link-cursor" style="text-align: justify;">ข้อควรระวังก่อนตัดสินใจเลือกการ์ดมีอะไรบ้าง</li>
+            <li class="link-cursor" style="text-align: justify;">ตัวละครที่ชอบ การส่งเกรดการ์ด ยุคสมัยของการ์ด ศิลปินผู้วาด ระดับความหายาก แบบไหนนะที่ส่งผลต่อมูลค่า</code></li>
+        </ul>
+
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            นี่คือเป้าหมายหลักของ Project นี้ครับ ก่อนอื่นเลย ณ ปัจจุบันมีหน้าการ์ดทั้งหมด 18900 กว่ารูปแบบ จากตัวละครทั้งหมด 1025 ตัวละครกับอีก energy และ trainer
+            จะถูกสรุปอยู่ในไฟล์ PDF ด้านล่างครับ เชิญรับชมได้เลยครับ
+        </p>
+
+    </section>
+
+    <section id="file">
+        <h2 class="link-cursor">Project Pitching</h2>
+        <div class="iframe-container">
+            <iframe
+                width="100%"
+                height="1000px"
+                src="https://drive.google.com/file/d/1sXlhcbHkBQ3-TuWPI7pTqScz0QOtupls/preview"
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
+                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Prism Core -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <!-- Prism Language Components -->
+    <script src="script.js"></script>
+    <script src="certificate-script.js"></script>
+</body>
+</html>

@@ -12,6 +12,9 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,133 +27,25 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ สร้าง Chatbot ง่ายๆสำหรับร้านพิซซ่า โดยใช้ R Programming เน้นทบกวน Workflow (while loop, if-else) เป็นหลัก มี 15 เมนูหลากหลายให้เลือก เช่น pizza, เครื่องดื่ม, ของหวาน รวมถึง Scenario ทั้งหมดที่เป็นไปได้ เช่น ดูเมนู (menu), เช็คของในตระกร้าพร้อมเช็คบิล (check), ล้างตระกร้า (reorder), หยุดการสั่งซื้อ (stop) เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Dark Mode -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_pizza-page">
+<body class="fade-slide-in project_pizza-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 9 : </span>Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
     <a style="text-decoration: none;" href="project.html">
         <button class="back-button">⬅︎ </button>
     </a>
-    
+
     <!-- 1. Project Introduction -->
     <section>
         <h2 class="link-cursor">1. Project Introduction</h2>
@@ -165,12 +60,12 @@
         <div class="iframe-container cursor-zoom-in">
             <img src="p9-simulate-order.gif" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p9-simulate-order.gif')">
         </div>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             แน่นอนครับว่าสำหรับโปรเจกต์นี้ ผมจะขออนุญาตนำเสนอวิธีการใช้งาน(วิธีการสั่งอาหาร) ให้เห็นภาพเป็นหลักนะครับ
             ส่วน<mark>เรื่องของ Coding ผมได้เขียนอธิบายไว้ใน Code Comment ทีละบรรทัดไว้แล้วครับ</mark> ใครที่สนใจสามารถเข้าไปดูได้ที่..
         </p>
-        
+
         <ul>
             <li class="link-cursor">
                 <a href="https://colab.research.google.com/drive/1r5JBCZ9OCMExucj47YEKTu8Utino1N5E?usp=sharing"
@@ -188,7 +83,7 @@
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             ต่อไป จะเป็น WorkFlow Chart ของ Chatbot และจะเป็น<mark>วิดิโอสาธิตการสั่งอาหารผ่าน Chatbot (2 นาที)</mark> ครับ
         </p>
-        
+
     </section>
 
     <!-- 2. Pizza Chatbot Workflow -->
@@ -209,7 +104,7 @@
                         <img src="icon-copy1.png" alt="Copy" width="20">
                     </button>
                 </div>
-                <pre><code class="link-cursor language-mermaid">  
+                <pre><code class="link-cursor language-mermaid">
 graph TD
     A[Start Function pizza] --> B[Show welcome message]
     B --> C[Initialize empty basket: collect_order list]
@@ -247,7 +142,7 @@ graph TD
             </div>
 
         </details>
-        
+
         <div class="mermaid-wide">
             <pre class="mermaid link-cursor">
             graph TD
@@ -327,111 +222,111 @@ menu <- c(
 menu_lower <- tolower(menu)
 
 price <- c(
-  sample(15:20, 5),  
-  sample(2:6, 5),    
-  sample(7:12, 5)    
+  sample(15:20, 5),
+  sample(2:6, 5),
+  sample(7:12, 5)
 )
 
 df_menu <- data.frame(MENU = menu, PRICE = price)
 
 pizza <- function() {
-  cat("\nWelcome to the Wonderful Pizza Shop!\n") 
+  cat("\nWelcome to the Wonderful Pizza Shop!\n")
 
-  collect_order <- list()  
-  
+  collect_order <- list()
+
   while (TRUE) {
-    
-    cat("Order now! :\n") 
-    cat("Type 'menu' to see the menu,\n") 
-    cat("Type 'check' to view your basket and check the bill,\n") 
-    cat("Type 'reorder' to clear your basket and start over,\n") 
-    cat("Type 'stop' to leave the restaurant.\n") 
-    
+
+    cat("Order now! :\n")
+    cat("Type 'menu' to see the menu,\n")
+    cat("Type 'check' to view your basket and check the bill,\n")
+    cat("Type 'reorder' to clear your basket and start over,\n")
+    cat("Type 'stop' to leave the restaurant.\n")
+
     order_item <- tolower(readline("What would you like to do? "))
-    
-    if (order_item %in% "menu") { 
-      cat("\n----------- MENU -----------\n") 
-      print(df_menu) 
-      next 
+
+    if (order_item %in% "menu") {
+      cat("\n----------- MENU -----------\n")
+      print(df_menu)
+      next
     }
 
-    if (order_item %in% "stop") { 
-      break 
+    if (order_item %in% "stop") {
+      break
     }
 
-    if (order_item %in% "check") { 
-      if (length(collect_order) == 0) { 
-        cat("\nYour basket is empty.\n") 
-      } else { 
+    if (order_item %in% "check") {
+      if (length(collect_order) == 0) {
+        cat("\nYour basket is empty.\n")
+      } else {
         original_menu_names <- sapply(names(collect_order), function(name) {
           menu[match(name, menu_lower)]
         })
-        
+
         order_summary <- data.frame(
-          Menu = unname(original_menu_names), 
+          Menu = unname(original_menu_names),
           Quantity = unname(unlist(collect_order)),
           Unit_Price_Dollar = price[match(names(collect_order), menu_lower)],
           Total_Price_Dollar = unname(unlist(collect_order) * price[match(names(collect_order), menu_lower)]),
           stringsAsFactors = FALSE
         )
-        cat("\nYour current order summary:\n") 
-        print(order_summary) 
-        
+        cat("\nYour current order summary:\n")
+        print(order_summary)
+
         total_order <- sum(order_summary$Total_Price_Dollar)
-        cat("\nOrder Total: $", total_order, "\n", sep = "") 
-        
+        cat("\nOrder Total: $", total_order, "\n", sep = "")
+
         confirm_order <- tolower(readline("\nDo you confirm your order? (Y/N): "))
 
         if (confirm_order %in% "y") {
           cat("\nOrder confirmed! Thank you for your purchase.\n")
           return(order_summary)
-        } else if (confirm_order %in% "n") {  
+        } else if (confirm_order %in% "n") {
           cat("\nYou can continue ordering.\n")
-          next 
-        } else { 
+          next
+        } else {
           cat("Invalid input. Returning to menu.\n")
-          next 
+          next
         }
       }
-      next 
+      next
     }
     if (order_item %in% "reorder") {
-      cat("\nYou chose to clear your basket and start over.\n") 
-      collect_order <- list() 
-      next 
+      cat("\nYou chose to clear your basket and start over.\n")
+      collect_order <- list()
+      next
     }
-    if (order_item %in% menu_lower) { 
-      order_quantity <- as.integer(readline(paste("How many", order_item, "would you like to order? "))) 
+    if (order_item %in% menu_lower) {
+      order_quantity <- as.integer(readline(paste("How many", order_item, "would you like to order? ")))
 
-      if (is.na(order_quantity) || order_quantity <= 0) { 
-        cat("Invalid quantity. Please enter only a positive integer!\n") 
-        next 
+      if (is.na(order_quantity) || order_quantity <= 0) {
+        cat("Invalid quantity. Please enter only a positive integer!\n")
+        next
       }
 
-      if (order_item %in% names(collect_order)) { 
-        confirm_add <- tolower(readline("You have already ordered this item. Do you want to add more? (Y/N): ")) 
+      if (order_item %in% names(collect_order)) {
+        confirm_add <- tolower(readline("You have already ordered this item. Do you want to add more? (Y/N): "))
 
-        if (confirm_add %in% "y") { 
-          collect_order[[order_item]] <- collect_order[[order_item]] + order_quantity 
-          cat("Updated:", order_item, "-", collect_order[[order_item]], "in total.\n") 
-        } else if (confirm_add %in% "n") { 
-          next 
-        } else { 
-          cat("Invalid input. Skipping this item.\n") 
-          next 
+        if (confirm_add %in% "y") {
+          collect_order[[order_item]] <- collect_order[[order_item]] + order_quantity
+          cat("Updated:", order_item, "-", collect_order[[order_item]], "in total.\n")
+        } else if (confirm_add %in% "n") {
+          next
+        } else {
+          cat("Invalid input. Skipping this item.\n")
+          next
         }
-      } else { 
-        collect_order[[order_item]] <- order_quantity 
-        cat("Added:", order_item, "->", order_quantity, "\n") 
+      } else {
+        collect_order[[order_item]] <- order_quantity
+        cat("Added:", order_item, "->", order_quantity, "\n")
       }
-    } else { 
-      cat("Invalid input. Please try again.\n") 
+    } else {
+      cat("Invalid input. Please try again.\n")
     }
   }
 
-  if (length(collect_order) == 0) { 
-    print("Your basket is currently empty. Thank you for visiting and using our service!") 
-  } else { 
+  if (length(collect_order) == 0) {
+    print("Your basket is currently empty. Thank you for visiting and using our service!")
+  } else {
     print("If you return for a new visit, the items in your basket will no longer be there. We warmly invite you and look forward to welcoming you again!")
   }
 }
@@ -443,13 +338,13 @@ order_summary <- pizza()
             </div>
 
         </details>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             เนื่องจากสำหรับหน้าเว็บนี้ ผม<mark>เน้นถึงวิธีการใช้งานเป็นหลัก(วิธีเริ่มคุยกับ Chatbot, วิธีสั่งอาหาร, วิธีดูเมนู, วิธีเช็คบิล, วิธียืนยันออเดอร์, วิธีล้างตะกร้า)</mark>
             ถ้าอยากดูวว่า Code แต่ละบรรทัดทำงานอย่างไร ผมได้เขียนอธิบายไว้ใน Code Comment ทีละบรรทัดไว้แล้วครับ
             ใครที่สนใจสามารถเข้าไปดูได้ที่ Google Colab หรือ Github ด้านล่างได้เลยครับ
         </p>
-        
+
         <ul>
             <li class="link-cursor">
                 <a href="https://colab.research.google.com/drive/1r5JBCZ9OCMExucj47YEKTu8Utino1N5E?usp=sharing"
@@ -463,7 +358,7 @@ order_summary <- pizza()
                 <b> Github</b></a> ✅ อ่าน Code, ❌ ลองสั่งอาหาร
             </li>
         </ul>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             ต่อไปจะเป็นการอธิบายเรื่องวิธีการใช้งาน Chatbot เพื่อสั่งอาหารภายในร้านครับ โดยจะแบ่งเป็น 2 หัวข้อย่อย ต่อไปนี้
         </p>
@@ -543,7 +438,7 @@ order_summary <- pizza()
             (ทั้งกรณีตะกร้าว่างกับไม่ว่าง) ให้ดูครับ สามารถดูได้ที่หัวข้อ <b>3.2 2-Minute Video</b>
         </p>
     </section>
-    
+
     <!-- 3.2 2-Minute Video -->
     <section>
         <h3 class="link-cursor">3.2 2-Minute Video</h3>
@@ -567,7 +462,7 @@ order_summary <- pizza()
             ขอบคุณมากครับ
         </p>
     </section>
-    
+
     <!-- Github & Google Colab -->
     <section id="file">
         <h2 class="link-cursor"><a href="https://github.com/Phubordin" class="hover-expand" target="_blank"><img src="github.png"
@@ -575,7 +470,7 @@ order_summary <- pizza()
             <a href="https://colab.research.google.com/drive/1r5JBCZ9OCMExucj47YEKTu8Utino1N5E?usp=sharing"
                 class="hover-expand" target="_blank"><img src="colab.png" width="30" class="notion-icon"></a> Google Colab
         </h2>
-        
+
         <p>
             <a href="https://colab.research.google.com/drive/1r5JBCZ9OCMExucj47YEKTu8Utino1N5E?usp=sharing"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
@@ -588,14 +483,13 @@ order_summary <- pizza()
         </p>
 
     </section>
-    
+
     <!-- Prism Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>

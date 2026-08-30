@@ -12,6 +12,9 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,38 +27,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ สร้างเกมเป่ายิ้งฉุบแบบหลายรอบ โดยใช้ภาษา R และ Python โดยมีการเก็บสถิติการเล่นของผู้เล่นและ Computer ว่าตอนจบ 10 รอบใครจะเป็นผู้ชนะ เป็นโปรเจกต์ที่ฝึกทักษะ Control Flow เป็นหลัก if, for, while ซึ่งเป็น Programimng ที่ส่วนใหญ่ใช้กัน เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Dark Mode -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_pyc-page">
+<body class="fade-slide-in project_pyc-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 4 : </span>Creating
@@ -63,131 +35,12 @@
                 <img src="python.png" style="vertical-align:middle" width="25"></span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_pyc_r_py_dsb10()">P4
-                            : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"
-                                style="vertical-align:middle" width="25"> and <img src="python.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                                        <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_pyc_r_py_dsb10()">P4
-                                        : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"
-                                            style="vertical-align:middle" width="25"> and <img src="python.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
@@ -230,7 +83,7 @@
                         <img src="icon-copy1.png" alt="Copy" width="20">
                     </button>
                 </div>
-                <pre><code class="link-cursor language-mermaid">  
+                <pre><code class="link-cursor language-mermaid">
     graph TD
         A[Start Function: hammer_scissor_paper] --> B[Initialize Variables and Rules Displayed]
         B --> C[Loop Round 1 to 10]
@@ -399,9 +252,9 @@
                 <pre><code class="link-cursor language-r">
 
 hammer_scissor_paper <- function() {
-  
+
   choices <- c("hammer", "scissor", "paper")
-  
+
   user_score <- 0
   computer_score <- 0
 
@@ -701,62 +554,62 @@ def pao_ying_chub_game():
   print("Hello, Welcome to Pao Ying Chub Game!")
 
   points_user = []
-  points_computer = [] 
-  total_round = len(points_computer + points_user) / 2 
+  points_computer = []
+  total_round = len(points_computer + points_user) / 2
 
-  while (len(points_computer + points_user) / 2) < 10: 
-    user_choices = input("Your Turn (hammer, scissor, paper): ").lower().replace(" ","") 
-    computer_choice = choice(choices) 
+  while (len(points_computer + points_user) / 2) < 10:
+    user_choices = input("Your Turn (hammer, scissor, paper): ").lower().replace(" ","")
+    computer_choice = choice(choices)
 
-    if user_choices == computer_choice: 
-      points_user.append(0) 
-      points_computer.append(0) 
-      print("Draw! get 0 point both") 
-      continue 
+    if user_choices == computer_choice:
+      points_user.append(0)
+      points_computer.append(0)
+      print("Draw! get 0 point both")
+      continue
     else:
-      if user_choices == "hammer": 
-        if computer_choice == "scissor": 
-          points_user.append(1) 
-          points_computer.append(0) 
-          print("You win! get 1 point") 
-          continue 
-        else: 
-          points_user.append(0) 
-          points_computer.append(1) 
-          print("Computer win! get 1 point") 
-          continue 
-      elif user_choices == "scissor": 
-        if computer_choice == "paper": 
-          points_user.append(1) 
-          points_computer.append(0) 
-          print("You win! get 1 point") 
-          continue 
+      if user_choices == "hammer":
+        if computer_choice == "scissor":
+          points_user.append(1)
+          points_computer.append(0)
+          print("You win! get 1 point")
+          continue
         else:
-          points_user.append(0) 
-          points_computer.append(1) 
-          print("Computer win! get 1 point") 
-          continue 
-      elif user_choices == "paper": 
-        if computer_choice == "hammer": 
-          points_user.append(1) 
-          points_computer.append(0) 
-          print("You win! get 1 point") 
-          continue 
+          points_user.append(0)
+          points_computer.append(1)
+          print("Computer win! get 1 point")
+          continue
+      elif user_choices == "scissor":
+        if computer_choice == "paper":
+          points_user.append(1)
+          points_computer.append(0)
+          print("You win! get 1 point")
+          continue
         else:
-          points_user.append(0) 
-          points_computer.append(1) 
-          print("Computer win! get 1 point") 
-          continue 
+          points_user.append(0)
+          points_computer.append(1)
+          print("Computer win! get 1 point")
+          continue
+      elif user_choices == "paper":
+        if computer_choice == "hammer":
+          points_user.append(1)
+          points_computer.append(0)
+          print("You win! get 1 point")
+          continue
+        else:
+          points_user.append(0)
+          points_computer.append(1)
+          print("Computer win! get 1 point")
+          continue
       elif user_choices == "check":
-        print(f"Point of User: {sum(points_user)} \nPoint of Computer:{sum(points_computer)}") 
+        print(f"Point of User: {sum(points_user)} \nPoint of Computer:{sum(points_computer)}")
         continue
       else:
-        print("Try Again! Wrong Your Type!") 
-        continue 
+        print("Try Again! Wrong Your Type!")
+        continue
 
-  total_point_user = sum(points_user) 
-  total_point_computer = sum(points_computer) 
-  print(f"Point of User: {total_point_user} \nPoint of Computer:{total_point_computer}") 
+  total_point_user = sum(points_user)
+  total_point_computer = sum(points_computer)
+  print(f"Point of User: {total_point_user} \nPoint of Computer:{total_point_computer}")
 
 pao_ying_chub_game()
                     </code></pre>
@@ -779,17 +632,17 @@ pao_ying_chub_game()
                         </button>
                     </div>
                     <pre><code class="link-cursor language-python">
-if user_choices == "hammer": 
-        if computer_choice == "scissor": 
-          points_user.append(1) 
-          points_computer.append(0) 
-          print("You win! get 1 point") 
-          continue 
-        else: 
-          points_user.append(0) 
-          points_computer.append(1) 
-          print("Computer win! get 1 point") 
-          continue 
+if user_choices == "hammer":
+        if computer_choice == "scissor":
+          points_user.append(1)
+          points_computer.append(0)
+          print("You win! get 1 point")
+          continue
+        else:
+          points_user.append(0)
+          points_computer.append(1)
+          print("Computer win! get 1 point")
+          continue
                     </code></pre>
                     <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
                 </div>
@@ -799,7 +652,6 @@ if user_choices == "hammer":
                 <mark><b>อธิบาย : </b></mark>
             </p>
 
-            
             <ul>
                 <li class="link-cursor" style="text-align: justify;">ถ้า <code class="inline-code">user_choices</code>
                     ออกตัวเลือกมาเป็น hammer
@@ -812,7 +664,6 @@ if user_choices == "hammer":
                     และจะเพิ่มคะแนนให้กับคอมพิวเตอร์ (Computer) 1 คะแนน
                     มันก็จะวนลูปไปเรื่อย ๆ จนกว่าจะครบ 10 รอบ ตาม while loop ที่เรากำหนดไว้ในส่วนถัดไป</li>
             </ul>
-            
 
             <br>
 
@@ -826,12 +677,12 @@ if user_choices == "hammer":
                     </div>
                     <pre><code class="link-cursor language-python">
 points_user = []
-points_computer = [] 
-total_round = len(points_computer + points_user) / 2 
+points_computer = []
+total_round = len(points_computer + points_user) / 2
 
 while (len(points_computer + points_user) / 2) < 10:
-    user_choices = input("Your Turn (hammer, scissor, paper): ").lower().replace(" ","") 
-    computer_choice = choice(choices) 
+    user_choices = input("Your Turn (hammer, scissor, paper): ").lower().replace(" ","")
+    computer_choice = choice(choices)
                 </code></pre>
                     <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
                 </div>
@@ -904,7 +755,7 @@ while (len(points_computer + points_user) / 2) < 10:
             <a href="https://colab.research.google.com/drive/1ITMHVGs7FL05r5lJSdYmBqhDgtva2sbr?usp=sharing"
                 class="hover-expand" target="_blank"><img src="colab.png" width="30" class="notion-icon"></a> Google Colab
         </h2>
-        
+
         <p>
             <a href="https://colab.research.google.com/drive/1ITMHVGs7FL05r5lJSdYmBqhDgtva2sbr?usp=sharing"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">

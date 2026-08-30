@@ -16,6 +16,9 @@
       gtag("config", "G-0MKCCGG3QF");
     </script>
     <meta charset="UTF-8" />
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -34,38 +37,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ นำข้อมูล Diamonds จาก library(ggplot2) มาวิเคราะห์เชิงสำรวจด้วย R และแปลงเป็นเอกสารสวยงามด้วย R Markdown ซึ่งประกอบด้วยข้อมูลเพชรกว่า 53,000 เม็ดจากบริษัทจำหน่ายเพชรจริงในสหรัฐฯ ในปี 2008 จุดประสงค์หลักคือใช้สำหรับการเรียนรู้การวิเคราะห์ข้อมูลและการสร้างกราฟ เชิญรับชมได้ครับ ขอบคุณครับ">
   </head>
 
-  <div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-      <input type="checkbox" id="theme-toggle" />
-      <span class="slider"></span>
-      <span class="switch-label"></span>
-    </label>
-  </div>
-
-  <div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-      <input type="checkbox" id="blur-toggle" />
-      <span class="slider1"></span>
-      <span class="switch-label1"></span>
-    </label>
-  </div>
-
-  <!-- Table of Contents -->
-  <!-- ปุ่มเลื่อนไปด้านบน -->
-  <button id="scrollToTopBtn" title="Go to top">⇧</button>
-  <button id="toggle-toc-btn">◀</button>
-  <!-- Hamburger for mobile -->
-  <button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-  ≡
-  </button>
-  <aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-  </aside>
-
-  <body class="fade-slide-in project_vizdiamond-page">
+  <body class="fade-slide-in project_vizdiamond-page" data-toc="deep">
     <header>
       <div class="header-background"></div>
       <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 6 : </span>EDA Visualization of <br>the Diamond Dataset Using
@@ -75,313 +47,14 @@
         /></span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-      <ul>
-        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li>
-        <!-- Home Tab with House Emoji -->
-        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-        <!-- Work Experience Dropdown -->
-        <li class="dropdown">
-          <a href="experience.html" onclick="navigateToExperience()"
-            >Work Experience</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToExperience_leowood()"
-                >Leowood Intertrade Co Ltd.
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Projects Dropdown -->
-        <li class="dropdown">
-          <a href="project.html" class="active" onclick="scrollToTop(event)"
-            >Project Overview</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToProject_ggsheet_dsb10()"
-                >P1 : Data Exploration and Transformation with
-                <img
-                  src="sheets.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />
-                Google Sheets</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                >P2 : Building a Café Restaurant Database Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="SQL.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_rfm_py_dsb10()"
-                >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python and
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                for Strategic Business Insight</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="python.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                with <img src="R.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a
-                class="active1"
-                onclick="scrollToTop(event)"
-                onclick="navigateToProject_vizdimond_dsb10()"
-                >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and R Markdown</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_titanic_glm_dsb10()"
-                >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R
-              </a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_looker_dsb10()"
-                >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                <img
-                  src="looker.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Looker Studio</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                >P9 : Chatbot Development for a Pizza Business Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                Programming</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                >P10 : Object-Oriented ATM System: Financial Transactions with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python OOP</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_api_py()"
-                >mini P11 : Extracting Public API Data with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python: Air Quality Analytics</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_xml_cafe()"
-                >mini P12 : Cafe Menu Data Structure with
-                <img
-                  src="xml.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />XML</a
-              >
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="certificate.html" onclick="navigateToCertificate()"
-            >Certificates</a
-          >
-        </li>
-        <li>
-          <a href="contact.html" onclick="navigateToContact()">Contact</a>
-        </li>
-      </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                  <ul>
-                    <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                    <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br>
-                    <!-- Home Tab with House Emoji -->
-                    <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                    <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                    <!-- Work Experience Dropdown -->
-                    <li class="dropdown">
-                      <a href="experience.html" onclick="navigateToExperience()"
-                        >Work Experience</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToExperience_leowood()"
-                            >Leowood Intertrade Co Ltd.
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-
-                    <!-- Projects Dropdown -->
-                    <li class="dropdown">
-                      <a href="project.html" class="active" onclick="scrollToTop(event)"
-                        >Project Overview</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToProject_ggsheet_dsb10()"
-                            >P1 : Data Exploration and Transformation with
-                            <img
-                              src="sheets.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />
-                            Google Sheets</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                            >P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="SQL.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_rfm_py_dsb10()"
-                            >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python and
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            for Strategic Business Insight</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                            >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="python.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                            >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                            with <img src="R.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a
-                            class="active1"
-                            onclick="scrollToTop(event)"
-                            onclick="navigateToProject_vizdimond_dsb10()"
-                            >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and R Markdown</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_titanic_glm_dsb10()"
-                            >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R
-                          </a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_looker_dsb10()"
-                            >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                            <img
-                              src="looker.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Looker Studio</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                            >P9 : Chatbot Development for a Pizza Business Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            Programming</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                            >P10 : Object-Oriented ATM System: Financial Transactions with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python OOP</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_api_py()"
-                            >mini P11 : Extracting Public API Data with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python: Air Quality Analytics</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_xml_cafe()"
-                            >mini P12 : Cafe Menu Data Structure with
-                            <img
-                              src="xml.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />XML</a
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="certificate.html" onclick="navigateToCertificate()"
-                        >Certificates</a
-                      >
-                    </li><br>
-                    <li>
-                      <a href="contact.html" onclick="navigateToContact()">Contact</a>
-                    </li>
-                  </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
       <p style="font-size: 1.5em; font-weight: bold" class="link-cursor">
         Table of Contents
       </p>
-      <div id="toc-marker"></div>
+
       <div id="toc-section"></div>
       <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
@@ -543,7 +216,7 @@ diamonds |> distinct() |> count() !=  diamonds |> count() # ตรวจสอ�
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำ
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() > 1) # เลือกเฉพาะกลุ่มที่มีแถวมากกว่า 1 ⇒ นั่นคือแถวที่ซ้ำกัน
 
@@ -555,10 +228,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ไม่ซำ (ไม่รวมแถวซ้ำ)
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() == 1) # เลือกเฉพาะแถวที่ไม่ซ้ำกันเท่านั้น
-  
 
 ```
 
@@ -566,9 +238,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำว่ามีกี่แถว แต่ละแถวซ้ำกันกี่ครั้ง
-diamonds |> 
-  group_by(across(everything())) |> 
-  tally() |> 
+diamonds |>
+  group_by(across(everything())) |>
+  tally() |>
   filter(n > 1)  # แสดงเฉพาะแถวที่ซ้ำ
 
 ```
@@ -680,7 +352,7 @@ custom_theme <- theme_linedraw() +
     ),
     # Add margin around the plot
     # กำหนดให้ element ทั้งหมดภายใน canvas top, right, bottom, left ห่าง 15 pt
-    plot.margin = margin(15, 15, 15, 15), 
+    plot.margin = margin(15, 15, 15, 15),
     panel.background = element_rect( # พื้นหลังภายในแกนเท่านั้น
       fill = "white"  # เป็นสีขาว
     )
@@ -702,15 +374,15 @@ prep_diamonds %>%
       # นำ price มาสร้างจุดแบ่ง(break) ทีละ 500 เช่น 0, 500, 1000, ..,  18000 18500(max)
       price, breaks = seq(0, max(price), by = 500),
       labels = paste(
-        seq(0, max(price) - 500, by = 500), 
-        seq(500, max(price), by = 500), sep = "-" 
+        seq(0, max(price) - 500, by = 500),
+        seq(500, max(price), by = 500), sep = "-"
       ) # สร้าง labels เพื่อบอกว่าคอลัมน์ price อยู่ช่วงราคาเพชรไหนด้วย ขอบบน-ขอบล่าง
     )
   ) %>%
   count(price_range) %>% # นับเพชรในแต่ละช่วงราคา
   head(10) %>% # เลือก 10 แถวบนสุด
   # ทำเป็นตารางที่ดูเหมาะสมขึ้น พร้อมเปลี่ยนชื่อคอลัมน์ใหม่
-  kable(col.names = c("Price Range ($)", "Number of Diamonds"))  
+  kable(col.names = c("Price Range ($)", "Number of Diamonds"))
 
 ```
 
@@ -743,7 +415,7 @@ prep_diamonds %>%
 prep_diamonds %>%
   ggplot(aes(price)) + # กำหนดแกน x เป็น price
   geom_density(fill = "#4682B4", alpha = 0.7) + # ลงสีพื้นที่ใต้ดราฟเป็นสีออกนำ้เงิน ค่อนไปทางเข้มๆ
-  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก 
+  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(title = "Price Distribution of Diamonds",# ชื่อของ Chart การกระจายตัวราคาเพชร
        # กำหนดหัวข้อรองลงมาว่าจำนวนเพชรมากสุดอยู่ที่ช่วงไหน
@@ -814,37 +486,37 @@ prep_diamonds %>%
 
 ขอเสริมข้อ 5.3 Depth Distribution Across Diamond Cut Quality.
 
-```         
+```
 จาก chart ที่แสดง boxplot ความสัมพันธ์ระหว่าง depth (ความลึกของเพชร) และ cut (คุณภาพการเจียระไนของเพชร)
 
 เราสามารถตั้งชื่อ labels
 
 -   Title
-    
+
     -   Depth Distribution Across Diamond Cut Quality
-    
+
     -   (แสดงการกระจายตัวของความลึกในแต่ละระดับคุณภาพการเจียระไน)
 
 -   Subtitle
-    
+
     -   Comparing Depth Values for 'Fair', 'Good', 'Very Good', 'Premium', and 'Ideal' Cuts
-    
+
     -   (เปรียบเทียบค่าความลึกในแต่ละคุณภาพการเจียระไน)
 
 -   Caption
-    
+
     -   Source: ggplot2 Diamonds Dataset
-    
+
     -   (ระบุแหล่งข้อมูลจาก dataset)
 
 -   x
-    
+
     -   Cut Quality
 
     -   (แสดงคุณภาพการเจียระไน)
 
 -   y
-    
+
     -   Depth Percentage (%)
 
     -   (ระบุสัดส่วนความลึกของเพชร)
@@ -867,7 +539,7 @@ prep_diamonds %>%
   geom_point() +  # กำหนด Scatter Plot
   geom_smooth(method = "lm", col = "red") + # สร้าง LR สีแดง carat vs. price
   # แยก cut ตามแนวแกน x และแยก color ตามแนวแกน y
-  facet_grid(color ~ cut) + 
+  facet_grid(color ~ cut) +
   custom_theme +  # ปรับแต่งธีมของ Chart ตามตัวอย่างแรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(
@@ -1302,7 +974,7 @@ diamonds |> distinct() |> count() != diamonds |> count()
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>ดูเฉพาะแถวที่ซ้ำ</mark>
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -1349,7 +1021,7 @@ filter(n() > 1)
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          ผลลัพธ์ที่ได้ ⬆︎ <mark>มีแถวที่ซ้ำกันทั้งหมด 289 แถว</mark> ดูได้ที่ขนาดของตาราง
       </p>
-    
+
     </section>
 <!-- 3.3.2 View Only Unique Rows -->
     <section>
@@ -1358,7 +1030,7 @@ filter(n() > 1)
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>ดูเฉพาะแถวที่ ไม่ซํา (ไม่รวมแถวซ้ํา)</mark>
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -1405,7 +1077,7 @@ filter(n()== 1)
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ผลลัพธ์ที่ได้ ⬆︎ มีเฉพาะแถวที่ไม่ซ้ำ มี 53,651 แถว
       </p>
-    
+
     </section>
 <!-- 3.3.3 Identify Duplicates with Counts -->
     <section>
@@ -1414,7 +1086,7 @@ filter(n()== 1)
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>ดูเฉพาะแถวที่ซ้ําว่ามีกี่แถว แต่ละแถวซ้ํากันกี่ครั้ง</mark>
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -1461,7 +1133,7 @@ filter(n > 1)
           <code class="inline-code">filter()</code> : คัดเฉพาะกลุ่มที่มี เท่ากับ 1 แถว
         </li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ผลลัพธ์ที่ได้ ⬆︎ <mark>มีแถวที่ซ้ำกันเฉพาะทั้งหมด 143 แถว
       </ul>
@@ -1473,7 +1145,7 @@ filter(n > 1)
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>ลบเฉพาะแถวซ้ํา แต่ยังคงไว้แค่แถวแรกไว้</mark>
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -1510,12 +1182,12 @@ diamonds |> distinct()
         ผลลัพธ์ที่ได้ ⬆︎ <mark>มีแถวที่ซ้ำกันแน่นอน</mark> เพราะมันขึ้น
         <code class="inline-code">TRUE</code>
       </ul>
-    
+
     </section>
 <!-- 3.4 Explore NA -->
     <section>
       <h3 class="link-cursor">3.4 Explore NA</h3>
-    
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         วิธีการ<mark>สำรวจว่าตารางมีอยู่ไหม NA</mark> ผมจะอยู่ 2 แบบ
       </p>
@@ -1528,12 +1200,12 @@ diamonds |> distinct()
             เลือกคอลัมน์ที่มี NA อย่างน้อย 1 แถว
           </li>
       </ol>
-    
+
     </section>
 <!-- 3.4.1 Rows with at least one NA in any column -->
     <section>
       <h4 class="link-cursor">3.4.1 Rows with at least one NA in any column</h4>
-    
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>เลือกแถวที่มี NA อย่างน้อย 1 คอลัมน์</mark>
       </p>
@@ -1554,7 +1226,7 @@ diamonds |> filter(if_any(everything(), is.na))
           <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
         </div>
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
         <img
           src="p6-na-1.png"
@@ -1563,36 +1235,35 @@ diamonds |> filter(if_any(everything(), is.na))
           onclick="openGalleryModal('p6-na-1.png')"
         />
       </div>
-      
+
       <ul>
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">everything()</code> → เลือก ทุกคอลัมน์
         </li>
-        
+
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">is.na</code> → เช็คว่า เป็นค่า NA หรือไม่
         </li>
-        
+
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">if_any(..., is.na)</code> → ตรวจสอบว่า มีอย่างน้อย 1 คอลัมน์ในแถวใดแถวหนึ่งที่เป็น NA
-        
+
         <ul>
           <li class="link-cursor" style="text-align: justify;">
           <code class="inline-code">filter(...)</code> → คัดเอาเฉพาะ แถวที่ผ่านเงื่อนไขนั้น
           </li>
         </ul>
-      
+
       </ul>
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ผลลัพธ์ที่ได้ ⬆︎ <mark>ไม่มี NA อยู่เลย</mark> ในแต่ละแถวอย่างน้อย 1 คอลัมน์
       </p>
 
-
     </section>
 <!-- 3.4.2 Columns with at least one NA in any row -->
     <section>
       <h4 class="link-cursor">3.4.2 Columns with at least one NA in any row</h4>
-    
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>เลือกแถวที่มี NA อย่างน้อย 1 คอลัมน์</mark>
       </p>
@@ -1613,7 +1284,7 @@ diamonds |> select(where(~ any(is.na(.))))
           <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
         </div>
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
         <img
           src="p6-na-2.png"
@@ -1622,19 +1293,19 @@ diamonds |> select(where(~ any(is.na(.))))
           onclick="openGalleryModal('p6-na-2.png')"
         />
       </div>
-      
+
       <ul>
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">select(...)</code> → เลือกเฉพาะคอลัมน์ตามเงื่อนไขที่กำหนด
         </li>
-        
+
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">where(...)</code> → ใช้เลือกคอลัมน์ <strong>ตามเงื่อนไขที่ใช้กับแต่ละคอลัมน์</strong>
         </li>
-        
+
         <li class="link-cursor" style="text-align: justify;">
         <code class="inline-code">~ any(is.na(.))</code> → เป็น <strong>lambda function</strong> (ฟังก์ชันย่อ):
-        
+
         <ul>
             <li class="link-cursor" style="text-align: justify;">
             <code class="inline-code">.</code> = แต่ละคอลัมน์ (ทีละคอลัมน์)
@@ -1652,12 +1323,12 @@ diamonds |> select(where(~ any(is.na(.))))
         ผลลัพธ์ที่ได้ ⬆︎ <mark>ไม่มี NA อยู่เลย</mark> แต่ละคอลัมน์อย่างน้อย 1 แถว
         ดังนั้นขั้นตอนต่อไปเราจะมา Clesing Data โดยการลบแถวที่ซ้ำออก
       </p>
-    
+
     </section>
 <!-- 4. Cleasing Data -->
     <section>
       <h2 class="link-cursor">4. Cleasing Data</h2>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         จากหัวข้อ 3.3 Duplicate Rows ผมแถวซ้ำ เราจะมาจำกัดแถวซ้ำทิ้งให้เหลือแค่ 1 แถวกันด้วย
       </p>
@@ -1688,7 +1359,7 @@ prep_diamonds
           onclick="openGalleryModal('p6-cleasing-1.png')"
         />
       </div>
-      
+
       <ul>
         <li class="link-cursor" style="text-align: justify">
           <code class="inline-code">distinct</code> : ตัดแถวซ้ำ
@@ -1703,7 +1374,7 @@ prep_diamonds
 <!-- 4.1 Check Duplicate Rows -->
     <section>
       <h3 class="link-cursor">4.1 Check Duplicate Rows</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ตรวจสอบว่ามีแถวซ้ำไหม
       </p>
@@ -1733,7 +1404,7 @@ prep_diamonds |> distinct() |> count() != prep_diamonds |> count()
           onclick="openGalleryModal('p6-cleasing-2.png')"
         />
       </div>
-      
+
       <ul>
         <li class="link-cursor" style="text-align: justify">
           <code class="inline-code">distinct</code> : ตัดแถวซ้ำ
@@ -1751,12 +1422,12 @@ prep_diamonds |> distinct() |> count() != prep_diamonds |> count()
 <!-- ⭐️ 5. Visualize Diamonds Data -->
     <section>
       <h2 class="link-cursor">⭐️ 5. Visualize Diamonds Data</h2>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         มาครับ มาเริ่มต้นการสำรวจข้อมูล และแสดงผลข้อมูลด้วย R ด้วยการใช้ <code class="inline-code">library(ggplot2)</code>
         กันครับ ก่อนอื่นเราจะ<mark>สร้าง object เพื่อเก็บการตั้งค่ารูปแบบมาตรฐานในการแสดงผล</mark>ของ Chart เช่น สี, ขนาด, ระยะห่าง, ตัวหนา, เส้นขอบหนา-บาง เป็นต้น
       </p>
-      
+
       <ul>
         <li class="link-cursor" style="text-align: justify">
           ชื่อหัวข้อใหญ่กราฟ
@@ -1791,63 +1462,63 @@ prep_diamonds |> distinct() |> count() != prep_diamonds |> count()
           <pre><code class="link-cursor language-r">
 custom_theme <- theme_linedraw() +
   theme(
-    
-    plot.title = element_text( 
-      face = "bold",          
-      size = rel(1.1),        
-      color = "black",        
-      margin = margin(b = 10) 
+
+    plot.title = element_text(
+      face = "bold",
+      size = rel(1.1),
+      color = "black",
+      margin = margin(b = 10)
     ),
-    
-    plot.subtitle = element_text( 
-      size = rel(0.9),        
-      color = "#2F4F4F",      
-      margin = margin(b = 15) 
+
+    plot.subtitle = element_text(
+      size = rel(0.9),
+      color = "#2F4F4F",
+      margin = margin(b = 15)
     ),
-    
-    plot.caption = element_text( 
-      size = 8,               
-      color = "#4A4A4A",      
-      margin = margin(t = 10) 
+
+    plot.caption = element_text(
+      size = 8,
+      color = "#4A4A4A",
+      margin = margin(t = 10)
     ),
-    
-    axis.title = element_text( 
-      size = 11,          
-      color = "#1C1C1C",  
-      face = "bold"       
+
+    axis.title = element_text(
+      size = 11,
+      color = "#1C1C1C",
+      face = "bold"
     ),
-    
-    axis.text = element_text( 
-      size = 9,          
-      color = "#2F4F4F"  
+
+    axis.text = element_text(
+      size = 9,
+      color = "#2F4F4F"
     ),
-    
-    strip.text = element_text( 
-      size = 10,          
-      color = "white",    
-      face = "bold"       
+
+    strip.text = element_text(
+      size = 10,
+      color = "white",
+      face = "bold"
     ),
-    strip.background = element_rect( 
-      fill = "#2F4F4F",  
-      color = "black"    
+    strip.background = element_rect(
+      fill = "#2F4F4F",
+      color = "black"
     ),
-    
-    panel.grid.major = element_line( 
-      color = "#BEBEBE",  
-      size = 0.3          
+
+    panel.grid.major = element_line(
+      color = "#BEBEBE",
+      size = 0.3
     ),
-    panel.grid.minor = element_line( 
-      color = "#D3D3D3",  
-      size = 0.2          
+    panel.grid.minor = element_line(
+      color = "#D3D3D3",
+      size = 0.2
     ),
-    panel.border = element_rect( 
-      color = "black",    
-      size = 0.8          
+    panel.border = element_rect(
+      color = "black",
+      size = 0.8
     ),
-    
-    plot.margin = margin(15, 15, 15, 15), 
-    panel.background = element_rect( 
-      fill = "white"  
+
+    plot.margin = margin(15, 15, 15, 15),
+    panel.background = element_rect(
+      fill = "white"
     )
   )
                     </code></pre>
@@ -1875,7 +1546,7 @@ custom_theme <- theme_linedraw() +
 
       <ol>
         <li class="link-cursor" style="text-align: justify">🔥 สำรวจเพชรส่วนใหญ่มีราคาอยู่ที่ช่วงเท่าไรต่อดอลลาร์</li><br>
-        
+
         <ul>
           <li class="link-cursor" style="text-align: justify">
             🔥 แสดงผลแบบตารางความถี่จำนวนเพชร
@@ -1884,44 +1555,44 @@ custom_theme <- theme_linedraw() +
             🔥 แสดงผลเป็น density chart ของช่วงราคาเพชร
           </li>
         </ul><br>
-        
+
         <li class="link-cursor" style="text-align: justify">
           🔥 สำรวจการกระจายตัวของราคาเพชร แบ่งตามเกรดการเจียระไนเพชร
         </li><br>
-        
+
         <li class="link-cursor" style="text-align: justify">
           🔥 สำรวจดูสัดส่วนความลึกเทียบกับเส้นผ่านศูนย์กลางเฉลี่ย กับการเจียระไน และ ราคา
         </li><br>
-        
+
         <ul>
           <li class="link-cursor" style="text-align: justify">
             🔥 Boxplot แสดงการกระจายตัว <code class="inline-code">depth</code>
             แบ่งตามเกรดการเจียระไนเพชร
           </li>
-          
+
           <li class="link-cursor" style="text-align: justify">
             🔥 Scatter แสดงความสัมพันธ์ของ <code class="inline-code">price</code>
             กับ <code class="inline-code">depth</code> แบ่งตามเกรดการเจียระไนเพชร
-            และแยกสีด้วย <code class="inline-code">color</code> 
+            และแยกสีด้วย <code class="inline-code">color</code>
           </li>
         </ul><br>
-        
+
         <li class="link-cursor" style="text-align: justify">
           🔥 สำรวจความสัมพันธ์น้ำหนักเพชร เทียบกับ ราคาเพชร แบ่งตามเกรดการเจียระไนเพชรระดับสูง
           และแยกสี E, F, G
         </li>
       </ol>
 
-    </section> 
+    </section>
 <!-- 5.1,5.1.1 Distribution of price groups of diamonds by Density, Table./ Table: Price Ranges of Diamonds -->
     <section>
       <h3 class="link-cursor">🔥 5.1 Distribution of price groups of diamonds by Density, Table.</h3>
       <h4 class="link-cursor">🔥 5.1.1 Table: Price Ranges of Diamonds</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้างตาราง สำรวจดูว่าจำนวนเพชรส่วนใหญ่อยู่ในช่วงราคากี่ดอลลลาร์
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -1938,14 +1609,14 @@ prep_diamonds %>%
     price_range = cut(
       price, breaks = seq(0, max(price), by = 500),
       labels = paste(
-        seq(0, max(price) - 500, by = 500), 
-        seq(500, max(price), by = 500), sep = "-" 
+        seq(0, max(price) - 500, by = 500),
+        seq(500, max(price), by = 500), sep = "-"
       )
     )
   ) %>%
   count(price_range) %>%
   head(10) %>%
-  kable(col.names = c("Price Range ($)", "Number of Diamonds"))  
+  kable(col.names = c("Price Range ($)", "Number of Diamonds"))
                     </code></pre>
           <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
         </div>
@@ -1967,7 +1638,7 @@ prep_diamonds %>%
                 class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                 <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.1.1 Table: Price Ranges of Diamonds</mark>"
     </p>
-    
+
     <p class="link-cursor" style="text-align: justify; text-indent: 1em">
       สรุปผลลัพธ์ ⬆
     </p>
@@ -1982,11 +1653,11 @@ prep_diamonds %>%
 <!-- 5.1.2 Density: Price Ranges of Diamonds -->
     <section>
       <h4 class="link-cursor">🔥 5.1.2 Density: Price Ranges of Diamonds</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้าง density chart ดูการกระจายตัวของราคาเพชรแต่ละเม็ด
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -2021,7 +1692,7 @@ prep_diamonds %>%
           onclick="openGalleryModal('p6-5.1.2.png')"
         />
       </div>
-      
+
       <p class="link-cursor">
           ขออนุญาตละการอธิบายโค้ดไว้ที่
             <a
@@ -2029,7 +1700,7 @@ prep_diamonds %>%
                   class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                   <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.1.2 Density: Price Ranges of Diamonds</mark>"
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สรุปผลลัพธ์ ⬆ Chart มีการกระจายตัวแบบ เบ้ขวา แสดงว่า
       </p>
@@ -2038,7 +1709,7 @@ prep_diamonds %>%
         <li class="link-cursor" style="text-align: justify;"><mark>ค่า Mode มีค่าน้อยกว่า ค่า Median, Mean</mark>และ</li>
         <li class="link-cursor" style="text-align: justify;"><mark>ค่าเฉลี่ยของราคาเพชรต่อเม็ดมีค่า มากกว่า ค่ามัธยฐานของราคาเพชร</mark></li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ดังนั้น ถ้าสังเกตจาก <mark>Chart เพิ่มเติมค่อนข้าง แหลมและเบ้มาก</mark> เราอาจพิจารณาค่า represent ตัวแทนของราคาเพชร
         หรืออาจไปใช้ Robust Statistic ในการวิเคราะห์เชิงสำรวจข้อมูล
@@ -2048,11 +1719,11 @@ prep_diamonds %>%
 <!-- 5.2 Sub-Diagram of Diamond Price Groups, Divided by cut. -->
     <section>
       <h3 class="link-cursor">🔥 5.2 Sub-Diagram of Diamond Price Groups, Divided by cut.</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้าง density chart ดูการกระจายตัวของราคาเพชรแต่ละเม็ด แบ่งตามเกรดที่เจียระไนของเพชร
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -2088,7 +1759,7 @@ prep_diamonds %>%
           onclick="openGalleryModal('p6-5.2.png')"
         />
       </div>
-      
+
       <p class="link-cursor">
           ขออนุญาตละการอธิบายโค้ดไว้ที่
             <a
@@ -2096,12 +1767,12 @@ prep_diamonds %>%
                   class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                   <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.2 Sub-Diagram of Diamond Price Groups, Divided by cut.</mark>"
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สรุปผลลัพธ์ ⬆ Chart <mark>มีการกระจายตัวแบบ เบ้ขวา ทุกๆการเกรดเจียระไนของเพชร</mark>เลย แต่จะมีเพชรเกรด <mark><code class="inline-code">Idel</code>
         ที่มีจำนวนสูงที่สุด</mark> เมื่อเทียบกับเกรดเพชรกลุ่มอื่นๆ
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช่มเดิม <mark>Chart เบ้มากและแหลมบางเกรด</mark> เราอาจพิจารณาค่า represent ตัวแทนของราคาเพชรของเพชรแต่ละเกรด
         หรืออาจไปใช้ Robust Statistic ในการวิเคราะห์เชิงสำรวจข้อมูล หรือสามารถตัด outlier ได้ไหมเพื่อดูช่วงราคาที่สนใจเท่านั้น
@@ -2111,11 +1782,11 @@ prep_diamonds %>%
     <section>
       <h3 class="link-cursor">🔥 5.3 Depth Distribution Across Diamond Cut Quality.</h3>
       <h4 class="link-cursor">🔥 5.3.1 Boxplot: Comparing Depth Values for Cut Quality</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้าง Boxplot แสดงการกระจายตัว depth แบ่งตามเกรดการเจียระไนเพชร
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -2161,22 +1832,22 @@ prep_diamonds %>%
                   class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                   <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.3.1 Boxplot: Comparing Depth Values for Cut Quality</mark>"
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สรุปผลลัพธ์ ⬆ Chart แกน x จะเห็นได้ว่ามันเป็นตัวแปร <code class="inline-code">factor</code> ที่กำหนด levels มาให้แล้ว
         จากน้อย-มาก ตามลำดับ และตามที่กล่าวไปในหัวข้อ <mark>3.2 Preview Data</mark> <code class="inline-code">depth</code> ที่คนส่วนใหญ่ชอบกันเพราะมันจะทำให้มีประกายเพชรที่ดีที่สุด
         <mark>คือช่วง 59-62%</mark>
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-        ดังนั้น <mark>ยิ่งเกรดเพชรดูสวยมากเท่าไร ยิ่งทำให้ depth ค่อยๆเข้าใกล้ 59-62%</mark> และ ข้อสังเกตุอีกอย่างคือ 
+        ดังนั้น <mark>ยิ่งเกรดเพชรดูสวยมากเท่าไร ยิ่งทำให้ depth ค่อยๆเข้าใกล้ 59-62%</mark> และ ข้อสังเกตุอีกอย่างคือ
       </p>
 
       <ul>
         <li class="link-cursor" style="text-align: justify;">เพชรที่มีเกรด <code class="inline-code">Fair</code>
         <mark>มี outlier ของ <code class="inline-code">depth</code> สูงมากในบรรดาเกรด <code class="inline-code">Fair</code> เดียวกัน</mark></li>
         <li class="link-cursor" style="text-align: justify;">รองลงมาก็จะเป็นเพชร เกรด <code class="inline-code">Good</code></li>
-        <li class="link-cursor" style="text-align: justify;">เพชรเกรด <code class="inline-code">Idel</code> มี outlier บางส่วนแต่มันยังคงค่า <code class="inline-code">depth</code> 
+        <li class="link-cursor" style="text-align: justify;">เพชรเกรด <code class="inline-code">Idel</code> มี outlier บางส่วนแต่มันยังคงค่า <code class="inline-code">depth</code>
           ที่<mark>กระจุกตัวเข้าใกล้ค่า <code class="inline-code">depth</code> 59-62% อยู่ดี</li></mark>
       </ul>
 
@@ -2184,11 +1855,11 @@ prep_diamonds %>%
 <!-- 5.3.2 Scatter: Dist. of Diamond Shapes with Prices by Diamond Color-->
     <section>
       <h4 class="link-cursor">🔥 5.3.2 Scatter: Dist. of Diamond Shapes with Prices by Diamond Color</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้าง scatter plot เพื่อดูการกระจายตัวของเพชรแต่ละเกรดว่ามี <code class="inline-code">depth</code> spread แตกต่างกันยังไง
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -2235,7 +1906,7 @@ prep_diamonds %>%
                   class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                   <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.3.2 Scatter: Dist. of Diamond Shapes with Prices by Diamond Color</mark>"
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สรุปผลลัพธ์ ⬆ Chart เห็นได้ชัดเลยว่ายิ่งเกรดเพชรต่ำ มีการกระจายตัวที่แตกต่างกันอย่างมีนัยยะสำคัญ เช่น
       </p>
@@ -2250,12 +1921,12 @@ prep_diamonds %>%
 <!-- 5.4 Correlation Between Carat and Diamond Price. -->
     <section>
       <h3 class="link-cursor">🔥 5.4 Correlation Between Carat and Diamond Price.</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สร้าง Scatter Plot พร้อมกับเส้น Simple Linear Regression เพื่อดูความสัมพันธ์ของน้ำหนักเพชรกับราคาเพชร แบ่งตามเกรด และแยกสี
         และแบ่งสีตามควาใสของเพชรแต่ละเม็ดด้วย
       </p>
-      
+
       <details class="detail1">
         <summary>Code</summary>
 
@@ -2276,7 +1947,7 @@ prep_diamonds %>%
   ggplot(aes(carat, price, col = clarity)) +
   geom_point() +
   geom_smooth(method = "lm", col = "red") +
-  facet_grid(color ~ cut) + 
+  facet_grid(color ~ cut) +
   custom_theme +
   theme(plot.background = element_rect(fill = "#f5e19f")) +
   labs(
@@ -2307,7 +1978,7 @@ prep_diamonds %>%
                   class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">
                   <b> Google Drive</b></a> กดเลือกหัวข้อ  "<mark>5.4 Correlation Between Carat and Diamond Price.</mark>"
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สรุปผลลัพธ์ ⬆ Chart ทุกๆ Chart ตามความสัมพันธ์ของน้ำหนักและราคา ตามสี ตามเกรด และความใสของเพชร โดยเฉลี่ยภาพรวม<mark>โมเดล Fitting
         มีค่าสัมประสิทธิสหสัมพันธ์ ~90% 🔥</mark>
@@ -2315,7 +1986,7 @@ prep_diamonds %>%
 
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ก็จบไปแล้วนะครับสำหรับหัวข้อ Visualize Diamonds Data ส่วนตัวผมชอบ Data Visualization มากเลยมันเหมืือนเป็นการที่เราผ่านทุกอย่างมาหมดแล้ว
-        การตั้งคำถาม การทำควาามสะอาดข้อมูล การสรุปผลสถิติ 
+        การตั้งคำถาม การทำควาามสะอาดข้อมูล การสรุปผลสถิติ
         เหลือแค่เล่าเรื่องด้วยภาพให้คนอื่นฟัง ต่อไปผมจะนำโค้ดทั้งหมดที่ผ่านมา นำมาสร้าง <code class="inline-code">.Rmd</code> และ
         Export เป็น PDF, HTML เหมือนตัวอย่างในหัวข้อ <mark>1.1 รูปแบบ R Markdown Code</mark>
       </p>
@@ -2359,7 +2030,7 @@ prep_diamonds %>%
 
         <li class="link-cursor" style="text-align: justify;">
           กำหนดชื่อ <code class="inline-code">Title</code>, <code class="inline-code">Author</code>, <code class="inline-code">Date</code>
-          เลือก Default ส่งออกเป็น PDF 
+          เลือก Default ส่งออกเป็น PDF
         </li>
 
         <div class="iframe-container cursor-zoom-in">
@@ -2377,7 +2048,7 @@ prep_diamonds %>%
           แต่สำหรับหัวข้อนี้เราจะเน้นการติดตั้ง package และส่งออกของมูลก่อน หัวข้อหน้าจะเป็นการอธิบายเกี่ยวกับ
           Code R Markdown ด้านล่าง
         </p>
-        
+
         <details class="detail">
         <summary>รูปแบบ Code R Markdown</summary>
 
@@ -2487,7 +2158,7 @@ diamonds |> distinct() |> count() !=  diamonds |> count() # ตรวจสอ�
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำ
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() > 1) # เลือกเฉพาะกลุ่มที่มีแถวมากกว่า 1 ⇒ นั่นคือแถวที่ซ้ำกัน
 
@@ -2499,10 +2170,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ไม่ซำ (ไม่รวมแถวซ้ำ)
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() == 1) # เลือกเฉพาะแถวที่ไม่ซ้ำกันเท่านั้น
-  
 
 ```
 
@@ -2510,9 +2180,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำว่ามีกี่แถว แต่ละแถวซ้ำกันกี่ครั้ง
-diamonds |> 
-  group_by(across(everything())) |> 
-  tally() |> 
+diamonds |>
+  group_by(across(everything())) |>
+  tally() |>
   filter(n > 1)  # แสดงเฉพาะแถวที่ซ้ำ
 
 ```
@@ -2624,7 +2294,7 @@ custom_theme <- theme_linedraw() +
     ),
     # Add margin around the plot
     # กำหนดให้ element ทั้งหมดภายใน canvas top, right, bottom, left ห่าง 15 pt
-    plot.margin = margin(15, 15, 15, 15), 
+    plot.margin = margin(15, 15, 15, 15),
     panel.background = element_rect( # พื้นหลังภายในแกนเท่านั้น
       fill = "white"  # เป็นสีขาว
     )
@@ -2646,15 +2316,15 @@ prep_diamonds %>%
       # นำ price มาสร้างจุดแบ่ง(break) ทีละ 500 เช่น 0, 500, 1000, ..,  18000 18500(max)
       price, breaks = seq(0, max(price), by = 500),
       labels = paste(
-        seq(0, max(price) - 500, by = 500), 
-        seq(500, max(price), by = 500), sep = "-" 
+        seq(0, max(price) - 500, by = 500),
+        seq(500, max(price), by = 500), sep = "-"
       ) # สร้าง labels เพื่อบอกว่าคอลัมน์ price อยู่ช่วงราคาเพชรไหนด้วย ขอบบน-ขอบล่าง
     )
   ) %>%
   count(price_range) %>% # นับเพชรในแต่ละช่วงราคา
   head(10) %>% # เลือก 10 แถวบนสุด
   # ทำเป็นตารางที่ดูเหมาะสมขึ้น พร้อมเปลี่ยนชื่อคอลัมน์ใหม่
-  kable(col.names = c("Price Range ($)", "Number of Diamonds"))  
+  kable(col.names = c("Price Range ($)", "Number of Diamonds"))
 
 ```
 
@@ -2687,7 +2357,7 @@ prep_diamonds %>%
 prep_diamonds %>%
   ggplot(aes(price)) + # กำหนดแกน x เป็น price
   geom_density(fill = "#4682B4", alpha = 0.7) + # ลงสีพื้นที่ใต้ดราฟเป็นสีออกนำ้เงิน ค่อนไปทางเข้มๆ
-  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก 
+  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(title = "Price Distribution of Diamonds",# ชื่อของ Chart การกระจายตัวราคาเพชร
        # กำหนดหัวข้อรองลงมาว่าจำนวนเพชรมากสุดอยู่ที่ช่วงไหน
@@ -2758,37 +2428,37 @@ prep_diamonds %>%
 
 ขอเสริมข้อ 5.3 Depth Distribution Across Diamond Cut Quality.
 
-```         
+```
 จาก chart ที่แสดง boxplot ความสัมพันธ์ระหว่าง depth (ความลึกของเพชร) และ cut (คุณภาพการเจียระไนของเพชร)
 
 เราสามารถตั้งชื่อ labels
 
 -   Title
-    
+
     -   Depth Distribution Across Diamond Cut Quality
-    
+
     -   (แสดงการกระจายตัวของความลึกในแต่ละระดับคุณภาพการเจียระไน)
 
 -   Subtitle
-    
+
     -   Comparing Depth Values for 'Fair', 'Good', 'Very Good', 'Premium', and 'Ideal' Cuts
-    
+
     -   (เปรียบเทียบค่าความลึกในแต่ละคุณภาพการเจียระไน)
 
 -   Caption
-    
+
     -   Source: ggplot2 Diamonds Dataset
-    
+
     -   (ระบุแหล่งข้อมูลจาก dataset)
 
 -   x
-    
+
     -   Cut Quality
 
     -   (แสดงคุณภาพการเจียระไน)
 
 -   y
-    
+
     -   Depth Percentage (%)
 
     -   (ระบุสัดส่วนความลึกของเพชร)
@@ -2811,7 +2481,7 @@ prep_diamonds %>%
   geom_point() +  # กำหนด Scatter Plot
   geom_smooth(method = "lm", col = "red") + # สร้าง LR สีแดง carat vs. price
   # แยก cut ตามแนวแกน x และแยก color ตามแนวแกน y
-  facet_grid(color ~ cut) + 
+  facet_grid(color ~ cut) +
   custom_theme +  # ปรับแต่งธีมของ Chart ตามตัวอย่างแรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(
@@ -2887,11 +2557,11 @@ prep_diamonds %>%
             <img src="p6-rmd-9.png" width="750" class="cursor-zoom-in"
                 onclick="openGalleryModal('p6-rmd-9.png')">
         </div>
-        
+
         <div class="iframe-container cursor-zoom-in">
             <img src="p6-rmd-10.png" width="750" class="cursor-zoom-in"
                 onclick="openGalleryModal('p6-rmd-10.png')">
-        </div> 
+        </div>
 
         <hr>
 
@@ -3083,7 +2753,7 @@ diamonds |> distinct() |> count() !=  diamonds |> count() # ตรวจสอ�
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำ
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() > 1) # เลือกเฉพาะกลุ่มที่มีแถวมากกว่า 1 ⇒ นั่นคือแถวที่ซ้ำกัน
 
@@ -3095,10 +2765,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ไม่ซำ (ไม่รวมแถวซ้ำ)
-diamonds |> 
+diamonds |>
   group_by(across(everything())) |> # group โดยใช้ทุกคอลัมน์
   filter(n() == 1) # เลือกเฉพาะแถวที่ไม่ซ้ำกันเท่านั้น
-  
 
 ```
 
@@ -3106,9 +2775,9 @@ diamonds |>
 
 ```{r}
 # ดูเฉพาะแถวที่ซ้ำว่ามีกี่แถว แต่ละแถวซ้ำกันกี่ครั้ง
-diamonds |> 
-  group_by(across(everything())) |> 
-  tally() |> 
+diamonds |>
+  group_by(across(everything())) |>
+  tally() |>
   filter(n > 1)  # แสดงเฉพาะแถวที่ซ้ำ
 
 ```
@@ -3220,7 +2889,7 @@ custom_theme <- theme_linedraw() +
     ),
     # Add margin around the plot
     # กำหนดให้ element ทั้งหมดภายใน canvas top, right, bottom, left ห่าง 15 pt
-    plot.margin = margin(15, 15, 15, 15), 
+    plot.margin = margin(15, 15, 15, 15),
     panel.background = element_rect( # พื้นหลังภายในแกนเท่านั้น
       fill = "white"  # เป็นสีขาว
     )
@@ -3242,15 +2911,15 @@ prep_diamonds %>%
       # นำ price มาสร้างจุดแบ่ง(break) ทีละ 500 เช่น 0, 500, 1000, ..,  18000 18500(max)
       price, breaks = seq(0, max(price), by = 500),
       labels = paste(
-        seq(0, max(price) - 500, by = 500), 
-        seq(500, max(price), by = 500), sep = "-" 
+        seq(0, max(price) - 500, by = 500),
+        seq(500, max(price), by = 500), sep = "-"
       ) # สร้าง labels เพื่อบอกว่าคอลัมน์ price อยู่ช่วงราคาเพชรไหนด้วย ขอบบน-ขอบล่าง
     )
   ) %>%
   count(price_range) %>% # นับเพชรในแต่ละช่วงราคา
   head(10) %>% # เลือก 10 แถวบนสุด
   # ทำเป็นตารางที่ดูเหมาะสมขึ้น พร้อมเปลี่ยนชื่อคอลัมน์ใหม่
-  kable(col.names = c("Price Range ($)", "Number of Diamonds"))  
+  kable(col.names = c("Price Range ($)", "Number of Diamonds"))
 
 ```
 
@@ -3283,7 +2952,7 @@ prep_diamonds %>%
 prep_diamonds %>%
   ggplot(aes(price)) + # กำหนดแกน x เป็น price
   geom_density(fill = "#4682B4", alpha = 0.7) + # ลงสีพื้นที่ใต้ดราฟเป็นสีออกนำ้เงิน ค่อนไปทางเข้มๆ
-  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก 
+  custom_theme + # ปรับแต่งธีมของ Chart ตามตัวอย่างอรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(title = "Price Distribution of Diamonds",# ชื่อของ Chart การกระจายตัวราคาเพชร
        # กำหนดหัวข้อรองลงมาว่าจำนวนเพชรมากสุดอยู่ที่ช่วงไหน
@@ -3354,37 +3023,37 @@ prep_diamonds %>%
 
 ขอเสริมข้อ 5.3 Depth Distribution Across Diamond Cut Quality.
 
-```         
+```
 จาก chart ที่แสดง boxplot ความสัมพันธ์ระหว่าง depth (ความลึกของเพชร) และ cut (คุณภาพการเจียระไนของเพชร)
 
 เราสามารถตั้งชื่อ labels
 
 -   Title
-    
+
     -   Depth Distribution Across Diamond Cut Quality
-    
+
     -   (แสดงการกระจายตัวของความลึกในแต่ละระดับคุณภาพการเจียระไน)
 
 -   Subtitle
-    
+
     -   Comparing Depth Values for 'Fair', 'Good', 'Very Good', 'Premium', and 'Ideal' Cuts
-    
+
     -   (เปรียบเทียบค่าความลึกในแต่ละคุณภาพการเจียระไน)
 
 -   Caption
-    
+
     -   Source: ggplot2 Diamonds Dataset
-    
+
     -   (ระบุแหล่งข้อมูลจาก dataset)
 
 -   x
-    
+
     -   Cut Quality
 
     -   (แสดงคุณภาพการเจียระไน)
 
 -   y
-    
+
     -   Depth Percentage (%)
 
     -   (ระบุสัดส่วนความลึกของเพชร)
@@ -3407,7 +3076,7 @@ prep_diamonds %>%
   geom_point() +  # กำหนด Scatter Plot
   geom_smooth(method = "lm", col = "red") + # สร้าง LR สีแดง carat vs. price
   # แยก cut ตามแนวแกน x และแยก color ตามแนวแกน y
-  facet_grid(color ~ cut) + 
+  facet_grid(color ~ cut) +
   custom_theme +  # ปรับแต่งธีมของ Chart ตามตัวอย่างแรก
   theme(plot.background = element_rect(fill = "#f5e19f")) + # เพิ่มสีของ canvas เป็นสีครีม
   labs(
@@ -3437,8 +3106,8 @@ prep_diamonds %>%
         <li class="link-cursor" style="text-align: justify">ส่วน YAML</li>
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-          YAML (อ่านว่า "แยม-เมล" หรือ "ยะ-เมล") ย่อมาจาก "YAML Ain't Markup Language" 
-          เป็น ภาษาที่ใช้จัดเก็บข้อมูลในรูปแบบข้อความ (text-based format) 
+          YAML (อ่านว่า "แยม-เมล" หรือ "ยะ-เมล") ย่อมาจาก "YAML Ain't Markup Language"
+          เป็น ภาษาที่ใช้จัดเก็บข้อมูลในรูปแบบข้อความ (text-based format)
           ซึ่งออกแบบมาให้อ่านง่ายและเขียนง่ายกว่าพวก XML หรือ JSON
         </p>
 
@@ -3446,7 +3115,7 @@ prep_diamonds %>%
             <img src="p6-rmds-1.png" width="750" class="cursor-zoom-in"
                 onclick="openGalleryModal('p6-rmds-1.png')">
         </div>
-        
+
         <ul>
           <li class="link-cursor" style="text-align: justify">
             <code class="inline-code">title</code> : ชื่อโปรเจกต์
@@ -3464,7 +3133,7 @@ prep_diamonds %>%
                 <code class="inline-code">html_document</code> : ตั้งค่า Export html
                 <ul>
                   <li class="link-cursor" style="text-align: justify">
-                    <code class="inline-code">latex_engine</code> : กำหนดให้ ใช้โปรแกรม XeLaTeX เป็นตัวประมวลผลเอกสาร LaTeX 
+                    <code class="inline-code">latex_engine</code> : กำหนดให้ ใช้โปรแกรม XeLaTeX เป็นตัวประมวลผลเอกสาร LaTeX
                   </li>
                   <li class="link-cursor" style="text-align: justify">
                     <code class="inline-code">toc</code> : สร้าง Table of Contents
@@ -3484,7 +3153,7 @@ prep_diamonds %>%
                 <code class="inline-code">pdf_document</code> : ตั้งค่า Export pdf
                 <ul>
                   <li class="link-cursor" style="text-align: justify">
-                    <code class="inline-code">latex_engine</code> : กำหนดให้ ใช้โปรแกรม XeLaTeX เป็นตัวประมวลผลเอกสาร LaTeX 
+                    <code class="inline-code">latex_engine</code> : กำหนดให้ ใช้โปรแกรม XeLaTeX เป็นตัวประมวลผลเอกสาร LaTeX
                   </li>
                   <li class="link-cursor" style="text-align: justify">
                     <code class="inline-code">toc</code> : สร้าง Table of Contents
@@ -3640,16 +3309,12 @@ prep_diamonds %>%
         </p>
 
     </section>
-    
+
     <!-- Prism Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/api/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>
   </body>

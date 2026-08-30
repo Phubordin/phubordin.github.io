@@ -12,6 +12,9 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,38 +27,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ สำรวจเพื่อวิเคราะห์ข้อมูล (EDA) เที่ยวบินของ New York City (NYC) ในปี 2013 และ 2023 โดยใช้ภาษา R เพื่อที่จะ make better decision  เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_nycflight-page">
+<body class="fade-slide-in project_nycflight-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 5 : </span>EDA and
@@ -63,131 +35,12 @@
                     width="25"></span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a class="active1" onclick="scrollToTop(event)"
-                            onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                                        <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a class="active1" onclick="scrollToTop(event)"
-                                        onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
@@ -307,7 +160,7 @@
         </ol>
 
     </section>
-    
+
     <section>
         <h3 class="link-cursor">2.1 People flying to which states and how many?</h3>
 
@@ -449,7 +302,7 @@ prep_n_flights23 |> filter(!complete.cases(prep_n_flights23))
         สำหรับตัวย่อสนามบิน 4 ที่ ที่มี NA ผมได้ทำการค้นหามาแล้วว่า
         <mark>ชื่อสนามบินแต่ละที่คืออะไร และตั้งอยู่รัฐไหน</mark> โดย<mark>อ้างอิงจากลิงก์่ต่อไปนี้</mark>
         </p>
-        
+
         <p class="link-cursor">
             <b>ตั้งอยู่ Puerto Rico</b>
         </p>
@@ -497,22 +350,22 @@ prep_n_flights23 |> filter(!complete.cases(prep_n_flights23))
                 </div>
                 <pre><code class="link-cursor language-r">
 prep_n_flights13 <- n_flight_des13 |>
-  left_join(state13, by = c("dest" = "faa")) |> 
-  select(airport_name, dest, adm1name, n_flights) |> 
-  mutate( 
+  left_join(state13, by = c("dest" = "faa")) |>
+  select(airport_name, dest, adm1name, n_flights) |>
+  mutate(
     adm1name = case_when(
       is.na(adm1name) & dest == "STT" ~ "U.S. Virgin Islands", Virgin Islands เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "BQN" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "SJU" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "PSE" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
-      TRUE ~ adm1name 
+      TRUE ~ adm1name
     ),
     airport_name = case_when(
       is.na(airport_name) & dest == "STT" ~ "Cyril E. King Airport", ให้ใส่ชื่อสนามบิน Cyril E. King Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "BQN" ~ "Rafael Hernández Airport", ให้ใส่ชื่อสนามบิน Rafael Hernández Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "SJU" ~ "Luis Muñoz Marín International Airport", คือ SJU ให้ใส่ชื่อสนามบิน Luis Muñoz Marín International Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "PSE" ~ "Mercedita Airport", ให้ใส่ชื่อสนามบิน Mercedita Airport เข้าไปแทน NA ในคอลัมน์ airport_name
-      TRUE ~ airport_name 
+      TRUE ~ airport_name
     )
   )
 
@@ -520,22 +373,22 @@ styled_note("จำนวนเที่ยวบินที่บินไป�
 prep_n_flights13
 
 prep_n_flights23 <- n_flight_des23 |>
-  left_join(state23, by = c("dest" = "faa")) |> 
-  select(airport_name, dest, adm1name, n_flights) |> 
-  mutate( 
+  left_join(state23, by = c("dest" = "faa")) |>
+  select(airport_name, dest, adm1name, n_flights) |>
+  mutate(
     adm1name = case_when(
       is.na(adm1name) & dest == "STT" ~ "U.S. Virgin Islands", Virgin Islands เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "BQN" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "SJU" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
       is.na(adm1name) & dest == "PSE" ~ "Puerto Rico", เข้าไปแทน NA ในคอลัมน์ adm1name
-      TRUE ~ adm1name 
+      TRUE ~ adm1name
     ),
     airport_name = case_when(
       is.na(airport_name) & dest == "STT" ~ "Cyril E. King Airport", ให้ใส่ชื่อสนามบิน Cyril E. King Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "BQN" ~ "Rafael Hernández Airport", ให้ใส่ชื่อสนามบิน Rafael Hernández Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "SJU" ~ "Luis Muñoz Marín International Airport", คือ SJU ให้ใส่ชื่อสนามบิน Luis Muñoz Marín International Airport เข้าไปแทน NA ในคอลัมน์ airport_name
       is.na(airport_name) & dest == "PSE" ~ "Mercedita Airport", ให้ใส่ชื่อสนามบิน Mercedita Airport เข้าไปแทน NA ในคอลัมน์ airport_name
-      TRUE ~ airport_name 
+      TRUE ~ airport_name
     )
   )
 
@@ -565,7 +418,7 @@ prep_n_flights23
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
         <p class="link-cursor" style="text-align: justify;">
             จากตารางด้านบนเราได้จัดการแทนค่า NA ไปแล้ว และเราจะพบข้อสังเกตุอีกอย่างว่า
             เราต้องการให้<mark>หาจำนวนเที่ยวบินไปในแต่ละรัฐ แต่กับพบว่ามันจะไม่ถูก Aggregate</mark>
@@ -578,7 +431,7 @@ prep_n_flights23
     <section>
         <h4 class="link-cursor">2.1.3 Check NA</h4>
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-        ทดสอบ NA ดูว่าจัดการไปแล้วหรือยัง เพื่อที่จะได้นำไป 
+        ทดสอบ NA ดูว่าจัดการไปแล้วหรือยัง เพื่อที่จะได้นำไป
         Summaries / Visualize Data ต่อไป
         </p>
 
@@ -621,7 +474,7 @@ prep_n_flights23 |>
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             เราเลือกแถวที่มี NA อย่างน้อย 1 คอลัมน์ <mark>พบว่าไม่มีค่า NA ใดๆ</mark> เหลืออยู่แล้ว
             ดังนั้นเราสามารถทำการ <mark>Summaries / Visualize Data</mark> ได้เลย
@@ -677,7 +530,7 @@ summaries_data23
         <div class="iframe-container cursor-zoom-in">
             <img src="p5-4-4-1.png" width="400" class="cursor-zoom-in" onclick="openGalleryModal('p5-4-4-1.png')">
         </div>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             ต่อไปเป็นการ <mark>สร้าง bar chart แสดงผลลัพธ์</mark>
             โดยใช้ <code class="inline-code">ggplot2</code> เพื่อให้เห็นภาพชัดเจนยิ่งขึ้น
@@ -719,7 +572,6 @@ visualize_data13
         <div class="iframe-container cursor-zoom-in">
             <img src="p5-4-4-2.png" width="400" class="cursor-zoom-in" onclick="openGalleryModal('p5-4-4-2.png')">
         </div>
-
 
         <details class="detail">
 
@@ -767,14 +619,14 @@ visualize_data23
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             จะเห็นได้ว่า <mark>รัฐที่มีจำนวนเที่ยวบินไปมากที่สุดในปี 2013, 2023 คือ Florida</mark>
             อยู่ที่จำนวน 58,677 เที่ยวบิน และเพิ่มขึ้นมาเป็น 75,388 เที่ยวบินในปี 2023 <mark>ที่เหลือลำดับจะเหมือนเดิมยกเว้น
             ลำดับที่ 5 ที่เปลี่ยนจาก illinois มาเป็น virginia ในปี 2013</mark>
             bar chart จะทำให้เห็นความแตกต่างของจำนวนเที่ยวบินที่บินไปในแต่ละรัฐได้ชัดเจนมากขึ้น
         </p>
-        
+
     </section>
 
     <section>
@@ -787,7 +639,7 @@ visualize_data23
             ชื่อว่า <mark>When is the best month to fly?</mark>
         </p>
     </section>
-    
+
     <section>
         <h3 class="link-cursor">2.2 When is the best month to fly?</h3>
 
@@ -921,11 +773,11 @@ season_travel_flights23
 
     <section>
         <h4 class="link-cursor"> Conclusion..month travel?</h4>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
                สรุป จำนวนเที่ยวบินทั้งหมดที่คนนิยมไป Top 4 Months
         </p>
-        
+
         <ul>
             <li class="link-cursor">
                 ปี 2013 Mar, Dec, Apr, Jan ตามลำดับ
@@ -948,7 +800,7 @@ season_travel_flights23
             ถัดไปแล้วสายการบินไหนดีล่ะ❓ ที่เราคิดว่าเหมาะที่สุด เชิฐชมได้ที่หัวข้อถัดไปครับ
         </p>
     </section>
-    
+
     <section>
         <h3 class="link-cursor">2.3 Which airline is the best?</h3>
 
@@ -962,11 +814,11 @@ season_travel_flights23
             <li class="link-cursor" style="text-align: justify;">
                 ไฟต์ดีเลย์ น้อยขาออก + ถึงก่อนเวลา (best)
             </li>
-            
-            <li class="link-cursor" style="text-align: justify;">               
+
+            <li class="link-cursor" style="text-align: justify;">
             ใช้เวลาบินน้อยสุด + ระยะเวลาบินต่อเที่ยวบิน ใน 1 ปี
             </li>
-            
+
             <li class="link-cursor" style="text-align: justify;">
                 เราต้องมาถึงสนามบินอย่างน้อย 3 ชม.<br>
                 (เพื่อเวลา Check-in, ทานข้าว, เวลาฉุกเฉินเร่งด่วน เพราะ บางสายการบิน มีการออกก่อนเวลา 2 ชม กว่าๆ)
@@ -1075,11 +927,11 @@ the_best_airlines_2023
 
     <section>
         <h4 class="link-cursor"> Conclusion..Airlines?</h4>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
                สรุป จาก 3 สนามบิน EWR(NJ), JFK(NY), LGA(NY) ที่บินไป florida มี Top 4 สายการบินที่บินไปในแต่ละปี
         </p>
-        
+
         <ul>
             <li class="link-cursor">
                 ปี 2013 American Airlines Inc., Envoy Air, Delta Air Lines Inc., United Air Lines Inc. ตามลำดับ
@@ -1098,7 +950,7 @@ the_best_airlines_2023
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             สรุป ณ ตอนนี้
-            
+
             <ul>
                 <li class="link-cursor">
                     <mark>เราเลือกไปรัฐ Florida</mark>
@@ -1110,12 +962,12 @@ the_best_airlines_2023
                     <mark>สายการบิน Allegiant Air</mark>
                 </li>
             </ul>
-            
+
             ถัดไปแล้วไป<mark>สนามบิน และ ช่วงเวลากี่โมงดีล่ะ❓</mark> ที่ลดโอกาสเจอฝนตก เชิญชมได้ที่หัวข้อถัดไปครับ
 
         </p>
     </section>
-    
+
     <section>
         <h3 class="link-cursor">2.4 What is the best flight time to choose?</h3>
 
@@ -1153,7 +1005,7 @@ the_best_airlines_2023
 styled_note("พบ NA หลัง Join Table ในปี 2013 ภายในคอลัมน์ต่อไปนี้")
 flights13 |>
   left_join(weather13, by = c("origin", "year", "month", "day", "hour")) |>
-  select(where(~ any(is.na(.)))) 
+  select(where(~ any(is.na(.))))
 
 styled_note("พบ NA หลัง Join Table ในปี 2023 ภายในคอลัมน์ต่อไปนี้")
 flights23 |>
@@ -1220,7 +1072,7 @@ flights_weather_clean_2013
 styled_note("ตัดแถวที่มีค่า NA ออก ในปี 2023")
 flights_weather_clean_2023 <- flights23 |>
   left_join(weather23, by = c("origin", "year", "month", "day", "hour")) |>
-  filter(if_all(everything(), ~ !is.na(.))) 
+  filter(if_all(everything(), ~ !is.na(.)))
 flights_weather_clean_2023
                     </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
@@ -1246,7 +1098,7 @@ flights_weather_clean_2023
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
         <p class="link-cursor" style="text-align: justify;">
             จากตารางด้านบนเราได้<mark>จัดการ NA แล้วด้วยการตัดแถวที่มีค่า NA</mark> อย่างน้อย 1 คอลัมน์ เพราะมันส่งผลต่อคอลัมน์
                 <code class="inline-code">precip</code> ซึ่งเป็นคอลัมน์บอกปริมาณฝนที่ตกในแต่ละวัน ณ ที่สนามบินต้นทาง
@@ -1257,7 +1109,7 @@ flights_weather_clean_2023
     <section>
         <h4 class="link-cursor">2.4.3 Check NA</h4>
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-        ทดสอบ NA ดูว่าจัดการไปแล้วหรือยัง เพื่อที่จะได้นำไป 
+        ทดสอบ NA ดูว่าจัดการไปแล้วหรือยัง เพื่อที่จะได้นำไป
         Summaries / Visualize Data ต่อไป
         </p>
 
@@ -1297,7 +1149,7 @@ flights_weather_clean_2023 |> select(where(~ any(is.na(.))))
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             เราเลือกแถวที่มี NA อย่างน้อย 1 คอลัมน์ <mark>พบว่าไม่มีค่า NA ใดๆ</mark> เหลืออยู่แล้ว
             ดังนั้นเราสามารถทำการ <mark>Summaries / Visualize Data</mark> ได้เลย
@@ -1356,7 +1208,7 @@ flights_weather_2013
         <div class="iframe-container cursor-zoom-in">
             <img src="p5-4-44-1.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p5-4-44-1.png')">
         </div>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             ต่อไปเป็นการ <mark>สร้าง line chart ย่อบๆของปี 2023</mark>
         </p>
@@ -1412,7 +1264,7 @@ flights_weather_2023
                 <b> Github</b></a>
             นะครับ
         </p>
-        
+
     </section>
 
     <section>
@@ -1424,7 +1276,7 @@ flights_weather_2023
             <li class="link-cursor" style="text-align: justify;">
                 ปี 2013 เน้นไปช่วงเช้า ตี 5 ถึง 10 โมงเช้าที่สายการบิน JFK(NY)(สีเขียว) เพราะช่วงเช้าจะมีฝนตกบ้างที่ LGA(NY) และ 8-10 โมงเริ่มมีฝนตกบ้างที่ EWR(NJ)
             </li>
-            
+
             <li class="link-cursor" style="text-align: justify;">
                 ปี 2023 เน้นไปช่วงเช้า ตี 5 ถึง 10 โมงเช้าที่สายการบินไหนก็ได้ EWR(NJ), <mark>JFK(NY)</mark>, LGA(NY)
             </li>
@@ -1440,7 +1292,7 @@ flights_weather_2023
             <a href="https://colab.research.google.com/drive/1SwBmA0Z2Zeta6G13PouYCCIQTVD2sO4K?usp=sharing"
                 class="hover-expand" target="_blank"><img src="colab.png" width="30" class="notion-icon"></a> Google Colab
         </h2>
-        
+
         <p>
             <a href="https://colab.research.google.com/drive/1SwBmA0Z2Zeta6G13PouYCCIQTVD2sO4K?usp=sharing"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
@@ -1457,10 +1309,7 @@ flights_weather_2023
     <!-- Prism Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>

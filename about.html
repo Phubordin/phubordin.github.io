@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,232 +29,154 @@
     <meta name="description" content="Portfolio About Me Page ใช้สำหรับการแนะนำตัวเบื้องต้น เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม body Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list"></ul>
-</aside>
-
 <body class="fade-slide-in about-page">
     <header>
         <div class="header-background"></div>
         <span class="strong1 link-cursor">About me</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" class="active" onclick="scrollToTop(event)">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"> SQL</a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                style="vertical-align:middle" width="25"> Python</a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" class="active" onclick="scrollToTop(event)">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"> SQL</a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                            style="vertical-align:middle" width="25"> Python</a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
-
-    <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
-        <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
-        <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
-    </section>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <section id="about-details">
         <h2 class="link-cursor">Personal Information</h2>
 
-        <div class="iframe-container">
-            <img src="phubordin.jpg" alt="Phubordin Phanyosri Data Analyst" width="250" class="cursor-zoom-in" onclick="openGalleryModal('phubordin.jpg')">
+        <div class="profile">
+            <img src="phubordin.jpg" alt="Phubordin Phanyosri — Data Analyst" class="profile-photo cursor-zoom-in"
+                onclick="openGalleryModal('phubordin.jpg')">
+
+            <dl class="info-grid link-cursor">
+                <dt>Name</dt>
+                <dd>Mr. Phubordin Phanyosri · Nickname: Phu</dd>
+
+                <dt>Age</dt>
+                <dd><span data-birth="2000-04-19">26</span> (April 19, 2000)</dd>
+
+                <dt>Education</dt>
+                <dd>B.Sc. Applied Mathematics<br>
+                    King Mongkut's University of Technology North Bangkok<br>
+                    <span class="text-description">KMUTNB</span>
+                </dd>
+
+                <dt>Work Type</dt>
+                <dd>Onsite (Bangkok, Nonthaburi, Samut Prakan), Hybrid, Work from Home · Permanent</dd>
+
+                <dt>Expected Salary</dt>
+                <dd>฿32,000 – ฿40,000</dd>
+
+                <dt>TOEIC</dt>
+                <dd><span class="text-description">In progress</span></dd>
+
+                <dt>Contact</dt>
+                <dd><a href="mailto:phubordin.phanyosri@gmail.com">phubordin.phanyosri@gmail.com</a></dd>
+            </dl>
         </div>
-        <p class="link-cursor">
-            <b>Name</b>: นายภูบดินทร์ พันธุ์โยศรี (Mr.Phubordin Phanyosri)<br>
-            <b>Nickname</b>: ภู (Phu)<br>
-            <b>Age</b>: 25 ปี (April 19,2000) <br>
-            <b>Work Preference</b>: <u>Onsite</u> (กรุงเทพ, สมุทรปรากร), Hybrid, Work from Home<br>
-            <b>Employment Type</b>: Permanent <span class="text-description" style="color: red; font-weight: bold;">(พร้อมเริ่มงานทันที) Update Oct-2025</span><br>
-            <b>Expected Salary</b>: ฿25,000 - ฿35,000 <br>
-            <b>Toeic Score</b>: <span style="color: brown;">(In progress)</span><br>
-            <b>Education</b>:<br>
-            <ul>
-                <li class="link-cursor">
-                    วิทยาศาสตรบัณฑิต มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ (มจพ.)<br>
-                    สาขาคณิตศาสตร์ประยุกร์<br>
-                    Bachelor of Science King Mongkut's University of Technology North Bangkok (KMUTNB)<br>
-                    (Applied Mathematics)
-                </li>
-            </ul>
-        </p>
+
     </section>
 
     <section id="timeline">
         <h2 class="link-cursor">TimeLine</h2>
 
-        <ul>
-            <li class="link-cursor" style="text-align: justify;">
-                Jul 2023 - Apr 2024 <br>| Data Analyst (10 Months) <br>| Leowood Intertrade Co Ltd.
+        <ul class="timeline-list">
+            <li>
+                <img src="mmt_logo.jpg" alt="" class="tl-logo">
+                <div class="tl-body">
+                    <span class="tl-role">Data Analyst</span>
+                    <span class="tl-org">มิตรไมตรีการแพทย์</span>
+                    <span class="tl-when" data-since="2025-11">Nov 2025 – Present</span>
+                </div>
+            </li>
+            <li>
+                <img src="leowood_logo.png" alt="" class="tl-logo">
+                <div class="tl-body">
+                    <span class="tl-role">Data Analyst</span>
+                    <span class="tl-org">Leowood Intertrade Co Ltd.</span>
+                    <span class="tl-when">Jul 2023 – Apr 2024 · 10 months</span>
+                </div>
             </li>
         </ul>
-    
+
     </section>
 
     <section id="skill">
         <h2 class="link-cursor">Skills & Tools</h2>
         <h3 class="link-cursor">Technical Skills</h3>
-        <ul class="link-cursor">
-            <li><b>Data Visualization</b>: Looker Studio, Power BI, Tableau</li>
-            <li><b>Prompt AI</b>: ChatGPT, Gemini, Claude, Github Copilot</li>
-            <li><b>Programming & Tools</b>
-                <ul>
-                    <li>Spreadsheets (Excel, Google Sheet) : Power Query, Pivot Table, Lookup, CSV, JSON</li>
-                    <li>Python (Pandas, NumPy)</li>
-                    <li>SQL Database</li>
-                    <li>R (dplyr, ggplot2, caret)</li>
-                    <li>Machine Learning (Random Forest, Decision Tree, Regression, KNN, etc.)</li>
-                    <li>Statistics (Sampling, Desciptive, Inferential, Experimental)</li>
-                    <li>Webscraping</li>
-                    <li>HTML/CSS, XML</li>
-                </ul>
-        </ul>
 
-        <h3 class="link-cursor">Soft Skills</h3>
-        <ul class="link-cursor">
-            <li>Adaptability & Continuous Learning </li>
-            <li>Communication & Storytelling with Data</li>
-            <li>Problem-Solving & Critical Thinking</li>
-            <li>Collaboration & Teamwork</li>
-        </ul>
+        <p class="link-cursor"><b>ภาษา &amp; การวิเคราะห์</b></p>
+        <div class="tags">
+            <span class="tag tag-accent"><img src="SQL.png" alt=""> SQL</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Microsoft SQL Server</span>
+            <span class="tag tag-accent"><img src="python.png" alt=""> Python</span>
+            <span class="tag tag-accent"><img src="R.png" alt=""> R</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">dplyr</span>
+            <span class="tag">ggplot2</span>
+            <span class="tag">caret</span>
+        </div>
+
+        <p class="link-cursor" style="margin-top:var(--s5)"><b>Dashboard &amp; BI</b></p>
+        <div class="tags">
+            <span class="tag tag-accent"><img src="looker.png" alt=""> Data Studio</span>
+            <span class="tag tag-accent">Power BI</span>
+            <span class="tag">DAX</span>
+            <span class="tag">Data Model / Star Schema</span>
+            <span class="tag">MCP Server</span>
+            <span class="tag">Tableau</span>
+        </div>
+
+        <p class="link-cursor" style="margin-top:var(--s5)"><b>Spreadsheet &amp; รายงาน</b></p>
+        <div class="tags">
+            <span class="tag tag-accent"><img src="sheets.png" alt=""> Google Sheets</span>
+            <span class="tag">Apps Script (Deploy Web App)</span>
+            <span class="tag tag-accent">Excel</span>
+            <span class="tag">Power Query</span>
+            <span class="tag">ตระกูล LOOKUP</span>
+            <span class="tag">Pivot Table</span>
+            <span class="tag">CSV / JSON</span>
+        </div>
+
+        <p class="link-cursor" style="margin-top:var(--s5)"><b>สถิติ &amp; Machine Learning</b></p>
+        <div class="tags">
+            <span class="tag">Sampling</span>
+            <span class="tag">Descriptive</span>
+            <span class="tag">Inferential</span>
+            <span class="tag">Experimental</span>
+            <span class="tag">Regression</span>
+            <span class="tag">Decision Tree</span>
+            <span class="tag">Random Forest</span>
+            <span class="tag">KNN</span>
+            <span class="tag">RFM Segmentation</span>
+            <span class="tag">Cohort Analysis</span>
+            <span class="tag">Market Basket Analysis</span>
+        </div>
+
+        <p class="link-cursor" style="margin-top:var(--s5)"><b>AI</b></p>
+        <div class="tags">
+            <span class="tag tag-accent">Claude Cowork</span>
+            <span class="tag tag-accent">Claude Code</span>
+            <span class="tag">AI Automation</span>
+            <span class="tag">SKILL.md</span>
+            <span class="tag">ChatGPT</span>
+            <span class="tag">Gemini</span>
+            <span class="tag">Claude</span>
+        </div>
+
+        <p class="link-cursor" style="margin-top:var(--s5)"><b>อื่นๆ</b></p>
+        <div class="tags">
+            <span class="tag">Web Scraping</span>
+            <span class="tag">ER Diagram</span>
+            <span class="tag"><img src="xml.png" alt=""> XML</span>
+            <span class="tag">HTML / CSS</span>
+        </div>
+
+        <h3 class="link-cursor" style="margin-top:var(--s6)">Soft Skills</h3>
+        <div class="tags">
+            <span class="tag">Adaptability &amp; Continuous Learning</span>
+            <span class="tag">Communication &amp; Storytelling with Data</span>
+            <span class="tag">Problem-Solving &amp; Critical Thinking</span>
+            <span class="tag">Collaboration &amp; Teamwork</span>
+        </div>
 
         <h3 class="link-cursor">Monkeytype <a target="_blank" href="https://monkeytype.com/profile/Phu_Phanyosri"
                 class="hover-expand"><img src="monkeytype.png" width="30" class="notion-icon"></a></h3>
@@ -294,7 +221,7 @@
                 class="link-website" target="_blank"
                 href="https://blog.skooldio.com/work-smarter-like-an-impact-player/">
                 แกะสูตรลับวิธี Worksmart ของพนักงานเกรด A+ ที่เจ้านายทุ่มจ่ายโบนัส ทีมพร้อม Support!</a> ของ <a target="_blank"
-                href="https://www.skooldio.com/"><img src="logo-skooldio.png" style="vertical-align:middle; cursor: url('cursor2.png'), auto;"
+                href="https://www.skooldio.com/"><img src="logo-skooldio.png" style="vertical-align:middle"
                     width="25"></a> Skooldio ซึ่งกล่าวถึง <mark>Impact Players ผมมีแนวคิดว่าการเป็น Impact Players
                 ที่ดีได้
                 คือเราต้องมีความเป็น Ownership + Leadership</mark> ซึ่งมีความหมายต่อไปนี้
@@ -307,7 +234,7 @@
             <ol class="link-cursor" style="text-align: justify;">
                 <li>
                     <b>Corporate Citizen</b> มุมมององค์กร
-                    
+
                     <p class="link-cursor" style="text-align: justify; text-indent: 2em;">
                         : หากเราทำตัวเองให้เก่งขึ้น ส่งผลให้เพิ่มโอกาสหารายได้ ได้มากขึ้น ยิ่งเพิ่มโอกาสสร้างรายได้ให้องค์กรได้ด้วยเช่นกัน
                         แถม Product ขององค์กรยิ่งส่งผลให้ลูกค้าได้สินค้าและบริการที่ช่วยเหลือเขาได้ ให้ผมมองว่า เราได้+องค์กรได้+ลูกค้าได้
@@ -316,11 +243,11 @@
                 </li>
                 <li>
                     <b>National Citizen</b> มุมมองประเทศชาติ
-                    
+
                     <p class="link-cursor" style="text-align: justify; text-indent: 2em;">
                         : สมมติว่า คนทำงานประจำทั้งประเทศรับผิดชอบงานอยู่ 800 บาท/งาน/ชม. ผ่านไป 1
                         ปีเงินเดือนเพิ่ม ถ้าสิ่งที่เกิดขึ้นคือจำนวนงานที่ทำเสร็จต่อชั่วโมงเท่าเดิม ประเทศจะจนลงโดยภาพรวม
-                        
+
                     <p class="link-cursor" style="text-align: justify; text-indent: 2em;">
                         ผมได้มีโอกาสฟัง <a class="link-website" target="_blank" href="https://www.youtube.com/watch?v=2qVB2pljIeo">Podcast ของคุณ CK Cheong กับ คุณธนาธร ช่วงวินาทีที่ 1:30:36 - 1:33:01</a>
                         ผมได้ข้อคิดว่า เมื่อเวลาผ่านไป
@@ -333,7 +260,7 @@
                         <li>> GDP ของประเทศนิ่ง </li>
                         <li>> แข่งขันกับประเทศอื่นไม่ได้</li>
                     </ul>
-                    
+
                     <p>
                         ผมตระหนักรู้คำนี้มากซึ่งมันไม่เกินจริงเลย แน่นอนว่ามันน่ากลัวไม่น้อย ดังนั้นสิ่งที่เราควบคุมได้คือ
                         เราทำให้ตัวเองเก่งขึ้น เพื่อสร้างข้อ 1 ที่ผ่านมา ซึ่งทำให้ภาคเอกชนเติบโต เราดี ประเทศก็ดี.. บทบาทต่อไปคือ
@@ -342,7 +269,7 @@
                 </li>
                 <li>
                     <b>Global Citizen</b> มุมมองประชาคมโลก
-                    
+
                     <p class="link-cursor" style="text-align: justify; text-indent: 2em;">
                         : ขออนุญาตยกตัวอย่าง AI สุดฮิต ส่วนใหญ่มีแต่คนบอกว่า AI จะทำให้คนว่างงาน แทนที่เด็กจบใหม่ แทนที่ junior ผมก็กลัวนะครับ
                         แต่มีน้อยมากที่มีพูดถึงว่ามันจะสร้าง role ใหม่ๆอะไรได้บ้าง อัพเกรดให้เราทำงานยังไงให้เร็วขึ้น เพิ่ม productivity ยังไงได้บ้าง
@@ -354,7 +281,7 @@
                         ถ้าเราถูกพัฒนาด้วย AI มันก็ยิ่งทำให้โลกดีขึ้น แต่ในที่นี้ก็ต้องมองเรื่องทรัพยากรที่ถูกใช้ไปด้วยเช่นกัน เช่น อากาศ น้ำ แร่ธาตุ
                         อย่าลืมว่า control สิ่งที่เรา control ได้นั่นคือ ตัวเราเอง และสิ่งที่ต้องรักษาไว้ เพื่อให้ภาพรวมดีขึ้นได้ก้ควรรักษา ขอบคุณครับ
                     </p>
-                    
+
                 </li>
             </ol>
         </p>
@@ -380,7 +307,7 @@
 
         <p><a target="_blank" href="https://www.16personalities.com/"><img src="16personalities.svg" width="200"
                     class="notion-icon hover-expand"></a></p>
-        
+
         <div class="iframe-container">
             <img src="16personalities0.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('16personalities0.png')">
         </div>
@@ -389,7 +316,7 @@
             <mark>INTJ-A สรุปสั้นๆคือเป็นคนที่ชอบความท้าทายและมักจะหาทางปรับปรุงสิ่งต่างๆให้ดีขึ้นเสมอ</mark></a>
             ไม่กลัวที่จะลงมือทำเพื่อให้สำเร็จ อ่านเพิ่มเติมเกี่ยวกับ <a class="link-website" target="_blank"href="https://www.16personalities.com/profiles/intj-a/m/ejdl2j1l2">INTJ-A</a> ภาพประกอบอื่นด้านล่าง
         </p>
-        
+
         <div class="iframe-container">
             <img src="16personalities1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('16personalities1.png')">
         </div>
@@ -447,9 +374,9 @@
                 width="100%"
                 height="1000px"
                 src="https://drive.google.com/file/d/1zo03H9m9wJv7KsPAgFkRWxHedVbgsj9P/preview"
-                frameborder="0" style="border:0" 
-                allowfullscreen 
-                loading="lazy" 
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
@@ -457,7 +384,7 @@
         <p>
             <a target="_blank" href="https://www.instagram.com/phuyuu/" class="hover-expand"><img src="ig.png" width="30"
                     class="notion-icon"></a>
-            <a target="_blank" href="https://www.youtube.com/@phu-bordin" class="hover-expand"><img src="youtube.png" width="29"
+            <a target="_blank" href="https://www.youtube.com/@Phuyuyuu" class="hover-expand"><img src="youtube.png" width="29"
                     class="notion-icon"></a>
             <a target="_blank" href="https://phubordin.github.io/index.html" class="hover-expand"><img
                     src="website.png" width="30" class="notion-icon"></a>

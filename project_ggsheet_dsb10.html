@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,38 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_ggsheet-page">
+<body class="fade-slide-in project_ggsheet-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 1 : </span>Data
@@ -63,132 +37,12 @@
                 Google Sheets</span>
     </header>
 
-    <!-- Navigation Bar -->
-
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_ggsheet_dsb10()">P1 :
-                            Data Exploration and Transformation with <img src="sheets.png" style="vertical-align:middle"
-                                width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_ggsheet_dsb10()">P1 :
-                                        Data Exploration and Transformation with <img src="sheets.png" style="vertical-align:middle"
-                                            width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                                        <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
@@ -361,7 +215,6 @@
 
     <section>
 
-
         <h3 class="link-cursor">2.2 Highlight Variable Gender Column แบ่งตามสี</h3>
 
         <p class="link-cursor">📌 <b>ที่อยู่ Google Sheets</b> : <a
@@ -460,7 +313,6 @@
             color scale ระบบก็จะทำการ default setting ให้เลยอัตโนมัติ
             หรือเราก็อาจจะปรับตามสีที่เราต้องการ เพื่อให้เหมาะสมกับความเข้าใจของ users
         </p>
-
 
     </section>
 
@@ -597,9 +449,9 @@
                     </button>
                 </div>
                 <pre><code class="link-cursor language-excel-formula">
-=QUERY( EMPLOYEE1, 
-"select * where " & 
-IF(B2="All","1=1","N='" & B2 & "'") & 
+=QUERY( EMPLOYEE1,
+"select * where " &
+IF(B2="All","1=1","N='" & B2 & "'") &
 "And " & IF(B3="all","1=1","O = '" & B3 & "'")  &
 "And " & IF(B4="All","1=1","L <= date'"& Text(B4,"yyyy-mm-dd") & "'"))
                     </code></pre>
@@ -795,7 +647,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                                     class="inline-code">select * where N = 'female'</code> ตามตารางด้านล่าง
                             </li>
                             <p>
-                                
+
                             <table class="tableizer-table link-cursor">
                                 <thead>
                                     <tr class="tableizer-firstrow">
@@ -955,7 +807,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                 <ul>
                     <li><code class="inline-code link-cursor">select * where N = 'female' And O = 'Good'</code></li>
                     <p>
-                        
+
                     <table class="tableizer-table link-cursor">
                         <thead>
                             <tr class="tableizer-firstrow">
@@ -1001,7 +853,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                     </p>
                     <li><code class="inline-code link-cursor">select * where N = 'female' And O = 'Average'</code></li>
                     <p>
-                        
+
                     <table class="tableizer-table link-cursor">
                         <thead>
                             <tr class="tableizer-firstrow">
@@ -1075,7 +927,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                     <li><code class="inline-code link-cursor">select * where N = 'female' And O = 'Excellent'</code>
                     </li>
                     <p>
-                        
+
                     <table class="tableizer-table link-cursor">
                         <thead>
                             <tr class="tableizer-firstrow">
@@ -1198,7 +1050,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                 </button>
             </div>
             <pre><code class="link-cursor language-excel-formula">
-=QUERY(EMPLOYEE1, 
+=QUERY(EMPLOYEE1,
 "select * where " &
 IF(B2="All","1=1","N='" & B2 & "'") &
 "And " & IF(B3="all","1=1","O = '" & B3 & "'")  &
@@ -1644,7 +1496,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                     </button>
                 </div>
                 <pre><code class="link-cursor language-excel-formula">
-=ArrayFormula(REGEXEXTRACT(B3:B7,".+" & D3:D7 & ".([A-Z][a-z]+)"))`                
+=ArrayFormula(REGEXEXTRACT(B3:B7,".+" & D3:D7 & ".([A-Z][a-z]+)"))`
 </code></pre>
                 <div class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -1807,7 +1659,7 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                     </button>
                 </div>
                 <pre><code class="link-cursor language-excel-formula">
-=ArrayFormula(REGEXEXTRACT(B3:B7,"Date of Birth (\d{2}.[A-z]+.\d{4})"))                
+=ArrayFormula(REGEXEXTRACT(B3:B7,"Date of Birth (\d{2}.[A-z]+.\d{4})"))
 </code></pre>
                 <div class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2294,12 +2146,11 @@ IF(B2="All","1=1","N='" & B2 & "'") &
                     class="inline-code">SPLIT()</code>, <code class="inline-code">DATE()</code> และ <code
                     class="inline-code">VLOOKUP()</code></li><br>
             <li class="link-cursor">การ Transform Data ด้วย Regular Expression สูตรที่ใช้หลักๆ <code
-                    class="inline-cod">REGEXEXTRACT()</code> และ <code class="inline-code">REGEXMATCH()</code></li>
+                    class="inline-code">REGEXEXTRACT()</code> และ <code class="inline-code">REGEXMATCH()</code></li>
         </ol>
 
         <p class="link-cursor" style="text-align:justify">เป็นต้น ขอบคุณมากๆครับที่อ่านมาถึงตรงนี้ ฝากผลงาน project อื่นๆด้วยนะครับ ขอบคุณครับ</p>
     </section>
-
 
     <section id="file">
         <h2 class="link-cursor"><a href="https://github.com/Phubordin" class="hover-expand" target="_blank"><img src="github.png"
@@ -2321,8 +2172,6 @@ IF(B2="All","1=1","N='" & B2 & "'") &
     <!-- Prism Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-excel-formula.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>

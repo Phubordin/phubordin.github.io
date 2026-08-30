@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,126 +29,18 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ เขียน Python Object-Oriented Programming (OOP) สร้างระบบ ATM ที่สามารถจำลองธุรกรรมทางการเงิน โดยมี ชื่อผู้ใช้ (name), ธนาคาร (bank), ยอดเงินคงเหลือ (balance), และ รายการธุรกรรม (statement) ผมจำลองถอนเงิน (withdraw), ชำระบิล (paybills), และ ฝากเงิน (deposit) และบันทึกธุรกรรมทั้งหมดอยู่ในรูป dict พร้อมแปลงเป็น Dataframe ด้วย Pandas เพื่อนำไปวิเคราะห์ต่อได้ เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_atm-page">
+<body class="fade-slide-in project_atm-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 10 : </span>Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" > Python OOP</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
@@ -159,7 +56,7 @@
             ที่มี Attributes เช่น ชื่อผู้ใช้ (name), ธนาคาร (bank), ยอดเงินคงเหลือ (balance), และ รายการธุรกรรม (statement) และ Methods เช่น ถอนเงิน (withdraw), ชำระบิล (paybills), และ ฝากเงิน (deposit)
             โดยที่ผมจะแบ่งเป็น 5 ข้อหลัก เพื่อใช้อธิบาย
         </p>
-        
+
         <ul>
             <li class="link-cursor" style="text-align: justify;">Object-Oriented ATM System with Python : โครงสร้างโค้ด ATM OOP</li>
             <li class="link-cursor" style="text-align: justify;">Simulate ATM Transactions : จำลองทำ Transactions ดู เช่น ฝาก ถอน จ่ายบิล</li>
@@ -181,7 +78,7 @@
             ด้านล่างนี้จะเป็นโครงสร้างโค้ด OOP ATM ที่ผมได้เขียนขึ้นมาด้วยภาษา Python
             โดยจะมีการสร้างคลาส Atm ที่มีแอตทริบิวต์และเมธอดต่างๆ เพื่อจำลองการทำงานของ ATM จริงๆ พร้อมบันทึกธุรกรรมทางการเงิน
         </p>
-        
+
         <!-- โครงโค้ด OOP ATM -->
         <details class="detail">
 
@@ -195,53 +92,53 @@
                     </button>
                 </div>
                 <pre><code class="link-cursor language-python">
-class Atm():    
-  
-  def __init__(self, name, bank, balance, statement):        
-    self.name = name         
-    self.bank = bank         
-    self.balance = balance   
-    self.statement = statement     
-  
+class Atm():
+
+  def __init__(self, name, bank, balance, statement):
+    self.name = name
+    self.bank = bank
+    self.balance = balance
+    self.statement = statement
+
   def __str__(self):
-    text = "You should type (my_atm.Attribute | my_atm.Methods(__, __) to view info." 
-    return text 
-  
+    text = "You should type (my_atm.Attribute | my_atm.Methods(__, __) to view info."
+    return text
+
   def withdraw(self, num, hint):
-    self.balance -= num  
-    self.statement["#Hints"] += [hint]       
-    self.statement["$Cash"] += [f"- {num}"]   
-    self.statement["Transactions"] += ["Withdraw"] 
-    if self.balance < 0:  
-      return "You don't have enough money"    
+    self.balance -= num
+    self.statement["#Hints"] += [hint]
+    self.statement["$Cash"] += [f"- {num}"]
+    self.statement["Transactions"] += ["Withdraw"]
+    if self.balance < 0:
+      return "You don't have enough money"
     else:
-      text = f"""WithDraw: - {num} | * {hint}"""  
-      return text 
-  
+      text = f"""WithDraw: - {num} | * {hint}"""
+      return text
+
   def paybills(self, num, hint):
-    self.balance -= num  
-    self.statement["#Hints"] += [hint]       
-    self.statement["$Cash"] += [f"- {num}"]   
-    self.statement["Transactions"] += ["Pay Bills"] 
-    if self.balance < 0:  
-      return "You don't have enough money"    
+    self.balance -= num
+    self.statement["#Hints"] += [hint]
+    self.statement["$Cash"] += [f"- {num}"]
+    self.statement["Transactions"] += ["Pay Bills"]
+    if self.balance < 0:
+      return "You don't have enough money"
     else:
-      text = f"""Pay Bills: - {num} | * {hint}"""  
-      return text 
-  
+      text = f"""Pay Bills: - {num} | * {hint}"""
+      return text
+
   def deposit(self, num, hint):
-    self.balance += num  
-    self.statement["#Hints"] += [hint]       
-    self.statement["$Cash"] += [f"+ {num}"]   
-    self.statement["Transactions"] += ["Pay Bills"] 
-    text = f"""Deposit : + {num} | * {hint}""" 
-    return text 
+    self.balance += num
+    self.statement["#Hints"] += [hint]
+    self.statement["$Cash"] += [f"+ {num}"]
+    self.statement["Transactions"] += ["Pay Bills"]
+    text = f"""Deposit : + {num} | * {hint}"""
+    return text
 
 my_atm = Atm(
-    "Phu",               
-    "Bualuang Bank",     
-    1000,                
-    {                    
+    "Phu",
+    "Bualuang Bank",
+    1000,
+    {
         "Transactions": [],
         "$Cash": [],
         "#Hints": [],
@@ -264,7 +161,7 @@ my_atm = Atm(
             แน่นอนครับว่าสำหรับโปรเจกต์นี้ ผมจะขออนุญาตนำเสนอวิธีการใช้งาน(เปลี่ยน Transactions) ให้เห็นภาพเป็นหลักนะครับ
             ส่วน<mark>เรื่องของ Coding ผมได้เขียนอธิบายไว้ใน Code Comment ทีละบรรทัดไว้แล้วครับ</mark> ใครที่สนใจสามารถเข้าไปดูได้ที่..
         </p>
-        
+
         <ul>
             <li class="link-cursor">
                 <a href="https://colab.research.google.com/drive/1M_BwQw89HmOfFR-MxLDf8VJeot5LtVeX?usp=sharing"
@@ -289,7 +186,7 @@ my_atm = Atm(
             โดยจะมีการถอนเงิน, ฝากเงิน, และ จ่ายบิล พร้อมบันทึกธุรกรรมทางการเงิน
             ซึ่งเราสามารถดูผลลัพธ์ของแต่ละธุรกรรมได้จากการเรียกใช้เมธอดต่างๆ ของคลาส Atm ดังนี้ครับ
         </p>
-        
+
         <!-- โครงโค้ด Simulate OOP ATM -->
         <details class="detail">
 
@@ -319,7 +216,7 @@ for r in results:
             </div>
 
         </details>
-        
+
         <div class="iframe-container cursor-zoom-in">
             <img src="p10-simulate-transactions.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p10-simulate-transactions.png')">
         </div>
@@ -344,7 +241,7 @@ for r in results:
             การแปลงข้อมูลจาก Dict เป็น DataFrame สามารถทำได้ง่ายๆ ด้วยการใช้ไลบรารี Pandas นั่นคือ <code class="inline-code">import pandas as pd</code>
             ใช้บ่อยมากสำหรับการจัดการข้อมูล
         </p>
-        
+
         <!-- โครงโค้ด แปลง Dict into Dataframe -->
         <details class="detail">
 
@@ -369,11 +266,11 @@ print(df)
             </div>
 
         </details>
-        
+
         <div class="iframe-container cursor-zoom-in">
             <img src="p10-convert-dataframe.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p10-convert-dataframe.png')">
         </div>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             เราจะได้ DataFrame ที่แสดงรายการธุรกรรมทั้งหมดที่เราได้ทำไปก่อนหน้านี้ ซึ่งสามารถนำไปวิเคราะห์หรือแสดงผลต่อได้ตามต้องการ
         </p>
@@ -387,7 +284,7 @@ print(df)
             ต่อมาจะเป็นการเช็คยอดเงินคงเหลือในบัญชี ATM ของเราครับ เริ่มต้นเรามีเงินใน ATM 1000 ล้าน ตามหัวข้อที่ 1 Project Introduction ที่กล่าวไปแล้ว
             จากนั้นเราลองทำธุรกรรมต่างๆ ในหัวที่ 3 Simulate ATM Transactions เราจะมาลองดูจำนวนเงินใน ATM ของเรากันครับ โดยการใช้คำสั่ง
         </p>
-        
+
         <!-- โครงโค้ด ตรวจสอบยอดเงินคงเหลือ -->
         <details class="detail">
 
@@ -415,17 +312,17 @@ for i in summary_cash:
             </div>
 
         </details>
-        
+
         <div class="iframe-container cursor-zoom-in">
             <img src="p10-verify-balance.png" width="600" class="cursor-zoom-in" onclick="openGalleryModal('p10-verify-balance.png')">
         </div>
-        
+
        <ul>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">my_atm.name</code> : ชื่อบัญชี</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">my_atm.bank</code> : ชื่อธนาคาร</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">my_atm.balance</code> : ยอดเงินคงเหลือ</li>
        </ul>
-    
+
     </section>
 
 <!-- 6. A Video Simulation of ATM Transactions -->
@@ -435,12 +332,12 @@ for i in summary_cash:
             วิดิโสาธิตให้ดูการทำงานของระบบ ATM ที่ผมได้จำลองขึ้นมา โดยจะมีการถอนเงิน, ฝากเงิน, และ จ่ายบิล พร้อมบันทึกธุรกรรมทางการเงิน
             รวมถึงถ้าเราทำธุรกรรมเพิ่มเข้าไปอีก ยอดเงินคงเหลือก็จะเปลี่ยนแปลงไปด้วยอย่างไร
         </p>
-    
+
         <p>
             <a target="_blank" href="https://youtu.be/Ty3WCbuXU3E" class="hover-expand"><img src="youtube.png" width="30"
                     class="notion-icon"></a> ⬅︎ Full Video (YouTube)
         </p>
-        
+
         <div style="text-align: center;" class="video-container">
             <iframe src="https://www.youtube.com/embed/Ty3WCbuXU3E" frameborder="0"
                 style="border:0" allowfullscreen loading="lazy"
@@ -448,7 +345,7 @@ for i in summary_cash:
             </iframe>
         </div>
     </section>
-    
+
     <!-- Github & Google Colab -->
     <section id="file">
         <h2 class="link-cursor"><a href="https://github.com/Phubordin" class="hover-expand" target="_blank"><img src="github.png"
@@ -456,7 +353,7 @@ for i in summary_cash:
             <a href="https://colab.research.google.com/drive/1M_BwQw89HmOfFR-MxLDf8VJeot5LtVeX?usp=sharing"
                 class="hover-expand" target="_blank"><img src="colab.png" width="30" class="notion-icon"></a> Google Colab
         </h2>
-        
+
         <p>
             <a href="https://colab.research.google.com/drive/1M_BwQw89HmOfFR-MxLDf8VJeot5LtVeX?usp=sharing"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
@@ -474,7 +371,6 @@ for i in summary_cash:
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>
 </body>

@@ -13,6 +13,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -25,184 +30,58 @@
     <meta name="description" content="Portfolio ช่องทางการติดต่อสำหรับการทำงานของผมครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-
 <body class="fade-slide-in contact-page">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1">Contact</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"> SQL</a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                style="vertical-align:middle" width="25"> Python</a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" class="active" onclick="scrollToTop(event)">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br><!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"> SQL</a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                            style="vertical-align:middle" width="25"> Python</a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" class="active" onclick="scrollToTop(event)">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <section>
-        <h2 class="link-cursor">Contact</h2>
-        <p class="link-cursor"><b>Email หรือ 086-338-1940 (For Work ภูบดินทร์ | Phubordin) Thailand</b></p>
-        <p class="link-cursor">Thank you for reviewing my portfolio. I look forward to the possibility of working with
-            you and contributing my skills to your team. 🙏😊
+        <h2 class="link-cursor">ติดต่อผมได้ที่</h2>
+        <p class="link-cursor">
+            ขอบคุณที่สละเวลาดู portfolio ของผมครับ ถ้าสนใจร่วมงานหรืออยากคุยเรื่องข้อมูล ทักมาได้ทุกช่องทางเลยครับ 🙏😊
         </p>
 
+        <dl class="info-grid link-cursor" style="margin-bottom:var(--s5)">
+            <dt>อีเมล</dt>
+            <dd>
+                <span id="email">phubordin.phanyosri@gmail.com</span>
+                <button onclick="copyEmail()" class="copy-btn1" aria-label="คัดลอกอีเมล">
+                    <img src="icon-copy.png" width="18" alt="คัดลอก">
+                </button>
+            </dd>
+
+            <dt>โทรศัพท์</dt>
+            <dd>086-338-1940 <span class="text-description">(สำหรับติดต่องาน)</span></dd>
+
+            <dt>ชื่อ</dt>
+            <dd>ภูบดินทร์ พันธุ์โยศรี · Phubordin Phanyosri</dd>
+
+            <dt>ที่อยู่</dt>
+            <dd>กรุงเทพฯ / นนทบุรี / สมุทรปราการ, ประเทศไทย</dd>
+        </dl>
+
+        <div class="hero-actions" style="margin-bottom:var(--s5)">
+            <a class="btn btn-primary" href="mailto:phubordin.phanyosri@gmail.com">ส่งอีเมล</a>
+            <a class="btn btn-ghost" target="_blank" rel="noopener"
+                href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/">LinkedIn</a>
+            <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://github.com/Phubordin">GitHub</a>
+            <a class="btn btn-ghost" href="about.html#file">Resume</a>
+        </div>
+
+        <p class="link-cursor"><b>ช่องทางอื่น</b></p>
         <p>
-            <a target="_blank" href="https://www.instagram.com/phuyuu/" class="hover-expand"><img src="ig.png" width="30"
-                    class="notion-icon"></a>
-            <a target="_blank" href="https://www.youtube.com/@phu-bordin" class="hover-expand"><img src="youtube.png" width="29"
-                    class="notion-icon"></a>
-            <a target="_blank" href="https://phubordin.github.io/index.html" class="hover-expand"><img
-                    src="website.png" width="30" class="notion-icon"></a>
-            <a target="_blank" href="https://github.com/Phubordin" class="hover-expand"><img src="github.png" width="30"
-                    class="notion-icon"></a>
-            <a target="_blank" href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/" class="hover-expand"><img src="linkedin.png"
-                    width="30" class="notion-icon"></a>
-            <a target="_blank" href="https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ifkv=AXH0vVtbMYVKhfTIG6uw7W8yEbwhPSDrFRLkDrElrCuzYX1O9hvXvuLaKlnVviw-BQH5XItVwzXKdg&rip=1&sacu=1&service=mail&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S-466503019%3A1742789516532254">
-                <img src="gmail.png" width="30" class="notion-icon hover-expand"></a> :
-            <span class="link-cursor" id="email">phubordin.phanyosri@gmail.com</span>
-            <button onclick="copyEmail()" class="copy-btn1 notion-icon">
-                <img src="icon-copy.png" width="20" alt="Copy">
-            </button>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.instagram.com/phuyuu/"><img src="ig.png" width="28" alt="Instagram"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.youtube.com/@Phuyuyuu"><img src="youtube.png" width="28" alt="YouTube"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://github.com/Phubordin"><img src="github.png" width="28" alt="GitHub"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/"><img src="linkedin.png" width="28" alt="LinkedIn"></a>
+            <a class="hover-expand" href="./"><img src="website.png" width="28" alt="เว็บไซต์"></a>
         </p>
+
         <div id="toast-copy" class="toast">✅ คัดลอกสำเร็จ!</div>
-        
-    </section>   
+    </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="script.js"></script>

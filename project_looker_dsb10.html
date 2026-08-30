@@ -16,6 +16,9 @@
       gtag("config", "G-0MKCCGG3QF");
     </script>
     <meta charset="UTF-8" />
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project - Looker</title>
     <link rel="stylesheet" href="style.css" />
@@ -32,38 +35,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ โปรเจกต์นี้เป็นการสร้าง Dashboard ด้วย Looker Studio จากชุดข้อมูลจำลองการขายของ USA-Superstore ที่มาจาก Tableau Public นะครับ ผมจะนำไปสร้าง Dashboard 3 Page โดยแต่ละ Page จะมีจุดประสงค์ในการสำรวจที่แตกต่างกัน โดยแบ่งเป็น 3 pages ครับ เชิญรับชมได้ครับ ขอบคุณครับ">
   </head>
 
-  <div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-      <input type="checkbox" id="theme-toggle" />
-      <span class="slider"></span>
-      <span class="switch-label"></span>
-    </label>
-  </div>
-
-  <div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-      <input type="checkbox" id="blur-toggle" />
-      <span class="slider1"></span>
-      <span class="switch-label1"></span>
-    </label>
-  </div>
-
-  <!-- Table of Contents -->
-  <!-- ปุ่มเลื่อนไปด้านบน -->
-  <button id="scrollToTopBtn" title="Go to top">⇧</button>
-  <button id="toggle-toc-btn">◀</button>
-  <!-- Hamburger for mobile -->
-  <button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-  ≡
-  </button>
-  <aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-  </aside>
-
-  <body class="fade-slide-in project_looker-page">
+  <body class="fade-slide-in project_looker-page" data-toc="deep">
     <header>
       <div class="header-background"></div>
       <span class="link-cursor strong1"
@@ -71,330 +43,26 @@
         Insights: Sales Performance & Profitability in
         <img src="looker.png" style="vertical-align: middle" width="25" />Looker
         Studio</span
-      >
+      ></span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-      <ul>
-        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li>
-        <!-- Home Tab with House Emoji -->
-        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-        <!-- Work Experience Dropdown -->
-        <li class="dropdown">
-          <a href="experience.html" onclick="navigateToExperience()"
-            >Work Experience</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToExperience_leowood()"
-                >Leowood Intertrade Co Ltd.
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Projects Dropdown -->
-        <li class="dropdown">
-          <a href="project.html" class="active" onclick="scrollToTop(event)"
-            >Project Overview</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToProject_ggsheet_dsb10()"
-                >P1 : Data Exploration and Transformation with
-                <img
-                  src="sheets.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />
-                Google Sheets</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                >P2 : Building a Café Restaurant Database Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="SQL.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_rfm_py_dsb10()"
-                >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python and
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                for Strategic Business Insight</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="python.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                with <img src="R.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_vizdimond_dsb10()"
-                >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and R Markdown
-              </a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_titanic_glm_dsb10()"
-                >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of
-                Classification Models
-                <img src="R.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a
-                class="active1"
-                onclick="scrollToTop(event)"
-                onclick="navigateToProject_looker_dsb10()"
-                >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                <img
-                  src="looker.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Looker Studio</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                >P9 : Chatbot Development for a Pizza Business Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                Programming</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                >P10 : Object-Oriented ATM System: Financial Transactions with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python OOP</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_api_py()"
-                >mini P11 : Extracting Public API Data with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python: Air Quality Analytics</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_xml_cafe()"
-                >mini P12 : Cafe Menu Data Structure with
-                <img
-                  src="xml.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />XML</a
-              >
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="certificate.html" onclick="navigateToCertificate()"
-            >Certificates</a
-          >
-        </li>
-        <li>
-          <a href="contact.html" onclick="navigateToContact()">Contact</a>
-        </li>
-      </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                  <ul>
-                    <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                    <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br>
-                    <!-- Home Tab with House Emoji -->
-                    <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                    <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                    <!-- Work Experience Dropdown -->
-                    <li class="dropdown">
-                      <a href="experience.html" onclick="navigateToExperience()"
-                        >Work Experience</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToExperience_leowood()"
-                            >Leowood Intertrade Co Ltd.
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-
-                    <!-- Projects Dropdown -->
-                    <li class="dropdown">
-                      <a href="project.html" class="active" onclick="scrollToTop(event)"
-                        >Project Overview</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToProject_ggsheet_dsb10()"
-                            >P1 : Data Exploration and Transformation with
-                            <img
-                              src="sheets.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />
-                            Google Sheets</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                            >P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="SQL.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_rfm_py_dsb10()"
-                            >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python and
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            for Strategic Business Insight</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                            >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="python.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                            >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                            with <img src="R.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_vizdimond_dsb10()"
-                            >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and R Markdown
-                          </a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_titanic_glm_dsb10()"
-                            >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of
-                            Classification Models
-                            <img src="R.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a
-                            class="active1"
-                            onclick="scrollToTop(event)"
-                            onclick="navigateToProject_looker_dsb10()"
-                            >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                            <img
-                              src="looker.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Looker Studio</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                            >P9 : Chatbot Development for a Pizza Business Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            Programming</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                            >P10 : Object-Oriented ATM System: Financial Transactions with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python OOP</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_api_py()"
-                            >mini P11 : Extracting Public API Data with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python: Air Quality Analytics</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_xml_cafe()"
-                            >mini P12 : Cafe Menu Data Structure with
-                            <img
-                              src="xml.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />XML</a
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="certificate.html" onclick="navigateToCertificate()"
-                        >Certificates</a
-                      >
-                    </li><br>
-                    <li>
-                      <a href="contact.html" onclick="navigateToContact()">Contact</a>
-                    </li>
-                  </ul>
-                
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
       <p style="font-size: 1.5em; font-weight: bold" class="link-cursor">
         Table of Contents
       </p>
-      <div id="toc-marker"></div>
+
       <div id="toc-section"></div>
       <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
-    
+
     <!-- Back Botton -->
     <a style="text-decoration: none" href="project.html">
       <button class="back-button">⬅︎</button>
     </a>
-    
+
     <!-- 1. Project Introduction -->
     <section>
       <h2 class="link-cursor">1. Project Introduction</h2>
@@ -454,25 +122,25 @@
       </p>
 
       <div class="iframe-container">
-          <iframe 
-              width="100%" 
+          <iframe
+              width="100%"
               height="1110px"
               src="https://lookerstudio.google.com/embed/reporting/92339059-263d-4e78-85d6-803cdd1c70a4/page/p_u8jh154pod"
-              frameborder="0" style="border:0" 
-              allowfullscreen 
-              loading="lazy" 
+              frameborder="0" style="border:0"
+              allowfullscreen
+              loading="lazy"
               sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
           </iframe>
       </div>
-      
+
       <p class="link-cursor">📌 <b>Link Dashboard</b> : <a
                 href="https://lookerstudio.google.com/s/u3-v0ijlk7E"
-                class="hover-expand certificate-school notion-icon" target="_blank"><img src="looker.png" width="25"></a> & 
+                class="hover-expand certificate-school notion-icon" target="_blank"><img src="looker.png" width="25"></a> &
                 <a
                 href="https://drive.google.com/file/d/1R5SQylKt0lUTKEzORzVsKakgXC19yLrV/view?usp=drive_link"
                 class="hover-expand certificate-school notion-icon" target="_blank"><img src="googledrive.png" width="25">PDF</a>
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         โดยเป้าหมายหลักข้อโปรเจกต์นี้คือ เราจะสร้าง Dashboard ออกเป็น 3 Pages หลักๆ เพื่อหา Insight ในเชิงของ
       </p>
@@ -482,7 +150,7 @@
         <li class="link-cursor"><code class="inline-code">Zone Area Sales</code> : มุ่งเน้นยอดขายไปในเชิงพื้นที่ รัฐไหนขายสินค้าได้มากสุด, ภูมิภาคไหนขายได้กำไรเป็นยังไง กลุ่มลูกค้าที่ทำกำไร/ขาดทุน เป็นยังไง, ประเภทลูกค้ารายไหนใช้จ่ายกับเรามากที่สุด ฯลฯ</li>
         <li class="link-cursor"><code class="inline-code">Logistic</code> : เน้นไปที่การขนส่ง เช่น Lead Time ต่อวันเป็นยังไง แนวโน้มดีขึ้นไหม?, คำสั่งซื้อแต่ละอัน ให้กำไร/ขาดทุนเป็นยังไง Lead Time นานไหม? ฯลฯ</li>
       </ol>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>ทั้ง 3 นี้ผมจะพาไปอ่านกราฟกันแบบละเอียดเลยนะครับ ว่ามีอะไรน่าสนใจบ้าง และเราจะได้ Insight อะไรจากข้อมูลนี้บ้าง โดยแบ่งเป็น 3 Section หลักๆ ตามด้านล่างนี้ครับ</mark>
       </p>
@@ -493,15 +161,15 @@
     <section>
       <h2 class="link-cursor">2. Product Sales</h2>
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-        สำหรับ Page : <b>Product Sales</b> ดูสินค้าที่ขายออกเป็นหลัก ต้นทุน, กำไร(ก่อนและหลัง หักลดสินค้า), ยอดขาย, ส่วนลด, NPM, ROI ในมุมมองของสินค้าแต่ละตัว ดังนี้ครับ 
+        สำหรับ Page : <b>Product Sales</b> ดูสินค้าที่ขายออกเป็นหลัก ต้นทุน, กำไร(ก่อนและหลัง หักลดสินค้า), ยอดขาย, ส่วนลด, NPM, ROI ในมุมมองของสินค้าแต่ละตัว ดังนี้ครับ
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p8-product-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-product-sales-overall.png')">
       </div>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เริ่มต้นด้วย Scorecard และ Dropdown Filter ที่ใช้กรองข้อมูลต่างๆในการดูข้อมูลยอดขายสินค้ากันครับ
       </p>
@@ -541,25 +209,25 @@
       </ul>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาผมจะแบ่งเป็น <b>2 ส่วน</b> หลักๆ คือ
       </p>
 
       <ol>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Stacked Smoothed Time Series Chart</code> : ดูแนวโน้ม 3 Metrics ยอดขาย, กำไร, จำนวนสินค้าขายออก</li>
-        <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Sparklines</code> : ใช้ดูแนวโน้มทั้ง 4 metrics 
-          <code class="inline-code">Net Profit</code>, 
-          <code class="inline-code">Discount</code>, 
-          <code class="inline-code">Net Sales</code>, 
-          <code class="inline-code">COGS</code> 
+        <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Sparklines</code> : ใช้ดูแนวโน้มทั้ง 4 metrics
+          <code class="inline-code">Net Profit</code>,
+          <code class="inline-code">Discount</code>,
+          <code class="inline-code">Net Sales</code>,
+          <code class="inline-code">COGS</code>
           แบ่งสีตามหมวดหมู่สินค้าหลักๆ เพื่อดูว่าหมวดหมู่สินค้าไหนที่มี Metrics เหล่านี้ที่แตกต่างกัน </li>
       </ol>
 
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-product-sales-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-product-sales-2.png')">
       </div>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>ส่วนที่ 1</b> : <mark>Time Line 3 Metrics</mark>
         โดยเราจะใช้เป็นแบบ <code class="inline-code">Stacked Smooth Line</code> แบ่งเป็น 3 เส้นหลักๆ ตามรูป
@@ -576,16 +244,16 @@
           (<code class="inline-code">Net Sales</code>) <span style="color: rgb(242, 15, 151);">ชมพู</span>
         </li>
       </ol>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-        และมี Drill Down ไปดูแบบ รายวัน, รายเดือน, รายไตรมาส, รายปี ได้ด้วยครับ ที่ลูกศรมุมบนขวา ขึ้น-ลง 
+        และมี Drill Down ไปดูแบบ รายวัน, รายเดือน, รายไตรมาส, รายปี ได้ด้วยครับ ที่ลูกศรมุมบนขวา ขึ้น-ลง
       </p>
 
       <ul>
         <li class="link-cursor" style="text-align: justify;">เลือกลูกศรลงจะเป็นแบบ รายวัน</li>
         <li class="link-cursor" style="text-align: justify;">เลือกลูกศรขึ้นจะเป็นแบบ รายไตรมาส และรายปี ครับ <mark>เพราะ default มันจะเป็นแบบรายเดือนอยู่แล้ว</mark></li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         และเราจะมี <code class="inline-code">Reference Line (Dot line สีดำ)</code> เป็นเส้นกับกับค่าเฉลี่ยของแต่ละ Metrics ด้วยครับ จากภาพด้านบนจะเห็นว่า
       </p>
@@ -595,7 +263,7 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Sales</code> ต่อเดือนอยู่ที่ $48,112</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Profit</code> ต่อเดือนอยู่ที่ $5,985 เป็นต้น</li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>ส่วนที่ 2</b> : <mark>Sparkinglines</mark>
         เราจะใช้ Sparklines เพื่อดูแนวโน้มของ 4 Metrics เป็นรายเดือน โดยแบ่งกราฟเส้นตามหมวดหมู่สินค้าหลัก ซึ่ง 4 Metrics ที่เราจะดูคือ
@@ -607,12 +275,12 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Sales</code></li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">COGS</code></li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         หมวดหมู่สินค้าไหนที่มี <code class="inline-code">Net Profit</code>, <code class="inline-code">Discount</code>, <code class="inline-code">Net Sales</code>, <code class="inline-code">COGS</code>
         <mark>ที่ค่อนข้างกระโดด หรือเสมอกันมากๆ</mark> เราจะเน้นดูสิ่งนั้นเป็นหลักๆสำหรับ Sparklines ครับ โดยสีกราฟเส้นของหมวดหมู่สินค้าหลักๆ จะมีดังนี้ครับ
       </p>
-      
+
       <ol>
         <li class="link-cursor" style="text-align: justify;">
           จำนวนสินค้าที่ขายออก (<code class="inline-code">Technology</code>) <span style="color: blue;">สีน้ำเงิน</span> ใน Dec 2020 จะมี <code class="inline-code">Net Profit</code> อยู่ที่ $5,697 ตามรูปด้านบน
@@ -626,7 +294,7 @@
       </ol>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Horizontal Bar Chart</b> และ <b>Tree Map</b> ครับ
       </p>
@@ -641,7 +309,7 @@
       </ul>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Products Table</b> ที่ใช้บอกว่าสินค้าแต่ละมี Metrics ต่างๆเป็นยังไงบ้าง
       </p>
@@ -665,22 +333,22 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">%NPM After Disc</code> อัตราส่วนระหว่างกำไรสุทธิหารด้วยยอดขายสุทธิ</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Diff %NPM</code> ผลต่างระหว่างก่อนหักส่วนลด และหลังหักส่วนลดแล้ว แบบไหนทำให้เสีย %NPM มากกว่ากัน</li>
       </ul>
-      
+
     </section>
-    
+
     <!-- 3. Zone Area Sales -->
     <section>
       <h2 class="link-cursor">3. Zone Area Sales</h2>
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         สำหรับ Page : <b>Zone Area Sales</b> ดูลูกค้าเป็นรายพื้นที่ ภูมิภาค, รัฐ, ประเภทลูกค้า, ลูกค้าที่ส่งผลต่อกำไร/ขาดทุน ฯลฯ ดังนี้ครับ
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p8-zone-area-sales-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-overall.png')">
       </div>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เริ่มต้นด้วย Scorecard และ Dropdown Filter เช่นเดิมครับ
       </p>
@@ -720,7 +388,7 @@
       </ul>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาผมจะแบ่งเป็น <b>2 ส่วน</b> หลักๆ คือ
       </p>
@@ -729,14 +397,14 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Stacked Smoothed Time Series Chart</code> : ดูแนวโน้ม 3 Metrics ยอดขายสุทธิ, กำไรสุทธิ, จำนวนสินค้าขายออก</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Horizontal Bar Chart</code> : ใช้ดู 3 Metrics
           <code class="inline-code">Net Profit</code>,
-          <code class="inline-code">Net Sales</code>, 
+          <code class="inline-code">Net Sales</code>,
           <code class="inline-code">COGS</code></li>
       </ol>
 
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-zone-area-sales-2.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-2.gif')">
       </div>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>ส่วนที่ 1</b> : <mark>Time Line 3 Metrics</mark>
         โดยเราจะใช้เป็นแบบ <code class="inline-code">Stacked Smooth Line</code> แบ่งเป็น 3 เส้นหลักๆ ตามรูป
@@ -753,16 +421,16 @@
           (<code class="inline-code">Net Sales</code>) <span style="color: rgb(242, 15, 151);">ชมพู</span>
         </li>
       </ol>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
-        และมี Drill Down ไปดูแบบ รายวัน, รายเดือน, รายไตรมาส, รายปี ได้ด้วยครับ ที่ลูกศรมุมบนขวา ขึ้น-ลง 
+        และมี Drill Down ไปดูแบบ รายวัน, รายเดือน, รายไตรมาส, รายปี ได้ด้วยครับ ที่ลูกศรมุมบนขวา ขึ้น-ลง
       </p>
 
       <ul>
         <li class="link-cursor" style="text-align: justify;">เลือกลูกศรลงจะเป็นแบบ รายวัน</li>
         <li class="link-cursor" style="text-align: justify;">เลือกลูกศรขึ้นจะเป็นแบบ รายไตรมาส และรายปี ครับ <mark>เพราะ default มันจะเป็นแบบรายเดือนอยู่แล้ว</mark></li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         และเราจะมี <code class="inline-code">Reference Line (Dot line สีดำ)</code> เป็นเส้นกับกับค่าเฉลี่ยของแต่ละ Metrics ด้วยครับ จากภาพด้านบนจะเห็นว่า
       </p>
@@ -772,7 +440,7 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Sales</code> ต่อเดือนอยู่ที่ $48,112</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Profit</code> ต่อเดือนอยู่ที่ $5,985 เป็นต้น</li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>ส่วนที่ 2</b> : <mark>Horizontal Bar Chart</mark>
         ใช้ดู 3 Metrics เป็นรายรัฐ, ภูมิภาค โดยแบ่งกราฟแท่งตามหมวดหมู่สินค้าหลักๆ ซึ่ง 3 Metrics ที่เราจะดูคือ
@@ -783,18 +451,18 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Net Sales</code></li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">COGS</code></li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ภูมิภาคไหน หรือรัฐใดที่มี <code class="inline-code">Net Profit</code>, <code class="inline-code">Net Sales</code>, <code class="inline-code">COGS</code>
         <mark>ที่มียอดขายสุทธิมากที่สุด</mark> (สามารถเลือก Drill Down ดูเป็นรายรัฐ หรือรายภูมิภาคได้)
       </p>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Horizontal Bar Chart</b> และ <b>Geo Chart</b> ครับ
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-zone-area-sales-3.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-3.gif')">
       </div>
@@ -806,8 +474,7 @@
       </ul>
 
       <hr>
-      
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาผมจะแบ่งเป็น <b>3 ส่วน</b> หลักๆ คือ
       </p>
@@ -821,9 +488,9 @@
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-zone-area-sales-4.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-zone-area-sales-4.gif')">
       </div>
-      
+
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Top-Spending Cusotmers Table</b> ใช้ดูว่าลูกค้าแต่ละรายมี Metrics ต่างๆเป็นยังไงบ้าง
       </p>
@@ -843,7 +510,7 @@
       </ul>
 
     </section>
-    
+
     <!-- 4. Logistic -->
     <section>
       <h2 class="link-cursor">4. Logistic</h2>
@@ -853,9 +520,9 @@
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-logitic-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-logitic-overall.png')">
       </div>
-      
+
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เริ่มต้นด้วย Scorecard และ Dropdown Filter เช่นเดิมครับ
       </p>
@@ -893,9 +560,9 @@
           <code class="inline-code">Avg Lead Time per Order</code> : จำนวนวันที่จัดส่งต่อ 1 คำสั่งซื้อ (ณ ที่นี้คือ 3.96 วัน ต่อ 1 Order หรือ 4 วัน/Order <mark>Metric นี้ผมมองว่าสำคัญมาก มันสามารถบอกประสิทธิในการจัดส่งสินค้าในแต่ละช่วง Time Frame ได้เลย</mark>)
         </li>
       </ul>
-      
+
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาผมจะแบ่งเป็น <b>3 ส่วน</b> หลักๆ คือ
       </p>
@@ -904,7 +571,7 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Stacked Smoothed Time Series Chart</code> : ดูแนวโน้ม 3 Metrics เวลาจัดส่งต่อออเดอรืในแต่ละช่วงกรอบเวลา, จำนวนสินค้าที่จัดส่งในแต่ละกรอบเวลา, จำนวนออเดอร์ที่จัดส่งในแต่ละกรอบเวลา (ณ ที่นี้คือมีค่าเฉลี่ยต่อกรอบเวลาเดือน ของเวลานำส่งต่อออเดอร์อยู่ที่ 4 วันต่ออเดอร์ใน 1 เดือน, ส่งสินค้าไปจำนวน 773 EA/เดือน และจำนวนออเดอร์ที่จัดส่งต่อเดือนอยู่ที่ 102 ออเดอร์/เดือน)</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Bar/Column Chart</code> : ดูประเภทการขนส่งสินค้า ว่าแบบไหนมี ออเดอร์มากกว่าหรือน้อยกว่ายังไง และเวลาในการจัดส่งต่อออเดอร์ว่า ประเภทการขนส่งไหนที่มีเวลาในการจัดส่งต่อ 1 ออเดอร์มากน้อยแตกต่างกันอย่างไร เช่นกัน (ณ ที่นี้คือ จำนวนออเดอร์ และเวลานำส่งต่ออเดอร์การขนส่งแบบ Standard Class จะสูงที่สุดอยู่ 2,994 Orders และเวลานำส่ง 2.55 วัน/ออเดอร์)</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Horizontal Bar Chart</code> : ดู Top 10 สินค้าที่มีจำนวนการขนส่งสูงสุด (ณ ที่นี้คือ Logitecg P710e Mobile Speakerphone อยู่ที่ 75 EA)</li>
-        
+
       </ol>
 
       <div class="iframe-container cursor-zoom-in">
@@ -912,11 +579,11 @@
       </div>
 
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Geo Chart</b>, <b>Tree Map</b> และ <b>Horizontal Bar Chart</b> ครับ
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
         <img src="p8-logistic-3.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p8-logistic-3.gif')">
       </div>
@@ -926,9 +593,9 @@
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Tree Map</code> ดูจำนวนสินค้าที่ขายออกในแต่ละ หมวดหมู่สินค้าหลัก-ย่อย ได้ (สามารถ Drill Down ลงไปดูแบบหมวดหมู่สินค้าย่อยอย่างเดียวได้)</li>
         <li class="link-cursor" style="text-align: justify;"><code class="inline-code">Horizontal Bar Chart</code> สามารถดูได้ว่า Order ได้ที่มีช่วงของ Lead Time ที่มากน้อยแตกต่างกันเพียงใด เช่น ≥ 5 Days, 3-5 Days, 1-3 Days, Same-day เป็นต้น</li>
       </ul>
-      
+
       <hr>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         ต่อมาจะเป็น <b>Top Lead-Time Orders Table</b> ใช้ดูว่าคำสั่งซื้อแต่ละอันมี Metrics ต่างๆเป็นยังไงบ้าง
       </p>
@@ -957,7 +624,7 @@
       </p>
 
     </section>
-    
+
     <!-- Github & Google Drive & Google Sheet & Looker Studio-->
     <section id="file">
         <h2 class="link-cursor"><a href="https://github.com/Phubordin" class="hover-expand" target="_blank"><img src="github.png"
@@ -969,7 +636,7 @@
                 href="https://drive.google.com/drive/folders/1DMA9LyifttNjKVF9ZKUBFaAPDgCQRUDC?usp=drive_link"
             class="hover-expand" target="_blank"><img src="googledrive.png" width="30" class="notion-icon"></a> Google Drive
         </h2>
-        
+
         <p>
             <a href="https://github.com/Phubordin/portfolio-project/blob/7c9357877451eb4337fef0a8c92da76f46b7c553/portfolio-project/P08-Data-Driven-Insights-Sales-Performance-%26-Profitability-in-Looker-Studio.md"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
@@ -989,13 +656,13 @@
             </a>
 
             <div class="iframe-container">
-                <iframe 
-                    width="100%" 
+                <iframe
+                    width="100%"
                     height="1110px"
                     src="https://lookerstudio.google.com/embed/reporting/92339059-263d-4e78-85d6-803cdd1c70a4/page/p_u8jh154pod"
-                    frameborder="0" style="border:0" 
-                    allowfullscreen 
-                    loading="lazy" 
+                    frameborder="0" style="border:0"
+                    allowfullscreen
+                    loading="lazy"
                     sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
                 </iframe>
             </div>

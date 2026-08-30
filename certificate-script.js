@@ -60,7 +60,7 @@ const certificates = [
     // 12. Data Analytics Program by W3School
     {
         id: 12,
-        image: "certificate-w3-basic-python.webp",
+        image: "certificate-w3-data-analyst.webp",
         title: "Data Analytics Program",
         school: "W3School",
         schoolLink: "https://www.w3schools.com/",
@@ -68,7 +68,7 @@ const certificates = [
         notionLink: "https://second-brain-phubordin.notion.site/W3Schools-Data-Analytics-Bootcamp-1932ea218a1580fb8c0dfcc2bd1ad1fc?source=copy_link",
         cost: "฿7,900 ($230) Scholarship",
         costlink: "https://campus.w3schools.com/products/data-analytics-program",
-        certificateLink: "https://verify.w3schools.com/1PW0RVAM0B"
+        certificateLink: "https://verify.w3schools.com/1PW3ODYB70"
     },
 
     // 3. Excel Practitioner
@@ -166,7 +166,7 @@ const certificates = [
         notionLink: "https://second-brain-phubordin.notion.site/Numpy-1982ea218a158084ad19f405f4c884a4?source=copy_link",
         cost: "฿3,300 ($95) Scholarship",
         costlink: "https://campus.w3schools.com/collections/certifications/products/numpy-certification-exam",
-        certificateLink: "https://verify.w3schools.com/1PVAX9R0EB"
+        certificateLink: "https://verify.w3schools.com/1PW3KWYI4I"
     },
     
     // 10. Pandas Developer
@@ -197,7 +197,6 @@ const certificates = [
         certificateLink: "https://verify.w3schools.com/1PW0RVAM0B"
     }
 
-
 ];
 
 // Global variables
@@ -208,17 +207,6 @@ let nextViewText = 'Switch to Slideshow View'; // ข้อความปุ่
 
 // Initialize the page
 document.addEventListener("DOMContentLoaded", function () {
-    // ตรวจสอบและสร้าง element สำหรับ list view หากยังไม่มี
-    if (!document.getElementById('list-view')) {
-        const listViewElement = document.createElement('div');
-        listViewElement.id = 'list-view';
-        listViewElement.classList.add('view-container');
-
-        // แทรกลงในตำแหน่งที่เหมาะสม
-        const container = document.querySelector('.container') || document.body;
-        container.appendChild(listViewElement);
-    }
-
     // Get DOM Elements
     const schoolSelector = document.getElementById('school-selector');
     const viewToggle = document.getElementById('view-toggle');
@@ -242,27 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
             currentIndex = 0; // Reset the slideshow index when school changes
             renderView();
         });
-    }
-
-    // Setup theme toggle
-    const themeToggle = document.getElementById("theme-toggle");
-    if (themeToggle) {
-        themeToggle.addEventListener("change", function () {
-            document.body.classList.toggle("dark-mode");
-
-            // เรียกใช้ renderView เพื่อวาด UI ใหม่ทั้งหมดตามโหมดปัจจุบัน
-            renderView();
-
-            // และยังเรียก applyDarkModeToElements เพื่อให้แน่ใจว่าทุก element ได้รับการอัพเดท
-            applyDarkModeToElements();
-        });
-
-        // ตรวจสอบสถานะเริ่มต้นของ theme toggle
-        if (document.body.classList.contains('dark-mode')) {
-            // เรียกใช้ทั้งสองฟังก์ชันเพื่อให้แน่ใจว่า UI แสดงผลถูกต้อง
-            renderView();
-            applyDarkModeToElements();
-        }
     }
 
     // Initialize the view
@@ -332,24 +299,6 @@ function getFilteredCertificates() {
         : certificates.filter(cert => cert.school === selectedSchool);
 }
 
-// ฟังก์ชันใหม่เพื่อหาดัชนีของ certificate จาก ID
-function findCertificateIndexById(certId) {
-    const filteredCerts = getFilteredCertificates();
-    return filteredCerts.findIndex(cert => cert.id === certId);
-}
-
-// ฟังก์ชันใหม่เพื่อเปิด slideshow จาก certificate ที่เลือก
-// function openSlideshowFromCertificate(certId) {
-//     const index = findCertificateIndexById(certId);
-//     if (index !== -1) {
-//         currentIndex = index;
-//         currentView = 'slideshow';
-//         nextViewText = 'Switch to List View';
-//         renderView();
-//         updateViewToggleButton();
-//     }
-// }
-
 // ✅ ฟังก์ชันสร้าง school logo อัตโนมัติ
 function getSchoolLogo(schoolName) {
   switch (schoolName) {
@@ -364,27 +313,17 @@ function getSchoolLogo(schoolName) {
   }
 }
 
-
 // Render certificate card
 function renderCertificateCard(cert) {
-    // ตรวจสอบโหมดปัจจุบันโดยตรงจาก body class
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const darkModeClass = isDarkMode ? 'dark-mode' : '';
-    const schoolLogo = getSchoolLogo(cert.school); // ✅ ดึงโลโก้มาใช้
 
     return `
-        <div class="certificate-card fade-in ${darkModeClass}" data-cert-id="${cert.id}">
+        <div class="certificate-card fade-in" data-cert-id="${cert.id}">
         <img src="${cert.image}" alt="${cert.title}" class="certificate-image cursor-zoom-in" onclick="openGalleryModal('${cert.image}')">
         
-        <div class="certificate-details ${darkModeClass}">
+        <div class="certificate-details">
             <h3 class="certificate-title1" onclick="openGalleryModal('${cert.image}')">${cert.title}</h3>
             
-            <div class="school-containner">
-            <a target="_blank" href="${cert.schoolLink}" class="${darkModeClass}">
-                ${schoolLogo} 
-                <span class="school-name">${cert.school}</span>
-            </a>
-            </div>
+            ${renderSchoolInfo(cert)}
             
             <details>
             <summary>คำอธิบาย<span class="text-description1">2x click to open just one</span></summary>
@@ -392,18 +331,18 @@ function renderCertificateCard(cert) {
             </details>
 
             <div class="certificate-links">
-            <a href="${cert.notionLink}" class="certificate-link ${darkModeClass}" target="_blank">
+            <a href="${cert.notionLink}" class="certificate-link" target="_blank">
                 <span class="notes-icon">
                 View Notes : <img src="notion.webp" width="20" class="notion-icon">
                 Notion
                 </span>
             </a>
 
-            <a href="${cert.costlink}" class="certificate-link ${darkModeClass}" target="_blank">
+            <a href="${cert.costlink}" class="certificate-link" target="_blank">
                 <span class="cost-icon"> Course Value : ${cert.cost}</span>
             </a>
 
-            <a href="${cert.certificateLink}" class="certificate-link ${darkModeClass}" target="_blank">
+            <a href="${cert.certificateLink}" class="certificate-link" target="_blank">
                 <span class="cost-icon">Verify Certificate</span>
             </a>
             </div>
@@ -418,12 +357,9 @@ function renderGalleryView() {
     if (!galleryView) return;
 
     const filteredCerts = getFilteredCertificates();
-    // ตรวจสอบโหมดปัจจุบันโดยตรงจาก body class
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const darkModeClass = isDarkMode ? 'dark-mode' : '';
 
     galleryView.innerHTML = `
-        <div class="certificate-grid ${darkModeClass}">
+        <div class="certificate-grid">
             ${filteredCerts.map(cert => renderCertificateCard(cert)).join('')}
         </div>
     `;
@@ -453,14 +389,9 @@ function renderSlideshowView() {
         }
 
         const cert = filteredCerts[currentIndex];
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        const darkModeClass = isDarkMode ? 'dark-mode' : '';
-
-        // ✅ ใช้ฟังก์ชันดึงโลโก้ + ชื่อโรงเรียน
-        const schoolLogo = getSchoolLogo(cert.school);
 
         slideshowView.innerHTML = `
-            <div class="slideshow-container fade-in ${darkModeClass}">
+            <div class="slideshow-container fade-in">
                 <div class="slideshow-image">
                     <img src="${cert.image}" alt="${cert.title}">
                     <div class="slideshow-nav">
@@ -472,32 +403,26 @@ function renderSlideshowView() {
                         </button>
                     </div>
                 </div>
-                <div class="slideshow-details ${darkModeClass}">
+                <div class="slideshow-details">
                     <h2 class="certificate-title1">${cert.title}</h2>
                     
-                    <!-- ✅ ปรับตรงนี้ให้เป็น container แบบเดียวกับ card -->
-                    <div class="school-containner">
-                        <a target="_blank" href="${cert.schoolLink}" class="${darkModeClass}">
-                            ${schoolLogo}
-                            <span class="school-name">${cert.school}</span>
-                        </a>
-                    </div>
+                    ${renderSchoolInfo(cert)}
 
                     <p class="certificate-description link-cursor">${cert.description}</p>
 
                     <div class="certificate-links">
-                        <a href="${cert.notionLink}" class="certificate-link ${darkModeClass}" target="_blank">
+                        <a href="${cert.notionLink}" class="certificate-link" target="_blank">
                             <span class="notes-icon">
                                 View Notes : <img src="notion.webp" width="20" class="notion-icon">
                                 Notion
                             </span>
                         </a>
                         
-                        <a href="${cert.costlink}" class="certificate-link ${darkModeClass}"  target="_blank">
+                        <a href="${cert.costlink}" class="certificate-link"  target="_blank">
                             <span class="cost-icon"> Course Value : ${cert.cost}</span>
                         </a>
                         
-                        <a href="${cert.certificateLink}" class="certificate-link ${darkModeClass}" target="_blank">
+                        <a href="${cert.certificateLink}" class="certificate-link" target="_blank">
                             <span class="cost-icon">Verify Certificate</span>
                         </a>
                     </div>
@@ -515,10 +440,10 @@ function renderSlideshowView() {
     if (listView) listView.style.display = 'none';
 }
 
-function renderSchoolInfo(cert, darkModeClass = '') {
+function renderSchoolInfo(cert) {
   return `
     <div class="school-containner">
-      <a target="_blank" href="${cert.schoolLink}" class="${darkModeClass}">
+      <a target="_blank" href="${cert.schoolLink}">
         ${getSchoolLogo(cert.school)}
         <span class="school-name">${cert.school}</span>
       </a>
@@ -526,15 +451,12 @@ function renderSchoolInfo(cert, darkModeClass = '') {
   `;
 }
 
-
 // Render list view
 function renderListView() {
     const listView = document.getElementById('list-view');
     if (!listView) return;
 
     const filteredCerts = getFilteredCertificates();
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    const darkModeClass = isDarkMode ? 'dark-mode' : '';
 
     listView.innerHTML = `
         <div class="certificate-list fade-in">
@@ -559,7 +481,7 @@ function renderListView() {
                                   class="certificate-title3">${cert.title}</td>
 
                                 <!-- ✅ แสดง school logo + name -->
-                                <td>${renderSchoolInfo(cert, darkModeClass)}</td>
+                                <td>${renderSchoolInfo(cert)}</td>
 
                                 <td>
                                   <a target="_blank" href="${cert.costlink}" class="check">
@@ -645,8 +567,6 @@ function setupDetailsElements() {
     });
 }
 
-
-
 // Previous slide function for slideshow
 function previousSlide() {
     const filteredCerts = getFilteredCertificates();
@@ -680,103 +600,9 @@ function renderView() {
     if (slideshowView) slideshowView.classList.toggle('active', currentView === 'slideshow');
     if (listView) listView.classList.toggle('active', currentView === 'list');
 
-    // เรียก applyDarkModeToElements โดยตรงหลังจาก render
-    applyDarkModeToElements();
 }
-
-// ปรับปรุงฟังก์ชัน applyDarkModeToElements ให้ครอบคลุมมากขึ้น
-function applyDarkModeToElements() {
-    const isDarkMode = document.body.classList.contains('dark-mode');
-
-    // สร้าง selectors รวมทุก element ที่ต้องการอัพเดทไว้ในที่เดียว
-    const selectors = [
-        '.certificate-card',
-        '.certificate-details',
-        '.slideshow-container',
-        '.slideshow-details',
-        '.list-item',
-        '.list-table',
-        '.certificate-grid',
-        '.gallery-modal',
-        '.modal-content',
-        '.certificate-link',
-        'verify-icon',
-        'th',
-        'td',
-        '.certificate-school',
-        'a.certificate-school'
-    ];
-
-    // ทำการ query selector รวมแล้วอัพเดท class
-    selectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-            if (isDarkMode) {
-                el.classList.add('dark-mode');
-            } else {
-                el.classList.remove('dark-mode');
-            }
-        });
-    });
-}
-
-function openGalleryModal(imageSrc, event) {
-    const modal = document.createElement('div');
-    modal.classList.add('gallery-modal');
-    
-    // ตรวจสอบโหมดปัจจุบันโดยตรงจาก body class
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    if (isDarkMode) {
-        modal.classList.add('dark-mode');
-    }
-    
-    modal.innerHTML = `
-        <div class="modal-content ${isDarkMode ? 'dark-mode' : ''}">
-            <span class="close-modal">&times;</span>
-            <img src="${imageSrc}" class="full-image">
-        </div>
-    `;
-    document.body.appendChild(modal);
-    
-    // จุดกึ่งกลางของ viewport
-    const viewportCenterX = window.innerWidth / 2 + window.pageXOffset;
-    const viewportCenterY = window.innerHeight / 2 + window.pageYOffset;
-    
-    // กำหนดตำแหน่งให้แสดงตรงกึ่งกลางของ viewport ที่ผู้ใช้กำลังดูอยู่
-    const modalContent = modal.querySelector('.modal-content');
-    
-    // เพิ่มขนาดภาพให้ใหญ่ขึ้นมาก
-    modalContent.style.maxWidth = '95%'; // เพิ่มเป็น 95% จากเดิม 80%
-    modalContent.style.maxHeight = '90%'; // เพิ่มเป็น 90% จากเดิม 80%
-    
-    // กำหนดตำแหน่งเริ่มต้นไปที่กึ่งกลาง viewport
-    modalContent.style.left = `${viewportCenterX}px`;
-    modalContent.style.top = `${viewportCenterY}px`;
-    
-    // เพิ่ม scale ในการแสดงผลเริ่มต้นเพื่อทำให้ภาพใหญ่ขึ้นอีก (ปรับตามความเหมาะสม)
-    modalContent.style.transform = 'translate(-50%, -50%) scale(1.5)'; // เพิ่ม scale เป็น 1.5 เท่า
-    
-    // สร้าง div สำหรับไฟล์ border เรืองแสง เหมือนในภาพตัวอย่าง
-    const img = modal.querySelector('.full-image');
-    img.style.boxShadow = '0px 0px 10px cyan, 0px 0px 20px cyan, 0px 0px 40px cyan, 0px 0px 60px cyan';
-    
-    // Close modal on click
-    modal.querySelector('.close-modal').addEventListener('click', () => {
-        modal.remove();
-    });
-
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.remove();
-        }
-    });
-}
-
-
-// ทำให้ฟังก์ชันนี้สามารถเรียกใช้งานจาก inline HTML ได้
-window.openGalleryModal = openGalleryModal;
 
 // Make functions globally available for HTML onclick attributes
 window.previousSlide = previousSlide;
 window.nextSlide = nextSlide;
 window.toggleView = toggleView;
-// window.openSlideshowFromCertificate = openSlideshowFromCertificate;

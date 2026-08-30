@@ -1,0 +1,8 @@
+# ไฟล์ขยะที่ Windows / OneDrive / macOS สร้างเอง
+desktop.ini
+Thumbs.db
+ehthumbs.db
+.DS_Store
+
+# ไฟล์ทดสอบชั่วคราว
+_*.html

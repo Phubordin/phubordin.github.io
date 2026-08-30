@@ -16,6 +16,9 @@
       gtag("config", "G-0MKCCGG3QF");
     </script>
     <meta charset="UTF-8" />
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -34,38 +37,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ วิเคราะห์ข้อมูลการเดินทางของผู้โดยสารบนเรือ Titanic โดยใช้ข้อมูลจริงจาก Kaggle และ R เพื่อทำนายว่าผู้โดยสารจะรอดชีวิตหรือไม่ โดยใช้เทคนิคการวิเคราะห์ข้อมูลเชิงสำรวจ (EDA) และการสร้างโมเดล Machine Learning เปรียบเทียบโมเดล Classification หลายตัว เชิญรับชมได้ครับ ขอบคุณครับ">
   </head>
 
-  <div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-      <input type="checkbox" id="theme-toggle" />
-      <span class="slider"></span>
-      <span class="switch-label"></span>
-    </label>
-  </div>
-
-  <div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-      <input type="checkbox" id="blur-toggle" />
-      <span class="slider1"></span>
-      <span class="switch-label1"></span>
-    </label>
-  </div>
-
-  <!-- Table of Contents -->
-  <!-- ปุ่มเลื่อนไปด้านบน -->
-  <button id="scrollToTopBtn" title="Go to top">⇧</button>
-  <button id="toggle-toc-btn">◀</button>
-  <!-- Hamburger for mobile -->
-  <button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-  ≡
-  </button>
-  <aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-  </aside>
-
-  <body class="fade-slide-in project_titanic-page">
+  <body class="fade-slide-in project_titanic-page" data-toc="deep">
     <header>
       <div class="header-background"></div>
       <span class= "link-cursor strong1"><span style="text-shadow: none;">Project 7 : </span>Titanic Survival Prediction:<br>A Comparative Analysis of
@@ -74,319 +46,14 @@
         /></span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-      <ul>
-        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li>
-        <!-- Home Tab with House Emoji -->
-        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-        <!-- Work Experience Dropdown -->
-        <li class="dropdown">
-          <a href="experience.html" onclick="navigateToExperience()"
-            >Work Experience</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToExperience_leowood()"
-                >Leowood Intertrade Co Ltd.
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <!-- Projects Dropdown -->
-        <li class="dropdown">
-          <a href="project.html" class="active" onclick="scrollToTop(event)"
-            >Project Overview</a
-          >
-          <ul class="dropdown-menu">
-            <li>
-              <a onclick="navigateToProject_ggsheet_dsb10()"
-                >P1 : Data Exploration and Transformation with
-                <img
-                  src="sheets.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />
-                Google Sheets</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                >P2 : Building a Café Restaurant Database Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="SQL.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_rfm_py_dsb10()"
-                >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python and
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                for Strategic Business Insight</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and
-                <img src="python.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                with <img src="R.png" style="vertical-align: middle" width="25"
-              /></a>
-            </li>
-            <li>
-              <a onclick="navigateToProject_vizdimond_dsb10()"
-                >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                and R Markdown
-              </a>
-            </li>
-            <li>
-              <a
-                class="active1"
-                onclick="scrollToTop(event)"
-                onclick="navigateToProject_titanic_glm_dsb10()"
-                >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of
-                Classification Models
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                R</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_looker_dsb10()"
-                >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                <img
-                  src="looker.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Looker Studio</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                >P9 : Chatbot Development for a Pizza Business Using
-                <img src="R.png" style="vertical-align: middle" width="25" />
-                Programming</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                >P10 : Object-Oriented ATM System: Financial Transactions with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python OOP</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_api_py()"
-                >mini P11 : Extracting Public API Data with
-                <img
-                  src="python.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />Python: Air Quality Analytics</a
-              >
-            </li>
-            <li>
-              <a onclick="navigateToProject_mini_xml_cafe()"
-                >mini P12 : Cafe Menu Data Structure with
-                <img
-                  src="xml.png"
-                  style="vertical-align: middle"
-                  width="25"
-                />XML</a
-              >
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="certificate.html" onclick="navigateToCertificate()"
-            >Certificates</a
-          >
-        </li>
-        <li>
-          <a href="contact.html" onclick="navigateToContact()">Contact</a>
-        </li>
-      </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                  <ul>
-                    <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                    <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br>
-                    <!-- Home Tab with House Emoji -->
-                    <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                    <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                    <!-- Work Experience Dropdown -->
-                    <li class="dropdown">
-                      <a href="experience.html" onclick="navigateToExperience()"
-                        >Work Experience</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToExperience_leowood()"
-                            >Leowood Intertrade Co Ltd.
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-
-                    <!-- Projects Dropdown -->
-                    <li class="dropdown">
-                      <a href="project.html" class="active" onclick="scrollToTop(event)"
-                        >Project Overview</a
-                      >
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a onclick="navigateToProject_ggsheet_dsb10()"
-                            >P1 : Data Exploration and Transformation with
-                            <img
-                              src="sheets.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />
-                            Google Sheets</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_cafe_r_sql_dsb10()"
-                            >P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="SQL.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_rfm_py_dsb10()"
-                            >⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python and
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            for Strategic Business Insight</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pyc_r_py_dsb10()"
-                            >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and
-                            <img src="python.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_nycflight13_23_dsb10()"
-                            >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023)
-                            with <img src="R.png" style="vertical-align: middle" width="25"
-                          /></a>
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_vizdimond_dsb10()"
-                            >⭐️ P6 : EDA Visualization of the Diamond Dataset Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            and R Markdown
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            class="active1"
-                            onclick="scrollToTop(event)"
-                            onclick="navigateToProject_titanic_glm_dsb10()"
-                            >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of
-                            Classification Models
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            R</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_looker_dsb10()"
-                            >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in
-                            <img
-                              src="looker.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Looker Studio</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_pizza_chatbot_dsb10()"
-                            >P9 : Chatbot Development for a Pizza Business Using
-                            <img src="R.png" style="vertical-align: middle" width="25" />
-                            Programming</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_atm_oop_py_dsb10()"
-                            >P10 : Object-Oriented ATM System: Financial Transactions with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python OOP</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_api_py()"
-                            >mini P11 : Extracting Public API Data with
-                            <img
-                              src="python.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />Python: Air Quality Analytics</a
-                          >
-                        </li>
-                        <li>
-                          <a onclick="navigateToProject_mini_xml_cafe()"
-                            >mini P12 : Cafe Menu Data Structure with
-                            <img
-                              src="xml.png"
-                              style="vertical-align: middle"
-                              width="25"
-                            />XML</a
-                          >
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="certificate.html" onclick="navigateToCertificate()"
-                        >Certificates</a
-                      >
-                    </li><br>
-                    <li>
-                      <a href="contact.html" onclick="navigateToContact()">Contact</a>
-                    </li>
-                  </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
       <p style="font-size: 1.5em; font-weight: bold" class="link-cursor">
         Table of Contents
       </p>
-      <div id="toc-marker"></div>
+
       <div id="toc-section"></div>
       <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
@@ -406,7 +73,7 @@
         <mark>เป้าหมายของโปรเจกต์นี้คือ สำรวจและวิเคราะห์การรอดชีวิตของผู้โดยสารจากเหตุการณ์ครั้งนี้</mark> และที่สำคัญคือ จะ<mark>สร้าง Machine Learning Model
         เพื่อทำนายคนรอดชีวิตและเปรียบเทียบประสิทธิภาพของแต่ละโมเดล</mark>ว่า โมเดลไหนทำงานได้ดีกว่ากัน ซึ่งมีทั้งหมด 5 Classification Models
       </p>
-        
+
       <ol>
             <li class="link-cursor" style="text-align: justify">
                 🔥 K-Nearest Neighbors
@@ -428,7 +95,7 @@
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         📍ก่อนอื่นผมได้แบ่งหัวข้อของโปรเจกต์นี้ไว้ 5 หัวข้อใหญ่คือ
       </p>
-      
+
       <ol>
             <li class="link-cursor" style="text-align: justify">
                 <b>Load Library/Data</b><br> : โหลดไลบรารีและข้อมูลที่จำเป็นสำหรับการวิเคราะห์
@@ -437,7 +104,7 @@
                 <b>Explore Data</b><br> : สำรวจค่า NA และ Missing Value, โครงสร้างตารางข้อมูลประเภทข้อมูล, ข้อมูลซ้ำไหม?, ค่าสถิติเบื้องต้นของแต่ละคอลัมน์
             </li><br>
             <li class="link-cursor" style="text-align: justify">
-                <b>🔥 Clensing Titanic Dataset</b><br> : ส่วนใหญ่<mark>หาข้อมูลผู้โดยสารจาก Internet มาแทนค่า NA และ Missing Value</mark> เช่น รอดชีวิตไหม?, อายุ, ราคาตั๋ว, ท่าเรือที่ขึ้น 
+                <b>🔥 Clensing Titanic Dataset</b><br> : ส่วนใหญ่<mark>หาข้อมูลผู้โดยสารจาก Internet มาแทนค่า NA และ Missing Value</mark> เช่น รอดชีวิตไหม?, อายุ, ราคาตั๋ว, ท่าเรือที่ขึ้น
                 โดยข้อมูลเหล่านั้นน่าเชื่อถือและมีอ้างอิงที่ชัดเจน ผมบันทึกลงไฟล์ Excel ไว้ สามารถเข้าไปดูที่หัวข้อได้เลย
             </li><br>
             <li class="link-cursor" style="text-align: justify">
@@ -450,7 +117,7 @@
 
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>โดยผมเลือกอธิบายเฉพาะแค่ 3 หัวข้อ เท่านั้น ❗️</b>
-        
+
         <ol>
             <li class="link-cursor" style="text-align: justify">
                 🔥 Clensing Titanic Dataset
@@ -467,9 +134,9 @@
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>ซึ่งหัวข้อเหล่านี้ <mark>(ไม่เน้นอธิบายโค้ด แต่เน้นอ่านผลลัพธ์ครับ)</mark></b>
       </p>
-      
+
       <hr>
-      
+
       <p class="link-cursor">
         <mark>แต่ถ้าหากสนใจหัวข้อไหนเป็นพิเศษ</mark> <span> สามารถเข้าไปดูได้ที่
         <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -483,7 +150,7 @@
 
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-preview-html.gif" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-preview-html.gif')">
-      </div> 
+      </div>
 
       <p class="link-cursor">
         ดังนั้นผมจะเริ่มอธิบายหัวข้อ 🔥 Clensing Titanic Dataset กันเลยนะครับ
@@ -506,11 +173,11 @@
         <tr><td><code class="inline-code">Embarked</code></td><td>❌train 0, ❌test 0</td><td>✅train 2, ❌test 0</td></tr>
         </tbody>
       </table>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         	❌train 0, ✅test 418 หมายถึง คอลัมน์นี้ไม่มีค่า NA ในชุดข้อมูล train แต่มีค่า NA ในชุดข้อมูล test
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         	ดังนั้นเราจะมา<mark>จัดการค่า NA กับ Missing Value ตามลำดับ</mark> กันเลยครับ โดยผมจะจัดการแต่ละคอลัมน์ ดังนี้
       </p>
@@ -519,7 +186,7 @@
             <li class="link-cursor" style="text-align: justify">
                 <code class="inline-code"><b>Survived</b></code><br>
                 NA เกิดจาก titanic_test ไม่มีคอลัมน์ Survived ตอน bind_rows ดังนั้นวิธีการจัดการ NA ผมใช้ AI สร้างคอลัมน์ 3 คอลัมน์
-                Name, Survived, Reference แล้วสุ่มตรวจคนรอด กับคนไม่รอดอย่างละ 5 คน พบว่าส่วนใหญ่ ไม่ตรงกับลิงก์ที่ให้มา 
+                Name, Survived, Reference แล้วสุ่มตรวจคนรอด กับคนไม่รอดอย่างละ 5 คน พบว่าส่วนใหญ่ ไม่ตรงกับลิงก์ที่ให้มา
                 ผมจำเป็นที่ต้อง<mark>ตรวจสอบผู้โดยสารแต่ละคนจาก Website ที่น่าเชื่อถือ แล้วนำไป บันทึกลงไฟล์ .xlsx</mark> ซึ่งเราจะนำไฟล์นี้ไปใส่ลงตาราง titanic
             </li><br>
             <li class="link-cursor" style="text-align: justify">
@@ -528,7 +195,7 @@
                 แต่ ! จะมีผู้โดยสารอยู่ 2 คนที่ไม่มีการบันทึกที่แน่ชัดเลยว่าอายุ เท่าไร คือ
                 <ul><br>
                     <li class="link-cursor">
-                         หมายเลขโดยสาร 43 คุณ Kraeff, Mr. Theodor ไม่พบอายุที่แน่ชัด\ 
+                         หมายเลขโดยสาร 43 คุณ Kraeff, Mr. Theodor ไม่พบอายุที่แน่ชัด\
                     </li>
                     <li class="link-cursor">
                          หมายเลขโดยสาร 421 คุณ Gheorgheff, Mr. Stanio ไม่พบอายุที่แน่ชัด
@@ -586,17 +253,17 @@
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         Preview ข้อมูลที่เก็บมาได้ที่ลิงก์ด้านล่าง
       </p>
-        
+
       <p>
         <a href="https://docs.google.com/spreadsheets/d/1rFNpxPFH17jefH_ZFr8fa0gJFm7ZIJDI/edit?usp=drive_link&ouid=116663168376755112559&rtpof=true&sd=true"
             class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
             Fill_NA_Test.xlsx
         </a> <span class="text-description link-cursor">Open with Google Drive</span> <br>
-        
+
         <a href="https://docs.google.com/spreadsheets/d/1vLxs8TM6-q8kLvRoYGQn6jq3rABkdGaz/edit?usp=sharing&ouid=116663168376755112559&rtpof=true&sd=true"
             class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
             Fill_NA_Train.xlsx
-        </a> <span class="text-description link-cursor">Open with Google Drive</span> 
+        </a> <span class="text-description link-cursor">Open with Google Drive</span>
       </p>
     </section>
 
@@ -624,10 +291,10 @@
 # อ่านไฟล์ Excel (ควรไฟล์ไว้โฟลเดอร์เดียวกับโปรเจกต์นี้)
 fill_na_test <- read_excel("Fill_NA_Test.xlsx") # นำไฟล์ Fill_NA_TEST.xlsx เก็บไว้ในตัวแปรใน R
 
-fill_na_test <- fill_na_test |> 
+fill_na_test <- fill_na_test |>
   select(PassengerId, Name_Test, Survived_Test, Age_Test, Fare_Test) # เลือกมาเฉพาะคอลัมน์ PassengerId, Name_Test, Survived_Test, Age_Test, Fare_Test
 
-fill_na_test |> 
+fill_na_test |>
   head(10) |> # ดู 10 แถวบนสุด
   styled_kable() # ธีมตาราง
                     </code></pre>
@@ -647,8 +314,8 @@ fill_na_test |>
             </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
         </p>
 
-    </section> 
-    
+    </section>
+
     <!-- 5.2 Read / Preview Fill_NA_Train.xlsx File -->
     <section>
       <h3 class="link-cursor">5.2 Read / Preview Fill_NA_Train.xlsx File</h3>
@@ -673,10 +340,10 @@ fill_na_test |>
 # อ่านไฟล์ Excel (ควรไฟล์ไว้โฟลเดอร์เดียวกับโปรเจกต์นี้)
 fill_na_train <- read_excel("Fill_NA_Train.xlsx") # นำไฟล์ Fill_NA_Train.xlsx เก็บไว้ในตัวแปรใน R
 
-fill_na_train <- fill_na_train |> 
+fill_na_train <- fill_na_train |>
   select(PassengerId, Name_Train, Survived_Train, Age_Train, Embarked_Train) # เลือกมาเฉพาะคอลัมน์ PassengerId, Name_Train, Survived_Train, Age_Train, Embarked_Train
 
-fill_na_train |> 
+fill_na_train |>
   head(10) |> # ดู 10 แถวบนสุด
   styled_kable() # ธีมตาราง
                     </code></pre>
@@ -696,8 +363,8 @@ fill_na_train |>
             </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
         </p>
 
-    </section> 
-    
+    </section>
+
     <!-- 5.3 Joining Tables for Data Preparation -->
     <section>
       <h3 class="link-cursor">5.3 Joining Tables for Data Preparation </h3>
@@ -721,7 +388,7 @@ fill_na_train |>
 join_table <- titanic_data |>
   left_join(fill_na_test, by = "PassengerId") |> # join table fill_na_test ด้วย PassengerId
   left_join(fill_na_train, by = "PassengerId") # join table fill_na_train ด้วย PassengerId
-join_table |> 
+join_table |>
   styled_kable() # ธีมตาราง
                     </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
@@ -741,7 +408,7 @@ join_table |>
         </p>
 
     </section>
-    
+
     <!-- 5.3.1 Survived Preparation -->
     <section>
       <h4 class="link-cursor">5.3.1 Survived Preparation</h4>
@@ -767,7 +434,7 @@ mutate(
   Survived = coalesce(Survived, Survived_Test) # ใช้คำสั่ง coalesce แทนค่า NA ในคอลัมน์ Survived ด้วยคอลัมน์ Survived_Test และเขียนทับกลับไปที่คอลัมน์ Survived
 )
 
-prep_survived |> 
+prep_survived |>
 filter(Source == "titanic_test") |> # กรองดูเฉพาะของมูลที่มาจาก test เพราะค่า NA จากคอลัมน์ Survived มาจากชุดข้อมูล Test
 select(Survived, Source) |> # เลือกมาเฉพาะคอลัมน์ Survived
 styled_kable() # ธีมตาราง
@@ -788,8 +455,8 @@ styled_kable() # ธีมตาราง
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
 
-    </section>  
-    
+    </section>
+
     <!-- 5.3.2 Age Preparation -->
     <section>
       <h4 class="link-cursor">5.3.2 Age Preparation</h4>
@@ -817,7 +484,7 @@ mutate(
   Age = if_else(is.na(Age), median(Age, na.rm = TRUE), Age) # ส่วนค่า NA ที่เหลืออีก 2 คน ให้แทนด้วยค่า median 28 นั่นเองเหตุผลด้านล่าง
 )
 
-prep_survived_age |> 
+prep_survived_age |>
 select(Age) |> # เลือกเฉพาะคอลัมน์ Age
 styled_kable() # ธีมตาราง
                   </code></pre>
@@ -825,11 +492,11 @@ styled_kable() # ธีมตาราง
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-na-age-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-na-age-1.png')">
       </div>
-        
+
       <p class="link-cursor" style="text-align: justify">
         เหตุผลที่เราแทนค่า NA 2 ตัวสุดท้าย ด้้วย median = 28 เพราะว่า
         <ol><br>
@@ -842,11 +509,11 @@ styled_kable() # ธีมตาราง
         </ol><br>
         ดังนั้นเช่นเดิม <mark>ผมจะนำไฟล์ที่บันทึกค่า Age มาแล้วใส่ลงไปในตาราง titanic (ในไฟล์มีอ้างอิงที่มา)</mark> ส่วนอีก 2 ค่าผมจะใช้ค่าอะไรต้องไปสำรวจข้อมูลดูทีหลังในหัวข้อ Age Preparation
       </p>
-        
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         ก่อนที่จะไปดูเหตุผลผมของตั้งค่าธีมเริ่มต้น เพื่อนำไปใช้สำหรับทุกๆ Chart รวมถึงเหตุผลข้อนี้ด้วยเช่นกัน
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -868,27 +535,27 @@ theme(
     color = "black",        # สีดำ
     margin = margin(b = 10) # ห่างจากเนื้อหาส่วนล่าง 10 pt
   ),
-  
+
   plot.subtitle = element_text( # หัวข้อรองรองลงมา
     size = rel(0.9),        # ปรับขนาดเล็กลงมาหน่อย 90% เทียบกับส่วนอื่นๆของกราฟ
     color = "#2F4F4F",      # ปรับสี
     margin = margin(b = 15)  # ห่างจากเนื้อด้านล่าง 15 pt
   ),
-  
+
   plot.caption = element_text(  # เพิ่ม caption มุมล่างขวา
     size = 8,               # ขนาด 8 pt
     color = "#4A4A4A",      # ปรับสี
     margin = margin(t = 10) # ห่างจากเนื้อหาด้านบน 10 pt
   ),
-  
+
   axis.title = element_text( # ชื่อแกน x
     size = 11,          # ขนาด 11 pt
     color = "#1C1C1C",  # ปรับสี
     face = "bold"       # ตัวหนา
   ),
-  
-  panel.grid.major.y = element_blank(), # ลบเส้นตารางหลักแกน y 
-  panel.grid.major.x = element_blank(), # ลบเส้นตารางหลักแกน x 
+
+  panel.grid.major.y = element_blank(), # ลบเส้นตารางหลักแกน y
+  panel.grid.major.x = element_blank(), # ลบเส้นตารางหลักแกน x
   panel.grid.minor.x = element_blank(), # ลบเส้นตารางรองแกน x
   panel.grid.minor.y = element_blank(), # ลบเส้นตารางรองแกน y
   legend.title = element_text(face = "bold"), # ชื่อหัวข้อ legend หัวหนา
@@ -900,19 +567,19 @@ theme(
           </div>
 
       </details>
-        
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <mark>กราฟเบ้ขวา</mark>ถ้าเราเพิ่มค่า Median เข้าไปในข้อมูล จะลดโอกาสเกิด Nosie ของข้อมูลได้มาก
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-na-age-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-na-age-2.png')">
       </div>
-        
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         หลังจากนำข้อมูลจาก 2 ไฟล์แทนค่า NA เข้าไปแล้ว เราจะเอาค่า median = 28 ไปแทนที่ค่า NA ที่เหลืออีก 2 ค่า
       </p>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-na-age-3.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-na-age-3.png')">
       </div>
@@ -924,8 +591,8 @@ theme(
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
 
-    </section> 
-    
+    </section>
+
     <!-- 5.3.3 Fare Preparation -->
     <section>
       <h4 class="link-cursor">5.3.3 Fare Preparation</h4>
@@ -955,11 +622,11 @@ prep_survived_age_fare |> styled_kable() # ธีมตาราง
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-na-fare.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-na-fare.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -967,8 +634,8 @@ prep_survived_age_fare |> styled_kable() # ธีมตาราง
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
 
-    </section> 
-    
+    </section>
+
     <!-- 5.3.4 Cabin Preparation -->
     <section>
       <h4 class="link-cursor">5.3.4 Cabin Preparation</h4>
@@ -998,11 +665,11 @@ prep_survived_age_fare_cabin |> styled_kable() # ธีมตาราง
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-drop-cabin.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-drop-cabin.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1010,8 +677,8 @@ prep_survived_age_fare_cabin |> styled_kable() # ธีมตาราง
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
 
-    </section> 
-    
+    </section>
+
     <!-- 5.3.5 Embarked Preparation -->
     <section>
       <h4 class="link-cursor">5.3.5 Embarked Preparation</h4>
@@ -1044,15 +711,15 @@ prep_survived_age_fare_cabin_embarked |> styled_kable() # ธีมตารา�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-mv-embarked-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-mv-embarked-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-mv-embarked-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-mv-embarked-2.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1061,21 +728,21 @@ prep_survived_age_fare_cabin_embarked |> styled_kable() # ธีมตารา�
       </p>
 
     </section>
-    
+
     <!-- 5.4 Check NA/Missing Value Cleansing Data / 5.4.1 Check NA Survived -->
     <section>
       <h3 class="link-cursor">5.4 Check NA/Missing Value Cleansing Data</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช็คคอลัมน์ทั้ง 5 ว่า Preparation เสร็จเรียบร้อยหรือยัง เช่น NA, Missing Value, Drop Columns
       </p>
-      
+
       <h4 class="link-cursor">5.4.1 Check NA Survived</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช็คว่าคอลัมน์ <code class="inline-code">Survived</code> ไม่มีค่า NA เหลืออยู่แล้ว
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1096,11 +763,11 @@ prep_survived |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-na-survived.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-na-survived.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1108,15 +775,15 @@ prep_survived |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.4.2 Check NA Age -->
     <section>
       <h4 class="link-cursor">5.4.2 Check NA Age</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช็คว่าคอลัมน์ <code class="inline-code">Age</code> ไม่มีค่า NA เหลืออยู่แล้ว
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1137,11 +804,11 @@ prep_survived_age |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-na-age.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-na-age.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1149,15 +816,15 @@ prep_survived_age |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.4.3 Check NA Fare -->
     <section>
       <h4 class="link-cursor">5.4.3 Check NA Fare</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช็คว่าคอลัมน์ <code class="inline-code">Fare</code> ไม่มีค่า NA เหลืออยู่แล้ว
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1178,11 +845,11 @@ prep_survived_age |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-na-fare.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-na-fare.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1190,15 +857,15 @@ prep_survived_age |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.4.4 Check Exist Cabin -->
     <section>
       <h4 class="link-cursor">5.4.4 Check Exist Cabin </h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เช็คว่าคอลัมน์ <code class="inline-code">Cabin</code> ยังอยู่หรือไม่
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1217,11 +884,11 @@ prep_survived_age_fare_cabin$Cabin # ตรวจสอบค่าเราล�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-drop-cabin.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-drop-cabin.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1229,15 +896,15 @@ prep_survived_age_fare_cabin$Cabin # ตรวจสอบค่าเราล�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.4.5 Check Exist Cabin -->
     <section>
       <h4 class="link-cursor">5.4.4 Check Missing Value Embarked</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          เช็คว่าคอลัมน์ <code class="inline-code">Embarked</code> ไม่มีค่า Missing Value เหลืออยู่แล้ว
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1258,11 +925,11 @@ prep_survived_age_fare_cabin_embarked |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-mv-embarked.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-mv-embarked.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1270,15 +937,15 @@ prep_survived_age_fare_cabin_embarked |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.4.6 Check NA / Missing Value Overall -->
     <section>
       <h4 class="link-cursor">5.4.6 Check NA / Missing Value Overall</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          ตรวจสอบ ค่า NA / Missing Value เฉพาะคอลัมน์ที่เราจะนำไปใช้งาน(คอลัมน์เดิมที่ชุดข้อมูลเดิมได้มา)
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1292,8 +959,8 @@ prep_survived_age_fare_cabin_embarked |>
               </div>
               <pre><code class="link-cursor language-r">
 prep_survived_age_fare_cabin_embarked |>
-  select(PassengerId, Survived, Pclass, 
-         Name, Sex, Age, SibSp, Parch, 
+  select(PassengerId, Survived, Pclass,
+         Name, Sex, Age, SibSp, Parch,
          Ticket, Fare, Embarked) |> # เลือกเฉพาะคอลัมน์ ที่เราต้องการ (กล่าวคือ คอลัมน์ที่ R ให้มาแต่ทีแรก)
   select(where(~ any(is.na(.) | . == ""))) # สำรวจดูว่ามีคอลัมน์ไหนไหมที่มีค่า NA หรือ ค่า Misising Value อย่างน้อย 1 แถว
                   </code></pre>
@@ -1301,11 +968,11 @@ prep_survived_age_fare_cabin_embarked |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-check-na-mv-overall.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-check-na-mv-overall.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1313,21 +980,21 @@ prep_survived_age_fare_cabin_embarked |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.5 Finalized Dataset for EDA and Model Training/ 5.5.1 🔥 Finalized Dataset -->
     <section>
       <h3 class="link-cursor">5.5 Finalized Dataset for EDA and Model Training</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          เราได้ข้อมูลที่พร้อมนำไปวิเคราะห์เชิงสำรวจ และเทรนโมเดลแล้ว โดยเราจะเลือกคอลัมน์เดิม ตามที่ชุดข้อมูลนี้ที่ ให้มา พร้อมกับ Preview และ Export ตามหัวข้อด้านล่าง
       </p>
-      
+
       <h4 class="link-cursor">5.5.1 🔥 Finalized Dataset </h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          นี่คือชุดข้อมูลที่เราจะใช้ในการวิเคราะห์เชิงสำรวจ (Exploratory Data Analysis - EDA) และเทรนโมเดล
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1342,8 +1009,8 @@ prep_survived_age_fare_cabin_embarked |>
               <pre><code class="link-cursor language-r">
 # ข้อมูลที่พร้อมใช้งาน สามารถนำไปวิเคราะห์ต่อ
 finalize_titanic_data <- prep_survived_age_fare_cabin_embarked |>
-  select(PassengerId, Survived, Pclass, 
-         Name, Sex, Age, SibSp, Parch, 
+  select(PassengerId, Survived, Pclass,
+         Name, Sex, Age, SibSp, Parch,
          Ticket, Fare, Embarked) # เลือกเฉพาะคอลัมน์ที่มีตั้งแต่เรื่มต้น (ตัดคอลัมน์ที่ Join เข้ามาทิ้ง)
 
 finalize_titanic_data |> styled_kable() # ธีมตาราง
@@ -1352,11 +1019,11 @@ finalize_titanic_data |> styled_kable() # ธีมตาราง
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-finalize-table.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-finalize-table.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1364,15 +1031,15 @@ finalize_titanic_data |> styled_kable() # ธีมตาราง
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.5.2 Summary Finalized Dataset -->
     <section>
       <h4 class="link-cursor">5.5.2 Summary Finalized Dataset</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          สรุปค่าสถิติเบื้องต้นสำหรับแต่ละคอลัมน์ในชุดข้อมูลที่เราจะใช้ในการวิเคราะห์เชิงสำรวจ (Exploratory Data Analysis - EDA) และเทรนโมเดล
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1386,18 +1053,18 @@ finalize_titanic_data |> styled_kable() # ธีมตาราง
               </div>
               <pre><code class="link-cursor language-r">
 # สรุปค่าสถิติเบื้องต้น ทุกคอลัมน์
-finalize_titanic_data |> 
-  summary() 
+finalize_titanic_data |>
+  summary()
                   </code></pre>
               <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-summary-fianlize-table.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-summary-fianlize-table.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1405,15 +1072,15 @@ finalize_titanic_data |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 5.5.3 Export Finalized Dataset File -->
     <section>
       <h4 class="link-cursor">5.5.3 Export Finalized Dataset File </h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          ส่งออกข้อมูล เผื่อเราจะนำไปใช้ในโปรแกรมอื่นๆ หรือเก็บไว้เป็นไฟล์ CSV และอ่านกลับเข้ามาใหม่
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -1427,7 +1094,7 @@ finalize_titanic_data |>
               </div>
               <pre><code class="link-cursor language-r">
 # เราสามารถใช้ write_csv() แทนได้ เพราะ Table ไม่มีภาษาไทย แต่ผมจะใช้ write_excel_csv เพราะมันสามารถ export ได้ทั้งไทยและอังกฤษ
-finalize_titanic_data |> 
+finalize_titanic_data |>
   write_xlsx(path = "finalize_titanic_data.xlsx")
 
 # อ่านกลับเข้ามาใหม่ด้วย
@@ -1461,7 +1128,7 @@ finalize_titanic_data <- read_excel("finalize_titanic_data.xlsx")
         >
         </iframe>
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -1545,7 +1212,7 @@ mutate( # เราเราได้หน้าตาตารางที่�
   Total = `0` + `1`, # สร้างคอลัมน์ชื่อ Total เก็บผลรวมของจำนวนคนที่ไม่รอดกับรอด
   `%Total` = (Total / nrow(finalize_titanic_data)) |> percent(accuracy = 1)) # คำนวณเป็นเปอร์เซ็นต์เทียบกับจำนวนคนทั้งหมดว่า ปรับเป็นเปอร์เซ็นต์ 1 ตำแหน่ง
 
-colnames(summary_agegroup_survived) <- c("AgeGroup", "Not_Survived", 
+colnames(summary_agegroup_survived) <- c("AgeGroup", "Not_Survived",
                                         "Survived", "Total", "%Total") # ปรับชื่อคอลัมน์ให้เป็นชื่อนี้ ตามลำดับ (หลีกเลี่ยงชื่อคอลัมน์เป็นตัวเลข)
 
 sum_total_survived <- summary_agegroup_survived |> # ต่อมาเราจะมาหาผลรวมแนวตั้งกันบ้าง
@@ -1611,7 +1278,7 @@ bind_rows(summary_agegroup_survived[10, ] |> # นั่นคือตารา
               <pre><code class="link-cursor language-r">
 # แบ่งกลุ่มอายุ ผุ้ใหญ่ เด็ก ผู้สูงอายุ
 summary_priority_survived <- finalize_titanic_data |>
-mutate( 
+mutate(
   Priority_passengers = case_when( # สร้างคอลัมน์ Priority_passengers แบ่งกลุ่มอายุ
     Age < 18 ~ "Child (< 18 years)", # อายุตำ่กว่า 18 ปี เป็น Child
     Age >= 60 ~ "Elderly (>= 60 years)", # อายุมากกว่าหรือเท่ากับ 60 เป็นผู้สูงอายุ
@@ -1627,7 +1294,7 @@ mutate(
   Total = `0` + `1`, # สร้างคอลัมน์ชื่อ Total เก็บผลรวมของจำนวนคนที่ไม่รอดกับรอด
   `%Total` = (Total / nrow(finalize_titanic_data)) |> percent(accuracy = 1)) # คำนวณเป็นเปอร์เซ็นต์เทียบกับจำนวนคนทั้งหมดว่า ปรับเป็นเปอร์เซ็นต์ 1 ตำแหน่ง
 
-colnames(summary_priority_survived) <- c("Priority_passengers", "Not_Survived", 
+colnames(summary_priority_survived) <- c("Priority_passengers", "Not_Survived",
                                         "Survived", "Total", "%Total") # ปรับชื่อคอลัมน์ให้เป็นชื่อนี้ ตามลำดับ (หลีกเลี่ยงชื่อคอลัมน์เป็นตัวเลข)
 
 sum_total_survived <- summary_priority_survived |> # ต่อมาเราจะมาหาผลรวมแนวตั้งกันบ้าง
@@ -1717,7 +1384,7 @@ mutate(
 ggplot(aes(Sex, percent, fill = Survived)) + # สร้างกราฟโดยการกำหนดค่า x = Sex และ y = percent แยกสีตาม Survived, Not_Survived
 geom_col() + # เลือกประเภทกราฟเป็น Bar Chart
 
-geom_text( # ตั้งค่ารูปแบบ label ข้อความ 
+geom_text( # ตั้งค่ารูปแบบ label ข้อความ
   aes(label = label_text), # เราจะใช้ข้อความที่เรากำหนดไว้ในคอลัมน์ label_text
   vjust = -0.3, # ตั้งค่าตามแนว vertical ห่างจากกราฟด้านล่างอยู่ 0.3 pt
   size = 3, # ขนาด 3 pt
@@ -1793,7 +1460,7 @@ summary_Pclass_survived <- finalize_titanic_data |>
     `%Total` = (Total / nrow(finalize_titanic_data)) |> percent(accuracy = 1) # และเราจะสร้างคอลัมน์ %Total เพื่อดูสัดส่วนผู้โดยสารแต่ละชั้นที่รอดชีวิตหรือไม่รอดชีวิตเทียบกับผู้ดดยสารทั้งหมด
     )
 
-colnames(summary_Pclass_survived) <- c("Pclass", "Not_Survived", 
+colnames(summary_Pclass_survived) <- c("Pclass", "Not_Survived",
                                          "Survived", "Total", "%Total") # ปรับชื่อคอลัมน์ให้เป็นชื่อนี้ ตามลำดับ (หลีกเลี่ยงชื่อคอลัมน์เป็นตัวเลข)
 
 sum_total_survived <- summary_Pclass_survived |> # ต่อมาเราจะมาหาผลรวมแนวตั้งกันบ้าง
@@ -1829,7 +1496,7 @@ summary_Pclass_survived <- summary_Pclass_survived |> # นำตารางท
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-4-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-4-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-4-2.png')">
       </div>
@@ -1881,7 +1548,7 @@ finalize_titanic_data |>
     percent = round((n / total_in_group) * 100, 1), # สร้างคอลัมน์ percent โดยเอาจำนวนผู้โดยสารที่รอดหรือไม่รอดชีวิตหารด้วยจำนวนผู้โดยสารแต่ละชั้นโดยสารแปลงเป็น % ทศนิยม 1 ตำแหน่ง
     label_text = ifelse(Survived %in% c("Survived"), # สร้างคอลัมน์ label_text ตามเงื่อนไขที่คอลัมน์ Survived คือค่า Survived ให้ใส่ข้อความต่อไปนี้ ลงคอลัมน์ label_text คือ
     paste0(percent, "%, ", n, " ", Pclass), NA)) |> # เราจะแสดง ค่า percent จำนวนผู้โดยสารในกลุ่มนั้นๆ และข้อความบ่งบอกชั้นโดยสาร เช่น 61.6%, 199 Passenger_Class_1
-  
+
   ggplot(aes(Pclass, percent, fill = Survived)) + # เริ่ม plot chart โดยแกน x = Pclass และ y = percent แยกสีตาม Survived
   geom_col() + # เลือกกราฟประเภท Bar Chart
   coord_flip() + # ปรับเป็น Horizontal Bar Chart
@@ -1891,7 +1558,7 @@ finalize_titanic_data |>
     size = 3, # ขนาด 4 pt
     fontface = "bold", # ตัวหนา
     na.rm = TRUE) + # ถ้าเจอ NA ในคอลัมน์ label_text ให้ข้ามไปเลยไม่สนใจ
-  
+
   scale_fill_manual( # กำหนดค่าต่างๆบนกราฟ เช่น สี, legend name
     values = c("Not_Survived" = "#f5e4cb", # กำหนดให้ค่า Not_Survived ที่เรากำหนดบน fill = Survived มีค่าเป็นสีขาวออกส้มหน่อยๆ
                "Survived" = "darkorange"), # และกำหนดให้ค่า Survived ที่เรากำหนดบน fill = Survived มีค่าเป็นสี darkorange
@@ -1952,19 +1619,19 @@ boxplot_pclass <- finalize_titanic_data |>
 
   ggplot(aes(x = Fare, fill = Survived)) +  # เริ่ม plot chart โดยแกน x = Fare แยกสีตาม Survived
   geom_boxplot() + # เลือกประเภทกราฟเป็น boxplot
-  
+
   scale_fill_manual( # กำหนดค่าต่างๆบนกราฟ เช่น สี, legend name
     values = c("Not_Survived" = "#f5e4cb", # กำหนดให้ค่า Not_Survived ที่เรากำหนดบน fill = Survived มีค่าเป็นสีขาวออกส้มหน่อยๆ
                "Survived" = "darkorange"), # และกำหนดให้ค่า Survived ที่เรากำหนดบน fill = Survived มีค่าเป็นสี darkorange
                 name = "Survival Status") + # กำหนดชื่อหัวข้อ legend เป็น Survived Status
-  
+
   custom_theme + # ปรับแต่งธีมเป็นค่าเริ่มต้น ตามที่เรากำหนดไว้ ใน Age Preparation Section
-  theme(axis.title.y = element_blank(), axis.ticks.y = element_blank(), 
+  theme(axis.title.y = element_blank(), axis.ticks.y = element_blank(),
         panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(),
         panel.grid.major.y = element_blank(), panel.grid.minor.y = element_blank(),
         legend.title = element_text(face = "bold"), legend.text = element_text(size = 10),
         legend.position = "right", legend.direction = "vertical", axis.text.y = element_blank()
-  ) + 
+  ) +
   facet_wrap2(~ Pclass, ncol = 1, nrow = 3, scales = "free_x", strip = strip_themed(
     background_x = list(
       element_rect(fill = "#FFD700"),  # สี Facet 1
@@ -2068,7 +1735,7 @@ ggplot(aes(x = Family_Size, fill = Survived)) + # กำหนดให้แก
       color = "blue", # สีน้ำเงิน
       size = 1,  # ขนาด 1 pt
       alpha = 0.5) + # สีความเข้ม
-  
+
   # เพิ่มข้อความบนกราฟ เช่น 1.9, mean ตรงเส้นที่ตัดแกน x ค่า mean
     geom_label( # เรียกฟังก์ชัน geom_label() เพื่อสร้างกล่องข้อความ (label) แสดงบนกราฟ
       x = mean_family_size, # กำหนดตำแหน่งแนวนอน (x) ของ label ให้ตรงกับค่า เฉลี่ยของ Family_Size ที่คำนวณไว้ล่วงหน้าในตัวแปร mean_family_size
@@ -2206,7 +1873,7 @@ titanic_data_with_travel_style <- titanic_data_with_travel_style |> # นำต�
   mutate(across(everything(), as.character)) |> # ขั้นตอนนี้สำคัญ ! เราจะนำทุกๆคอลัมน์ในตารางที่เรามารวมกันกำหนดให้เป็น character ทั้งหมดเพราะเราจะรวมตารางต่อ
   bind_rows(titanic_data_with_travel_style[6, ] |> # นั่นคือตารางแถวที่ 6 (ตารางที่รวมก่อนหน้ามี 5 แถว) ซึ่งมันจะเป็น Chracter ทั้งหมด
   mutate(
-    Travel_Style = ifelse(is.na(Travel_Style),"%Total", Travel_Style), # แถวที่ 6 คอลัมน์ Travel_Style เราจะใส่ข้อความ %Total เพราะเรากำลังจะหา %ทั้งหมดตามแนวคอลัมน์ 
+    Travel_Style = ifelse(is.na(Travel_Style),"%Total", Travel_Style), # แถวที่ 6 คอลัมน์ Travel_Style เราจะใส่ข้อความ %Total เพราะเรากำลังจะหา %ทั้งหมดตามแนวคอลัมน์
     Not_Survived = ( # แถวที่ 6 คอลัมน์ Not_Survived
         sum(titanic_data_with_travel_style$Not_Survived) / nrow(finalize_titanic_data)) |> # หาสัดส่วนเปอร์เซนต์ตามแนวคอลัมน์ Not_Survived เทียบกับจำนวนทั้งหมด
         percent(accuracy = 1), # แปลงเป็นทศนิยม 1 ตำแหน่ง
@@ -2285,9 +1952,9 @@ data_travel_style <- finalize_titanic_data |>
   )
 
 # เริ่มสร้าง Horizontal Bar Chart ดูสัดส่วนคนรอดชีวิตโดยแบ่งที่ละชั้นผู้โดยสาร
-bar_chart_travel_style <- data_travel_style |>  
+bar_chart_travel_style <- data_travel_style |>
   ggplot( # เริ่มกำหนดช่วงข้อมูล
-    aes(x = Travel_Style, # x = Travel_Style 
+    aes(x = Travel_Style, # x = Travel_Style
         y = percent_n,  # แกน y = percent_n
         fill = Survived)) + # แบ่งสีตามสถานะการรอดชีวิต
   geom_col() + # เลือกประเภท Chart เป็น Bar Chart
@@ -2304,8 +1971,8 @@ bar_chart_travel_style <- data_travel_style |>
     na.rm = TRUE) + # โดยถ้าในตารางมีตัวไหน NA ให้ข้ามไปเลย
   custom_theme + # ตั้งค่าเป็นธีมเรื่มต้น
   theme(
-    axis.text.x = element_blank(),  # เลขแกน x เอาออก 
-    axis.text.y = element_blank(),  # เลขแกน y เอาออก 
+    axis.text.x = element_blank(),  # เลขแกน x เอาออก
+    axis.text.y = element_blank(),  # เลขแกน y เอาออก
     axis.title.y = element_blank() # ตัดชื่อแกน y ออก
   ) +
   labs(
@@ -2322,7 +1989,7 @@ data_travel_style |> styled_kable() # แสดงตารางข้อมู
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-9-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-9-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-9-2.png')">
       </div>
@@ -2392,7 +2059,7 @@ corrplot(
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-10-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-10-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-2.png')">
       </div>
@@ -2439,11 +2106,11 @@ corrplot(
     <!-- 7.1 🔥 Transform Data -->
     <section>
       <h3 class="link-cursor">7.1 🔥 Transform Data</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         เรามี Data ที่พร้อมใช้งานแล้วจากหัวข้อ 🔥 Finalized Dataset แต่เราจะมา featured selection ใหม่ โดยการเพิ่มคอลัมน์และตัดคอลัมน์บางตัวทิ้ง เช่น
       </p>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         <b>4 คอลัมน์ที่เอาออก</b>
       </p>
@@ -2462,11 +2129,11 @@ corrplot(
             <code class="inline-code">Cabin</code> : หมายเลขห้องโดยสาร แน่นอนว่าเราตัดไปแล้วเพราะว่ามีค่า Missing Value คิดเป็น ~70% ของจำนวนหมายเลขห้องโดยสารทั้งหมด
           </li>
       </ol>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         <b>2 คอลัมน์ที่เพิ่ม</b>
       </p>
-      
+
       <ol><br>
         <li class="link-cursor">
           <code class="inline-code">Family_Size</code> : ขนาดครอบครัวที่เดินทาง Parch + SibSp + 1 อาจบอกได้ว่าครอบครัวยิ่งใหญ่อาจมีโอกาสรอดได้สูงหรือไม่?
@@ -2475,11 +2142,11 @@ corrplot(
           <code class="inline-code">Travel_Style</code> : รูปแบบการเดินทาง เช่น เดินทางคนเดียว, เดินทางกับพ่อแม่ลูก, เดินทางกับญาติพี่น้อง, หรือเดินทางเป็นแบบครอบครัว อาจบอกได้ว่ามีโอกาสรอดมากน้อยแค่ไหน
         </li>
       </ol>
-      
+
       <p class="link-cursor" style="text-align: justify;">
         รวมถึงผมจะ<mark>เปลี่ยน 4 คอลัมน์ต่อไปนี้เป็น factor</mark> ก่อนเทรนโมเดล เพราะเราเห็นเป็นหมวดหมู่ชัดเจน ไม่เหมือนชื่อผู้โดยสารที่ไม่มีรูปแบบที่ชัดเจน
       </p>
-      
+
       <ol><br>
         <li class="link-cursor">
           <code class="inline-code">Survived</code> ประกอบด้วย 2 ค่า Not_Survived, Survived เลเวล 0,1 ตามลำดับ เลเวล 1 คือสิ่งที่โมเดลจะพยายามทำนาย
@@ -2498,7 +2165,7 @@ corrplot(
       <p class="link-cursor" style="text-align: justify;">
         <mark>สรุป เราจะใช้ข้อมูลต่อไปนี้ในการทำนายและเปรียบเทียบโมเดล โดยคอลัมน์ต่อไปนี้</mark>
       </p>
-      
+
       <table class="link-cursor tableizer-table">
         <thead><tr class="tableizer-firstrow"><th>ชื่อคอลัมน์</th><th>ความหมาย</th><th>ประเภทข้อมูล</th></tr></thead><tbody>
           <tr><td><code class="inline-code">Survived</code></td><td>รอดชีวิตหรือไม่</td><td>Factor (0 = Not_Survived, 1 = Survived)</td></tr>
@@ -2513,7 +2180,7 @@ corrplot(
           <tr><td><code class="inline-code">Travel_Style</code></td><td>ลักษณะการเดินทางของผู้โดยสาร</td><td>Factor ("Alone", "With Parents/Children Only", "With Siblings/Spouse Only", "With Mixed Family")</td></tr>
         </tbody>
       </table>
-        
+
       <p class="link-cursor" style="text-align: justify;">
         <b>Output จากฟังก์ชัน system.time({}) จะมีคอลัมน์ต่อไปนี้</b>
       </p>
@@ -2529,7 +2196,7 @@ corrplot(
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-10-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-analyze-10-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-analyze-10-2.png')">
       </div>
@@ -2543,17 +2210,17 @@ corrplot(
 
       <ul>
         <li class="link-cursor">
-          <code class="inline-code">Aggregating results</code> = รวมผลจาก cross-validation Fitting final model = เทรนใหม่อีกรอบด้วยข้อมูลทั้งหมด 
+          <code class="inline-code">Aggregating results</code> = รวมผลจาก cross-validation Fitting final model = เทรนใหม่อีกรอบด้วยข้อมูลทั้งหมด
         </li>
         <li class="link-cursor">
           <mark>✅ <code class="inline-code">elapsed</code> = เวลาที่ใช้ทั้งหมดในการฝึกโมเดล (วัดจริง) สำคัญสุด</mark>
         </li>
       </ul>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
         <b>เริ่มทำตารางให้มีคอลัมน์เหมือนด้านบน</b>
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -2583,9 +2250,9 @@ data_model <- finalize_titanic_data |>
     )
   ) |>
   # เลือกคอลัมน์ที่จะไปเทรนโมเดล
-  select(Survived, Pclass, Sex, 
-         Age, SibSp, Parch, Fare, 
-         Embarked, Family_Size, Travel_Style 
+  select(Survived, Pclass, Sex,
+         Age, SibSp, Parch, Fare,
+         Embarked, Family_Size, Travel_Style
          )
 
 data_model |> glimpse()
@@ -2607,15 +2274,15 @@ data_model |> glimpse()
       </p>
 
     </section>
-    
+
     <!-- 7.2 🔥 Export File Data Model -->
     <section>
       <h3 class="link-cursor">7.2 🔥 Export File Data Model </h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          ส่งออกข้อมูล <code class="inline-code">data_model</code> ที่เราทำการ transform แล้วไปเก็บไว้ในไฟล์ Excel เพื่อใช้ในการเทรนโมเดลต่อไป
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -2629,7 +2296,7 @@ data_model |> glimpse()
               </div>
               <pre><code class="link-cursor language-r">
 # ส่งออกไฟล์ data_model ที่เราจะนำไปใช้ train model (สำรองไว้)
-data_model |> 
+data_model |>
   write_xlsx(path = "data_model.xlsx")
 
 # อ่านไฟล์ที่ใช้เทรนโมเดล (เราไม่ควรอ่านไฟล์และเขียนทับอีกรอบ ไม่งั้นคอลัมน์ที่เป็น factor จะถูกเปลี่ยนเป็น character ทันทีทำให้ใช้ confusion matrix ตอน Compare โมเดลไม่ได้)
@@ -2662,7 +2329,7 @@ data_model |>
         >
         </iframe>
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -2670,15 +2337,15 @@ data_model |>
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.3 🔥 Demo Model with Logitic Regression -->
     <section>
       <h3 class="link-cursor">7.3 🔥 Demo Model with Logitic Regression</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          เราจะมา demo โมเดล Logitic Regression และอ่านผลลัพธ์คร่าวๆกัน เพราะเราจะเอา model นี้ไปดูว่า features ไหนที่ส่งผลต่อการรอดชีวิตผู้โดยสารมากสุด
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -2717,11 +2384,11 @@ box_model({
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-demo-glm-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-demo-glm-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-demo-glm-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-demo-glm-2.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -2729,15 +2396,15 @@ box_model({
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.4 🔥 Exploring the Impact of Feature Selection -->
     <section>
       <h3 class="link-cursor">7.4 🔥 Exploring the Impact of Feature Selection</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          สำรวจดูว่า feature ไหนที่ส่งผลกับการทำนายคอลัมน์ Survived มาที่สุดตะ Survived หรือ Not_Survived
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -2763,15 +2430,15 @@ demo_model$finalModel$coefficients |> # ดูสัมประสิทธิ�
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-demo-impact-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-demo-impact-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-demo-impact-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-demo-impact-2.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-demo-impact-3.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-demo-impact-3.png')">
       </div>
-      
+
       <p class="link-cursor">
           ดูตัวอย่างเต็มได้ที่ :
           <a href="https://github.com/Phubordin/portfolio-project/blob/main/portfolio-project/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.md"
@@ -2779,15 +2446,15 @@ demo_model$finalModel$coefficients |> # ดูสัมประสิทธิ�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.5 🔥🔥 Split Train Test -->
     <section>
       <h3 class="link-cursor">7.5 🔥🔥 Split Train Test</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          สร้างฟังก์ชัน Split Data ให้เป็น train_data และ test_data
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -2834,18 +2501,18 @@ prep_data
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6 🔥🔥 Train 5 Model / 7.6.1 🔥🔥 Set Train Control-->
     <section>
       <h3 class="link-cursor">7.6 🔥🔥 Train 5 Model</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
          เริ่มนำข้อมูลมาเทรนทั้งหมดโดยใช้ 5 model กับชุดข้อมูล train_data
          1. K-Nearest Neighbors 2. Logitic Regression 3. Ridge/Lasso Regression 4. Decision Tree 5. Random Forest
       </p>
-      
+
       <h4 class="link-cursor">7.6.1 🔥🔥 Set Train Control</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           กำหนด train control ที่จะใช้ในการเทรนโมเดลทั้งหมด โดยใช้ k-fold cross-validation 5 รอบ
           <mark>และจะทำการ resampling 5 รอบ</mark> เพื่อให้ได้ผลลัพธ์ที่แม่นยำมากขึ้น
@@ -2868,11 +2535,11 @@ k_grid <- data.frame(k = c(3, 5, 7, 9))
 
 # สร้าง grid มาจับคู่ค่า lambda กับ alpha เพื่อใช้สร้าง glmnet model
 k_alpha_lambda <- expand.grid(
-  alpha = c(0, 1), 
+  alpha = c(0, 1),
   lambda = c(0.01, 0.1)
   )
 
-# สร้าง train control คอยควบคุม "วิธีการสุ่มซ้ำ" 
+# สร้าง train control คอยควบคุม "วิธีการสุ่มซ้ำ"
 train_ctrl <- trainControl(
   method = "repeatedcv", # ใช้วิธีการสุ่มซ้ำแบบ K-fold
   number = 5, # จำนวน 5 รอบ
@@ -2891,11 +2558,11 @@ train_ctrl <- trainControl(
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6.2 🔥🔥 K-Nearest Neighbors (knn Train) -->
     <section>
       <h4 class="link-cursor">7.6.2 🔥🔥 K-Nearest Neighbors (knn Train) </h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเทรนโมเดล K-Nearest Neighbors (knn) โดยใช้ train_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -2932,11 +2599,11 @@ train_knn_time <- system.time({ # นับเวลาในการเทร�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-knn-model-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-knn-model-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-knn-model-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-knn-model-2.png')">
       </div>
@@ -2948,11 +2615,11 @@ train_knn_time <- system.time({ # นับเวลาในการเทร�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6.3 🔥🔥 Logitic Regression (glm Train) -->
     <section>
       <h4 class="link-cursor">7.6.3 🔥🔥 Logitic Regression (glm Train)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเทรนโมเดล Logitic Regression (glm) โดยใช้ train_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -2988,11 +2655,11 @@ train_logit_time <- system.time({ # นับเวลาในการเท�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-glm-model-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-glm-model-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-glm-model-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-glm-model-2.png')">
       </div>
@@ -3004,11 +2671,11 @@ train_logit_time <- system.time({ # นับเวลาในการเท�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6.4 🔥🔥 Ridge/Lasso Regression (glmnet Train) -->
     <section>
       <h4 class="link-cursor">7.6.4 🔥🔥 Ridge/Lasso Regression (glmnet Train)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเทรนโมเดล Ridge/Lasso Regression (glmnet) โดยใช้ train_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3044,11 +2711,11 @@ train_glmnet_time <- system.time({ # นับเวลาในการเท�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-glmnet-model-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-glmnet-model-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-glmnet-model-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-glmnet-model-2.png')">
       </div>
@@ -3060,11 +2727,11 @@ train_glmnet_time <- system.time({ # นับเวลาในการเท�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6.5 🔥🔥 Decision Tree (rpart Train) -->
     <section>
       <h4 class="link-cursor">7.6.5 🔥🔥 Decision Tree (rpart Train) </h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเทรนโมเดล Decision Tree (rpart Train) โดยใช้ train_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3099,11 +2766,11 @@ train_rpart_time <- system.time({ # นับเวลาในการเท�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-rpart-model-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-rpart-model-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-rpart-model-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-rpart-model-2.png')">
       </div>
@@ -3115,11 +2782,11 @@ train_rpart_time <- system.time({ # นับเวลาในการเท�
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- 7.6.6 🔥🔥 Random Forest (rf Train) -->
     <section>
       <h4 class="link-cursor">7.6.6 🔥🔥 Random Forest (rf Train)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเทรนโมเดล Random Forest (rf Train) โดยใช้ train_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3154,11 +2821,11 @@ train_rf_time <- system.time({ # นับเวลาในการเทร�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-rf-model-1.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-rf-model-1.png')">
       </div>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-train-rf-model-2.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-train-rf-model-2.png')">
       </div>
@@ -3174,13 +2841,13 @@ train_rf_time <- system.time({ # นับเวลาในการเทร�
     <!-- 7.7 🔥🔥 Score (predict) / 7.7.1 🔥🔥 K-Nearest Neighbors (knn predict) -->
     <section>
       <h3 class="link-cursor">7.7 🔥🔥 Score (predict)</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มเอา 5 model มาทำนายกับชุดข้อมูล test_data
       </p>
 
       <h4 class="link-cursor">7.7.1 🔥🔥 K-Nearest Neighbors (knn predict)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มทำนายโมเดล K-Nearest Neighbors (knn) โดยใช้ test_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3213,7 +2880,7 @@ knn_pred_data |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-score-knn.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-score-knn.png')">
       </div>
@@ -3229,7 +2896,7 @@ knn_pred_data |>
     <!-- 7.7.2 🔥🔥 Logitic Regression (glm predict) -->
     <section>
       <h4 class="link-cursor">7.7.2 🔥🔥 Logitic Regression (glm predict)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มทำนายโมเดล Logitic Regression (glm predict) โดยใช้ test_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3258,12 +2925,12 @@ logit_pred_data <- if_else(
   logit_pred_data$Survived > 0.5,"Survived", "Not_Survived")
 
 # แปลงเป็น factor เพื่อจะไปเปรียบเทียบกับข้อมูลชุด test ที่เป็น factor ได้ และตอนที่เรากำหนด type = "prob" มันเป็นตัวเลขและถูกแปลงเป็น character ดังนั้นต้องเปลี่ยนกลับไปเป็น factor
-logit_pred_data <- factor( 
-  logit_pred_data, 
+logit_pred_data <- factor(
+  logit_pred_data,
   levels = c("Not_Survived", "Survived"))
 
-# แปลงเป็นตาราง และเปลี่ยนชื่อคอลัมน์ 
-logit_pred_data |> 
+# แปลงเป็นตาราง และเปลี่ยนชื่อคอลัมน์
+logit_pred_data |>
   data.frame() |> # ทำเป็นตาราง
   rename(Survived_predict_logitic = logit_pred_data) |> # เปลี่ยนชื่อคอลัมน์ New_Name_Column = Old_Name_Column
   styled_kable() # ธีม ตารางเริ่มต้น                  </code></pre>
@@ -3271,7 +2938,7 @@ logit_pred_data |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-score-glm.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-score-glm.png')">
       </div>
@@ -3287,7 +2954,7 @@ logit_pred_data |>
     <!-- 7.7.3 🔥🔥 Ridge/Lasso Regression (glmnet predict) -->
     <section>
       <h4 class="link-cursor">7.7.3 🔥🔥 Ridge/Lasso Regression (glmnet predict)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มทำนายโมเดล Ridge/Lasso Regression (glmnet predict) โดยใช้ test_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3310,8 +2977,8 @@ glmnet_pred_data <- predict( # ทำนาย
   glmnet_model, # เลือกโมเดลทำนาย Ridge/Lasso Regression
   newdata = prep_data$test) # ใช้ชุดข้อมูล test_data
 
-# แปลงเป็นตาราง และเปลี่ยนชื่อคอลัมน์ 
-glmnet_pred_data |> 
+# แปลงเป็นตาราง และเปลี่ยนชื่อคอลัมน์
+glmnet_pred_data |>
   data.frame() |> # ทำเป็นตาราง
   rename(Survived_predict_ridge_lasso = glmnet_pred_data) |> # เปลี่ยนชื่อคอลัมน์ New_Name_Column = Old_Name_Column
   styled_kable() # ธีมตารางเริ่มต้น                  </code></pre>
@@ -3319,7 +2986,7 @@ glmnet_pred_data |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-score-glmnet.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-score-glmnet.png')">
       </div>
@@ -3335,7 +3002,7 @@ glmnet_pred_data |>
     <!-- 7.7.4 🔥🔥 Decision Tree (rpart predict) -->
     <section>
       <h4 class="link-cursor">7.7.3 🔥🔥 Decision Tree (rpart predict)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มทำนายโมเดล Decision Tree (rpart predict) โดยใช้ test_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3358,7 +3025,7 @@ rpart_pred_data <- predict( # ทำนาย
   rpart_model, # ใช้โมเดล decistion tree
   newdata = prep_data$test) # ไปใช้กับข้อมูลชุด test_data
 
-rpart_pred_data |> 
+rpart_pred_data |>
   data.frame() |> # ทำเป็นตาราง
   rename(Survived_predict_decision_tree = rpart_pred_data) |> # เปลี่ยนชื่อคอลัมน์ New_Name_Column = Old_Name_Column
   styled_kable() # ธีมตาราง เริ่มต้น                  </code></pre>
@@ -3366,7 +3033,7 @@ rpart_pred_data |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-score-rpart.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-score-rpart.png')">
       </div>
@@ -3382,7 +3049,7 @@ rpart_pred_data |>
     <!-- 7.7.5 🔥🔥 Random Forest (rf predict) -->
     <section>
       <h4 class="link-cursor">7.7.5 🔥🔥 Random Forest (rf predict)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           เริ่มทำนายโมเดล Random Forest (rf predict) โดยใช้ test_data ที่เราสร้างไว้ในหัวข้อ Split Train Test
           <mark>และใช้ train control ที่เราสร้างไว้ในหัวข้อ Set Train Control</mark>
@@ -3405,7 +3072,7 @@ rf_pred_data <- predict( # ทำนาย
   rf_model, # ใช้โมเดล Random Foreset
   newdata = prep_data$test) # ใช้กับชุดข้อมูล test data
 
-rf_pred_data |> 
+rf_pred_data |>
   data.frame() |> # ทำเป็นตาราง
   rename(Survived_predict_random_forest = rf_pred_data) |> # เปลี่ยนชื่อคอลัมน์ New_Name_Column = Old_Name_Column
   styled_kable() # ธีมตารางเริ่มต้น                  </code></pre>
@@ -3413,7 +3080,7 @@ rf_pred_data |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-score-rpart.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-score-rpart.png')">
       </div>
@@ -3429,13 +3096,13 @@ rf_pred_data |>
     <!-- 7.8 🔥🔥 Evaluate (Create Error Data Frame) / 7.8.1 🔥🔥 K-Nearest Neighbors (knn evaluate) -->
     <section>
       <h3 class="link-cursor">7.8 🔥🔥 Evaluate (Create Error Data Frame)</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           ประเมินผล 5 Model ตอน Train และตอน Test
       </p>
 
       <h4 class="link-cursor">7.8.1 🔥🔥 K-Nearest Neighbors (knn evaluate)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           หา Error ตอน Train และ Test ของ <mark>K-Nearest Neighbors Model</mark>
       </p>
@@ -3464,7 +3131,7 @@ knn_test_err <- confusionMatrix( # ตาราง confusion matrix
   dnn = c("Predict", "Actual"), # กำหนดชื่อแกน x เป็น Predict, แกน y เป็น Actual
   positive = "Survived", # กำหนดค่าที่ทำนาย เราทำนาย "Survived"
   mode = "prec_recall") # กำหนดให้วัด Performance เป็น F1, Recall, precision, Accuracy
-knn_test_err <- knn_test_err$overall[["Accuracy"]] # ดึงค่า Accuracy_test 
+knn_test_err <- knn_test_err$overall[["Accuracy"]] # ดึงค่า Accuracy_test
 knn_test_err <- 1 - knn_test_err # นำ 1 - Accuracy_test จะได้เป็นค่า Error ของชุดข้อมูล test
 
 # นำ 2 เวกเตอร์มาสร้างเป็นตาราง
@@ -3477,7 +3144,7 @@ data.frame(knn_test_err) |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-knn.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-knn.png')">
       </div>
@@ -3493,7 +3160,7 @@ data.frame(knn_test_err) |>
     <!-- 7.8.2 🔥🔥 Logitic Regression (glm evaluate) -->
     <section>
       <h4 class="link-cursor">7.8.2 🔥🔥 Logitic Regression (glm evaluate)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           หา Error ตอน Train และ Test ของ <mark>Logitic Regression</mark>
       </p>
@@ -3533,7 +3200,7 @@ data.frame(logit_test_err) |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-glm.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-glm.png')">
       </div>
@@ -3549,7 +3216,7 @@ data.frame(logit_test_err) |>
     <!-- 7.8.3 🔥🔥 Ridge/Lasso Regression (glmnet evaluate) -->
     <section>
       <h4 class="link-cursor">7.8.3 🔥🔥 Ridge/Lasso Regression (glmnet evaluate)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           หา Error ตอน Train และ Test ของ <mark>Logitic Regression</mark>
       </p>
@@ -3567,14 +3234,14 @@ data.frame(logit_test_err) |>
               </div>
               <pre><code class="link-cursor language-r">
 ## glmnet train err
-glmnet_train_err <- glmnet_model$results %>% 
-  filter(alpha == glmnet_model$bestTune[[1]] & 
+glmnet_train_err <- glmnet_model$results %>%
+  filter(alpha == glmnet_model$bestTune[[1]] &
            lambda == glmnet_model$bestTune[[2]])
 glmnet_train_err <- 1 - glmnet_train_err[["Accuracy"]]
 
 ## glmnet test err
 glmnet_test_err <- confusionMatrix(
-  glmnet_pred_data, 
+  glmnet_pred_data,
   prep_data$test$Survived, # คอลัมน์ Survived_actual
   dnn = c("Predict", "Actual"), # กำหนดชื่อแกน x เป็น Predict, แกน y เป็น Actual
   positive = "Survived", # กำหนดค่าที่ทำนาย เราทำนาย "Survived"
@@ -3592,7 +3259,7 @@ data.frame(glmnet_test_err) |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-glmnet.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-glmnet.png')">
       </div>
@@ -3608,7 +3275,7 @@ data.frame(glmnet_test_err) |>
     <!-- 7.8.4 🔥🔥 Decision Tree (rpart evaluate) -->
     <section>
       <h4 class="link-cursor">7.8.4 🔥🔥 Decision Tree (rpart evaluate)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           หา Error ตอน Train และ Test ของ <mark>Decision Tree</mark>
       </p>
@@ -3626,13 +3293,13 @@ data.frame(glmnet_test_err) |>
               </div>
               <pre><code class="link-cursor language-r">
 ## rpart train err
-rpart_train_err <- rpart_model$results %>% 
+rpart_train_err <- rpart_model$results %>%
   filter(cp == rpart_model$bestTune[[1]])
 rpart_train_err <- 1 - rpart_train_err[["Accuracy"]]
 
 ## rpart test err
 rpart_test_err <- confusionMatrix(
-  rpart_pred_data, 
+  rpart_pred_data,
   prep_data$test$Survived, # คอลัมน์ Survived_actual
   dnn = c("Predict", "Actual"), # กำหนดชื่อแกน x เป็น Predict, แกน y เป็น Actual
   positive = "Survived", # กำหนดค่าที่ทำนาย เราทำนาย "Survived"
@@ -3650,7 +3317,7 @@ data.frame(rpart_test_err) |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-rpart.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-rpart.png')">
       </div>
@@ -3666,7 +3333,7 @@ data.frame(rpart_test_err) |>
     <!-- 7.8.5 🔥🔥 Random Forest (rf evaluate) -->
     <section>
       <h4 class="link-cursor">7.8.5 🔥🔥 Random Forest (rf evaluate)</h4>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           หา Error ตอน Train และ Test ของ <mark>Random Forest</mark>
       </p>
@@ -3690,7 +3357,7 @@ rf_train_err <- 1 - rf_train_err[["Accuracy"]]
 
 ## rf test err
 rf_test_err <- confusionMatrix(
-  rf_pred_data, 
+  rf_pred_data,
   prep_data$test$Survived, # คอลัมน์ Survived_actual
   dnn = c("Predict", "Actual"), # กำหนดชื่อแกน x เป็น Predict, แกน y เป็น Actual
   positive = "Survived", # กำหนดค่าที่ทำนาย เราทำนาย "Survived"
@@ -3708,7 +3375,7 @@ data.frame(rf_test_err) |>
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-rf.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-rf.png')">
       </div>
@@ -3724,11 +3391,11 @@ data.frame(rf_test_err) |>
     <!-- 7.9 🔥🔥 Comparative Analysis of Classification Models -->
     <section>
       <h3 class="link-cursor">7.9 🔥🔥 Comparative Analysis of Classification Models</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           สร้างตาราง <mark>ประเมิน Classification Model</mark> ทั้งหมด 5 Models
       </p>
-      
+
       <details class="detail">
 
           <summary>Code</summary>
@@ -3743,25 +3410,25 @@ data.frame(rf_test_err) |>
               <pre><code class="link-cursor language-r">
 # สร้างตาราง Evaluate 5 Models ด้วย Error
 # ชื่อแต่ละโมเดล
-model_name <- c("K-Nearest Neighbors", "Logitic Regression", 
-                "Ridge/Lasso Regression", "Decision Tree", 
+model_name <- c("K-Nearest Neighbors", "Logitic Regression",
+                "Ridge/Lasso Regression", "Decision Tree",
                 "Random Forest")
 
-# รวม Error ของ Train Data อยู่ในเวกเตอร์เดียวกัน 
+# รวม Error ของ Train Data อยู่ในเวกเตอร์เดียวกัน
 train_err_model <- c(
-  knn_train_err, logit_train_err, 
-  glmnet_train_err, rpart_train_err, 
+  knn_train_err, logit_train_err,
+  glmnet_train_err, rpart_train_err,
   rf_train_err)
 
 # รวม Error ของ Test Data อยู่ในเวกเตอร์เดียวกัน
 test_err_model <- c(
-  knn_test_err, logit_test_err, 
-  glmnet_test_err, rpart_test_err, 
+  knn_test_err, logit_test_err,
+  glmnet_test_err, rpart_test_err,
   rf_test_err)
 
 # ตาราง Evaluate โมเดล
 fitting <- data_frame(
-  model_name, 
+  model_name,
   train_err_model,
   test_err_model
 )
@@ -3773,15 +3440,15 @@ fitting["Error_Change"] <- if_else(fitting$Diff > 0, "Increased", # สร้า
 
 # สร้างคอลัมน์ Evaluate ตามเงื่อนไขว่าโมเดลเรานั้นเมื่อมาปรับใช้ปรับ unseen data แล้ว Performance ต่างกันมากไหม เช่น GoodFitting, WeakFittng, Overfitting
 fitting["Evaluate"] <- if_else(
-  fitting$Diff < 1, "GoodFitting", 
+  fitting$Diff < 1, "GoodFitting",
     if_else(fitting$Diff < 2, "WeakFittng", "Overfitting"))
 
 # สร้าง list รวมเวลาเทรนของโมเดลทั้งหมด 5 โมเดล
 time_model <- list(
   train_knn_time,
-  train_logit_time, 
-  train_glmnet_time, 
-  train_rpart_time, 
+  train_logit_time,
+  train_glmnet_time,
+  train_rpart_time,
   train_rf_time)
 
 # แปลงเป็นตาราง พร้อม transpose ตาราง
@@ -3799,7 +3466,7 @@ fitting <- fitting |> # นำตารางหลักมาแล้วเ�
   bind_cols(time_model) |> # นำคอลัมน์เวลาเวลาเทรนมารวมกับตารางหลัก
   # เลือกคอลัมน์ที่เราจะให้แสดงผล ปล. เราเอา elapsed เพราะนับเวลาจริงที่เราเทรนโมเดล จนได้โมเดลมา
   select(
-    model_name, elapsed, train_err_model, 
+    model_name, elapsed, train_err_model,
     test_err_model, Diff, Error_Change, Evaluate) |>
   # เปลี่ยนชื่อคอลัมน์
   rename(
@@ -3820,7 +3487,7 @@ compare_model_table <- fitting |> # เลือกคอลัมน์ที�
           </div>
 
       </details>
-      
+
       <div class="iframe-container cursor-zoom-in">
           <img src="p7-evaluate-compare.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('p7-evaluate-compare.png')">
       </div>
@@ -3836,12 +3503,12 @@ compare_model_table <- fitting |> # เลือกคอลัมน์ที�
     <!-- 7.10 🔥 Save Model (only Model) -->
     <section>
       <h3 class="link-cursor">7.10 🔥 Save Model (only Model)</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           บันทึกโมเดลทั้งหมด 5 โมเดลที่เราสร้างไว้ในหัวข้อ Train Model (only Model) ลงไฟล์ .RNS
           เพื่อให้สามารถนำไปใช้ต่อได้ในอนาคต
       </p>
-      
+
       <details class="detail1">
 
           <summary>Code</summary>
@@ -3884,12 +3551,12 @@ for (model_name in names(models)) {
     <!-- 7.11 🔥 Load Model (only Model) -->
     <section>
       <h3 class="link-cursor">7.11 🔥 Load Model (only Model)</h3>
-      
+
       <p class="link-cursor" style="text-align: justify; text-indent: 1em">
           โหลดโมเดลทั้งหมด 5 โมเดลที่เราบันทึกไว้ในหัวข้อ Save Model (only Model) เพื่อให้สามารถนำไปใช้ต่อได้ในอนาคต
           โดยไม่ต้องเทรนโมเดลใหม่อีกครั้ง
       </p>
-      
+
       <details class="detail1">
 
           <summary>Code</summary>
@@ -3909,7 +3576,7 @@ model_names <- c("knn_model", "logit_model", "glmnet_model", "rpart_model", "rf_
 for (model_name in model_names) {
   model_path <- paste0(model_name, "_final.RNS") # สร้างชื่อไฟล์ตามชื่อใน model_names และตามด้วย _final.RNS
   model_object <- readRDS(model_path) # อ่านโมเดลแต่ละตัว ใน for loop
-  
+
   assign(model_name, model_object) # เอาค่าใน model_object assign เข้าไปในตัวแปร model_name แต่ละตัว
 }
                   </code></pre>
@@ -3925,7 +3592,7 @@ for (model_name in model_names) {
           </a></span> (กด Ctrl+F เพื่อค้นหาและพิมพ์หัวข้อนี้)
       </p>
     </section>
-    
+
     <!-- Github & Google Drive -->
     <section id="file">
         <h2 class="link-cursor"><a href="https://github.com/Phubordin" class="hover-expand" target="_blank"><img src="github.png"
@@ -3957,26 +3624,26 @@ for (model_name in model_names) {
                 <a href="https://docs.google.com/spreadsheets/d/1DTZIGZ-SmP1xpIPbygdXXU6WrwlTlXwx/edit?usp=drive_link&ouid=116663168376755112559&rtpof=true&sd=true"
                   class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
                   finalize_titanic_data.xlsx : 📥
-                </a> <span class="text-description link-cursor">Open with Google Drive</span>                
+                </a> <span class="text-description link-cursor">Open with Google Drive</span>
               </li>
               <li>
                 <a href="https://docs.google.com/spreadsheets/d/19zrBAzv2KOnZvyXT80L9Lbj3MXerxll2/edit?usp=drive_link&ouid=116663168376755112559&rtpof=true&sd=true"
                   class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
                   data_model.xlsx : 📥
-                </a> <span class="text-description link-cursor">Open with Google Drive</span>                
+                </a> <span class="text-description link-cursor">Open with Google Drive</span>
               </li>
               <li>
                 <a href="https://drive.google.com/file/d/1H9uTupFsjAAkYQ_aw5V1yhCksuZLV1z9/view?usp=drive_link"
                   class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
-                  R Markdown : 📥 
-                </a> <span class="text-description link-cursor">Open with Google Drive</span>                
+                  R Markdown : 📥
+                </a> <span class="text-description link-cursor">Open with Google Drive</span>
               </li>
               </li>
               <li>
                 <a href="https://drive.google.com/file/d/12qkFBlWbf5k8AgSMfIYyta6wCLw0hxr8/view?usp=drive_link"
                   class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">
-                  HTML : 📥 
-                </a> <span class="text-description link-cursor">Open with Google Drive</span>                
+                  HTML : 📥
+                </a> <span class="text-description link-cursor">Open with Google Drive</span>
               </li>
               <li>
                   <a href="https://drive.google.com/drive/folders/124VCvN_1TeFE83Ie1vEkM57EoZBEiSNK?usp=drive_link"
@@ -3997,11 +3664,7 @@ for (model_name in model_names) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <!-- Prism Language Components -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-r.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-mermaid.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/api/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
     <script src="script.js"></script>
     <script src="certificate-script.js"></script>
   </body>

@@ -1,124 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <!-- index -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Phubordin Phanyosri | Data Analyst Portfolio -->
   <url>
     <loc>https://phubordin.github.io/</loc>
-    <lastmod>2025-10-12</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <priority>1.0</priority>
   </url>
-  <!-- home -->
+  <!-- Phubordin Phanyosri | Data Analyst Portfolio -->
   <url>
     <loc>https://phubordin.github.io/home.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.9</priority>
   </url>
-  <!-- about -->
-  <url>
-    <loc>https://phubordin.github.io/about.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- experience -->
-  <url>
-    <loc>https://phubordin.github.io/experience.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- experience_leowood -->
-  <url>
-    <loc>https://phubordin.github.io/experience_leowood.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project -->
+  <!-- Project Overview -->
   <url>
     <loc>https://phubordin.github.io/project.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.9</priority>
   </url>
-  <!-- project_ggsheet_dsb10 -->
+  <!-- About Me - Phubordin -->
   <url>
-    <loc>https://phubordin.github.io/project_ggsheet_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
+    <loc>https://phubordin.github.io/about.html</loc>
+    <lastmod>2026-08-26</lastmod>
     <priority>0.8</priority>
   </url>
-  <!-- project_cafe_r_sql_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_cafe_r_sql_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_rfm_py_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_rfm_py_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_pyc_r_py_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_pyc_r_py_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_nycflight13_23_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_nycflight13_23_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_vizdimond_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_vizdimond_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_titanic_glm_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_titanic_glm_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_looker_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_looker_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_pizza_chatbot_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_pizza_chatbot_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_atm_oop_py_dsb10 -->
-  <url>
-    <loc>https://phubordin.github.io/project_atm_oop_py_dsb10.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_mini_api_py -->
-  <url>
-    <loc>https://phubordin.github.io/project_mini_api_py.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- project_mini_xml_cafe -->
-  <url>
-    <loc>https://phubordin.github.io/project_mini_xml_cafe.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <!-- certificate -->
+  <!-- Certificate - Phubordin -->
   <url>
     <loc>https://phubordin.github.io/certificate.html</loc>
-    <lastmod>2025-10-12</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <priority>0.8</priority>
   </url>
-  <!-- contact -->
+  <!-- Work Experience -->
+  <url>
+    <loc>https://phubordin.github.io/experience.html</loc>
+    <lastmod>2026-08-30</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <!-- Contact - Phubordin -->
   <url>
     <loc>https://phubordin.github.io/contact.html</loc>
-    <lastmod>2025-10-12</lastmod>
-    <priority>0.8</priority>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <!-- Project 7 : Titanic Survival Prediction: A Comparative Analysis of Cla -->
+  <url>
+    <loc>https://phubordin.github.io/P07-Titanic-Survival-Prediction-A-Comparative-Analysis-of-Classification-Models.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Experience - Leowood -->
+  <url>
+    <loc>https://phubordin.github.io/experience_leowood.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Experience - มิตรไมตรีการแพทย์ -->
+  <url>
+    <loc>https://phubordin.github.io/experience_mmt.html</loc>
+    <lastmod>2026-08-30</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - Pokemon Card -->
+  <url>
+    <loc>https://phubordin.github.io/p13_pokemon_card.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 6 : EDA Visualization of the Diamond Dataset Using R and R Mar -->
+  <url>
+    <loc>https://phubordin.github.io/p6-rmd-html.html</loc>
+    <lastmod>2025-09-25</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - ATM -->
+  <url>
+    <loc>https://phubordin.github.io/project_atm_oop_py_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 2 - Cafe -->
+  <url>
+    <loc>https://phubordin.github.io/project_cafe_r_sql_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 1 - Sheets -->
+  <url>
+    <loc>https://phubordin.github.io/project_ggsheet_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - Looker -->
+  <url>
+    <loc>https://phubordin.github.io/project_looker_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - API -->
+  <url>
+    <loc>https://phubordin.github.io/project_mini_api_py.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - XML -->
+  <url>
+    <loc>https://phubordin.github.io/project_mini_xml_cafe.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - nycflights13, 23 -->
+  <url>
+    <loc>https://phubordin.github.io/project_nycflight13_23_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - Pizza -->
+  <url>
+    <loc>https://phubordin.github.io/project_pizza_chatbot_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 4 - Pao Ying Chub -->
+  <url>
+    <loc>https://phubordin.github.io/project_pyc_r_py_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 3 - RFM Analysis -->
+  <url>
+    <loc>https://phubordin.github.io/project_rfm_py_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project - Titanic -->
+  <url>
+    <loc>https://phubordin.github.io/project_titanic_glm_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Project 6 - VizDiamond -->
+  <url>
+    <loc>https://phubordin.github.io/project_vizdimond_dsb10.html</loc>
+    <lastmod>2026-08-26</lastmod>
+    <priority>0.6</priority>
   </url>
 </urlset>

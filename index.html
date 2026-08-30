@@ -1,5 +1,6 @@
+<!-- index.html — หน้าแรกของเว็บ (รวมเนื้อหาเดิมของ home.html เข้ามาไว้ที่เดียว) -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <!-- Google Analytics -->
@@ -11,512 +12,405 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&family=Poppins:wght@300;400;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Prompt', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background-color: #121212;
-            background-image: url("mountain.webp");
-            background-position: center 25%;
-            background-size:cover;
-            background-attachment: fixed;
-            color: rgb(0, 0, 0);
-            overflow: hidden;
-            cursor: url("cursor.png"), auto;
-            position: relative;
-        }
-
-        .content {
-            max-width: 100%;
-            margin-bottom: 20px;
-            font-size: 20px;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        .start-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            font-style: "Prompt";
-            background: linear-gradient(145deg, #aeaff5 0%, #8587ff 50%, #ff6600 80%);
-            color: rgb(255, 255, 255);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            cursor: url("cursor1.png"), auto;
-            z-index: 10;
-            position: relative;
-        }
-
-        .start-button:hover {
-            background-color: rgb(255, 136, 0);
-            transform: scale(1.05);
-        }
-
-        .active {
-            display: inline-flex;
-            cursor: url("cursor1.png"), auto;
-            border-radius: 20px;
-            color: #ffffff;
-            text-align: left;
-            border-radius: 20px;
-            padding: 0.3rem 0.8rem;
-            background: linear-gradient(145deg, #aeaff5 0%, #8587ff 50%, #ff6600 100%);
-            content: "🔍";
-            font-size: 14px;
-        }
-
-        .active:hover {
-            background-color: rgb(255, 136, 0);
-            transform: scale(1.05);
-        }
-
-        /* Animation elements */
-        .transition-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-        }
-
-        .transition-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            transform: scale(0);
-            transform-origin: center;
-        }
-
-        .data-visualization {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
-
-        .data-point {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgb(255, 136, 0);
-            transform: scale(0);
-            opacity: 0;
-            box-shadow: 0 0 10px rgba(255, 136, 0, 0.8);
-        }
-
-        .data-line {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.6);
-            height: 2px;
-            transform-origin: left center;
-            transform: scaleX(0);
-            opacity: 0;
-        }
-
-        .rocket {
-            position: relative;
-            font-size: 24px;
-            opacity: 0;
-            transform: translateY(50px) scale(0.5);
-        }
-
-        .dashboard-grid {
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-        }
-
-        .dashboard-cell {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .loading-bar-container {
-            position: absolute;
-            bottom: 10%;
-            width: 60%;
-            height: 4px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        .loading-bar {
-            height: 100%;
-            width: 0%;
-            background-color: rgb(255, 136, 0);
-            border-radius: 2px;
-        }
-
-        /* For browsers with support for backdrop-filter */
-        @supports (backdrop-filter: blur(10px)) {
-            .transition-overlay {
-                background-color: rgba(0, 0, 0, 0.6);
-                backdrop-filter: blur(10px);
-            }
-        }
-
-        /* เพิ่ม Style สำหรับ Title */
-        .portfolio-title {
-            font-family: 'Prompt', sans-serif;
-            font-size: 40px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-top: 20px;
-            margin-bottom: 15px;
-            text-shadow: 0 2px 10px rgba(255, 136, 0, 0.4);
-            letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .subtitle {
-            font-family: 'Prompt', sans-serif;
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px;
-            opacity: 0;
-            transform: translateY(-15px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            transition-delay: 0.2s;
-        }
-
-        /* Charts Styling */
-        .chart-container {
-            position: absolute;
-            opacity: 0;
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
-
-        .chart-title {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            margin-left: 5px;
-        }
-
-        /* Bar Chart */
-        .bar-chart {
-            top: 30%;
-            left: 10%;
-            transform: translateY(30px);
-        }
-
-        .bar {
-            display: inline-block;
-            width: 20px;
-            background-color: rgb(255, 136, 0);
-            margin-right: 6px;
-            border-radius: 3px 3px 0 0;
-            transform: scaleY(0);
-            transform-origin: bottom;
-            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* Pie Chart */
-        .pie-chart {
-            top: 30%;
-            right: 10%;
-            transform: translateY(30px);
-            width: 100px;
-            height: 100px;
-        }
-
-        .pie-segment {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%);
-            transform: rotate(0deg) scale(0);
-            transform-origin: center;
-            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        /* Line Chart */
-        .line-chart {
-            bottom: 30%;
-            left: 35%;
-            transform: translateY(30px);
-        }
-
-        .line-chart-container {
-            position: absolute;
-            width: 200px;
-            height: 80px;
-            border-left: 1px solid rgba(255, 255, 255, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .chart-line {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            /* ความกว้างของเส้น */
-            height: 100%;
-            /* ความสูงของเส้น */
-            background-color: rgb(255, 136, 0);
-
-            /* ทำให้เส้นเอียงขึ้นโดยใช้เส้นทแยง */
-            clip-path: polygon(0% 100%, 100% 0%, 100% 100%);
-
-            transform: scaleX(0);
-            /* เริ่มต้นเส้นให้เล็ก */
-            transform-origin: left bottom;
-            /* ให้ขยายจากมุมล่างซ้าย */
-            transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .chart-line.show {
-            transform: scaleX(1);
-            /* ค่อย ๆ ขยายเส้นไปตามแกน x */
-        }
-
-        /* จุดที่ปลายเส้น */
-        .chart-line::before,
-        .chart-line::after {
-            content: "";
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: rgb(255, 136, 0);
-        }
-
-        .chart-line::before {
-            left: 0;
-            bottom: -4px;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            transition-delay: 0.6s;
-        }
-
-        .chart-line::after {
-            right: 0;
-            top: -4px;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            transition-delay: 1s;
-        }
-
-        /* ใช้ JavaScript เพื่อเริ่มแสดง animation */
-        .chart-line.show {
-            transform: scaleX(1) rotate(20deg);
-        }
-
-        /* Animation label styles */
-        .animation-label {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
-            font-weight: 500;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px 10px;
-            border-radius: 4px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            z-index: 1001;
-        }
-
-        #scatterDataLabel {
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        #connectingDataLabel {
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        #analyzingDataLabel {
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        #clusteringDataLabel {
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        #modelingDataLabel {
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        #finalizingDataLabel {
-            top: 65%;
-            left: 50%;
-            transform: translate(-50%, -50%) translateY(10px);
-        }
-
-        /* Pattern elements */
-        .pattern-container {
-            position: absolute;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .pattern-circle {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 136, 0, 0.7);
-            opacity: 0;
-            transform: scale(0);
-            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 1s ease;
-        }
-
-        .pattern-grid {
-            position: absolute;
-            width: 60%;
-            height: 60%;
-            top: 20%;
-            left: 20%;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .pattern-grid-line-h {
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 1s ease;
-        }
-
-        .pattern-grid-line-v {
-            position: absolute;
-            height: 100%;
-            width: 1px;
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scaleY(0);
-            transform-origin: top;
-            transition: transform 1s ease;
-        }
-
-        .pattern-group {
-            position: absolute;
-            border: 1px solid rgba(255, 136, 0, 0.4);
-            background-color: rgba(255, 136, 0, 0.05);
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .completion-message {
-            position: absolute;
-            top: 85%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
-            border-radius: 8px;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-        }
-
-        .link-cursor {
-            cursor: text;
-        }
-    </style>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title>Phubordin Phanyosri | Data Analyst Portfolio</title>
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio และผลงานของ Phubordin Phanyosri - Data Analyst เครื่องมือ SQL, R, Python, Looker Studio, Power BI, Excel, Google Sheets ในการวิเคราะห์ข้อมูลธุรกิจ">
-    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
+    <title>Phubordin Phanyosri | Data Analyst Portfolio</title>
+    <meta name="description" content="Portfolio ของ ภูบดินทร์ พันธุ์โยศรี (Phubordin Phanyosri) — Data Analyst ทำรายงานและแดชบอร์ดยอดขายให้ทีมขายและผู้บริหารใช้ตัดสินใจ ด้วย SQL, Python, R, Data Studio (Looker Studio), Power BI และ Excel/Google Sheets">
+    <meta name="keywords" content="Phubordin, Phanyosri, ภูบดินทร์ พันธุ์โยศรี, Data Analyst, Portfolio, SQL, Python, R, Data Studio, Looker Studio, Power BI, Claude Code">
     <meta name="author" content="Phubordin Phanyosri">
-    <meta name="google-site-verification" content="TECdgJQJA3gvBHpo_VZhhWLiIos_smNRClNv6hXiWj4" />
+    <meta name="google-site-verification" content="TECdgJQJA3gvBHpo_VZhhWLiIos_smNRClNv6hXiWj4">
+    <link rel="canonical" href="https://phubordin.github.io/">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Phubordin Phanyosri | Data Analyst Portfolio">
+    <meta property="og:description" content="Data Analyst — เปลี่ยนข้อมูลดิบให้เป็นรายงานและแดชบอร์ดที่ทีมใช้ตัดสินใจได้จริง">
+    <meta property="og:url" content="https://phubordin.github.io/">
+    <meta property="og:image" content="https://phubordin.github.io/phubordin.jpg">
+
     <script type="application/ld+json">
     {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Phubordin Phanyosri",
-    "url": "https://phubordin.github.io",
-    "jobTitle": "Data Analyst",
-    "sameAs": [
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Phubordin Phanyosri",
+      "alternateName": "ภูบดินทร์ พันธุ์โยศรี",
+      "url": "https://phubordin.github.io",
+      "image": "https://phubordin.github.io/phubordin.jpg",
+      "jobTitle": "Data Analyst",
+      "email": "phubordin.phanyosri@gmail.com",
+      "alumniOf": "King Mongkut's University of Technology North Bangkok",
+      "knowsAbout": ["Data Analysis", "SQL", "Python", "R", "Data Studio", "Power BI", "Excel", "Machine Learning"],
+      "sameAs": [
         "https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/",
-        "https://github.com/phubordin"
-    ]
+        "https://github.com/phubordin",
+        "https://www.youtube.com/@Phuyuyuu"
+      ]
     }
     </script>
-
-
 </head>
 
-<body id="pageBody">
-    <div class="main-content" id="mainContent" style="background: rgba(30, 30, 60, 0.85); box-shadow: 0 8px 32px rgba(0,0,0,0.25); border-radius: 24px; padding: 3% 5%; max-width: 575px;">
-        <div style="margin-bottom: 18px;">
-            <img src="phubordin.jpg" alt="Phubordin Phanyosri Data Analyst" width="140" style="border-radius: 8px; box-shadow: 0 2px 12px rgba(255,136,0,0.25); border: 2px solid #fcf9f7; object-fit: cover;">
-        </div>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
-            <h1 style="font-size: 2.2rem; font-weight: 700; color: #fff; letter-spacing: 1px; text-shadow: 0 2px 10px rgba(255,136,0,0.3); margin: 0;">Phubordin Phanyosri</h1>
-        </div>
-        <p style="font-size: 1.1rem; color: #e0e0e0; margin-bottom: 18px;">Data Analyst | SQL, Python, R, Excel, Google Sheets, Looker Studio, Power BI, GenAI</p>
-        <div style="margin-bottom: 18px;">
-            <span style="display: inline-block; background: linear-gradient(90deg,#ff6600,#8587ff); color: #fff; font-size: 1rem; font-weight: 500; border-radius: 12px; padding: 6px 18px; box-shadow: 0 2px 8px rgba(255,136,0,0.15);">Ready for Data-Driven Impact</span>
-        </div>
-        <div style="margin-bottom: 24px;">
-            <p style="color: #fff; font-size: 1rem; margin-bottom: 8px;">Dear HR and Data Leaders,</p>
-            <p style="color: #e0e0e0; font-size: 0.98rem;">Explore my portfolio to see how data insights drive business impact. Ready to help your team grow.</p>
-        </div>
-        <div style="margin-bottom: 18px;">
-            <a href="home.html" style="display: inline-block; background: linear-gradient(90deg,#ff6600 0%,#8587ff 100%); color: #fff; font-size: 1.15rem; font-weight: 600; border: none; border-radius: 16px; padding: 16px 36px; box-shadow: 0 4px 16px rgba(255,136,0,0.18); cursor: url(cursor1.png), auto; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;"
-                onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 6px 24px rgba(255,136,0,0.25)';"
-                onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 16px rgba(255,136,0,0.18)';">
-                🚀 View My Portfolio
-            </a>
-        </div>
-        <div style="margin-top: 18px;">
-            <a href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/" target="_blank" style="cursor: url(cursor1.png), auto; color:#8587ff; font-size:1.1rem; text-decoration:none; margin-right:12px;">LinkedIn</a>
-            <a href="https://github.com/phubordin" target="_blank" style="cursor: url(cursor1.png), auto; color:#ff6600; font-size:1.1rem; text-decoration:none;">GitHub</a>
-        </div>
-        <div style="margin-top: 24px;">
-            <p style="color: #ff6600; font-size: 0.85rem; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 6px 12px;">
-                <u style="font-weight: bold;">No redistribution allowed.</u><br> This site does <u style="font-weight: bold;">not collect any user data</u>.
-            </p>
+<body class="fade-slide-in">
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <!-- ===================== HERO ===================== -->
+    <div class="site-hero">
+        <div class="site-hero-art"></div>
+        <div class="hero-inner">
+
+            <div class="hero-text">
+                <img src="phubordin.jpg" alt="Phubordin Phanyosri — Data Analyst"
+                    class="hero-avatar cursor-zoom-in" onclick="openGalleryModal('phubordin.jpg')">
+
+                <span class="eyebrow">Ready for Data-Driven Impact</span>
+
+                <h1>Phubordin&nbsp;Phanyosri</h1>
+                <p class="hero-role">Data Analyst</p>
+
+                <p class="hero-lede">
+                    เปลี่ยนข้อมูลดิบให้เป็น<b>รายงานและแดชบอร์ดที่ทีมขายกับผู้บริหารใช้ตัดสินใจได้จริง</b>
+                    — ตั้งแต่จัดการความถูกต้องของข้อมูล ไปจนถึงเล่าเรื่องด้วยภาพให้คนที่ไม่ใช่สาย Data เข้าใจได้
+                </p>
+
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="project.html">ดูโปรเจกต์ทั้งหมด</a>
+                    <a class="btn btn-ghost" href="experience.html">ประสบการณ์ทำงาน</a>
+                    <a class="btn btn-ghost" href="about.html#file">Resume</a>
+                </div>
+
+                <div class="hero-meta">
+                    <span>📍 กรุงเทพฯ / นนทบุรี / สมุทรปราการ</span>
+                    <span>🎓 B.Sc. Applied Mathematics, KMUTNB</span>
+                    <span>✉️ phubordin.phanyosri@gmail.com</span>
+                </div>
+            </div>
+
+            <!-- แผงสรุป + กราฟ -->
+            <div class="panel">
+                <div class="panel-head">
+                    <span class="panel-title">Portfolio at a glance</span>
+                    <span class="panel-note">อัปเดต 2026</span>
+                </div>
+
+                <div class="kpi-row">
+                    <div class="kpi"><span class="kpi-num">13</span><span class="kpi-label">โปรเจกต์</span></div>
+                    <div class="kpi"><span class="kpi-num">14</span><span class="kpi-label">Certificates</span></div>
+                    <div class="kpi"><span class="kpi-num">2</span><span class="kpi-label">บริษัท</span></div>
+                </div>
+
+                <svg class="chart" viewBox="0 0 320 148" role="img"
+                    aria-label="ภาพประกอบ: ข้อมูลดิบกระจัดกระจาย ถูกสรุปเป็นเส้นแนวโน้มที่ชัดเจน">
+                    <line class="chart-grid" x1="8" y1="34" x2="312" y2="34" />
+                    <line class="chart-grid" x1="8" y1="64" x2="312" y2="64" />
+                    <line class="chart-grid" x1="8" y1="94" x2="312" y2="94" />
+                    <line class="chart-grid" x1="8" y1="124" x2="312" y2="124" />
+
+                    <!-- ข้อมูลดิบ -->
+                    <g fill="var(--text-faint)" opacity=".38">
+                        <circle cx="34" cy="118" r="2.2" />
+                        <circle cx="58" cy="96" r="2.2" />
+                        <circle cx="82" cy="108" r="2.2" />
+                        <circle cx="112" cy="82" r="2.2" />
+                        <circle cx="138" cy="104" r="2.2" />
+                        <circle cx="166" cy="74" r="2.2" />
+                        <circle cx="196" cy="88" r="2.2" />
+                        <circle cx="222" cy="52" r="2.2" />
+                        <circle cx="252" cy="66" r="2.2" />
+                        <circle cx="284" cy="36" r="2.2" />
+                    </g>
+
+                    <!-- เส้นแนวโน้มที่สรุปได้ -->
+                    <path class="chart-area" d="M16 112 L74 98 L132 92 L190 68 L248 54 L304 28 L304 124 L16 124 Z" />
+                    <path class="chart-path" d="M16 112 L74 98 L132 92 L190 68 L248 54 L304 28" />
+
+                    <circle class="chart-dot" cx="16" cy="112" r="3.6" style="animation-delay:.7s" />
+                    <circle class="chart-dot" cx="74" cy="98" r="3.6" style="animation-delay:.95s" />
+                    <circle class="chart-dot" cx="132" cy="92" r="3.6" style="animation-delay:1.2s" />
+                    <circle class="chart-dot" cx="190" cy="68" r="3.6" style="animation-delay:1.45s" />
+                    <circle class="chart-dot" cx="248" cy="54" r="3.6" style="animation-delay:1.7s" />
+                    <circle class="chart-dot" cx="304" cy="28" r="4.4" style="animation-delay:1.95s" />
+
+                    <text class="chart-label" x="8" y="142">ข้อมูลดิบ</text>
+                    <text class="chart-label" x="312" y="142" text-anchor="end">Insight ที่ใช้ตัดสินใจได้</text>
+                </svg>
+            </div>
+
         </div>
     </div>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section id="skills">
+        <h2>Skills &amp; Tools</h2>
+        <p class="hero-lede" style="margin-bottom:var(--s5)">เครื่องมือที่ใช้ทำงานจริงและใช้ในโปรเจกต์บนเว็บนี้</p>
+
+        <div class="grid-2">
+            <div class="project" style="cursor:auto">
+                <h3>วิเคราะห์ &amp; เขียนโปรแกรม</h3>
+                <div class="tags">
+                    <span class="tag tag-accent"><img src="SQL.png" alt=""> SQL</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">Microsoft SQL Server</span>
+                    <span class="tag tag-accent"><img src="python.png" alt=""> Python</span>
+                    <span class="tag tag-accent"><img src="R.png" alt=""> R</span>
+                    <span class="tag">Pandas</span>
+                    <span class="tag">NumPy</span>
+                    <span class="tag">dplyr / ggplot2</span>
+                </div>
+            </div>
+
+            <div class="project" style="cursor:auto">
+                <h3>Dashboard &amp; BI</h3>
+                <div class="tags">
+                    <span class="tag tag-accent"><img src="looker.png" alt=""> Data Studio</span>
+                    <span class="tag tag-accent">Power BI</span>
+                    <span class="tag">DAX</span>
+                    <span class="tag">Data Model / Star Schema</span>
+                    <span class="tag">MCP Server</span>
+                    <span class="tag">Tableau</span>
+                </div>
+            </div>
+
+            <div class="project" style="cursor:auto">
+                <h3>Spreadsheet &amp; รายงาน</h3>
+                <div class="tags">
+                    <span class="tag tag-accent"><img src="sheets.png" alt=""> Google Sheets</span>
+                    <span class="tag">Apps Script (Deploy Web App)</span>
+                    <span class="tag tag-accent">Excel</span>
+                    <span class="tag">Power Query</span>
+                    <span class="tag">ตระกูล LOOKUP</span>
+                    <span class="tag">Pivot Table</span>
+                </div>
+            </div>
+
+            <div class="project" style="cursor:auto">
+                <h3>สถิติ &amp; Machine Learning</h3>
+                <div class="tags">
+                    <span class="tag">Descriptive / Inferential</span>
+                    <span class="tag">Regression</span>
+                    <span class="tag">Decision Tree</span>
+                    <span class="tag">Random Forest</span>
+                    <span class="tag">KNN</span>
+                    <span class="tag">RFM Segmentation</span>
+                    <span class="tag">Cohort Analysis</span>
+                    <span class="tag">Market Basket Analysis</span>
+                </div>
+            </div>
+
+            <div class="project" style="cursor:auto">
+                <h3>AI</h3>
+                <div class="tags">
+                    <span class="tag tag-accent">Claude Cowork</span>
+                    <span class="tag tag-accent">Claude Code</span>
+                    <span class="tag">AI Automation</span>
+                    <span class="tag">SKILL.md</span>
+                    <span class="tag">ChatGPT / Gemini / Claude</span>
+                </div>
+            </div>
+
+            <div class="project" style="cursor:auto">
+                <h3>อื่นๆ</h3>
+                <div class="tags">
+                    <span class="tag">Web Scraping</span>
+                    <span class="tag">ER Diagram</span>
+                    <span class="tag"><img src="xml.png" alt=""> XML</span>
+                    <span class="tag">HTML / CSS</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ===================== PROJECTS ===================== -->
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <p class="hero-lede" style="margin-bottom:var(--s5)">
+            6 โปรเจกต์ที่สะท้อนงาน Data Analyst ได้ครบที่สุด — ดูทั้ง 13 โปรเจกต์ได้ที่ปุ่มมุมขวาบน
+        </p>
+
+        <div class="project" onclick="go('project.html#name-project8')"
+            onmouseover="showPreview(event, 'p8-looker-overview.gif')" onmouseout="hidePreview()">
+            <h3>P8 · Sales Performance &amp; Profitability Dashboard</h3>
+            <p class="project-why">Dashboard 3 หน้าใน Data Studio (ชื่อเดิม Looker Studio) แยกมุมมอง Product / Zone Area / Logistic
+                พร้อมอ่านกราฟทีละตัวว่าได้ Insight อะไร และควรตัดสินใจอย่างไร</p>
+            <div class="tags">
+                <span class="tag"><img src="looker.png" alt=""> Data Studio</span>
+                <span class="tag">Dashboard</span>
+                <span class="tag">NPM / ROI</span>
+            </div>
+        </div>
+
+        <div class="project" onclick="go('project.html#name-project3')"
+            onmouseover="showPreview(event, 'p3-viz-count-rfm-r.png')" onmouseout="hidePreview()">
+            <h3>P3 · Customer Segmentation ด้วย RFM Model</h3>
+            <p class="project-why">แบ่งลูกค้า USA SuperStore เป็น 11 กลุ่มตามพฤติกรรม Recency / Frequency / Monetary
+                พร้อมระบุ Business Impact ของแต่ละกลุ่ม เพื่อวางแผนการตลาดให้ตรงกลุ่ม</p>
+            <div class="tags">
+                <span class="tag"><img src="python.png" alt=""> Python</span>
+                <span class="tag"><img src="R.png" alt=""> R</span>
+                <span class="tag">Segmentation</span>
+            </div>
+        </div>
+
+        <div class="project" onclick="go('project.html#name-project7')"
+            onmouseover="showPreview(event, 'p7-evaluate-compare.png')" onmouseout="hidePreview()">
+            <h3>P7 · Titanic Survival Prediction</h3>
+            <p class="project-why">เปรียบเทียบโมเดล Classification หลายตัวบนชุดข้อมูลเดียวกัน
+                แล้ววัดผลด้วย metric ที่เหมาะกับโจทย์ เพื่อเลือกโมเดลที่ใช้ได้จริง ไม่ใช่แค่ accuracy สูง</p>
+            <div class="tags">
+                <span class="tag"><img src="R.png" alt=""> R</span>
+                <span class="tag">Machine Learning</span>
+                <span class="tag">Model Evaluation</span>
+            </div>
+        </div>
+
+        <div class="project" onclick="go('project.html#name-project5')"
+            onmouseover="showPreview(event, 'p5-4-44-1.png')" onmouseout="hidePreview()">
+            <h3>P5 · NYC Flights 2013 vs 2023</h3>
+            <p class="project-why">ตอบคำถามเชิงตัดสินใจจริง — ควรบินเดือนไหน สายการบินไหน สนามบินไหน
+                รวมถึงการหาชื่อรัฐปลายทางที่ไม่มีอยู่ในฐานข้อมูลตั้งต้น</p>
+            <div class="tags">
+                <span class="tag"><img src="R.png" alt=""> R</span>
+                <span class="tag">EDA</span>
+                <span class="tag">Data Joining</span>
+            </div>
+        </div>
+
+        <div class="project" onclick="go('project.html#name-project6')"
+            onmouseover="showPreview(event, 'p6-5.3.2.png')" onmouseout="hidePreview()">
+            <h3>P6 · EDA เพชร 53,000 เม็ด ด้วย R Markdown</h3>
+            <p class="project-why">วิเคราะห์เชิงสำรวจชุดข้อมูล Diamonds แล้วส่งออกเป็นรายงาน R Markdown
+                ที่อ่านต่อได้ทั้งโค้ด กราฟ และข้อสรุปในเอกสารเดียว</p>
+            <div class="tags">
+                <span class="tag"><img src="R.png" alt=""> R Markdown</span>
+                <span class="tag">ggplot2</span>
+                <span class="tag">Data Storytelling</span>
+            </div>
+        </div>
+
+        <div class="project" onclick="go('project.html#name-project13')"
+            onmouseover="showPreview(event, 'p13_pokemon_project.gif')" onmouseout="hidePreview()">
+            <h3>P13 · Pokemon Card — Skooldio Project</h3>
+            <p class="project-why">โจทย์ตั้งต้นจากคำถามผู้ใช้จริง “มือใหม่ควรพิจารณาอะไรก่อนสะสมการ์ด”
+                แล้วใช้ข้อมูลตอบให้เห็นภาพ</p>
+            <div class="tags">
+                <span class="tag">Data Storytelling</span>
+                <span class="tag">Visualization</span>
+            </div>
+        </div>
+
+        <div class="corner-text" onclick="go('project.html')"><span>ดูทั้ง 13 โปรเจกต์</span></div>
+    </section>
+
+    <!-- ===================== EXPERIENCE ===================== -->
+    <section id="experience">
+        <h2>Work Experience</h2>
+
+        <div class="experience" onclick="go('experience.html#experience-mmt')">
+            <h3>Data Analyst</h3>
+            <p>
+                <span class="company-name"><img src="mmt_logo.jpg" alt="" width="26"> มิตรไมตรีการแพทย์</span>
+                <span class="date-info" data-since="2025-11">Nov 2025 – Present</span>
+            </p>
+        </div>
+
+        <div class="experience" onclick="go('experience.html#experience-leowood')">
+            <h3>Data Analyst</h3>
+            <p>
+                <span class="company-name"><img src="leowood_logo.png" alt="" width="26"> Leowood Intertrade Co Ltd.</span>
+                <span class="date-info">Jul 2023 – Apr 2024 · 10 months</span>
+            </p>
+            <ul class="exp-points">
+                <li>ดูแลรายงานสรุปยอดขาย B2B / B2C รายวัน–รายปี พร้อมตรวจความถูกต้องของข้อมูลอย่างสม่ำเสมอ</li>
+                <li>ทำรายงาน KPI ของพนักงานขายรายเขต และแดชบอร์ดยอดขายรายจังหวัดสำหรับติดตามผล</li>
+                <li>เทรนพนักงานขายและ Product Consultant เรื่องการคีย์ข้อมูลและการใช้โปรแกรม Monitor Sales</li>
+            </ul>
+        </div>
+
+        <div class="corner-text" onclick="go('experience.html')"><span>ดูรายละเอียด</span></div>
+    </section>
+
+    <!-- ===================== CERTIFICATES ===================== -->
+    <section id="certificates">
+        <h2>Certificates</h2>
+        <p class="hero-lede" style="margin-bottom:var(--s5)">
+            14 ใบจาก 3 สถาบัน ตรวจสอบได้ทุกใบ พร้อมโน้ตสรุปสิ่งที่ได้เรียนใน Notion
+        </p>
+
+        <div class="kpi-row">
+            <div class="kpi">
+                <span class="kpi-num">3</span>
+                <span class="kpi-label">DataRockie</span>
+                <span class="kpi-note" title="บูตแคมป์ 6 เดือน 100 ชั่วโมง สอบได้ 224/240">น้อยแต่หนัก</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi-num">3</span>
+                <span class="kpi-label">Skooldio</span>
+                <span class="kpi-note" title="SQL for Data Analytics, EDA with Excel, Intro to Data Science">คัดมาให้ตรงงาน</span>
+            </div>
+            <div class="kpi">
+                <span class="kpi-num">8</span>
+                <span class="kpi-label">W3Schools</span>
+                <span class="kpi-note" title="SQL, R, Python, Pandas, NumPy, Statistics, Excel, Data Analytics">เก็บครบสาย</span>
+            </div>
+        </div>
+
+        <div class="tags">
+            <span class="tag tag-accent">Data Science Bootcamp #10, #11</span>
+            <span class="tag">SQL for Data Analytics</span>
+            <span class="tag">EDA with Excel</span>
+            <span class="tag">Statistics</span>
+            <span class="tag">Pandas / NumPy</span>
+            <span class="tag">R Developer</span>
+            <span class="tag">SQL Developer</span>
+        </div>
+
+        <div class="corner-text" onclick="go('certificate.html')"><span>ดูทั้งหมด</span></div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>สนใจร่วมงานหรืออยากคุยเรื่องข้อมูล ทักมาได้เลยครับ 🙏</p>
+
+        <p>
+            <span class="link-cursor" id="email">phubordin.phanyosri@gmail.com</span>
+            <button onclick="copyEmail()" class="copy-btn1" aria-label="คัดลอกอีเมล">
+                <img src="icon-copy.png" width="18" alt="คัดลอก">
+            </button>
+        </p>
+        <p class="text-description">โทร. 086-xxx-1940 (สำหรับติดต่องาน)</p>
+
+        <div class="hero-actions" style="margin-bottom:0">
+            <a class="btn btn-primary" href="mailto:phubordin.phanyosri@gmail.com">ส่งอีเมล</a>
+            <a class="btn btn-ghost" target="_blank" rel="noopener"
+                href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/">LinkedIn</a>
+            <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://github.com/Phubordin">GitHub</a>
+        </div>
+
+        <div id="toast-copy" class="toast">✅ คัดลอกสำเร็จ!</div>
+
+        <div class="corner-text" onclick="go('contact.html')"><span>ช่องทางอื่น</span></div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="socials">
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.linkedin.com/in/phubordin-phanyosri-b26a2a27a/"><img src="linkedin.png" width="26" alt="LinkedIn"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://github.com/Phubordin"><img src="github.png" width="26" alt="GitHub"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.youtube.com/@Phuyuyuu"><img src="youtube.png" width="26" alt="YouTube"></a>
+            <a class="hover-expand" target="_blank" rel="noopener" href="https://www.instagram.com/phuyuu/"><img src="ig.png" width="26" alt="Instagram"></a>
+        </div>
+        <p>© 2026 Phubordin Phanyosri · เว็บนี้ไม่เก็บข้อมูลส่วนตัวของผู้เข้าชม และไม่อนุญาตให้นำไปเผยแพร่ต่อ</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="script.js"></script>
+    <script src="certificate-script.js"></script>
 </body>
 
 </html>

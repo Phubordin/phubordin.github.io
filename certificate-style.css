@@ -1,538 +1,362 @@
-/* Certificate Container Styles */
+/* =========================================================================
+   หน้า Certificates + ส่วนที่ใช้ร่วมกับหน้าอื่น (โมดัลซูมรูป, โลโก้สถาบัน)
+   ใช้ token ชุดเดียวกับ style.css — ธีมมืด/สว่างจึงเปลี่ยนตามเองโดยไม่ต้องมี override
+   ========================================================================= */
+
 #certificate-container {
-    max-width: 1200px;
+    max-width: var(--measure-wide);
     margin: 0 auto;
-    padding: 2rem;
+    padding: var(--s6) var(--s5) var(--s8);
 }
 
-/* View Controls */
+/* ---------- แถบควบคุมมุมมอง ---------- */
 .view-controls {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    gap: 1rem;
+    gap: var(--s3);
+    margin-bottom: var(--s6);
 }
 
-/* ปรับปรุงปุ่มเลือก School */
-.school-select {
-    padding: 0.75rem 1.25rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.8);
-    min-width: 220px;
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.3s ease;
-    cursor: url('cursor1.png'), auto;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-.school-select:hover {
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
-}
-
-.school-select:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-}
-
-/* ปรับปรุงปุ่ม Toggle View */
+.school-select,
 .view-toggle-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    text-align: center;
-    gap: 1rem;
-    padding: 1rem 2rem;
-    background: linear-gradient(145deg, #6366f1 0%, #3b82f6 50%, #2563eb 100%);
-    color: #fff;
-    border-radius: 12px;
-    cursor: url('cursor1.png'), auto;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: capitalize;
-    letter-spacing: 1px;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    transform: translateZ(0);
-    box-shadow: 
-        0 4px 6px rgba(59, 130, 246, 0.2),
-        0 10px 15px rgba(59, 130, 246, 0.1);
+    gap: var(--s2);
+    padding: var(--s3) var(--s4);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--text);
+    cursor: var(--cursor-click);
+    transition: border-color .18s ease, background .18s ease, color .18s ease;
 }
 
-.view-toggle-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        120deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    transition: all 0.6s ease;
-}
-
+.school-select:hover,
 .view-toggle-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 8px 12px rgba(59, 130, 246, 0.3),
-        0 15px 25px rgba(59, 130, 246, 0.2);
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
 }
 
-.view-toggle-btn:hover::before {
-    left: 100%;
+.toggle-icon {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid currentColor;
+    border-radius: 3px;
 }
 
-.view-toggle-btn:active {
-    transform: translateY(1px);
-    box-shadow: 
-        0 2px 4px rgba(59, 130, 246, 0.2),
-        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+.toggle-icon.list-icon {
+    border-width: 1.5px 0;
+    border-radius: 0;
+    height: 12px;
 }
 
-.view-toggle-btn:focus-visible {
-    outline: 2px solid #93c5fd;
-    outline-offset: 2px;
+.toggle-icon.slideshow-icon {
+    border-radius: 50%;
 }
 
-.view-toggle-btn svg { /* สำหรับไอคอนถ้ามี */
-    transition: transform 0.3s ease;
-    width: 1.25rem;
-    height: 1.25rem;
+/* ---------- การ์ด certificate ---------- */
+.certificate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: var(--s5);
 }
 
-.view-toggle-btn:hover svg {
-    transform: scale(1.1);
-}
-
-/* Gallery View Styles */
 .certificate-card {
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(5, 5, 5, 0.33);
-    transition: all 0.3s ease-in-out;
-    font-size: 0.9rem;
-    height: 100%;
-    max-height: 100%;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(5px);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .certificate-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    background: #bbdefb;
+    transform: translateY(-3px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow);
 }
 
 .certificate-image {
     width: 100%;
-    height: 100%;
-    object-fit:cover;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    cursor: url('cursor1.png'), auto;
-    transition: transform 0.2s ease-in-out;
-}
-
-.certificate-image:hover {
-    transform: scale(1.05); /* ทำให้ภาพขยายเล็กน้อยเมื่อ hover */
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
 }
 
 .certificate-details {
-    padding: 1.25rem;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: var(--s3);
+    padding: var(--s5);
 }
 
-.certificate-school, .certificate-school1 {
-    display: inline-flex; /* ใช้ inline-flex เพื่อให้เหมือน tag */
-    align-items: center;
-    gap: 0.5rem;
-    color: #242424; /* สีตัวอักษรปกติ */
-    font-size: 15.5px; /* ขนาดฟอนต์พอดีกับข้อความ */
-    font-weight: 500; /* ตัวหนาเล็กน้อย */
-    background: linear-gradient(145deg, #fafafa 0%, #a2a4fe 50%, #ffa162 100%);
-    padding: 0.3rem 0.8rem; /* เพิ่มระยะห่างรอบๆ ตัวอักษร */
-    border-radius: 20px; /* ขอบมุมโค้งมน */
-    text-decoration: none; /* ไม่มีเส้นใต้ */
-    transition: color 0.3s, transform 0.3s; /* ให้การเปลี่ยปลงเป็นไปอย่างนุ่มนวล */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.307);
-}
-
-.check {
-    display: inline-flex; /* ใช้ inline-flex เพื่อให้เหมือน tag */
-    align-items: center;
-    gap: 0.5rem;
-    color: #242424; /* สีตัวอักษรปกติ */
-    font-size: 15.5px; /* ขนาดฟอนต์พอดีกับข้อความ */
-    font-weight: 500; /* ตัวหนาเล็กน้อย */
-    padding: 0.3rem 0.8rem; /* เพิ่มระยะห่างรอบๆ ตัวอักษร */
-    border-radius: 20px; /* ขอบมุมโค้งมน */
-    text-decoration: none; /* ไม่มีเส้นใต้ */
-    transition: color 0.3s, transform 0.3s; /* ให้การเปลี่ยปลงเป็นไปอย่างนุ่มนวล */
-}
-
-.check:hover {
-    padding: 0.3rem 0.8rem; /* เพิ่มระยะห่างรอบๆ ตัวอักษร */
-}
-
-.certificate-school:hover {
-    color: hsl(0, 0%, 100%); /* สีตัวอักษรเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    background-color: #000000; /* สีพื้นหลังเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    transform: scale(1.05); /* ขยายขนาดเล็กน้อยเมื่อ hover */
-    cursor: url('cursor1.png'), auto;
-    text-shadow: 0px 0px 0.9px cyan,
-                 0px 0px 0.9px cyan,
-                 0px 0px 0.4px cyan,
-                 0px 0px 0.9px cyan;
-    padding: 0.3rem 0.8rem;
-}
-
-.certificate-title1 {
-    display: inline-flex; /* ใช้ inline-flex เพื่อให้เหมือน tag */
-    align-items: center;
-    gap: 0.5rem;    
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    line-height: 1.4;
+.certificate-details details {
     margin: 0;
-    border-radius: 20px; /* ขอบมุมโค้งมน */
-}
-
-.certificate-title1:hover {
-    color: hsl(0, 0%, 100%); /* สีตัวอักษรเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    text-decoration: solid;
-    text-shadow: 0px 0px 1px cyan,
-                 0px 0px 2px cyan,
-                 0px 0px 4px cyan,
-                 0px 0px 8px cyan;
-    cursor: url("cursor1.png"), auto;
-}
-
-.certificate-title3:hover {
-    color: hsl(0, 0%, 100%); /* สีตัวอักษรเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    text-decoration: solid;
-    text-shadow: 0px 0px 1px cyan,
-                 0px 0px 2px cyan,
-                 0px 0px 4px cyan,
-                 0px 0px 8px cyan;
-    cursor: url("cursor1.png"), auto;
-}
-
-.certificate-title2 {
-    font-weight: 500;
-    display:inline-block;
-}
-
-.certificate-title2:hover {
-    color: hsl(0, 0%, 100%); /* สีตัวอักษรเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    text-decoration: solid;
-    text-shadow: 0px 0px 1px cyan,
-                 0px 0px 2px cyan,
-                 0px 0px 4px cyan,
-                 0px 0px 8px cyan;
-    cursor: url("cursor1.png"), auto;
 }
 
 .certificate-description {
-    color: #4b5563;
-    line-height: 1.5;
-    margin-top: 0;
-    overflow: hidden;
-    max-height: 12em; 
-    position: relative;
-    font-size: 14px;
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
 }
 
-.certificate-links {
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding-top: 0.8rem;
-    border-top: 1px solid rgba(224, 10, 10, 0.1);
+/* ---------- ชื่อ certificate ---------- */
+.certificate-title1,
+.certificate-title2,
+.certificate-title3 {
+    font-weight: 600;
+    color: var(--text);
+    cursor: var(--cursor-click);
+    transition: color .18s ease;
 }
 
-.certificate-link {
-    display: flex;
+.certificate-title1 {
+    margin: 0;
+    font-size: var(--fs-md);
+    line-height: 1.4;
+}
+
+.certificate-title2 {
+    font-weight: 400;
+}
+
+.certificate-title1:hover,
+.certificate-title2:hover,
+.certificate-title3:hover {
+    color: var(--accent);
+}
+
+/* ---------- สถาบัน ---------- */
+.school-containner a,
+.certificate-school {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: #3b82f6;
-    text-decoration: none;
+    gap: var(--s2);
+    padding: var(--s1) var(--s3) var(--s1) var(--s1);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    font-size: var(--fs-xs);
     font-weight: 500;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    cursor: url('cursor1.png'), auto;
-
+    color: var(--text-muted);
+    transition: border-color .18s ease, color .18s ease;
 }
 
-.certificate-link:hover {
-    color: #2563eb;
-    transform: translateX(3px);
+.school-containner a:hover,
+.certificate-school:hover {
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
-/* Slideshow View Styles */
-.slideshow-container {
+.school-logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: var(--surface);
+}
+
+.school-name {
+    line-height: 1.6;
+}
+
+/* ---------- ลิงก์ใต้การ์ด ---------- */
+.certificate-links {
     display: flex;
-    gap: 2rem;
-    height: calc(80vh - 200px);
-    max-height: 800px;
+    flex-wrap: wrap;
+    gap: var(--s2);
+    margin-top: auto;
+    padding-top: var(--s2);
+}
+
+.certificate-link,
+.check {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+    padding: var(--s1) var(--s3);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+
+.certificate-link:hover,
+.check:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.notes-icon,
+.cost-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+}
+
+/* ---------- มุมมอง slideshow ---------- */
+.slideshow-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--s6);
+    align-items: start;
+    padding: var(--s5);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .slideshow-image {
     position: relative;
-    flex: 2;
 }
 
 .slideshow-image img {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit:contain;
-    border-radius: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
 }
 
 .slideshow-nav {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
+    inset: 0;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 var(--s3);
+    pointer-events: none;
 }
 
 .nav-button {
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 8%;
-    width: 50px;
-    height: 50px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    cursor: url('cursor1.png'), auto;
-    transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    position: absolute;
-    top: 50%;
-    z-index: 10;
+    width: 38px;
+    height: 38px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-full);
+    box-shadow: var(--shadow);
+    cursor: var(--cursor-click);
+    pointer-events: auto;
+    transition: border-color .18s ease, transform .18s ease;
 }
 
-/* ปุ่มซ้าย */
-.prev-button {
-    left: 15px;
-}
-
-/* ปุ่มขวา */
-.next-button {
-    right: 15px;
-}
-
-/* เอฟเฟกต์เมื่อ hover */
 .nav-button:hover {
-    background: rgba(255, 255, 255, 0.9);
-    color: black;
-    border: 2px solid rgba(0, 0, 0, 0.3);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent);
+    transform: scale(1.06);
 }
 
-/* เอฟเฟกต์เมื่อกดคลิก */
-.nav-button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+.prev-icon,
+.next-icon {
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--text-muted);
+    border-right: 2px solid var(--text-muted);
 }
 
+.prev-icon {
+    transform: rotate(-135deg);
+    margin-left: 3px;
+}
+
+.next-icon {
+    transform: rotate(45deg);
+    margin-right: 3px;
+}
+
+.nav-button:hover .prev-icon,
+.nav-button:hover .next-icon {
+    border-color: var(--accent);
+}
 
 .slideshow-details {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(20, 20, 20, 0.318);
-    overflow-y: auto;
-}
-
-/* School Groups */
-.school-group {
-    margin-bottom: 3rem;
-}
-
-.school-group-title {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid #e2e8f0;
-    color: #1a1a1a;
+    flex-direction: column;
+    gap: var(--s3);
 }
 
-/* Responsive Grid */
-.certificate-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+.slideshow-details h2 {
+    margin: 0;
+    font-size: var(--fs-lg);
 }
 
-
-/* Dark Mode Styles */
-.dark-mode .certificate-card,
-.dark-mode .slideshow-details,
-.dark-mode section{
-    background: rgba(31, 41, 55, 0.8);
-    color: white;
+/* ---------- มุมมองตาราง ---------- */
+.certificate-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
 }
 
-.dark-mode .certificate-title1 {
-    color: white;
+.table-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-.dark-mode .certificate-description {
-    color: #d1d5db;
+.table-scroll-wrapper::-webkit-scrollbar {
+    height: 8px;
 }
 
-.dark-mode .inline-code {
-    background-color: #f6f6f6;
-    color: #eb5757;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    padding: 2px 5px;
-    border-radius: 4px;
-    font-size: 0.9em;
+.table-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: var(--r-full);
 }
 
-
-.dark-mode .certificate-description::after {
-    background: white;
-    z-index: -1000;
+.list-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
 }
 
-.dark-mode .certificate-school {
-    color: hsl(0, 0%, 100%);
-    background: linear-gradient(145deg, #ffefef 0%, #7f81f9 50%, #ff8e42 100%);
+.list-table th {
+    padding: var(--s3) var(--s4);
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    text-align: left;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.list-table td {
+    padding: var(--s3) var(--s4);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: middle;
+}
+
+.list-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.list-table tbody tr:hover {
+    background: var(--surface-2);
+}
+
+.list-table td:first-child {
     font-weight: 500;
-    text-shadow: 0px 0px 0.9px rgb(0, 0, 0),
-                 0px 0px 0.9px rgb(0, 0, 0),
-                 0px 0px 0.4px rgb(0, 0, 0),
-                 0px 0px 0.9px rgb(0, 0, 0);
+    color: var(--text);
+    min-width: 220px;
 }
 
-.dark-mode .certificate-school1 {
-    color: hsl(0, 0%, 100%);
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-    font-weight: 500;
-    text-shadow: 0px 0px 0.9px rgb(0, 0, 0),
-                 0px 0px 0.9px rgb(0, 0, 0),
-                 0px 0px 0.4px rgb(0, 0, 0),
-                 0px 0px 0.9px rgb(0, 0, 0);
-}
-
-.dark-mode .certificate-school:hover {
-    color: rgb(255, 255, 255);
-    background: #000000;
-    cursor: url('cursor1.png'), auto;
-}
-
-.dark-mode .certificate-card:hover {
-    background: #1e3a8a;
-}
-
-.dark-mode .experience {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-}
-
-.dark-mode .project {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-}
-
-.dark-mode .content p {
-    color: white;
-}
-
-.dark-mode .download-btn {
-    color: white;
-}
-
-.dark-mode .link-website {
-    color: #ffffff;
-}
-
-.dark-mode .text-description1 {
-    color: gray;
-}
-
-.dark-mode .detail0 {
-    color: #000000;
-}
-
-.dark-mode .copy-btn1 {
-    background: linear-gradient(145deg, #6366f1 0%, #3b82f6 50%, #2563eb 100%);
-    color: white;
-}
-
-.dark-mode #toc-section a, .dark-mode #toc-section1 a {
-    color: white;
-}
-
-.dark-mode span {
-    color: #ffffff;
-}
-
-.dark-mode .corner-text span {
-    color: rgb(0, 0, 0);
-}
-
-.dark-mode .certificate-links {
-    border-top-color: rgba(255, 255, 255, 0.1);
-}
-
-.dark-mode .school-select {
-    background: rgba(31, 41, 55, 0.8);
-    color: white;
-    border-color: #374151;
-}
-
-.dark-mode .view-toggle-btn {
-    background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-}
-
-.dark-mode .view-toggle-btn:hover {
-    background: linear-gradient(135deg, #4338ca 0%, #312e81 100%);
-}
-
-.dark-mode details summary {
-    color: #000000;
-}
-
-.dark-mode .line-code {
-    color: #000000;
-}
-
-.dark-mode details summary:hover {
-    background-color: white;
-}
-
-/* Animations */
-.fade-in {
-    animation: fadeIn 0.3s ease-in;
-}
-
+/* ---------- สลับมุมมอง ---------- */
 .certificate-view {
     display: none;
 }
@@ -541,337 +365,52 @@
     display: block;
 }
 
-.gallery-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 101%;
-    background: rgba(0, 0, 0, 0.9); /* เพิ่มความเข้มของพื้นหลังให้เข้มขึ้น */
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    position: absolute;
-    max-width: 95%; /* เพิ่มจาก 80% เป็น 95% */
-    max-height: 90%; /* เพิ่มจาก 80% เป็น 90% */
-    /* transform จะถูกกำหนดโดยตรงจาก JavaScript */
-}
-
-.full-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px cyan,
-                0px 0px 20px cyan,
-                0px 0px 40px cyan,
-                0px 0px 60px cyan;
-}
-
-.close-modal {
-    position: absolute;
-    top: 1px;
-    right: 1px;
-    font-size: 30px;
-    color: white;
-    cursor: url('cursor1.png'), auto;
-}
-
-.notion-icon {
-    vertical-align: middle;
-}
-
-/* show list */
-/* เอฟเฟกต์ fade-in สำหรับ .certificate-list */
-.certificate-list.fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.5s ease-in-out forwards;
+.fade-in {
+    animation: fadeIn .35s ease both;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(8px);
     }
+
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
-/* สไตล์ของตาราง list ---------------------------------------------------------------------------------------------------------------------------------- */
-/* เอฟเฟกต์ fade-in สำหรับ .certificate-list */
-.certificate-list.fade-in {
-    opacity: 0;
-    transform: translateY(10px);
-    animation: fadeIn 0.5s ease-in-out forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Modern Certificate Styling for Data Professionals */
-
-/* Certificate List Container */
-.certificate-list {
-    display: grid;
-    gap: 2rem;
-    width: 90%;
-    max-width: 1200px;
-    margin: 3rem auto;
-    position: relative;
-}
-
-/* Modern Certificate Styling for Data Professionals */
-
-/* Certificate List Container */
-.certificate-list {
-    display: grid;
-    gap: 2rem;
-    width: 90%;
-    max-width: 1200px;
-    margin: 3rem auto;
-    position: relative;
-}
-
-/* Table Styling with Modern Look */
-.list-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-family: 'Prompt', sans-serif;
-    font-size: 0.95rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    transition: all 0.3s ease;
-    min-width: 600px; /* เพิ่มความกว้างขั้นต่ำเพื่อให้ scroll เกิด */
-}
-
-/* Table Header - Professional Look */
-.list-table thead {
-    background: linear-gradient(135deg, #92a7fe 0%, #3b5ef8 100%);
-    color: white;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-.list-table th {
-    padding: 16px 20px;
-    text-align: center;
-    position: relative;
-    font-size: 1rem;
-}
-
-/* Add subtle separator between headers */
-.list-table th:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 25%;
-    height: 50%;
-    width: 1px;
-    background-color: rgba(238, 0, 0, 0.3);
-}
-
-/* Table Body Rows */
-.list-table tbody tr {
-    transition: background-color 0.2s ease;
-    text-align: left;
-}
-
-.list-table tbody tr:hover {
-    background-color: #bbdefb;
-    /* cursor: url("cursor1.png"), auto; */
-}
-
-/* Table Data Cells */
-.list-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    vertical-align: middle;
-}
-
-/* Course Title Column */
-.list-table td:first-child {
-    font-weight: 500;
-    color: #000000;
-}
-
-/* School Links */
-.list-table td a {
-    color: #000000;
-    text-decoration: none;
-    font-weight: 1500;
-    transition: all 0.2s ease;
-    position: relative;
-    padding: 0.3rem 0.8rem;
-}
-
-.list-table td a:hover {
-    display:inline-flex;
-    /* color: #ffffff; สีตัวอักษรปกติ */
-    background: snow; /* สีพื้นหลังเป็นสีน้ำเงินฟ้าเมื่อ hover */
-    /* border-radius: 20px; ขอบมุมโค้งมน */
-    cursor: url("cursor2.png"), auto;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .certificate-list {
-        width: 95%;
-    }
-    
-    .list-table {
-        font-size: 0.85rem;
-    }
-    
-    .list-table th, 
-    .list-table td {
-        padding: 12px 14px;
+/* ---------- Responsive ---------- */
+@media (max-width: 932px) {
+    #certificate-container {
+        padding: var(--s5) var(--s4) var(--s7);
     }
 
-    .view-controls {
-    flex-direction: column;
-    gap: 1rem;
-    }
-    
-    .school-select {
-        width: 100%;
-    }
-    
     .slideshow-container {
-        flex-direction: column;
-        height: auto;
+        grid-template-columns: 1fr;
+        gap: var(--s5);
     }
-    
+
+    .certificate-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: var(--s4);
+    }
+
+}
+
+@media (max-width: 560px) {
+    .view-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .school-select,
+    .view-toggle-btn {
+        justify-content: center;
+    }
+
     .certificate-grid {
         grid-template-columns: 1fr;
     }
 }
-
-.table-scroll-wrapper {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-  border-radius: 12px;
-  /* 👇 ซ่อน scrollbar (แต่ยัง scroll ได้) */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
-}
-
-.table-scroll-wrapper::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
-}
-
-
-/* Dark Mode Support */
-.dark-mode .list-table {
-    background-color: rgba(30, 32, 40, 0.9);
-    color: #e9ecef;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-}
-
-.dark-mode .list-table thead {
-    background: linear-gradient(135deg, #92a7fe 0%, #3b5ef8 100%);
-}
-
-.dark-mode .list-table th {
-    color: white;
-}
-
-.dark-mode .list-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.dark-mode .list-table td:first-child {
-    color: #e9ecef;
-}
-
-.dark-mode .list-table tbody tr:nth-child(even) {
-    background-color: rgba(35, 37, 47, 0.8);
-}
-
-.dark-mode .list-table tbody tr:hover {
-    background-color: rgba(74, 108, 247, 0.1);
-}
-
-.dark-mode .list-table td a {
-    color: #ffffff;;
-}
-
-.dark-mode .list-table td a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    /* padding: 0.3rem 0.8rem; เพิ่มระยะห่างรอบๆ ตัวอักษร */
-    border-radius: 20px; /* ขอบมุมโค้งมน */
-    cursor: url("cursor2.png"), auto;
-}
-
-.cursor-zoom-in {
-    cursor: url("zoom-in.png"), auto;
-}
-
-/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
-
-.school-containner a {
-  display: inline-flex; /* ทำให้โลโก้+ข้อความอยู่บรรทัดเดียวกัน */
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  background: #f8fbff; /* สีฟ้าอ่อน */
-  padding: 0.5rem 0.75rem;
-  border-radius: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  cursor: url("cursor1.png"), auto;
-}
-
-.school-containner a:hover {
-  transform: translateY(-2px);
-  background: #eaf4ff; /* hover แล้วฟ้าเข้มขึ้นเล็กน้อย */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.school-logo {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  border-radius: 50%;
-  background: white;
-  padding: 2px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
-}
-
-.school-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #0a3d62;
-  letter-spacing: 0.3px;
-}
-
-.dark-mode .school-containner a {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-

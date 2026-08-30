@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,172 +29,13 @@
     <meta name="description" content="Portfolio แสดงผลงานตัวอย่างที่ผมได้ลองทำที่บริษัท Leowood Intertrade Co.,Ltd. เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class= "link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
 <body class="fade-slide-in experience_leowood-page">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1">Leowood Intertrade Co Ltd.</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" class="active" onclick="scrollToTop(event)">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToExperience_leowood()">Leowood
-                            Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"> SQL</a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                            <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                style="vertical-align:middle" width="25"> Python</a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Logistic Regression Analysis on the
-                            Titanic Dataset Using  <img src="R.png" style="vertical-align:middle" width="25"> R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>   
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" class="active" onclick="scrollToTop(event)">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToExperience_leowood()">Leowood
-                                        Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"> SQL</a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()">⭐️ P3 : Customer Segmentation and RFM Analysis Using
-                                        <img src="python.png" style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> R for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> R and <img src="python.png"
-                                            style="vertical-align:middle" width="25"> Python</a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with  <img src="R.png" style="vertical-align:middle" width="25"> R</a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using  <img src="R.png" style="vertical-align:middle" width="25"> R and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Logistic Regression Analysis on the
-                                        Titanic Dataset Using  <img src="R.png" style="vertical-align:middle" width="25"> R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using  <img src="R.png" style="vertical-align:middle" width="25"> R Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25"> Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25"> Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25"> XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
-
-    <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
-        <p style="font-size: 1.5em; font-weight: bold;" class= "link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
-        <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
-    </section>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <a style="text-decoration: none;" href="experience.html">
         <button class="back-button">⬅︎</button>
@@ -206,21 +52,21 @@
             เริ่มต้นด้วยการสร้างรายงานและแดชบอร์ดของบริษัทที่ขายให้กับลูกค้า B2B (Business to Business) กันครับ
         </p>
     </section>
-    
+
     <!-- 1.1 Sales Report by Channel (B2B), Categorized by Product Category -->
     <section>
         <h3 class="link-cursor">1.1 Sales Report by Channel (B2B), Categorized by Product Category</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> รายงานยอดขายแต่ละช่องทาง (B2B) แบ่งตามหมวดหมู่สินค้า สะสมทุกวันจนถึงสินเดือนแต่ละเดือน
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1QS8RNx78WBveeC_HXhdcziyom4MvZpus/edit?gid=282826975#gid=282826975" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
         </div>
-        
+
         <div class="scrollable-image">
             <img src="1-1-leo-report-table-b2b.png" class="zoomed-img cursor-zoom-in" onclick="openGalleryModal('1-1-leo-report-table-b2b.png')">
         </div>
@@ -229,7 +75,7 @@
     <!-- 1.2 Sales Report by Sales Territory March 2030 -->
     <section>
         <h3 class="link-cursor">1.2 Sales Report by Sales Territory March 2030</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> แสดงยอดขาย (ตามเขตพื้นที่การดูแล) 1-31 มีนาคม 2030 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน
@@ -242,7 +88,7 @@
         <div class="scrollable-image">
             <img src="1-2-leo-report-table-b2b.png" class="zoomed-img cursor-zoom-in" onclick="openGalleryModal('1-2-leo-report-table-b2b.png')">
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Bar Chart :</b></mark> แสดงยอดขาย (ตามเขตพื้นที่การดูแล) 1-31 มีนาคม 2030
@@ -261,7 +107,7 @@
     <!-- 1.3 Special Product Group Sales Report – March, 2030 (vs March, 2029)-->
     <section>
         <h3 class="link-cursor">1.3 Special Product Group Sales Report – March, 2030 (vs March, 2029)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> รายงานยอดขายสินค้ากลุ่มพิเศษ 1-31 มีนาคม 2030 (เทียบมีนาคม 2029 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน)
@@ -279,7 +125,7 @@
     <!-- 1.4 Sales Back Order – March 1–31, 2030 -->
     <section>
         <h3 class="link-cursor">1.4 Sales Back Order – March 1–31, 2030</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> แสดงภาพรวม ยอดขายจริง, ยอดขายค้างส่ง และยอดขายที่อยู่ระหว่างจัดส่ง (วันที่ 1-31 มีนาคม 2030 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน)
@@ -294,11 +140,11 @@
         </div>
 
     </section>
-    
+
     <!-- 1.5 Consolidated Sales Performance – March 2030 (vs Target & Previous Day) -->
     <section>
         <h3 class="link-cursor">1.5 Consolidated Sales Performance – March 2030 (vs Target & Previous Day)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> สรุปยอดขายจริง (รวมยอดค้างส่งและยอดที่กำลังจัดส่ง) เปรียบเทียบกับเป้าหมายและยอดขายวันก่อนหน้า (เดือนมีนาคม 2030 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน)
@@ -313,11 +159,11 @@
         </div>
 
     </section>
-    
+
     <!-- 1.6 D Channel Sales by Sales Representative – March 1–31, 2030 -->
     <section>
         <h3 class="link-cursor">1.6 D Channel Sales by Sales Representative – March 1–31, 2030</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Table :</b></mark> สรุปยอดขายแต่ละเซลส์ช่องทาง D (1-31 มีนาคม 2030 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน)
@@ -332,11 +178,11 @@
         </div>
 
     </section>
-    
+
     <!-- 1.7 B2B Sales Overview: Direct Sales to Business Customers (August, 2025) -->
     <section>
         <h3 class="link-cursor">1.7 B2B Sales Overview: Direct Sales to Business Customers (August, 2025)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แสดงภาพรวมยอดขายของบริษัทให้กับลูกค้า B2B  (1-31 สิงหาคม 2025 สะสมทุกวันจนถึงสินเดือนแต่ละเดือน)
@@ -351,7 +197,7 @@
         </div>
 
     </section>
-    
+
     <!-- 2. B2C Sales Performance Reporting & Strategic Insights -->
     <section>
         <h2 class="link-cursor">2. B2C Sales Performance Reporting & Strategic Insights</h2>
@@ -359,11 +205,11 @@
             ต่อไปนี้เป็นการสร้างรายงานและแดชบอร์ดของบริษัทที่ขายให้กับลูกค้า B2C (Business to Customer) ครับ
         </p>
     </section>
-    
+
     <!-- 2.1 B2C Sales via Channel A: End-User Distribution Insights (Sep - Dec 2030) -->
     <section>
         <h3 class="link-cursor">2.1 B2C Sales via Channel A: End-User Distribution Insights (Sep - Dec 2025)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แสดงภาพรวมยอดขายของบริษัทให้กับลูกค้า B2C ของช่องทางการขาย A  (กันยายน - ธันวาคม 2025)
@@ -377,11 +223,11 @@
             <img src="2-1-b2c-channel-a.png" width="750" class="cursor-zoom-in" onclick="openGalleryModal('2-1-b2c-channel-a.png')">
         </div>
     </section>
-    
+
     <!-- 2.2 B2C Sales via Channel B: Consumer Reach and Trends (Oct - Dec 2025) -->
     <section>
         <h3 class="link-cursor">2.2 B2C Sales via Channel B: Consumer Reach and Trends (Oct - Dec 2025)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แสดงภาพรวมยอดขายของบริษัทให้กับลูกค้า B2C ของช่องทางการขาย B  (ตุลาคม - ธันวาคม 2025)
@@ -395,11 +241,11 @@
             <img src="2-2-b2c-channel-b.png" width="750" class="cursor-zoom-in" onclick="openGalleryModal('2-2-b2c-channel-b.png')">
         </div>
     </section>
-    
+
     <!-- 2.3 B2C Sales via Channel C: Customer-Level Analysis (December 2025) -->
     <section>
         <h3 class="link-cursor">2.3 B2C Sales via Channel C: Customer-Level Analysis (December 2025)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แสดงภาพรวมยอดขายของบริษัทให้กับลูกค้าแต่ละสาขา B2C ของช่องทางการขาย C (ธันวาคม 2025)
@@ -413,7 +259,7 @@
             <img src="2-3-b2c-channel-c.png" width="750" class="cursor-zoom-in" onclick="openGalleryModal('2-3-b2c-channel-c.png')">
         </div>
     </section>
-    
+
     <!-- 3. Sales Team KPI Tracking & Regional Performance Analysis -->
     <section>
         <h2 class="link-cursor">3. Sales Team KPI Tracking & Regional Performance Analysis</h2>
@@ -425,7 +271,7 @@
     <!-- 3.1 Sales Team Daily Activity Dashboard and Monthly Incentive Decision Support -->
     <section>
         <h3 class="link-cursor">3.1 Sales Team Daily Activity Dashboard and Monthly Incentive Decision Support</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แดชบอร์ดติดตามกิจกรรมประจำวันของทีมขาย และสนับสนุนการตัดสินใจจ่ายค่าตอบแทนพิเศษรายเดือน
@@ -443,7 +289,7 @@
     <!-- 3.2 Sales Incentive Achievement Summary Report (Mockup Data) -->
     <section>
         <h3 class="link-cursor">3.2 Sales Incentive Achievement Summary Report (Mockup Data)</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Google Shets :</b></mark> Sales Incentive Achievement Summary Report (Mockup Data)
@@ -454,18 +300,18 @@
         </div>
 
         <div class="iframe-container">
-            <iframe 
-                width="100%" 
+            <iframe
+                width="100%"
                 height="500px"
                 src="https://drive.google.com/file/d/1q8c9HYJO8bkcEiG-cP9mEN-6fKxDw6vl/preview"
-                frameborder="0" style="border:0" 
-                allowfullscreen 
-                loading="lazy" 
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
     </section>
-    
+
     <!-- 4. Coordinated with Internal and External Stakeholders -->
     <section>
         <h2 class="link-cursor">4. Coordinated with Internal and External Stakeholders</h2>
@@ -492,7 +338,7 @@
         </div>
 
     </section>
-    
+
     <!-- 4.2 Prepared data and scheduled weekly sales team meetings-->
     <section>
         <h3 class="link-cursor">4.2 Prepared data and scheduled weekly sales team meetings</h3>
@@ -509,11 +355,11 @@
         </ul>
 
     </section>
-    
+
     <!-- 4.2.1 Weekly Sales vs Target - [Channel A, B, ..]-->
     <section>
         <h4 class="link-cursor">4.2.1 Weekly Sales vs Target - [Channel A, B, ..]</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Weekly Monitor :</b></mark> รายงานจำนวนขายสินค้าประจำสัปดาห์ เทียบกับเป้าหมาย (ด้านล่างจะเป็น Template รายงานของแต่ละ Channel A, B, ..)
@@ -531,7 +377,7 @@
     <!-- 4.2.2 Channel Performance Summary - Quantity Sold-->
     <section>
         <h4 class="link-cursor">4.2.2 Channel Performance Summary - Quantity Sold</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Weekly Monitor :</b></mark> สรุปจำนวนขายสินค้าประจำสัปดาห์ แยกตามช่องทางการขาย (Channel A, B, ..)
@@ -550,7 +396,7 @@
     <!-- 4.2.3 Sell-In vs. Sell-Out Performance-->
     <section>
         <h4 class="link-cursor">4.2.3 Sell-In vs. Sell-Out Performance</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Weekly Monitor :</b></mark> เปรียบเทียบยอดขายสินค้าประจำสัปดาห์ ระหว่างยอดขายเข้าร้าน (Sell-In) กับยอดขายออกจากร้าน (Sell-Out)
@@ -568,7 +414,7 @@
     <!-- 4.2.4 B2B Sales Performance Overview-->
     <section>
         <h4 class="link-cursor">4.2.4 B2B Sales Performance Overview</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Weekly Monitor :</b></mark> สรุปภาพรวมยอดขายสะสมทุกๆสัปดาห์ ของช่องทางการขาย B2B (ช่องทางหลัก)
@@ -583,7 +429,7 @@
         </div>
 
     </section>
-    
+
     <!-- 4.3 Training Product Consultants for Sales & Work Status Data Entry  -->
     <section>
         <h3 class="link-cursor">4.3 Training Product Consultants for Sales & Work Status Data Entry</h3>
@@ -597,7 +443,7 @@
         <div class="iframe-container cursor-zoom-in">
             <img src="4-3-train-pc.png" width="750" class="cursor-zoom-in" onclick="openGalleryModal('4-3-train-pc.png')">
         </div>
-        
+
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             อธิบายแผ่นงานชีต ในรูปด้านบน
         </p>
@@ -617,16 +463,14 @@
             </li>
         </ul>
 
-
     </section>
-    
+
     <!-- 5. Additional Assigned Responsibilities -->
     <section>
         <h2 class="link-cursor">5. Additional Assigned Responsibilities</h2>
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             งานอื่นๆที่ได้รับมอบหมายเพิ่มเติม
         </p>
-
 
         <ul>
             <li class="link-cursor" style="text-align: justify;">5.1 จัดทำรายงานยอดขายแต่ละจังหวัดในรูปแบบ ตารางสรุปและ Dashboard</li>
@@ -640,7 +484,7 @@
     <!-- 5.1 Created provincial sales reports as interactive dashboards for performance monitoring -->
     <section>
         <h3 class="link-cursor">⭐️ 5.1 Created provincial sales reports as interactive dashboards for performance monitoring</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Dashboard :</b></mark> แสดงภาพรวมยอดขายของบริษัทให้กับลูกค้า B2B  รายจังหวัด (3 ปีย้อนหลัง)
@@ -655,29 +499,29 @@
         </div>
 
     </section>
-    
+
     <!-- 5.2 Gathered and compared sales targets across multiple channels to analyze performance over different time periods-->
     <section>
         <h3 class="link-cursor">5.2 Gathered and compared sales targets across multiple channels to analyze performance over different time periods</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 Template สำหรับเก็บรวบรวมแผน/ตัวเลข เป้าการขายแต่ละช่องทาง เพื่อนำมาเปรียบเทียบยอดขายแต่ละช่วงเวลา
                 (ทำเป็นประจำทุกเดือน) เพื่อนำไปรายงานใน Dashboard ช่องทาง B2B หัวข้อที่ 1 และ 4.2
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1MdARY-hU9pJpM1vp6EU5ifOUmbPw1Euj/edit?gid=1095668787#gid=1095668787" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
         </div>
-        
+
         <div class="scrollable-image">
             <img src="5-2-gather-target.png" class="zoomed-img cursor-zoom-in" onclick="openGalleryModal('5-2-gather-target.png')">
         </div>
 
     </section>
-    
+
     <!-- 5.3 Prepared and delivered internal sales data support to company teams in a timely and accurate manner -->
     <section>
         <h3 class="link-cursor">5.3 Prepared and delivered internal sales data support to company teams in a timely and accurate manner</h3>
@@ -691,38 +535,38 @@
         </ul>
 
     </section>
-    
+
     <!-- 5.3.1 Monthly Sales Data Collection for Existing and New Customers – Channel A -->
     <section>
         <h4 class="link-cursor">5.3.1 Monthly Sales Data Collection for Existing and New Customers – Channel A</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 เก็บข้อมูลยอดขายของลูกค้าเดิม/ใหม่ ของ Channel A ทุกเดือน
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1Zw9BfQs7ZPbC-vVNrT74BqjJwDhL8Fri/edit?gid=568492755#gid=568492755" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
         </div>
-        
+
         <div class="scrollable-image">
             <img src="5-3-1-Monthly-Sales-Data-Collection.png" class="zoomed-img cursor-zoom-in" onclick="openGalleryModal('5-3-1-Monthly-Sales-Data-Collection.png')">
         </div>
 
     </section>
-    
+
     <!-- 5.3.2 Sales Performance Data of Channel A Sales Staff and Inbound Sales of Channel B -->
     <section>
         <h4 class="link-cursor">5.3.2 Sales Performance Data of Channel A Sales Staff and Inbound Sales of Channel B</h4>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 เก็บข้อมูลยอดขายของพนักงานขายของ Channel A
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1Zw9BfQs7ZPbC-vVNrT74BqjJwDhL8Fri/edit?gid=1441611164#gid=1441611164" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
@@ -731,13 +575,13 @@
         <div class="iframe-container cursor-zoom-in">
             <img src="5-3-2-sales-staff.png" width="700" class="cursor-zoom-in" onclick="openGalleryModal('5-3-2-sales-staff.png')">
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 เก็บข้อมูลยอดขาย In ของลูกค้า Channel B
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1Zw9BfQs7ZPbC-vVNrT74BqjJwDhL8Fri/edit?gid=1868780513#gid=1868780513" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
@@ -748,32 +592,32 @@
         </div>
 
     </section>
-    
+
     <!-- 5.4 Updated Customer Database After Changes for Marketing and Sales Team Usage -->
     <section>
         <h3 class="link-cursor">5.4 Updated Customer Database After Changes for Marketing and Sales Team Usage</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 เก็บ/อัพเดท รายชื่อลูกค้าใหม่/เก่า ของ Channel A (ทำเป็นประจำทุกเดือน)
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1nrsNxETOmm2ol7xN2xNKa2AY8hurZqBw/edit?gid=38150285#gid=38150285" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
         </div>
-        
+
         <div class="scrollable-image">
             <img src="5-4-customers-list-a.png" class="zoomed-img cursor-zoom-in" onclick="openGalleryModal('5-4-customers-list-a.png')">
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Table :</b></mark> 
+                <mark><b>Table :</b></mark>
                 เก็บ/อัพเดท โซนการดูแลของพนักงานขายแต่ละสาขา/ร้านค้า ของ Channel B, C, D (ทำเป็นประจำทุกเดือน)
             </p>
-                
+
             <a href="https://docs.google.com/spreadsheets/d/1nrsNxETOmm2ol7xN2xNKa2AY8hurZqBw/edit?gid=659074265#gid=659074265" target="_blank" class="drive-btn">
                 <img src="sheets.png" alt="Google Sheets Logo" class="drive-logo">Open
             </a>
@@ -782,7 +626,7 @@
         <div class="iframe-container cursor-zoom-in">
             <img src="5-4-customers-list-b-c-d.png" width="650" class="cursor-zoom-in" onclick="openGalleryModal('5-4-customers-list-b-c-d.png')">
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Presentation :</b></mark> ส่งมอบให้กับทีมการตลาดและฝ่ายขาย เพื่อใช้ในการวางแผนการขายและการตลาด
@@ -793,26 +637,26 @@
         </div>
 
         <div class="iframe-container">
-            <iframe 
-                width="100%" 
+            <iframe
+                width="100%"
                 height="500px"
                 src="https://drive.google.com/file/d/1OgKoVaKYHzGY9DJgQPMs8rzBK-c16AtM/preview"
-                frameborder="0" style="border:0" 
-                allowfullscreen 
-                loading="lazy" 
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
 
     </section>
-    
+
     <!-- 5.5 Power BI Dashboard Prototype for Marketing Team -->
     <section>
         <h3 class="link-cursor">5.5 Power BI Dashboard Prototype for Marketing Team</h3>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Dashboard :</b></mark> 
+                <mark><b>Dashboard :</b></mark>
                 สำรวจแนวโน้มยอดขายของ Channel D
             </p>
         </div>
@@ -820,14 +664,14 @@
         <div class="iframe-container cursor-zoom-in">
             <img src="5-5-channel-d-1.png" width="650" class="cursor-zoom-in" onclick="openGalleryModal('5-5-channel-d-1.png')">
         </div>
-        
+
         <div class="iframe-container cursor-zoom-in">
             <img src="5-5-channel-d-2.png" width="650" class="cursor-zoom-in" onclick="openGalleryModal('5-5-channel-d-2.png')">
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
-                <mark><b>Dashboard :</b></mark> 
+                <mark><b>Dashboard :</b></mark>
                 สำรวจแนวโน้มยอดขายของ Channel A
             </p>
         </div>
@@ -837,7 +681,7 @@
         </div>
 
     </section>
-    
+
     <!-- 6. Sample Quarterly Presentation -->
     <section>
         <h2 class="link-cursor">6. Sample Quarterly Presentation</h2>
@@ -849,7 +693,7 @@
             <li class="link-cursor">ภาพรวมยอดขายของบริษัท และผลการปฎิบัติงานของพนักงานขาย</li>
             <li class="link-cursor">ภาพรวมยอดขายของช่องทางการขาย E (ช่องทางการขายงานโครงการต่างๆ โครงการบ้าน คอนโด ฯลฯ)</li>
         </ol>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Presentation :</b></mark> Sample Q1 Sales Closing and Sales Performance Presentation (Overview Sales)
@@ -860,17 +704,17 @@
         </div>
 
         <div class="iframe-container">
-            <iframe 
-                width="100%" 
+            <iframe
+                width="100%"
                 height="500px"
                 src="https://drive.google.com/file/d/1manqIk2Gae-NPQXjDYtG1tIwHuGm9Avf/preview"
-                frameborder="0" style="border:0" 
-                allowfullscreen 
-                loading="lazy" 
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
-        
+
         <div class="translation-header">
             <p class="link-cursor">
                 <mark><b>Presentation :</b></mark> Sample Q1 Sales Closing and Sales Performance Presentation (Overview Sales Project) - Channel E
@@ -881,26 +725,26 @@
         </div>
 
         <div class="iframe-container">
-            <iframe 
-                width="100%" 
+            <iframe
+                width="100%"
                 height="500px"
                 src="https://drive.google.com/file/d/1yi-a56P4UjWJfwOJVXAW3jfDYHILR7Dv/preview"
-                frameborder="0" style="border:0" 
-                allowfullscreen 
-                loading="lazy" 
+                frameborder="0" style="border:0"
+                allowfullscreen
+                loading="lazy"
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox">
             </iframe>
         </div>
 
     </section>
-    
+
     <!-- Google Drive -->
     <section id="file">
         <h2 class="link-cursor"><a
                 href="https://drive.google.com/drive/folders/1qYKdeE7Jz9QknsasEgcBnD4yf6D-fCkE?usp=drive_link"
             class="hover-expand" target="_blank"><img src="googledrive.png" width="30" class="notion-icon"></a> ⭐️⭐️ Google Drive & Certificate of Employment (COE) & Probation Completion Form (PCF)
         </h2>
-        
+
         <p>
             <a href="https://drive.google.com/drive/folders/1qYKdeE7Jz9QknsasEgcBnD4yf6D-fCkE?usp=drive_link"
                 class="download-btn" style="text-align: center; margin-top: 10px;" target="_blank">

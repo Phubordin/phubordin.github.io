@@ -12,6 +12,9 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,38 +27,7 @@
     <meta name="description" content="Portfolio แสดงภาพรวม Project โปรเจกต์นี้คือ วิเคราะห์พฤติกรรมการใช้จ่ายของลูกค้า โดยใช้แนวคิดที่เรียกว่า RFM Model กับข้อมูล USA - SuperStore ซึ่งเป็นการแบ่งลูกค้าออกเป็นทั้งหมด 11 กลุ่ม แบ่งตามพฤติกรรมทั้ง 3 อย่างของลูกค้า เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Dark Mode -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3 class="link-cursor">Navigation Menu</h3>
-    <ul id="toc-list1"></ul>
-</aside>
-
-<body class="fade-slide-in project_rfm-page">
+<body class="fade-slide-in project_rfm-page" data-toc="deep">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1">
@@ -65,132 +37,12 @@
         </span>
     </header>
 
-    <!-- Navigation Bar -->
-
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-            <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
-
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                            <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                            <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_rfm_py_dsb10()">P3 :
-                            Customer Segmentation and RFM Analysis Using <img src="python.png"
-                                style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                            Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                style="vertical-align:middle" width="25"></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                            Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                    </li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                            Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                            Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                            Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                            Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                    </li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                            Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                            OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                            Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li>
-                        <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" onclick="navigateToExperience()">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" class="active" onclick="scrollToTop(event)">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()">P1 : Data Exploration and Transformation with
-                                        <img src="sheets.png" style="vertical-align:middle" width="25"> Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()">P2 : Building a Café Restaurant Database Using
-                                        <img src="R.png" style="vertical-align:middle" width="25"> and <img src="SQL.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a class="active1" onclick="scrollToTop(event)" onclick="navigateToProject_rfm_py_dsb10()">P3 :
-                                        Customer Segmentation and RFM Analysis Using <img src="python.png"
-                                            style="vertical-align:middle" width="25">Python and <img src="R.png"
-                                            style="vertical-align:middle" width="25"> for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()">P4 : Creating a Multi-Round Rock-Paper-Scissors
-                                        Game in <img src="R.png" style="vertical-align:middle" width="25"> and <img src="python.png"
-                                            style="vertical-align:middle" width="25"></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()">⭐️ P5 : EDA and Comparison of NYC Flights
-                                        Data (2013 vs. 2023) with <img src="R.png" style="vertical-align:middle" width="25"></a>
-                                </li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()">⭐️ P6 : EDA Visualization of the Diamond Dataset
-                                        Using <img src="R.png" style="vertical-align:middle" width="25"> and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()">⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" > R</a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()">⭐️ P8 : Data-Driven Insights: Sales Performance &
-                                        Profitability in <img src="looker.png" style="vertical-align:middle" width="25">Looker
-                                        Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()">P9 : Chatbot Development for a Pizza
-                                        Business Using <img src="R.png" style="vertical-align:middle" width="25"> Programming</a>
-                                </li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()">P10 : Object-Oriented ATM System: Financial
-                                        Transactions with <img src="python.png" style="vertical-align:middle" width="25">Python
-                                        OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()">mini P11 : Extracting Public API Data with <img
-                                            src="python.png" style="vertical-align:middle" width="25">Python: Air Quality
-                                        Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()">mini P12 : Cafe Menu Data Structure with <img
-                                            src="xml.png" style="vertical-align:middle" width="25">XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
     <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
+    <section class="toc-box">
         <p style="font-size: 1.5em; font-weight: bold;" class="link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
+
         <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
     </section>
 
@@ -202,8 +54,8 @@
         <h2 class="link-cursor">1. Project Introduction</h2>
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             สวัสดีครับ สำหรับ Project นี้ผมมี <a class="link-website" target="_blank" href="https://community.tableau.com/s/question/0D54T00000CWeX8SAL/sample-superstore-sales-excelxls?_gl=1*6jtjnc*_ga*MzUyOTA0ODIyLjE3NTE5NjQxMzE.*_ga_8YLN0SNXVS*czE3NTE5NjQxMjkkbzEkZzEkdDE3NTE5NjQyMDMkajQ2JGwwJGgw*_gcl_au*NTkxNDEyNzk2LjE3NTE5NjQxMzE."><b>Sample-Superstore Sales (Excel).xls</b>
-            </a> 
-            ที่เอามาจาก Tableau ซึ่งเป็นข้อมูลการขายสินค้าใน Superstore ในสหรัฐอเมริกา (ไม่ใช่ข้อมูลจริงนะครับ) <mark>ข้อมูลนี้ถูกออกแบบขึ้นมาเพื่อใช้ประกอบการฝึกวิเคราะห์ด้วยเครื่องมือเช่น 
+            </a>
+            ที่เอามาจาก Tableau ซึ่งเป็นข้อมูลการขายสินค้าใน Superstore ในสหรัฐอเมริกา (ไม่ใช่ข้อมูลจริงนะครับ) <mark>ข้อมูลนี้ถูกออกแบบขึ้นมาเพื่อใช้ประกอบการฝึกวิเคราะห์ด้วยเครื่องมือเช่น
             Tableau, Power BI, Excel, SQL และ Python โดยมีโครงสร้างและบริบทใกล้เคียงกับข้อมูลจริง</mark>แต่ไม่ได้อ้างอิงจากบริษัทใดบริษัทหนึ่งโดยตรง โดยเราจะนำเอาแค่ชีตที่มี Transaction
             ข้อมูลการขายสินค้าเท่านั้น โดยผมจะวิเคราะห์ดูพฤติกรรมการซื้อของลูกค้า โดยการใช้วิธี RFM Model ที่อาศัยการแบ่งกลุ่มลูกค้าออกเป็น 11 กลุ่ม ตามพฤติกรรม Rencently, Frequency, Monetary
         </p>
@@ -986,7 +838,6 @@ display(df.info())
             </tbody>
         </table>
 
-
         <p class="link-cursor">
             📌 <b>ผลลัพธ์ที่ได้</b>
         </p>
@@ -1262,7 +1113,7 @@ display(df.loc[:, df.isna().any()
 styled_note("เลือกทุกคอลัมน์ที่แถวมี NaN : ⬇︎")
 
 display(df[df.isna().any(axis=1)
-            ].reset_index(drop = True))                                        
+            ].reset_index(drop = True))
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -1526,7 +1377,7 @@ df[df["Customer Name"]
 styled_note("สำรวจที่อยู่ Burlington มีบางที่มีเลข Postal Code: ⬇︎")
 
 df[df["City"] == "Burlington"][["City", "Postal Code"]].sort_values("Postal Code")
-                    
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -1610,7 +1461,7 @@ styled_note("สำรวจคอลัมน์อื่นๆที่ลู�
 
 df[df["City"] == "Burlington"][
     ["Customer Name", "Order ID", "State", "City", "Postal Code", "Product Name"]
-    ].sort_values("Postal Code").reset_index(drop=True)                    
+    ].sort_values("Postal Code").reset_index(drop=True)
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2248,7 +2099,7 @@ df_rfm1.columns = ['Customer Name', 'Monetary', 'Frequency', 'Recently (Days)']
 df_rfm1 = df_rfm1[["Customer Name", "Recently (Days)", "Frequency", "Monetary"]]
 
 styled_note("ตารางดูพฤติกรรมลูกค้า : ⬇︎")
-display(df_rfm1)    
+display(df_rfm1)
                     </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2312,7 +2163,7 @@ axes[2].set_title("Boxplot of Monetary")
 
 styled_note("แสดงกราฟ Boxplot ทั้ง 3 แท่ง : ⬇︎")
 display(fig1)
-plt.close(fig1)                    
+plt.close(fig1)
                     </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2388,7 +2239,7 @@ for col in ["Recently (Days)", "Frequency", "Monetary"]:
     decisions[col] = decision
 
 styled_note("ข้อมูลตัดสินใจการแบ่งกลุ่มลูกค้า : ⬇︎")
-display(decisions)                              
+display(decisions)
                     </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2466,7 +2317,7 @@ df_rfm2["F_Score"] = df_rfm2["F_Score"].astype(int)
 df_rfm2["Y_(F+M)/2"] = (df_rfm2["F_Score"] + df_rfm2["M_Score"]) / 2
 
 styled_note("เพิ่ม RFM-Score Columns : ⬇︎")
-display(df_rfm2)    
+display(df_rfm2)
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2519,31 +2370,31 @@ df_rfm3 = df_rfm2.copy()
 def classify_rfm(row):
     r, y = row["R_Score"], row["Y_(F+M)/2"]
 
-    if r >= 5 and y >= 4: 
-        return "Champions" 
-    elif r >= 3 and y >= 4: 
-        return "Loyal Customers" 
-    elif r >= 4 and 2 <= y < 4: 
-        return "Potential Loyalists" 
-    elif r >= 5 and 1 <= y < 2: 
-        return "New Customers" 
-    elif 4 <= r < 5 and y < 2: 
-        return "Promising" 
-    elif 3 <= r < 4 and 1 <= y < 3: 
-        return "About to Sleep" 
-    elif 3 <= r < 4 and 3 <= y < 4: 
-        return "Need Attention" 
-    elif 1 <= r < 3 and y >= 5: 
-        return "Can't Lose Them" 
-    elif 1 <= r < 3 and 3 <= y < 5: 
-        return "At Risk" 
-    elif 1 <= r < 3 and 2 <= y < 3: 
-        return "Hibernating" 
-    elif 1 <= r < 3 and 1 <= y < 2: 
-        return "Lost" 
+    if r >= 5 and y >= 4:
+        return "Champions"
+    elif r >= 3 and y >= 4:
+        return "Loyal Customers"
+    elif r >= 4 and 2 <= y < 4:
+        return "Potential Loyalists"
+    elif r >= 5 and 1 <= y < 2:
+        return "New Customers"
+    elif 4 <= r < 5 and y < 2:
+        return "Promising"
+    elif 3 <= r < 4 and 1 <= y < 3:
+        return "About to Sleep"
+    elif 3 <= r < 4 and 3 <= y < 4:
+        return "Need Attention"
+    elif 1 <= r < 3 and y >= 5:
+        return "Can't Lose Them"
+    elif 1 <= r < 3 and 3 <= y < 5:
+        return "At Risk"
+    elif 1 <= r < 3 and 2 <= y < 3:
+        return "Hibernating"
+    elif 1 <= r < 3 and 1 <= y < 2:
+        return "Lost"
 
-    else: 
-        return "Other" 
+    else:
+        return "Other"
 
 df_rfm3["Segment"] = df_rfm3.apply(classify_rfm, axis=1)
 
@@ -2682,7 +2533,7 @@ display(df_rfm3[["Segment", "Business_Impact"]
                 ].drop_duplicates(
                 ).sort_values("Business_Impact", ascending = False
                 ).reset_index(drop=True))
-                    
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2733,7 +2584,7 @@ display(df_rfm3[["Segment", "Business_Impact"]
                 ].drop_duplicates(
                 ).sort_values("Business_Impact", ascending = False
                 ).reset_index(drop=True))
-segment_n1 = segment_n.copy() 
+segment_n1 = segment_n.copy()
 
 segment_n1.columns = ["Segment", "Segment Level"]
 
@@ -2764,11 +2615,11 @@ layout_positions = {
 }
 
 if "Segment" in segment_n1.columns:
-    
+
     layout_positions = {
         segment: layout_positions[segment] for segment in segment_n1["Segment"]
     }
-else: 
+else:
     raise KeyError("คอลัมน์ 'Segment' ไม่พบใน segment_n1")
 
 salmon_cmap = LinearSegmentedColormap.from_list("salmon_cmap",
@@ -2791,8 +2642,8 @@ for (segment, (x, y, w, h)), color, count in zip(adjusted_layout_positions.items
 
     ax.text(x + w/2, y + h/2, f"{segment}\n{count}", ha="center", va="center", fontsize=12, fontweight="bold", color="black")
 
-ax.axhline(y=0.5, color="black", linewidth=3.0) 
-ax.axvline(x=0.5, color="black", linewidth=2.0) 
+ax.axhline(y=0.5, color="black", linewidth=3.0)
+ax.axvline(x=0.5, color="black", linewidth=2.0)
 ax.set_xlim(0.5, 6.5)
 ax.set_ylim(0.5, 6)
 ax.set_xticks([1,2,3,4,5])
@@ -2807,7 +2658,7 @@ plt.title("RFM Model Treemap Heatmap", fontsize=24, fontweight="bold", pad=15)
 styled_note("ในอุดมคิติ เราต้องการให้ Chart มีลักษณะแบบนี้มากที่สุด โดยพิจารณาจาก Revenue Oppurtunity & Retention Oppurtunity : ⬇︎")
 display(fig2)
 plt.close(fig2)
-    
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -2884,11 +2735,11 @@ layout_positions = {
 }
 
 if "Segment" in segment_n.columns:
-    
+
     layout_positions = {
         segment: layout_positions[segment] for segment in segment_n["Segment"]
     }
-else: 
+else:
     raise KeyError("คอลัมน์ 'Segment' ไม่พบใน segment_n")
 
 salmon_cmap = LinearSegmentedColormap.from_list("salmon_cmap",
@@ -2905,29 +2756,29 @@ adjusted_layout_positions = {
     for key, (x, y, w, h) in layout_positions.items()
 }
 
-for (segment, (x, y, w, h)), color, count in zip(adjusted_layout_positions.items(), colors, segment_n["No. Customers"]):    
-    
+for (segment, (x, y, w, h)), color, count in zip(adjusted_layout_positions.items(), colors, segment_n["No. Customers"]):
+
     rect = patches.Rectangle((x, y), w, h, linewidth=1.5, edgecolor="black", facecolor=color, alpha=0.8)
     ax.add_patch(rect)
-    
+
     ax.text(x + w/2, y + h/2, f"{segment}\n{count}", ha="center", va="center", fontsize=12, fontweight="bold", color="black")
 
-ax.axhline(y=0.5, color="black", linewidth=3.0)  
-ax.axvline(x=0.5, color="black", linewidth=2.0)  
-ax.set_xlim(0.5, 6.5) 
-ax.set_ylim(0.5, 6.5) 
-ax.set_xticks([1,2,3,4,5]) 
-ax.set_yticks([1,2,3,4,5]) 
-ax.tick_params(axis="both", labelsize=14) 
-ax.set_xlabel("Recently Score", fontsize=14, fontweight="bold", labelpad=10) 
-ax.set_ylabel("(Monetary Score + Frequency Score)/2", fontsize=14, fontweight="bold", labelpad=10) 
-ax.set_frame_on(False) 
+ax.axhline(y=0.5, color="black", linewidth=3.0)
+ax.axvline(x=0.5, color="black", linewidth=2.0)
+ax.set_xlim(0.5, 6.5)
+ax.set_ylim(0.5, 6.5)
+ax.set_xticks([1,2,3,4,5])
+ax.set_yticks([1,2,3,4,5])
+ax.tick_params(axis="both", labelsize=14)
+ax.set_xlabel("Recently Score", fontsize=14, fontweight="bold", labelpad=10)
+ax.set_ylabel("(Monetary Score + Frequency Score)/2", fontsize=14, fontweight="bold", labelpad=10)
+ax.set_frame_on(False)
 
 plt.title("Customer Distribution across RFM Segments", fontsize=24, fontweight="bold", pad=15)
 
 styled_note("วิเคราะห์การกระจายตัวของกลุ่มลูกค้าว่ามีจำนวนเท่าไร : ⬇︎")
-display(fig3) 
-plt.close(fig3)                     
+display(fig3)
+plt.close(fig3)
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -3018,7 +2869,7 @@ plt.close(fig2)
 
 styled_note("วิเคราะห์การกระจายตัวของกลุ่มลูกค้าว่ามีจำนวนเท่าไร : ⬇︎")
 display(fig3)
-plt.close(fig3) 
+plt.close(fig3)
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -3078,7 +2929,6 @@ plt.close(fig3)
 
     <section>
         <h2 class="link-cursor">8. RFM Analysis Using R</h2>
-
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             สำหรับหัวข้อนี้ การสรุปผลการวิเคราะห์ RFM ด้วย R พร้อม Visualization จำนวนลูกค้าที่
@@ -3180,7 +3030,7 @@ install.packages("scales")
 
             </details>
 
-            <li class="link-cursor">เรียกใช้งาน <code class="inline=code">Library</code></li>
+            <li class="link-cursor">เรียกใช้งาน <code class="inline-code">Library</code></li>
 
             <details class="detail">
 
@@ -3200,14 +3050,14 @@ missing_packages <- packages[!sapply(packages, requireNamespace, quietly = TRUE)
 
 if (length(missing_packages) > 0) {
     message("พบว่ามี library บางตัวที่ยังไม่ได้ติดตั้ง กำลังติดตั้งให้นะครับ...\n")
-    install.packages(missing_packages, repos = "https://cloud.r-project.org/") 
+    install.packages(missing_packages, repos = "https://cloud.r-project.org/")
     message("✅ ผมพึ่งติดตั้ง library ที่เกี่ยวข้องทั้งหมดให้คุณไปแล้วครับ อ่านโค้ดให้สนุก!")
 } else {
     message("✅ library ทั้งหมดถูกติดตั้งไว้อยู่แล้วครับ เชิญอ่าน code ให้สนุก !")
 }
 
 invisible(lapply(packages, library, character.only = TRUE))
-                        
+
                     </code></pre>
                     <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
                 </div>
@@ -3355,7 +3205,7 @@ df_rfm <- left_join(behavior_customers, r1, by = "Customer_Name") %>%
     select(Customer_Name, recently_days, Frequency, Monetary) %>%
     rename(`Recently (Days)` = recently_days)
 
-df_rfm1 <- copy(df_rfm)      
+df_rfm1 <- copy(df_rfm)
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -3410,7 +3260,7 @@ recently_percentiles <- quantile(df_rfm$`Recently (Days)`, probs = c(0.2, 0.4, 0
 monetary_percentiles <- quantile(df_rfm$Monetary, probs = c(0.2, 0.4, 0.6, 0.8), na.rm = TRUE)
 
 assign_r_score <- function(x, breaks) {
-    
+
     index <- findInterval(x, breaks, rightmost.closed = TRUE)
     return(5 - index)
 }
@@ -3423,13 +3273,13 @@ assign_m_score <- function(x, breaks) {
 df_rfm <- df_rfm %>%
     mutate(
     R_Score = sapply(`Recently (Days)`, assign_r_score, breaks = as.numeric(recently_percentiles)),
-    F_Score = ntile(Frequency, 5),  
+    F_Score = ntile(Frequency, 5),
     M_Score = sapply(Monetary, assign_m_score, breaks = as.numeric(monetary_percentiles)),
     `Y_(F+M)/2` = (F_Score + M_Score) / 2
     )
 
-df_rfm2 <- copy(df_rfm) 
-                    
+df_rfm2 <- copy(df_rfm)
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -3437,7 +3287,7 @@ df_rfm2 <- copy(df_rfm)
         </details>
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            หลังจากรันโค้ดด้านบนแล้ว ⬆︎ ให้เราเพิ่มช่อง cell อีกช่อง และใส่ <code class="inine-code">%R df_rfm2</code>
+            หลังจากรันโค้ดด้านบนแล้ว ⬆︎ ให้เราเพิ่มช่อง cell อีกช่อง และใส่ <code class="inline-code">%R df_rfm2</code>
             เพื่อที่ผลลัพธ์จะได้แสดงเป็น ✅ RFM Table : ⬇︎
         </p>
 
@@ -3523,7 +3373,7 @@ df_rfm_final <- copy(df_rfm)
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
             หลังจากรันโค้ดด้านบนแล้ว ⬆︎ ให้เราเพิ่มช่อง cell อีกช่อง และใส่ <code
-                class="inine-code">%R df_rfm_final</code>
+                class="inline-code">%R df_rfm_final</code>
             เพื่อที่ผลลัพธ์จะได้แสดงเป็น ✅ RFM Table : ⬇︎
         </p>
 
@@ -3583,7 +3433,7 @@ segment_n <- df_rfm %>%
         </details>
 
         <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            หลังจากรันโค้ดด้านบนแล้ว ⬆︎ ให้เราเพิ่มช่อง cell อีกช่อง และใส่ <code class="inine-code">%R segment_n</code>
+            หลังจากรันโค้ดด้านบนแล้ว ⬆︎ ให้เราเพิ่มช่อง cell อีกช่อง และใส่ <code class="inline-code">%R segment_n</code>
             เพื่อที่ผลลัพธ์จะได้แสดงเป็น ✅ RFM Table : ⬇︎
         </p>
 
@@ -3679,17 +3529,17 @@ chart <- ggplot(layout_df) +
     title = "Customer Distribution across RFM Segments"
     ) +
     theme(
-    
+
     plot.background = element_rect(fill = "white", color = NA),
-    axis.text.x = element_text(size = 20),    
-    axis.text.y = element_text(size = 20, margin = margin(r = -20)),    
-    axis.title.x = element_text(size = 24, margin = margin(t = 20)),  
-    axis.title.y = element_text(size = 24, margin = margin(r = 40)),  
-    plot.title = element_text(size = 36, face = "bold", hjust = 0.5, margin = margin(b = 40)), 
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20, margin = margin(r = -20)),
+    axis.title.x = element_text(size = 24, margin = margin(t = 20)),
+    axis.title.y = element_text(size = 24, margin = margin(r = 40)),
+    plot.title = element_text(size = 36, face = "bold", hjust = 0.5, margin = margin(b = 40)),
     ) +
     scale_x_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5, 6.5)) +
     scale_y_continuous(breaks = c(1, 2, 3, 4, 5), limits = c(0.5, 6.5)) +
-    coord_fixed(ratio = 0.5)  
+    coord_fixed(ratio = 0.5)
 
 ggsave("rfm-heatmap.png", plot = chart, width = 15, height = 10)
                 </code></pre>
@@ -3917,7 +3767,7 @@ display(df_cali_tex_2017.head())
 
 # ทั้ง 2 lines ผลลัพธ์เหมือน line 13 สามารถเลือกใช้ได้ตามที่ถนัด
 df1.query("State in ['California', 'Texas']").query("Order_Date >= '2017-01-01' & Order_Date <= '2017-12-31'")
-df1.query("State in ['California', 'Texas'] & Order_Date >= '2017-01-01' & Order_Date <= '2017-12-31'")                    
+df1.query("State in ['California', 'Texas'] & Order_Date >= '2017-01-01' & Order_Date <= '2017-12-31'")
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -3999,7 +3849,7 @@ display(df_2017_stat_day)
 
 styled_note("ปี 2017 ยอดขายเฉลี่ยต่อออเดอร์ : ⬇︎")
 display(df_2017_stat_order)
-                    
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -4211,7 +4061,7 @@ product_avg_sales.columns = ["Product Name", "Total_Sales", "No. Order", "Avg"] 
 
 styled_note("Top 10 ยอดขายสินค้ารวมโดยเฉลี่ยต่อครั้ง ที่สั่งซื้อภายในปี 2019 และ 2020 : ⬇︎")
 product_avg_sales.sort_values("Avg", ascending = False).head(10).reset_index(drop = True)
-                    
+
                 </code></pre>
                 <div id="toast" class="toast">✅ คัดลอกสำเร็จ!</div>
             </div>
@@ -4512,7 +4362,7 @@ for (var in ls()) {
 
         <ul>
             <li class="link-cursor" style="text-align: justify;">
-                RFM Analysis Using Python : 
+                RFM Analysis Using Python :
                 <ul>
                     <li>
                         Aggregate ยอดขายเฉลี่ยต่อเดือน, จำนวนครั้งที่ลุกค้าใช้จ่าย และวันล่าสุดที่ลูกค้าซื้อ
@@ -4535,7 +4385,7 @@ for (var in ls()) {
             </li>
             <li class="link-cursor" style="text-align: justify;">
                 RFM Analysis Using Python R : คล้ายกับการวิเคราะห์ด้วย Python เลยแต่ใช้เป็นภาษา R
-                แต่ตัดตัวตอนสำรวจข้อมูลด้วย Boxplot ออกไป จะเน้นเป็นการเขียน R เพื่อวิเคราะห์ RFM เลย 
+                แต่ตัดตัวตอนสำรวจข้อมูลด้วย Boxplot ออกไป จะเน้นเป็นการเขียน R เพื่อวิเคราะห์ RFM เลย
             </li>
         </ul>
 

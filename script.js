@@ -1,479 +1,349 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const themeToggle = document.getElementById("theme-toggle");
-    const blurToggle = document.getElementById("blur-toggle");
-    const root = document.documentElement;
-    const headerBg = document.querySelector(".header-background");
+/* =========================================================================
+   Phubordin Phanyosri — Data Analyst Portfolio
+   โครงสร้างหน้าเว็บทั้งหมด (nav, ปุ่มต่างๆ, TOC) ถูกสร้างจากไฟล์นี้ที่เดียว
+   เพิ่ม/แก้โปรเจกต์ใหม่ → แก้แค่ NAV ด้านล่างนี้ ทุกหน้าอัปเดตตามทันที
+   ========================================================================= */
 
-    // ปิด transition ตอนโหลดหน้า
-    document.body.classList.add("no-transition");
-    setTimeout(() => {
-        document.body.classList.remove("no-transition");
-    }, 100);
+const PAGE = location.pathname.split("/").pop() || "index.html";
 
-    if (!headerBg) {
-        console.error("❌ ไม่พบ .header-background ในหน้านี้");
-        return;
-    }
+/* ไอคอนประกอบชื่อเมนู */
+const ic = (file, w = 25) => `<img src="${file}" style="vertical-align:middle" width="${w}">`;
 
-    function setTheme(isDark) {
-        console.log("Theme Change:", isDark ? "Dark Mode" : "Light Mode");
+/* --- เมนูหลัก : [ไฟล์, ชื่อ, (เมนูย่อย)] — เรียงจากใหม่ไปเก่า --- */
+const NAV = [
+    ["index.html", "🏠 Home"],
+    ["about.html", "About Me"],
+    ["experience.html", "Work Experience", [
+        ["experience_mmt.html", `${ic("mmt_logo.jpg", 35)} มิตรไมตรีการแพทย์`],
+        ["experience_leowood.html", `${ic("leowood_logo.png", 35)} Leowood Intertrade Co Ltd.`],
+    ]],
+    ["project.html", "Project Overview", [
+        ["p13_pokemon_card.html", `⭐️ P13 : Pokemon Card - Skooldio Project`],
+        ["project_mini_xml_cafe.html", `mini P12 : Cafe Menu Data Structure with ${ic("xml.png")} XML`],
+        ["project_mini_api_py.html", `mini P11 : Extracting Public API Data with ${ic("python.png")} Python: Air Quality Analytics`],
+        ["project_atm_oop_py_dsb10.html", `P10 : Object-Oriented ATM System: Financial Transactions with ${ic("python.png")} Python OOP`],
+        ["project_pizza_chatbot_dsb10.html", `P9 : Chatbot Development for a Pizza Business Using ${ic("R.png")} R Programming`],
+        ["project_looker_dsb10.html", `⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in ${ic("looker.png")}Looker Studio`],
+        ["project_titanic_glm_dsb10.html", `⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models ${ic("R.png")} R`],
+        ["project_vizdimond_dsb10.html", `⭐️ P6 : EDA Visualization of the Diamond Dataset Using ${ic("R.png")} R and R Markdown`],
+        ["project_nycflight13_23_dsb10.html", `⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with ${ic("R.png")} R`],
+        ["project_pyc_r_py_dsb10.html", `P4 : Creating a Multi-Round Rock-Paper-Scissors Game in ${ic("R.png")} R and ${ic("python.png")} Python`],
+        ["project_rfm_py_dsb10.html", `⭐️ P3 : Customer Segmentation and RFM Analysis Using ${ic("python.png")}Python and ${ic("R.png")} R for Strategic Business Insight`],
+        ["project_cafe_r_sql_dsb10.html", `P2 : Building a Café Restaurant Database Using ${ic("R.png")} R and ${ic("SQL.png")} SQL`],
+        ["project_ggsheet_dsb10.html", `P1 : Data Exploration and Transformation with ${ic("sheets.png")} Google Sheets`],
+    ]],
+    ["certificate.html", "Certificates"],
+    ["contact.html", "Contact"],
+];
 
-        document.body.classList.add("no-transition"); // ป้องกันกระพริบตอนเปลี่ยนธีม
-        setTimeout(() => {
-            if (isDark) {
-                root.style.setProperty("--body-bg", "url('mac.webp')");
-                headerBg.style.backgroundImage = "url('sunset.webp')";
-                document.body.classList.add("dark-mode");
-                localStorage.setItem("theme", "dark");
-            } else {
-                root.style.setProperty("--body-bg", "url('sky.webp')");
-                headerBg.style.backgroundImage = "url('sea2.webp')";
-                document.body.classList.remove("dark-mode");
-                localStorage.setItem("theme", "light");
-            }
-            document.body.classList.remove("no-transition");
-        }, 100); // หน่วงเวลาสั้น ๆ ให้ transition ทำงานได้
-    }
+/* สร้าง <li> ของเมนู — หน้าปัจจุบันจะถูก highlight และคลิกแล้วเลื่อนขึ้นบนสุดแทนการโหลดซ้ำ */
+function navHTML(isMobile) {
+    return NAV.map(([href, label, sub], i) => {
+        const here = href === PAGE || (sub && sub.some(([h]) => h === PAGE));
+        const top = here
+            ? `<a href="${href}" class="active" onclick="scrollToTop(event)">${label}</a>`
+            : `<a href="${href}">${label}</a>`;
 
-    function setBlur(isBlurred) {
-        if (isBlurred) {
-            document.body.classList.add("blur-transition");
-            setTimeout(() => document.body.classList.add("blur"), 10);
+        let li;
+        if (sub) {
+            const items = sub.map(([h, l]) => `<li><a ${h === PAGE
+                ? `class="active1" onclick="scrollToTop(event)"`
+                : `href="${h}"`}>${l}</a></li>`).join("");
+            li = `<li class="dropdown">${top}<ul class="dropdown-menu">${items}</ul></li>`;
         } else {
-            document.body.classList.remove("blur");
-            setTimeout(() => document.body.classList.remove("blur-transition"), 500);
+            li = `<li>${top}</li>`;
         }
-        localStorage.setItem("blurState", isBlurred ? "on" : "off");
-    }
-
-    // โหลดค่าเริ่มต้นจาก Local Storage
-    const savedTheme = localStorage.getItem("theme");
-    setTheme(savedTheme === "dark");
-
-    if (themeToggle) {
-        themeToggle.checked = savedTheme === "dark"; // ✅ เพิ่มโค้ดนี้เพื่อให้ switch อยู่ในสถานะที่ถูกต้อง
-    }
-
-    const savedBlur = localStorage.getItem("blurState") === "on";
-    if (blurToggle) {
-        blurToggle.checked = savedBlur;
-        setBlur(savedBlur);
-    }
-
-    // Event Listeners
-    if (themeToggle) {
-        themeToggle.addEventListener("change", function () {
-            setTheme(this.checked);
-        });
-    }
-
-    if (blurToggle) {
-        blurToggle.addEventListener("change", function () {
-            setBlur(this.checked);
-        });
-    }
-});
-
-/*------------------------------------------------------------------------------------------------------------------------- */
-
-document.addEventListener("DOMContentLoaded", function () {
-    const tocList = document.getElementById("toc-list");
-    const sections = document.querySelectorAll("section h2");
-    const detailsElements = document.querySelectorAll("details");
-
-    if (!tocList) {
-        console.error("❌ ไม่พบ <ul id='toc-list'> ใน HTML");
-        return;
-    }
-
-    if (sections.length === 0) {
-        console.error("❌ ไม่พบ <h2> หรือ <h3> ใน <section>");
-        return;
-    }
-
-    const tocLinks = [];
-    sections.forEach((heading, index) => {
-        const tocItem = document.createElement("li");
-        const tocLink = document.createElement("a");
-
-        // ตั้งค่าลิงก์ TOC
-        tocLink.href = `#section-${index}`;
-        tocLink.textContent = heading.textContent;
-
-        // กำหนด ID ให้ <h2> และ <h3> เพื่อให้สามารถเลื่อนหาได้
-        heading.id = `section-${index}`;
-
-        tocItem.appendChild(tocLink);
-        tocList.appendChild(tocItem);
-
-        tocLinks.push(tocLink); // เก็บลิงก์ทั้งหมด
-
-        // เพิ่ม Smooth Scroll
-        tocLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            document.getElementById(`section-${index}`).scrollIntoView({
-                behavior: "smooth",
-                block: "center" // จัดให้ section อยู่กลางหน้าจอ
-            });
-
-            // เปลี่ยนการ highlight สีพื้นหลังของ TOC เมื่อคลิก
-            tocLinks.forEach((link) => link.classList.remove("highlighted"));
-            tocLink.classList.add("highlighted");
-        });
-    });
-
-    // อัปเดตตำแหน่งของ TOC เมื่อเลื่อนหน้า
-    const toc = document.getElementById("table-of-contents");
-    const initialTop = 255; // ตำแหน่งเริ่มต้นของ TOC
-
-    function updateTOCHighlight() {
-        let scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        let newTop = initialTop + scrollPosition; // คำนวณตำแหน่งใหม่ของ TOC
-
-        // อัปเดตตำแหน่งของ TOC
-        toc.style.top = newTop + "px";
-
-        // เพิ่มการ highlight ให้กับ TOC ตามการเลื่อนหน้า
-        let currentSection = -1;
-
-        sections.forEach((section, index) => {
-            const parentSection = section.closest("section"); // ดึง parent <section>
-            if (!parentSection) return;
-
-            const sectionOffset = parentSection.offsetTop;
-            const sectionHeight = parentSection.offsetHeight;
-
-            // ตรวจสอบว่าอยู่ในตำแหน่งที่ควร highlight
-            if (scrollPosition >= sectionOffset - window.innerHeight * 0.55 && scrollPosition < sectionOffset + sectionHeight) {
-                currentSection = index;
-            }
-        });
-
-        tocLinks.forEach((link, index) => {
-            if (index === currentSection) {
-                link.classList.add("highlighted");
-            } else {
-                link.classList.remove("highlighted");
-            }
-        });
-    }
-
-    // ตรวจจับการเปิด/ปิด <details> แล้วอัปเดต highlight
-    detailsElements.forEach((details) => {
-        details.addEventListener("toggle", updateTOCHighlight);
-    });
-
-    // เรียกใช้ฟังก์ชัน highlight TOC เมื่อโหลดหน้าเว็บเสร็จ โดยหน่วงเวลาเล็กน้อย
-    setTimeout(updateTOCHighlight, 50);
-
-    // ตรวจจับการเลื่อนหน้าจอ
-    window.addEventListener("scroll", updateTOCHighlight);
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const tocList = document.getElementById("toc-list1");
-    const sections = document.querySelectorAll("section h2, section h3, section h4");
-    const detailsElements = document.querySelectorAll("details");
-
-    if (!tocList) {
-        console.error("❌ ไม่พบ <ul id='toc-list1'> ใน HTML");
-        return;
-    }
-
-    if (sections.length === 0) {
-        console.error("❌ ไม่พบ <h2> หรือ <h3> ใน <section>");
-        return;
-    }
-
-    const tocLinks = [];
-    sections.forEach((heading, index) => {
-        const tocItem = document.createElement("li");
-        const tocLink = document.createElement("a");
-
-        // ตั้งค่าลิงก์ TOC
-        tocLink.href = `#section-${index}`;
-        tocLink.textContent = heading.textContent;
-
-        // กำหนด ID ให้ <h2> และ <h3> เพื่อให้สามารถเลื่อนหาได้
-        heading.id = `section-${index}`;
-
-        tocItem.appendChild(tocLink);
-        tocList.appendChild(tocItem);
-
-        tocLinks.push(tocLink); // เก็บลิงก์ทั้งหมด
-
-        // เพิ่ม Smooth Scroll
-        tocLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            document.getElementById(`section-${index}`).scrollIntoView({
-                behavior: "smooth",
-                block: "center" // จัดให้ section อยู่กลางหน้าจอ
-            });
-
-            // เปลี่ยนการ highlight สีพื้นหลังของ TOC เมื่อคลิก
-            tocLinks.forEach((link) => link.classList.remove("highlighted"));
-            tocLink.classList.add("highlighted");
-        });
-    });
-
-    // อัปเดตตำแหน่งของ TOC เมื่อเลื่อนหน้า
-    const toc = document.getElementById("table-of-contents");
-    const initialTop = 255; // ตำแหน่งเริ่มต้นของ TOC
-
-    function updateTOCHighlight() {
-        let scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        let newTop = initialTop + scrollPosition; // คำนวณตำแหน่งใหม่ของ TOC
-
-        // อัปเดตตำแหน่งของ TOC
-        toc.style.top = newTop + "px";
-
-        // เพิ่มการ highlight ให้กับ TOC ตามการเลื่อนหน้า
-        let currentSection = -1;
-
-        sections.forEach((section, index) => {
-            const parentSection = section.closest("section"); // ดึง parent <section>
-            if (!parentSection) return;
-
-            const sectionOffset = parentSection.offsetTop;
-            const sectionHeight = parentSection.offsetHeight;
-
-            // ตรวจสอบว่าอยู่ในตำแหน่งที่ควร highlight
-            if (scrollPosition >= sectionOffset - window.innerHeight * 0.55 && scrollPosition < sectionOffset + sectionHeight) {
-                currentSection = index;
-            }
-        });
-
-        tocLinks.forEach((link, index) => {
-            if (index === currentSection) {
-                link.classList.add("highlighted");
-            } else {
-                link.classList.remove("highlighted");
-            }
-        });
-    }
-
-    // ตรวจจับการเปิด/ปิด <details> แล้วอัปเดต highlight
-    detailsElements.forEach((details) => {
-        details.addEventListener("toggle", updateTOCHighlight);
-    });
-
-    // เรียกใช้ฟังก์ชัน highlight TOC เมื่อโหลดหน้าเว็บเสร็จ โดยหน่วงเวลาเล็กน้อย
-    setTimeout(updateTOCHighlight, 50);
-
-    // ตรวจจับการเลื่อนหน้าจอ
-    window.addEventListener("scroll", updateTOCHighlight);
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const toc = document.getElementById("table-of-contents");
-    const toggleBtn = document.getElementById("toggle-toc-btn");
-
-    // ✅ เพิ่มบรรทัดนี้ เพื่อซ่อน TOC ตอนเปิดบนมือถือครั้งแรก
-    if (window.innerWidth <= 932) {
-        toc.classList.add("hidden");
-    }
-
-    // ฟังก์ชันซ่อน/แสดง TOC
-    toggleBtn.addEventListener("click", function () {
-        toc.classList.toggle("hidden");
-    });
-
-    // ให้ปุ่มเลื่อนตามผู้ใช้
-    window.addEventListener("scroll", function () {
-        toggleBtn.style.top = window.scrollY + 200 + "px";
-    });
-});
-
-/*------------------------------------------------------------------------------------------------------------------------- */
-// Get all the navigation links
-
-document.addEventListener("DOMContentLoaded", function () {
-    let currentPage = window.location.pathname.split("/").pop();
-    let navLinks = document.querySelectorAll("nav ul li a");
-
-    navLinks.forEach(link => {
-        if (link.getAttribute("href") === currentPage) {
-            link.classList.add("active");
-        }
-    });
-});
-
-const navLinks = document.querySelectorAll('nav ul li a');
-
-// Add an event listener to each navigation link
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        // Prevent default behavior of the anchor tag (page jumping)
-        e.preventDefault();
-
-        // Get the target section's ID from the href attribute
-        const targetSection = document.querySelector(link.getAttribute('href'));
-
-        // Scroll to the target section with smooth scrolling
-        targetSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center' // This ensures that the section is centered vertically in the viewport
-        });
-    });
-});
-
-/*------------------------------------------------------------------------------------------------------------------------- */
-
-// คลิก Home tab แล้วไป index.html
-function navigateToIndex() {
-    event.preventDefault();  // ป้องกันการโหลดซ้ำ
-    window.location.href = "index.html";
+        // เว้นบรรทัดคั่นกลุ่มเมนูบนมือถือ (เหมือนเดิม)
+        return li + (isMobile && (i === 0 || i === 4) ? "<br>" : "");
+    }).join("");
 }
 
-// คลิก Home tab แล้วไป home.html
-function navigateToHome() {
-    event.preventDefault();  // ป้องกันการโหลดซ้ำ
-    window.location.href = "home.html";
+/* --- ประกอบส่วนประกอบคงที่ของทุกหน้า --- */
+const TOC_MODE = document.body.dataset.toc || "flat";   // ไม่ใส่ = flat (เฉพาะ h2) | "deep" = ลงลึกถึง h4
+
+document.body.insertAdjacentHTML("afterbegin", `
+<div class="theme-switch-wrapper">
+    <label class="switch"><input type="checkbox" id="theme-toggle"><span class="slider"></span><span class="switch-label"></span></label>
+</div>
+<div class="theme-switch1-wrapper" hidden>
+    <label class="switch1" title="แสดง/ซ่อนสารบัญ"><input type="checkbox" id="toc-toggle"><span class="slider1"></span><span class="switch-label1"></span></label>
+</div>
+<button id="scrollToTopBtn" title="Go to top">⇧</button>
+<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">≡</button>
+<aside id="table-of-contents" aria-label="สารบัญในหน้านี้">
+    <h3 class="link-cursor">สารบัญ</h3>
+    <ul id="${TOC_MODE === "deep" ? "toc-list1" : "toc-list"}"></ul>
+</aside>
+<div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="panel-inner">
+        <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
+        <nav aria-label="เมนูมือถือ"><ul>${navHTML(true)}</ul></nav>
+    </div>
+</div>`);
+
+const primaryNav = document.querySelector("nav.primary");
+if (primaryNav) {
+    primaryNav.innerHTML = `<ul>${navHTML(false)}</ul>`;
+
+    // แถบเมนูลอยอยู่บนสุด (position:fixed) จึงต้องบอก CSS ว่าสูงเท่าไร
+    // เพื่อเว้นที่ให้เนื้อหาและวางปุ่มมุมขวาให้พอดี — ความสูงเปลี่ยนได้ถ้าเมนูตัดบรรทัด
+    const syncNavHeight = () => {
+        const h = primaryNav.offsetHeight;   // 0 เมื่อจอเล็กจน nav ถูกซ่อน
+        document.documentElement.style.setProperty("--nav-h", h + "px");
+    };
+    syncNavHeight();
+    addEventListener("resize", syncNavHeight);
+    addEventListener("load", syncNavHeight);
+    if (window.ResizeObserver) new ResizeObserver(syncNavHeight).observe(primaryNav);
 }
 
-// คลิก About Me section แล้วไป about.html
-function navigateToAbout() {
-    window.location.href = "about.html";
+/* ใช้กับลิงก์ "Read More" ในเนื้อหาหน้า */
+function go(page) {
+    if (window.event) window.event.stopPropagation();
+    location.href = page;
 }
-
-// คลิก Project section แล้วไป experience.html
-function navigateToExperience() {
-    window.location.href = "experience.html";
-}
-
-// คลิก Project section แล้วไป project.html
-function navigateToProject() {
-    window.location.href = "project.html";
-}
-
-// คลิก Certificate แล้วไป certificate.html
-function navigateToCertificate() {
-    window.location.href = "certificate.html";
-}
-
-// คลิก Contact แล้วไป contact.html
-function navigateToContact() {
-    window.location.href = "contact.html";
-}
-// สร้างฟังก์ชันคลิก tab ปัจจุบันแล้วเลื่อนไปด้านบน /*------------------------------------------------------------------------------------------------------------------------- */
 
 function scrollToTop(event) {
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/*------------------------------------------------------------------------------------------------------------------------- */
-
+/* =========================================================================
+   ธีมมืด/สว่าง + เบลอพื้นหลัง (จำค่าไว้ใน localStorage)
+   ========================================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-    let currentPage = window.location.pathname.split("/").pop();
-    let navLinks = document.querySelectorAll("nav ul li a");
+    const themeToggle = document.getElementById("theme-toggle");
 
-    navLinks.forEach(link => {
-        if (link.getAttribute("href") === currentPage) {
-            link.classList.add("active");
+    // ปิด transition ชั่วคราวตอนสลับธีม กันสีค้างและกันกระพริบ
+    function withoutTransition(fn) {
+        document.body.classList.add("no-transition");
+        fn();
+        requestAnimationFrame(() => requestAnimationFrame(
+            () => document.body.classList.remove("no-transition")));
+    }
+
+    // ใส่คลาสไว้บน <html> ให้ตรงกับสคริปต์ใน <head> ที่ทำงานก่อนเบราว์เซอร์วาดหน้า
+    function setTheme(isDark) {
+        withoutTransition(() => document.documentElement.classList.toggle("dark-mode", isDark));
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    }
+
+    // สถานะถูกตั้งไว้แล้วโดยสคริปต์ใน <head> (ค่าเริ่มต้น = มืด)
+    const isDark = document.documentElement.classList.contains("dark-mode");
+    if (themeToggle) {
+        themeToggle.checked = isDark;
+        themeToggle.addEventListener("change", function () { setTheme(this.checked); });
+    }
+
+});
+
+/* =========================================================================
+   TOC ด้านข้าง — ตามหัวข้อใน <section> พร้อม highlight ตามการ scroll
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("table-of-contents");
+    const tocList = document.getElementById("toc-list") || document.getElementById("toc-list1");
+    if (!toc || !tocList) return;
+
+    const deep = tocList.id === "toc-list1";
+    const headings = document.querySelectorAll(deep ? "section h2, section h3, section h4" : "section h2");
+
+    // หน้าที่มีหัวข้อน้อยเกินไป ไม่ต้องมีสารบัญและไม่ต้องมีสวิตช์
+    if (headings.length < 2) { toc.remove(); return; }
+    const switchWrap = document.querySelector(".theme-switch1-wrapper");
+    if (switchWrap) switchWrap.hidden = false;
+
+    const tocLinks = [];
+    headings.forEach((heading, index) => {
+        heading.id = `section-${index}`;
+
+        const link = document.createElement("a");
+        link.href = `#section-${index}`;
+        // เก็บกวาดข้อความหัวข้อ: ตัดขีดคั่น/ช่องว่างที่ติดมาจาก markup
+        link.textContent = heading.textContent.replace(/\s+/g, " ").replace(/^[\s|·:–-]+/, "").trim();
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            heading.scrollIntoView({ behavior: "smooth", block: "center" });
+            tocLinks.forEach(l => l.classList.remove("highlighted"));
+            link.classList.add("highlighted");
+        });
+
+        const item = document.createElement("li");
+        item.appendChild(link);
+        tocList.appendChild(item);
+        tocLinks.push(link);
+    });
+
+    function updateTOCHighlight() {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        let current = -1;
+        headings.forEach((heading, index) => {
+            const parent = heading.closest("section");
+            if (!parent) return;
+            if (scrollPosition >= parent.offsetTop - window.innerHeight * 0.55 &&
+                scrollPosition < parent.offsetTop + parent.offsetHeight) current = index;
+        });
+        tocLinks.forEach((link, i) => link.classList.toggle("highlighted", i === current));
+    }
+
+    document.querySelectorAll("details").forEach(d => d.addEventListener("toggle", updateTOCHighlight));
+    window.addEventListener("scroll", updateTOCHighlight, { passive: true });
+    window.addEventListener("resize", updateTOCHighlight);
+    setTimeout(updateTOCHighlight, 50);
+
+    // สวิตช์ข้างปุ่มธีม : เปิด/ปิดสารบัญ และจำค่าไว้
+    const toggle = document.getElementById("toc-toggle");
+    const hidden = localStorage.getItem("tocHidden") === "1";
+    toc.classList.toggle("hidden", hidden);
+    if (toggle) {
+        toggle.checked = !hidden;
+        toggle.addEventListener("change", function () {
+            toc.classList.toggle("hidden", !this.checked);
+            localStorage.setItem("tocHidden", this.checked ? "0" : "1");
+        });
+    }
+
+});
+
+/* =========================================================================
+   TOC ในหน้า — #toc-section (ซ้อนชั้น h2-h4) หรือ #toc-section1 (เฉพาะ h2)
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const nested = document.getElementById("toc-section");
+    const target = nested || document.getElementById("toc-section1");
+    if (!target) return;
+
+    const headings = document.querySelectorAll(nested ? "h2, h3, h4" : "h2");
+    const tocList = document.createElement("ul");
+    let lastH2 = null, lastH3 = null;
+
+    headings.forEach((heading, index) => {
+        heading.id = heading.id || `heading-${index}`;
+
+        const link = document.createElement("a");
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            window.scrollTo({
+                top: heading.getBoundingClientRect().top + window.scrollY - window.innerHeight / 2,
+                behavior: "smooth"
+            });
+        });
+
+        const item = document.createElement("li");
+        item.appendChild(link);
+
+        // จัดชั้น h3 ไว้ใต้ h2 และ h4 ไว้ใต้ h3
+        const parent = heading.tagName === "H3" && lastH2 ? lastH2
+            : heading.tagName === "H4" && lastH3 ? lastH3 : null;
+        if (parent) {
+            let subList = parent.querySelector("ul");
+            if (!subList) { subList = document.createElement("ul"); parent.appendChild(subList); }
+            subList.appendChild(item);
+            if (heading.tagName === "H3") lastH3 = item;
+        } else if (heading.tagName === "H2") {
+            tocList.appendChild(item);
+            lastH2 = item;
+            lastH3 = null;
         }
     });
-});
-/*------------------------------------------------------------------------------------------------------------------------- */
-// ป้องกัน dropdown menu หายไปเมื่อคลิก
-document.querySelectorAll('.dropdown, .dropdown1').forEach(dropdown => {
-    dropdown.addEventListener('mouseenter', function () {
-        let menu = this.querySelector('.dropdown-menu, .dropdown-menu1');
-        if (menu) menu.style.display = 'block';
-    });
 
-    dropdown.addEventListener('mouseleave', function () {
-        let menu = this.querySelector('.dropdown-menu, .dropdown-menu1');
-        if (menu) menu.style.display = 'none';
-    });
+    target.appendChild(tocList);
 });
 
-function navigateToSection(event, sectionId) {
-    event.preventDefault();
-    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-}
-/*------------------------------------------------------------------------------------------------------------------------- */
+/* =========================================================================
+   ตัวเลขที่ต้องอัปเดตตามเวลา — คำนวณจากวันที่วันนี้ ไม่ต้องกลับมาแก้เอง
+   data-birth="YYYY-MM-DD" -> อายุ   |   data-since="YYYY-MM" -> อายุงาน
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const now = new Date();
 
-function navigateToProject_ggsheet_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_ggsheet_dsb10.html";
-}
-
-function navigateToProject_cafe_r_sql_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_cafe_r_sql_dsb10.html";
-}
-
-function navigateToProject_rfm_py_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_rfm_py_dsb10.html";
-}
-
-function navigateToProject_pyc_r_py_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_pyc_r_py_dsb10.html";
-}
-
-function navigateToProject_nycflight13_23_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_nycflight13_23_dsb10.html";
-}
-
-function navigateToProject_vizdimond_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_vizdimond_dsb10.html";
-}
-
-function navigateToProject_titanic_glm_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_titanic_glm_dsb10.html";
-}
-
-function navigateToProject_looker_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_looker_dsb10.html";
-}
-
-function navigateToProject_pizza_chatbot_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_pizza_chatbot_dsb10.html";
-}
-
-function navigateToProject_atm_oop_py_dsb10() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_atm_oop_py_dsb10.html";
-}
-
-function navigateToProject_mini_api_py() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_mini_api_py.html";
-}
-
-function navigateToProject_mini_xml_cafe() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "project_mini_xml_cafe.html";
-}
-
-function navigateToExperience() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "experience.html";
-}
-
-function navigateToExperience_leowood() {
-    event.stopPropagation(); // ป้องกันไม่ให้ event ถูก propagate ไปยังพ่อแม่
-    window.location.href = "experience_leowood.html";
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------- 
-function copyEmail() {
-    let email = document.getElementById("email").textContent.trim(); // ดึงเฉพาะข้อความอีเมล
-    navigator.clipboard.writeText(email).then(() => {
-        let toast = document.getElementById("toast-copy"); // ดึง element Toast ที่เกี่ยวข้อง
-        showToast(toast); // เรียกใช้ฟังก์ชัน showToast() ที่คุณมีอยู่แล้ว
+    // อายุ — นับจากวันเกิด ถ้ายังไม่ถึงวันเกิดปีนี้ก็ลบออกหนึ่งปี
+    document.querySelectorAll("[data-birth]").forEach(el => {
+        const b = new Date(el.dataset.birth);
+        let age = now.getFullYear() - b.getFullYear();
+        const m = now.getMonth() - b.getMonth();
+        if (m < 0 || (m === 0 && now.getDate() < b.getDate())) age--;
+        el.textContent = age;
     });
-}
-//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    document.querySelectorAll("[data-since]").forEach(el => {
+        const [y, m] = el.dataset.since.split("-").map(Number);
+        const months = (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m);
+        if (months < 1) return;
+        const years = Math.floor(months / 12), rest = months % 12;
+        const text = years
+            ? `${years} yr${years > 1 ? "s" : ""}${rest ? ` ${rest} mo${rest > 1 ? "s" : ""}` : ""}`
+            : `${months} month${months > 1 ? "s" : ""}`;
+        el.textContent = `${el.textContent.trim()} (${text})`;
+    });
+});
+
+/* =========================================================================
+   ปุ่มเลื่อนขึ้นบนสุด
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("scrollToTopBtn");
+    if (!btn) return;
+
+    window.addEventListener("scroll", function () {
+        btn.classList.toggle("show", window.scrollY > 200);
+    });
+    btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+});
+
+/* =========================================================================
+   เมนูมือถือ (hamburger)
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const closeBtn = document.getElementById("closeBtn");
+    if (!hamburger || !mobileMenu || !closeBtn) return;
+
+    function openMenu() {
+        mobileMenu.classList.add("open");
+        mobileMenu.setAttribute("aria-hidden", "false");
+        hamburger.setAttribute("aria-expanded", "true");
+        closeBtn.focus();
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
+        mobileMenu.classList.remove("open");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        hamburger.setAttribute("aria-expanded", "false");
+        hamburger.focus();
+        document.body.style.overflow = "";
+    }
+
+    hamburger.addEventListener("click", () => {
+        hamburger.getAttribute("aria-expanded") === "true" ? closeMenu() : openMenu();
+    });
+    closeBtn.addEventListener("click", closeMenu);
+    mobileMenu.addEventListener("click", e => { if (e.target === mobileMenu) closeMenu(); });
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && mobileMenu.classList.contains("open")) closeMenu();
+    });
+
+    // แตะหัวข้อที่มีเมนูย่อยบนมือถือ = กาง/พับ แทนการเปิดลิงก์
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll("nav ul li > a").forEach(link => {
+            link.addEventListener("click", function (e) {
+                const li = this.parentElement;
+                if (!li.querySelector(".dropdown-menu")) return;
+                e.preventDefault();
+                document.querySelectorAll("nav ul li").forEach(o => { if (o !== li) o.classList.remove("open"); });
+                li.classList.toggle("open");
+            });
+        });
+    }
+});
+
+/* =========================================================================
+   รูปพรีวิวตอนชี้เมาส์ + คัดลอกอีเมล/โค้ด + toast
+   ========================================================================= */
 const previewImage = document.createElement("img");
 previewImage.classList.add("preview");
 document.body.appendChild(previewImage);
@@ -481,375 +351,190 @@ document.body.appendChild(previewImage);
 function showPreview(event, src) {
     previewImage.src = src;
     previewImage.style.display = "block";
-
-    // ปรับตำแหน่งให้อยู่บนขวาของ cursor
-    previewImage.style.left = event.pageX + 15 + "px"; // ขยับไปทางขวาของ cursor
-    previewImage.style.top = event.pageY - 250 + "px";  // ขยับขึ้นไปด้านบน cursor
+    previewImage.style.left = event.pageX + 15 + "px";
+    previewImage.style.top = event.pageY - 250 + "px";
 }
 
 function hidePreview() {
     previewImage.style.display = "none";
 }
 
-/*------------------------------------------------------------------------------*/
+function showToast(toast) {
+    if (!toast) return;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+function copyEmail() {
+    const email = document.getElementById("email").textContent.trim();
+    navigator.clipboard.writeText(email).then(() => showToast(document.getElementById("toast-copy")));
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".code-container").forEach(container => {
         const copyBtn = container.querySelector(".copy-btn");
         const codeBlock = container.querySelector("code");
-        const toast = container.querySelector(".toast"); // แก้ไขให้หา Toast เฉพาะของ container นี้
+        const toast = container.querySelector(".toast");
+        if (!copyBtn || !codeBlock || !toast) return;
 
-        if (copyBtn && codeBlock && toast) {
-            // ลบ white space ที่ไม่จำเป็น
-            codeBlock.textContent = codeBlock.textContent.trim();
-
-            copyBtn.addEventListener("click", function () {
-                // คัดลอกโค้ดไปยัง clipboard
-                navigator.clipboard.writeText(codeBlock.textContent).then(() => {
-                    showToast(toast); // ส่ง Toast ที่เกี่ยวข้องเข้าไป
-                }).catch(err => {
-                    console.error("Failed to copy: ", err);
-                });
-            });
-
-            // Prism.js ทำ Highlight ใหม่ (ถ้ามี Prism.js)
-            Prism.highlightElement(codeBlock);
-        }
-    });
-});
-
-// ฟังก์ชันแสดง Toast สำหรับแต่ละ container
-function showToast(toast) {
-    if (!toast) return;
-
-    // แสดง Toast เฉพาะ container ที่เกี่ยวข้อง
-    toast.classList.add("show");
-
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 2000); // Toast หายไปหลัง 2 วินาที
-}
-
-/*------------------------------------------------------------------------------*/
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".detail1").forEach(detail => {
-        detail.setAttribute("open", "true");
-    });
-});
-
-/*-------------------------------------------------------------------------------- */
-document.addEventListener("DOMContentLoaded", function () {
-    const tocSection = document.getElementById("toc-section"); // ส่วนที่จะแสดง TOC
-    const headings = document.querySelectorAll("h2, h3, h4"); // ค้นหา h2, h3, h4 ทั้งหมด
-    const tocList = document.createElement("ul");
-
-    let lastH2 = null, lastH3 = null;
-
-    let h2Count = 0;
-
-    headings.forEach((heading, index) => {
-        if (heading.tagName === "H2") {
-            h2Count++;
-            // if (h2Count === 1) return; // ❌ ข้าม h2 ตัวแรก
-        }
-
-        const id = heading.id || `heading-${index}`;
-        heading.id = id;
-
-        const listItem = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = `#${id}`;
-        link.textContent = heading.textContent;
-
-        listItem.appendChild(link);
-
-        // โครงสร้าง TOC
-        if (heading.tagName === "H2") {
-            tocList.appendChild(listItem);
-            lastH2 = listItem;
-            lastH3 = null;
-        } else if (heading.tagName === "H3" && lastH2) {
-            let subList = lastH2.querySelector("ul") || document.createElement("ul");
-            subList.appendChild(listItem);
-            lastH2.appendChild(subList);
-            lastH3 = listItem;
-        } else if (heading.tagName === "H4" && lastH3) {
-            let subList = lastH3.querySelector("ul") || document.createElement("ul");
-            subList.appendChild(listItem);
-            lastH3.appendChild(subList);
-        }
-    });
-
-
-    tocSection.appendChild(tocList);
-
-    // เพิ่ม Smooth Scroll และให้หัวข้อเลื่อนมาตรงกลางจอ
-    document.querySelectorAll("#toc-section a").forEach(link => {
-        link.addEventListener("click", function(event) {
-            event.preventDefault();
-            const targetId = this.getAttribute("href").substring(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 2),
-                    behavior: "smooth"
-                });
-            }
+        codeBlock.textContent = codeBlock.textContent.trim();
+        copyBtn.addEventListener("click", function () {
+            navigator.clipboard.writeText(codeBlock.textContent).then(() => showToast(toast));
         });
+        if (window.Prism) Prism.highlightElement(codeBlock);
     });
+
+    // <details class="detail1"> ให้กางไว้ตั้งแต่แรก
+    document.querySelectorAll(".detail1").forEach(d => d.setAttribute("open", "true"));
 });
 
-/*รับ toc แค่ h2-------------------------------------------------------------------------------- */
+/* =========================================================================
+   Lightbox — กดที่รูปไหนก็ได้เพื่อดูเต็มจอ
+   เลื่อนดูรูปอื่นในหน้าเดียวกันได้ด้วยลูกศร ← → , Esc เพื่อปิด
+   ========================================================================= */
+function openGalleryModal(src) {
+    // รวบรวมรูปทั้งหมดในหน้านี้ที่กดดูได้ เพื่อทำปุ่มก่อนหน้า/ถัดไป
+    const items = [...document.querySelectorAll('[onclick*="openGalleryModal"]')]
+        .map(el => {
+            const m = /openGalleryModal\(\s*['"]([^'"]+)['"]/.exec(el.getAttribute("onclick") || "");
+            if (!m) return null;
+            const img = el.tagName === "IMG" ? el : el.querySelector("img");
+            // ไม่มี alt ก็ใช้ชื่อหัวข้อของ section ที่รูปอยู่ เพื่อให้รู้ว่ากำลังดูรูปอะไร
+            const near = el.closest("section")?.querySelector("h2, h3");
+            const caption = (img && img.alt) || el.textContent.trim() || (near ? near.textContent.trim() : "");
+            return { src: m[1], caption: caption.replace(/\s+/g, " ").slice(0, 110) };
+        })
+        .filter(Boolean)
+        .filter((v, i, a) => a.findIndex(x => x.src === v.src) === i);   // ตัดรูปซ้ำ
 
-document.addEventListener("DOMContentLoaded", function () {
-    const tocSection1 = document.getElementById("toc-section1"); // ส่วนที่จะแสดง TOC ใหม่
-    const headings = document.querySelectorAll("h2"); // ค้นหาเฉพาะ h2
-    const tocList = document.createElement("ul");
+    let i = Math.max(0, items.findIndex(x => x.src === src));
+    if (!items.length) items.push({ src, caption: "" });
 
-    headings.forEach((heading, index) => {
-        // if (index === 0) return; // ข้ามตัวแรก
-    
-        const id = heading.id || `heading-${index}`;
-        heading.id = id;
-    
-        const listItem = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = `#${id}`;
-        link.textContent = heading.textContent;
-    
-        listItem.appendChild(link);
-        tocList.appendChild(listItem);
-    });
-    
+    const modal = document.createElement("div");
+    modal.className = "gallery-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.innerHTML = `
+        <div class="lb-stage">
+            <button class="close-modal" aria-label="ปิด">&times;</button>
+            <button class="lb-nav lb-prev" aria-label="รูปก่อนหน้า">&#8249;</button>
+            <img class="full-image" src="${items[i].src}" alt="">
+            <button class="lb-nav lb-next" aria-label="รูปถัดไป">&#8250;</button>
+        </div>
+        <div class="lb-bar">
+            <div class="lb-meta">
+                <span class="lb-caption"></span>
+                <span class="lb-count"></span>
+            </div>
+            <div class="lb-tools">
+                <button class="lb-btn lb-zoom">🔍 ขนาดจริง</button>
+                <a class="lb-btn lb-open" target="_blank" rel="noopener">↗ เปิดไฟล์</a>
+            </div>
+        </div>`;
 
-    if (tocSection1) {
-        tocSection1.appendChild(tocList);
+    const img = modal.querySelector(".full-image");
+    const cap = modal.querySelector(".lb-caption");
+    const count = modal.querySelector(".lb-count");
+    const zoomBtn = modal.querySelector(".lb-zoom");
+    const openLink = modal.querySelector(".lb-open");
+    const many = items.length > 1;
+    modal.querySelector(".lb-prev").hidden = !many;
+    modal.querySelector(".lb-next").hidden = !many;
+
+    function show(n) {
+        i = (n + items.length) % items.length;
+        modal.classList.remove("zoomed");
+        zoomBtn.textContent = "🔍 ขนาดจริง";
+        img.src = items[i].src;
+        cap.textContent = items[i].caption || "";
+        count.textContent = many ? `${i + 1} / ${items.length}` : "";
+        openLink.href = items[i].src;
+        // เล่นอนิเมชันซ้ำทุกครั้งที่เปลี่ยนรูป
+        img.style.animation = "none";
+        void img.offsetWidth;
+        img.style.animation = "";
     }
 
-    // เพิ่ม Smooth Scroll และให้หัวข้อเลื่อนมาตรงกลางจอ
-    document.querySelectorAll("#toc-section1 a").forEach(link => {
-        link.addEventListener("click", function(event) {
-            event.preventDefault();
-            const targetId = this.getAttribute("href").substring(1);
-            const targetElement = document.getElementById(targetId);
+    function toggleZoom() {
+        const on = modal.classList.toggle("zoomed");
+        zoomBtn.textContent = on ? "🔍 พอดีจอ" : "🔍 ขนาดจริง";
+    }
 
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.getBoundingClientRect().top + window.scrollY - (window.innerHeight / 2),
-                    behavior: "smooth"
-                });
-            }
-        });
+    function close() {
+        modal.classList.add("closing");
+        document.removeEventListener("keydown", onKey);
+        document.body.style.overflow = prevOverflow;
+        setTimeout(() => modal.remove(), 150);
+    }
+
+    function onKey(e) {
+        if (e.key === "Escape") close();
+        else if (e.key === "ArrowLeft" && many) show(i - 1);
+        else if (e.key === "ArrowRight" && many) show(i + 1);
+    }
+
+    modal.querySelector(".close-modal").addEventListener("click", close);
+    modal.querySelector(".lb-prev").addEventListener("click", e => { e.stopPropagation(); show(i - 1); });
+    modal.querySelector(".lb-next").addEventListener("click", e => { e.stopPropagation(); show(i + 1); });
+    zoomBtn.addEventListener("click", toggleZoom);
+    img.addEventListener("click", e => { e.stopPropagation(); toggleZoom(); });
+    // กดพื้นที่ว่างรอบรูปเพื่อปิด
+    modal.querySelector(".lb-stage").addEventListener("click", e => {
+        if (e.target === e.currentTarget) close();
     });
+    document.addEventListener("keydown", onKey);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";   // ล็อกไม่ให้หน้าข้างหลังเลื่อน
+    document.body.appendChild(modal);
+    show(i);
+}
+
+/* =========================================================================
+   ตารางกว้างเกินจอ → ใส่กรอบเลื่อนแนวนอนให้อัตโนมัติ
+   ========================================================================= */
+document.querySelectorAll("table").forEach(function (table) {
+    if (table.parentElement.classList.contains("table-container")) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-container";
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
 });
 
-/*to top-------------------------------------------------------------------------------- */
-
-document.addEventListener("DOMContentLoaded", function () {
-    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-
-    window.addEventListener("scroll", function () {
-        const scrollY = window.scrollY;
-        const viewportHeight = window.innerHeight;
-
-        // ปรับตำแหน่งปุ่มให้อยู่ล่างสุดของหน้าจอแบบลอยตาม scroll
-        scrollToTopBtn.style.top = `${scrollY + viewportHeight - 80}px`; /*80*/
-
-        // แสดงปุ่มเมื่อ scroll ลงมาเกิน 200px
-        if (scrollY > 200) {
-            scrollToTopBtn.classList.add("show");
-        } else {
-            scrollToTopBtn.classList.remove("show");
-        }
-    });
-
-    scrollToTopBtn.addEventListener("click", function () {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    });
-});
-
-// -----------------------------------------------------------------------------------------------
-// เลื่อนหน้าไปยังตำแหน่งที่มี hash ใน URL
+/* =========================================================================
+   เลื่อนไปยังโปรเจกต์ที่ระบุใน URL เช่น project.html#name-project8
+   ========================================================================= */
 window.addEventListener("DOMContentLoaded", function () {
-const hash = window.location.hash;
-
-// ตรวจสอบว่า hash เริ่มต้นด้วย #name-project
-if (hash.startsWith("#name-project")) {
-    const target = document.querySelector(hash);
-    if (target) {
+    if (!location.hash.startsWith("#name-project")) return;
+    const target = document.querySelector(location.hash);
+    if (!target) return;
     setTimeout(() => {
-        const yOffset = -340; // ปรับให้เลื่อนขึ้น 100px จากตำแหน่งจริง
-        const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
+        window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 340, behavior: "smooth" });
     }, 100);
-    }
-}
 });
 
-// -----------------------------------------------------------------------------------------------
-
-document.querySelectorAll("table").forEach(function(table) {
-// ตรวจว่า table ยังไม่ถูก wrap ซ้ำ
-    if (!table.parentElement.classList.contains("table-container")) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "table-container";
-        table.parentNode.insertBefore(wrapper, table);
-        wrapper.appendChild(table);
-    }
-});
-
-// -----------------------------------------------------------------------------------------------
+/* =========================================================================
+   Mermaid diagram (เฉพาะหน้าที่โหลด mermaid.min.js)
+   ========================================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-  const isMobile = window.innerWidth <= 768;
-  if (!isMobile) return;
+    if (typeof mermaid === "undefined") return;
 
-  const dropdownTriggers = document.querySelectorAll("nav ul li > a");
+    mermaid.initialize({ startOnLoad: false, theme: "default", flowchart: { curve: "basis" } });
 
-  dropdownTriggers.forEach(link => {
-    link.addEventListener("click", function (e) {
-      const parentLi = this.parentElement;
-      const hasDropdown =
-        parentLi.querySelector(".dropdown-menu") ||
-        parentLi.querySelector(".dropdown-menu1");
-
-      if (hasDropdown) {
-        e.preventDefault(); // ป้องกันเปิดลิงก์ทันที
-        parentLi.classList.toggle("open");
-
-        // ปิด dropdown อื่น ๆ
-        document.querySelectorAll("nav ul li").forEach(li => {
-          if (li !== parentLi) li.classList.remove("open");
+    function renderMermaids() {
+        document.querySelectorAll(".mermaid:not(.rendered)").forEach(el => {
+            el.innerHTML = el.textContent.split("\n").map(l => l.trimStart()).join("\n").trim();
+            el.classList.add("rendered");
         });
-      }
-    });
-  });
-});
-
-/*-------------------------------------------------------------------------------- */
-
-document.addEventListener("DOMContentLoaded", async function () {
-if (typeof mermaid === "undefined") {
-    console.error("Mermaid is not loaded.");
-    return;
-}
-
-// กำหนดค่าการทำงานของ Mermaid
-mermaid.initialize({
-    startOnLoad: false,
-    theme: "default",
-    flowchart: {
-    curve: "basis"
-    }
-});
-
-// ฟังก์ชันช่วยล้างช่องว่างหน้า
-function cleanMermaidCode(rawText) {
-    return rawText
-    .split('\n')
-    .map(line => line.trimStart())
-    .join('\n')
-    .trim();
-}
-
-// เตรียม element ทั้งหมด
-const renderMermaids = () => {
-    document.querySelectorAll(".mermaid:not(.rendered)").forEach((el) => {
-    const cleanCode = cleanMermaidCode(el.textContent);
-    el.innerHTML = cleanCode; // Mermaid ต้องการให้ element มี raw code ข้างใน
-    el.classList.add("rendered");
-    });
-
-    // เรียกให้ Mermaid render ทั้งหมด
-    mermaid.run().catch(err => {
-    console.error("Mermaid run failed:", err);
-    });
-};
-
-// รันรอบแรก
-renderMermaids();
-
-// render เมื่อ toggle <details>
-document.querySelectorAll("details").forEach((detail) => {
-    detail.addEventListener("toggle", () => {
-    if (detail.open) {
-        setTimeout(() => {
-            requestAnimationFrame(() => {
-                renderMermaids(); // ฟังก์ชันที่ใช้ mermaid.run()
-            });
-            }, 500);
-    }
-    });
-});
-});
-
-/*-------------------------------------------------------------------------------- */
-document.addEventListener("DOMContentLoaded", function () {
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const closeBtn = document.getElementById('closeBtn');
-
-    function openMenu() {
-        mobileMenu.classList.add('open');
-        mobileMenu.setAttribute('aria-hidden', 'false');
-        hamburger.setAttribute('aria-expanded', 'true');
-        closeBtn.focus();
-        document.body.style.overflow = 'hidden';
+        mermaid.run().catch(err => console.error("Mermaid run failed:", err));
     }
 
-    function closeMenu() {
-        mobileMenu.classList.remove('open');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-        hamburger.setAttribute('aria-expanded', 'false');
-        hamburger.focus();
-        document.body.style.overflow = '';
-    }
+    renderMermaids();
 
-    hamburger.addEventListener('click', () => {
-        const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-        expanded ? closeMenu() : openMenu();
-    });
-
-    closeBtn.addEventListener('click', closeMenu);
-
-    mobileMenu.addEventListener('click', (e) => {
-        if (e.target === mobileMenu) closeMenu();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-            closeMenu();
-        }
-    });
-
-    document.querySelectorAll('.mobile-link').forEach(a => {
-        a.addEventListener('click', closeMenu);
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const hbg = document.getElementById("hamburger");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    // ให้ปุ่มเลื่อนตามผู้ใช้
-    window.addEventListener("scroll", function () {
-        const offsetTop = window.scrollY + 80;
-        hbg.style.top = offsetTop + "px";
-
-        // ✅ ให้ mobileMenu เลื่อนตามตำแหน่งปุ่มด้วย (ถ้าใช้ absolute)
-        if (!mobileMenu.classList.contains("open")) {
-            // ถ้ายังไม่เปิดเมนู ก็อัปเดตตำแหน่งไว้ล่วงหน้า
-            mobileMenu.style.top = offsetTop + "px";
-        }
-    });
-
-    // ✅ เวลาที่เปิดเมนูให้จัดตำแหน่งอีกครั้ง
-    document.getElementById("hamburger").addEventListener("click", function () {
-        const offsetTop = window.scrollY + 0;
-        mobileMenu.style.top = offsetTop + "px";
+    // แผนภาพที่อยู่ใน <details> ต้อง render ใหม่ตอนกาง
+    document.querySelectorAll("details").forEach(detail => {
+        detail.addEventListener("toggle", () => {
+            if (detail.open) setTimeout(() => requestAnimationFrame(renderMermaids), 500);
+        });
     });
 });

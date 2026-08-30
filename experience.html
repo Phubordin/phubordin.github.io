@@ -12,6 +12,11 @@
         gtag('config', 'G-0MKCCGG3QF');
     </script>
     <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
+    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
     <meta name="author" content="Phubordin Phanyosri">
@@ -24,135 +29,41 @@
     <meta name="description" content="Portfolio Work Experience ในแต่ละที่ อธิบายถึงลักษณะงานที่ได้รับมอบหมายให้ทำ เชิญรับชมได้ครับ ขอบคุณครับ">
 </head>
 
-<div class="theme-switch-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider"></span>
-        <span class="switch-label"></span>
-    </label>
-</div>
-
-<div class="theme-switch1-wrapper">
-    <!-- ปุ่ม Blur Background -->
-    <label class="switch1">
-        <input type="checkbox" id="blur-toggle">
-        <span class="slider1"></span>
-        <span class="switch-label1"></span>
-    </label>
-</div>
-
-<!-- Table of Contents -->
-<!-- ปุ่มเลื่อนไปด้านบน -->
-<button id="scrollToTopBtn" title="Go to top">⇧</button>
-<button id="toggle-toc-btn">◀</button>
-<!-- Hamburger for mobile -->
-<button class="hamburger" id="hamburger" aria-haspopup="true" aria-controls="mobileMenu" aria-expanded="false" aria-label="เปิดเมนู">
-≡
-</button>
-<aside id="table-of-contents" class="active">
-    <h3  class= "link-cursor">Navigation Menu</h3>
-    <ul id="toc-list"></ul>
-</aside>
-
 <body class="fade-slide-in experience-page">
     <header>
         <div class="header-background"></div>
         <span class= "link-cursor strong1">Work Experience</span>
     </header>
 
-    <!-- Navigation Bar -->
-    <nav class="primary" aria-label="เมนูหลัก">
-        <ul>
-            <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-            <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li> <!-- Home Tab with House Emoji -->
-            <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-            <!-- Work Experience Dropdown -->
-            <li class="dropdown">
-                <a href="experience.html" class="active" onclick="scrollToTop(event)">Work Experience</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                </ul>
-            </li>
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
 
-            <!-- Projects Dropdown -->
-            <li class="dropdown">
-                <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                <ul class="dropdown-menu">
-                    <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                    <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                    <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                    <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" ></a></li>
-                    <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                    <li><a onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                    <li><a onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                    <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                    <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                </ul>
-            </li>
-            <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li>
-            <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Mobile overlay menu -->
-    <div id="mobileMenu" class="mobile-panel" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="panel-inner">
-            <button class="close-btn" id="closeBtn" aria-label="ปิดเมนู">✕</button>
-                <nav aria-label="เมนูมือถือ">
-                    <ul>
-                        <!-- <li><a href="index.html" onclick = "navigateToIndex()" ><img src="door.png" width="25" class="notion-icon"></a></li> come back index page -->
-                        <li><a href="home.html" onclick="navigateToHome()">🏠 Home </a></li><br> <!-- Home Tab with House Emoji -->
-                        <li><a href="about.html" onclick="navigateToAbout()">About Me</a></li> <!-- เปลี่ยนเป็นลิงก์ไปยัง about.html -->
-                        <!-- Work Experience Dropdown -->
-                        <li class="dropdown">
-                            <a href="experience.html" class="active" onclick="scrollToTop(event)">Work Experience</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToExperience_leowood()">Leowood Intertrade Co Ltd. </a></li>
-                            </ul>
-                        </li>
+    <section id="experience-mmt">
+        <h2 class="link-cursor"><span class="company-name"> <img src="mmt_logo.jpg" style="vertical-align:middle" width="40"> | มิตรไมตรีการแพทย์</span></h2>
 
-                        <!-- Projects Dropdown -->
-                        <li class="dropdown">
-                            <a href="project.html" onclick="navigateToProject()">Project Overview</a>
-                            <ul class="dropdown-menu">
-                                <li><a onclick="navigateToProject_ggsheet_dsb10()" >P1 : Data Exploration and Transformation with <img src="sheets.png"  style="vertical-align:middle" width="25" > Google Sheets</a></li>
-                                <li><a onclick="navigateToProject_cafe_r_sql_dsb10()" >P2 : Building a Café Restaurant Database Using <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="SQL.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_rfm_py_dsb10()" >⭐️ P3 : Customer Segmentation and RFM Analysis Using <img src="python.png"  style="vertical-align:middle" width="25" >Python and <img src="R.png"  style="vertical-align:middle" width="25" > for Strategic Business Insight</a></li>
-                                <li><a onclick="navigateToProject_pyc_r_py_dsb10()" >P4 : Creating a Multi-Round Rock-Paper-Scissors Game in <img src="R.png"  style="vertical-align:middle" width="25" > and <img src="python.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_nycflight13_23_dsb10()" >⭐️ P5 : EDA and Comparison of NYC Flights Data (2013 vs. 2023) with <img src="R.png"  style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_vizdimond_dsb10()" >⭐️ P6 : EDA Visualization of the Diamond Dataset Using <img src="R.png"  style="vertical-align:middle" width="25" > and R Markdown </a></li>
-                                <li><a onclick="navigateToProject_titanic_glm_dsb10()" >⭐️ P7 : Titanic Survival Prediction: A Comparative Analysis of Classification Models <img src="R.png" style="vertical-align:middle" width="25" ></a></li>
-                                <li><a onclick="navigateToProject_looker_dsb10()" >⭐️ P8 : Data-Driven Insights: Sales Performance & Profitability in <img src="looker.png"  style="vertical-align:middle" width="25" >Looker Studio</a></li>
-                                <li><a onclick="navigateToProject_pizza_chatbot_dsb10()" >P9 : Chatbot Development for a Pizza Business Using <img src="R.png"  style="vertical-align:middle" width="25" > Programming</a></li>
-                                <li><a onclick="navigateToProject_atm_oop_py_dsb10()" >P10 : Object-Oriented ATM System: Financial Transactions with <img src="python.png"  style="vertical-align:middle" width="25" >Python OOP</a></li>
-                                <li><a onclick="navigateToProject_mini_api_py()" >mini P11 : Extracting Public API Data with <img src="python.png"  style="vertical-align:middle" width="25" >Python: Air Quality Analytics</a></li>
-                                <li><a onclick="navigateToProject_mini_xml_cafe()" >mini P12 : Cafe Menu Data Structure with <img src="xml.png"  style="vertical-align:middle" width="25" >XML</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="certificate.html" onclick="navigateToCertificate()">Certificates</a></li><br>
-                        <li><a href="contact.html" onclick="navigateToContact()">Contact</a></li>
-                    </ul>
-                </nav>
-        </div>
-    </div>
+        <p class="link-cursor">
+            Data Analyst
+        </p>
+        <p class="link-cursor">
+            <i class="link-cursor" data-since="2025-11">Nov 2025 - Present</i>
+        </p>
 
-    <!-- Section ที่จะแสดง TOC อัตโนมัติ -->
-    <section id="toc-section">
-        <p style="font-size: 1.5em; font-weight: bold;" class= "link-cursor">Table of Contents</p>
-        <div id="toc-marker"></div>
-        <div id="toc-section"></div> <!-- ตรงนี้ TOC จะถูกสร้างอัตโนมัติ -->
+        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
+            <mark>กำลังเรียบเรียงผลงานในตำแหน่งนี้อยู่ครับ</mark> เนื้อหาจะทยอยอัปเดตเร็วๆ นี้
+        </p>
+
+        <div class="corner-text" onclick="go('experience_mmt.html')"><span>Read More</span></div>
+
     </section>
-    
+
     <section id="experience-leowood">
-        <h2 class="link-cursor"> Data Analyst <span class= "certificate-school1 link-cursor notion-icon"> | Leowood Intertrade Co Ltd.</span></h2>
+        <h2 class="link-cursor"><span class="company-name"> <img src="leowood_logo.png" style="vertical-align:middle" width="40"> | Leowood Intertrade Co Ltd.</span></h2>
+        <p class="link-cursor">
+            Data Analyst
+        </p>
         <p class="link-cursor">
             <i class= "link-cursor">Jul 2023 - Apr 2024 (10 Months)</i>
         </p>
-        
+
         <!-- Scope of Work : -->
         <details class="detail1">
             <summary><b>Scope of Work :</b></summary>
@@ -210,9 +121,9 @@
             </ol>
 
         </details>
-        
+
         <hr>
-        
+
         <!-- ลักษณะงาน : -->
         <details class="detail">
             <summary><b>ลักษณะงาน :</b></summary>
@@ -270,7 +181,7 @@
                 </ol>
         </details>
 
-        <div class="corner-text" onclick="navigateToExperience_leowood()"><span>Read More</span></div>
+        <div class="corner-text" onclick="go('experience_leowood.html')"><span>Read More</span></div>
 
     </section>
 
@@ -279,4 +190,3 @@
     <script src="certificate-script.js"></script>
 </body>
 </html>
-                
