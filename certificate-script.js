@@ -1,6 +1,21 @@
 // สมมุติว่า certificates มีข้อมูลภาพ
 const certificates = [
-    
+
+    // 15. Data Analytics Bootcamp Batch 12 by Skooldio
+    {
+        id: 15,
+        image: "certificate-DA-Skooldio.png",
+        title: "Data Analytics Bootcamp Batch 12",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "หลักสูตรเข้มข้น 4 เดือน เรียนแบบ Onsite ควบคู่ Online จบด้วยการ Pitching โปรเจกต์จริง เนื้อหาครอบคลุม 1) SQL สำหรับดึงและแปลงข้อมูล 2) Excel สำหรับวิเคราะห์ข้อมูล 3) หลักการออกแบบ Dashboard ให้คนอ่านเข้าใจ 4) พื้นฐาน Data Science 5) Data Storytelling การเล่าเรื่องด้วยข้อมูล 6) Power BI และการเขียน DAX และ 7) การนำข้อมูลไปใช้ประกอบการตัดสินใจทางธุรกิจ",
+        cost: "฿39,990 ($1,176)",
+        costlink: "https://www.skooldio.com/bootcamps/data-analytics-bootcamp",
+        certificateLink: "https://www.skooldio.com/certificate/0b89986a-ce05-4130-8b75-9e902c8e7459",
+        notionLink: "https://app.notion.com/p/second-brain-phubordin/Data-Analytics-Bootcamp-Skooldio-31d2ea218a158060b105e8b447892767?source=copy_link",
+        note: "ลงทุนสูงสุดในพอร์ต คุ้มที่สุดเช่นกัน"
+    },
+
     // 1. DSB10 by DataRockie
     {
         id: 1,
@@ -12,9 +27,23 @@ const certificates = [
         notionLink: "https://second-brain-phubordin.notion.site/Data-Science-Bootcamp-10-1a82ea218a1580a68f47e000b12e9b0a?pvs=4",
         cost: "฿4,900 ($143)",
         costlink: "https://datarockie.com/data-science-bootcamp/",
-        certificateLink: "https://api.badgr.io/public/assertions/99CX-fsTQ02SPkihaDTINQ?identity__email=poorider02%40gmail.com"
+        certificateLink: "https://api.badgr.io/public/assertions/99CX-fsTQ02SPkihaDTINQ?identity__email=poorider02%40gmail.com",
+        note: "จ่ายหลักพัน แต่คุณภาพจัดเต็ม"
     },
-    
+
+    // 16. Hands-On Power BI by Skooldio
+    {
+        id: 16,
+        image: "certificate-handons-powerbi.png",
+        title: "Hands-On Power BI",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "Power BI ระดับ Advanced ต่อยอดจาก Essentials 1) เทคนิค DAX ขั้นสูง ทั้ง CALCULATE, Time Intelligence และ Context Transition 2) การวางโมเดลให้รองรับรายงานหลายมุมมอง โดยไม่ต้องสร้าง measure ซ้ำ 3) การออกแบบ Dashboard ให้ตอบโจทย์ธุรกิจจริงแบบลงมือทำทั้งคอร์ส 4) การจูนรายงานให้เปิดเร็วเมื่อข้อมูลใหญ่ขึ้น เป็นคอร์สที่ใช้ต่อยอดกับงานทำโมเดล Power BI ที่ทำอยู่ตอนนี้โดยตรง",
+        notionLink: "https://app.notion.com/p/second-brain-phubordin/Data-Analytics-Bootcamp-Skooldio-31d2ea218a158060b105e8b447892767?source=copy_link",
+        cost: "฿3,490 ($103)",
+        costlink: "https://www.skooldio.com/courses/hands-on-power-bi"
+    },
+
     // 14last. SQL for Data Analytics
     {
         id: 14,
@@ -28,7 +57,7 @@ const certificates = [
         costlink: "https://www.skooldio.com/courses/sql-data-analytics",
         certificateLink: "https://www.skooldio.com/certificate/5d520564-764e-492f-a6a8-4fb38b395fbb"
     },
-    
+
     // 13. Exploratory Data Analysis with Excel
     {
         id: 13,
@@ -42,7 +71,20 @@ const certificates = [
         costlink: "https://www.skooldio.com/courses/eda-excel",
         certificateLink: "https://www.skooldio.com/certificate/df89e17f-455a-43ad-9cc6-fbac091e0fcb"
     },
-    
+
+    // 17. Power BI Essentials by Skooldio
+    {
+        id: 17,
+        image: "certificate-bi-essentials.png",
+        title: "Power BI Essentials",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "พื้นฐาน Power BI ที่ใช้ได้จริงตั้งแต่ต้นจนจบสายงาน 1) เชื่อมต่อและเตรียมข้อมูลด้วย Power Query 2) จัดความสัมพันธ์ระหว่างตารางแบบ Star Schema 3) เขียน DAX สำหรับตัวชี้วัดที่ใช้ประจำ 4) สร้าง Visualization และหน้ารายงานที่กดกรองโต้ตอบกันได้ ดูเพิ่มได้ที่ notion นะครับ",
+        notionLink: "https://app.notion.com/p/second-brain-phubordin/Data-Analytics-Bootcamp-Skooldio-31d2ea218a158060b105e8b447892767?source=copy_link",
+        cost: "฿1,990 ($59)",
+        costlink: "https://www.skooldio.com/courses/power-bi-essentials-2024"
+    },
+
     // 2. Intro to Data Science
     {
         id: 2,
@@ -56,7 +98,61 @@ const certificates = [
         costlink: "https://www.skooldio.com/courses/data-science-01",
         certificateLink: "https://www.skooldio.com/certificate/b2d8f435-7e96-46e9-a85f-6dc066d83f0e"
     },
-    
+
+    // 18. Dashboard Design Principles by Skooldio
+    {
+        id: 18,
+        image: "certificate-design-principle.png",
+        title: "Dashboard Design Principles",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "หลักการออกแบบ Dashboard ให้คนอ่านเข้าใจได้ในครั้งเดียว 1) เลือกชนิดกราฟให้ตรงกับคำถามที่อยากตอบ 2) จัดลำดับความสำคัญและวางเลย์เอาต์ตามทางที่สายตาคนอ่านวิ่ง 3) ใช้สีและพื้นที่ว่างให้สื่อความหมาย ไม่ใช่ใส่เพื่อความสวย 4) ตัดส่วนที่ไม่ได้ใช้ตัดสินใจออก สอนโดยอดีต Data Scientist ที่ Facebook เป็นคอร์สที่ผมหยิบมาใช้ตอนออกแบบแดชบอร์ดจริงบ่อยที่สุด",
+        notionLink: "https://app.notion.com/p/second-brain-phubordin/Data-Analytics-Bootcamp-Skooldio-31d2ea218a158060b105e8b447892767?source=copy_link",
+        cost: "฿1,490 ($44)",
+        costlink: "https://www.skooldio.com/courses/dashboard-design-principles"
+    },
+
+    // 19. Driving Business Impact with Data by Skooldio
+    {
+        id: 19,
+        image: "certificate-data-driven.png",
+        title: "Driving Business Impact with Data",
+        school: "Skooldio",
+        schoolLink: "https://www.skooldio.com/",
+        description: "มองข้อมูลจากมุมธุรกิจ 1) แนวคิดพื้นฐานว่าข้อมูลสร้างมูลค่าให้ธุรกิจได้ตรงจุดไหน 2) การตั้งโจทย์ให้ตรงกับสิ่งที่ธุรกิจอยากรู้ก่อนลงมือวิเคราะห์ 3) การเลือกตัวชี้วัดที่สะท้อนผลลัพธ์จริง ไม่ใช่ตัวเลขที่ดูดีอย่างเดียว 4) การวางแผนขับเคลื่อนองค์กรด้วยข้อมูล ทำให้เวลาส่งงานวิเคราะห์ ผมเล่าต่อได้ว่าตัวเลขนี้ควรทำให้ใครตัดสินใจอะไร",
+        notionLink: "https://app.notion.com/p/second-brain-phubordin/Data-Analytics-Bootcamp-Skooldio-31d2ea218a158060b105e8b447892767?source=copy_link",
+        cost: "฿1,490 ($44)",
+        costlink: "https://www.skooldio.com/courses/driving-business-impact-data"
+    },
+
+    // 5. DSB11 by DataRockie
+    {
+        id: 5,
+        image: "certificate-dsb11-datarockie.webp",
+        title: "Data Science Bootcamp Batch 11",
+        school: "DataRockie",
+        schoolLink: "https://bootcamp.datarockie.com/",
+        description: "สอบผ่านหลักสูตร Data Science Bootcamp (หลักสูตร 6 เดือน 100 ชั่วโมง) โดย DataRockie สำเร็จ ! ข้อสอบประกอบด้วยคำถามแบบเลือกตอบ 240 ข้อ เพื่อจะผ่านการทดสอบ นักเรียนจะต้องได้คะแนนขั้นต่ำ 192/240 คะแนน(me 223/240 คะแนน) Solid foundations on these topics: Spreadsheets, SQL databases, R, Python, Data Transformation, Data Visualization, Statistics, Intro to Machine Learning, Dashboard with Looker Studio and Tableau Public. อ่านต่อเพื่มได้ที่ notion นะครับ",
+        notionLink: "https://www.notion.so/second-brain-phubordin/Data-Science-Bootcamp-11-1dd2ea218a1580eca268c44d2e25f40b?source=copy_link",
+        cost: "฿4,900 ($143) Scholarship",
+        costlink: "https://datarockie.com/data-science-bootcamp/",
+        certificateLink: "https://badgr.com/public/assertions/eT01MdhOTkqB70L1NYBkVw?identity__email=phubordin.phanyosri%40gmail.com"
+    },
+
+    // 4. SQL Crash Course
+    {
+        id: 4,
+        image: "certificate-sql-crash-course.webp",
+        title: "SQL Crash Course",
+        school: "DataRockie",
+        schoolLink: "https://bootcamp.datarockie.com/",
+        description: "Connect database (SQLite), Select Columns, Rename Columns, Filter Rows → WHERE, Aggregate Function → Sum, Avg, Min, Max, Count, Group By, ORDER, Limit, Create and Drop Table, Import and Export Data",
+        notionLink: "https://second-brain-phubordin.notion.site/SQL-Crash-Course-1aa2ea218a158005b346c1b0375cf93d?pvs=4",
+        cost: "Free! ($0)",
+        costlink: "https://bootcamp.datarockie.com/p/sql-cc",
+        certificateLink: "https://data-science-bootcamp1.teachable.com/courses/enrolled/1877587"
+    },
+
     // 12. Data Analytics Program by W3School
     {
         id: 12,
@@ -85,34 +181,6 @@ const certificates = [
         certificateLink: "https://verify.w3schools.com/1PNV4D3H6E"
     },
 
-    // 4. SQL Crash Course
-    {
-        id: 4,
-        image: "certificate-sql-crash-course.webp",
-        title: "SQL Crash Course",
-        school: "DataRockie",
-        schoolLink: "https://bootcamp.datarockie.com/",
-        description: "Connect database (SQLite), Select Columns, Rename Columns, Filter Rows → WHERE, Aggregate Function → Sum, Avg, Min, Max, Count, Group By, ORDER, Limit, Create and Drop Table, Import and Export Data",
-        notionLink: "https://second-brain-phubordin.notion.site/SQL-Crash-Course-1aa2ea218a158005b346c1b0375cf93d?pvs=4",
-        cost: "Free! ($0)",
-        costlink: "https://bootcamp.datarockie.com/p/sql-cc",
-        certificateLink: "https://data-science-bootcamp1.teachable.com/courses/enrolled/1877587"
-    },
-    
-    // 5. DSB11 by DataRockie
-    {
-        id: 5,
-        image: "certificate-dsb11-datarockie.webp",
-        title: "Data Science Bootcamp Batch 11",
-        school: "DataRockie",
-        schoolLink: "https://bootcamp.datarockie.com/",
-        description: "สอบผ่านหลักสูตร Data Science Bootcamp (หลักสูตร 6 เดือน 100 ชั่วโมง) โดย DataRockie สำเร็จ ! ข้อสอบประกอบด้วยคำถามแบบเลือกตอบ 240 ข้อ เพื่อจะผ่านการทดสอบ นักเรียนจะต้องได้คะแนนขั้นต่ำ 192/240 คะแนน(me 223/240 คะแนน) Solid foundations on these topics: Spreadsheets, SQL databases, R, Python, Data Transformation, Data Visualization, Statistics, Intro to Machine Learning, Dashboard with Looker Studio and Tableau Public. อ่านต่อเพื่มได้ที่ notion นะครับ",
-        notionLink: "https://www.notion.so/second-brain-phubordin/Data-Science-Bootcamp-11-1dd2ea218a1580eca268c44d2e25f40b?source=copy_link",
-        cost: "฿4,900 ($143) Scholarship",
-        costlink: "https://datarockie.com/data-science-bootcamp/",
-        certificateLink: "https://badgr.com/public/assertions/eT01MdhOTkqB70L1NYBkVw?identity__email=phubordin.phanyosri%40gmail.com"
-    },
-    
     // 6. SQL Developer
     {
         id: 6,
@@ -126,7 +194,7 @@ const certificates = [
         costlink: "https://campus.w3schools.com/collections/certifications/products/sql-certificate",
         certificateLink: "https://verify.w3schools.com/1PRGZRSIM9"
     },
-    
+
     // 7. R Developer
     {
         id: 7,
@@ -140,7 +208,7 @@ const certificates = [
         costlink: "https://campus.w3schools.com/collections/course-catalog/products/r-course",
         certificateLink: "https://verify.w3schools.com/1PV590VMUV"
     },
-    
+
     // 8. Statistical Data Analyst
     {
         id: 8,
@@ -154,7 +222,7 @@ const certificates = [
         costlink: "https://campus.w3schools.com/products/statistics-certificate",
         certificateLink: "https://verify.w3schools.com/1PVAX9R0EB"
     },
-    
+
     // 9. Numpy Developer
     {
         id: 9,
@@ -168,7 +236,7 @@ const certificates = [
         costlink: "https://campus.w3schools.com/collections/certifications/products/numpy-certification-exam",
         certificateLink: "https://verify.w3schools.com/1PW3KWYI4I"
     },
-    
+
     // 10. Pandas Developer
     {
         id: 10,
@@ -182,7 +250,7 @@ const certificates = [
         costlink: "https://campus.w3schools.com/collections/certifications/products/pandas-certification-exam",
         certificateLink: "https://verify.w3schools.com/1PW3GVK5HQ"
     },
-    
+
     // 11. Python Developer
     {
         id: 11,
@@ -198,6 +266,14 @@ const certificates = [
     }
 
 ];
+
+// แสดงลิงก์เฉพาะใบที่มีข้อมูลจริง ใบไหนยังไม่มีก็ไม่ต้องขึ้นปุ่มเปล่า ๆ
+function certLink(url, inner, cls) {
+    if (!url) return "";
+    return `<a href="${url}" class="${cls || "certificate-link"}" target="_blank">${inner}</a>`;
+}
+
+const NOTION_ICON = `<span class="notes-icon">View Notes : <img src="notion.webp" width="20" class="notion-icon"> Notion</span>`;
 
 // Global variables
 let currentView = 'gallery';
@@ -243,7 +319,7 @@ function populateSchoolSelector() {
     if (!schoolSelector) return;
 
     const schools = [...new Set(certificates.map(cert => cert.school))];
-    schoolSelector.innerHTML = '<option value="all">All Schools (Update : Oct 2025)</option>';
+    schoolSelector.innerHTML = '<option value="all">All Schools (Update : Sep 2026)</option>';
     schools.forEach(school => {
         const option = document.createElement('option');
         option.value = school;
@@ -318,6 +394,7 @@ function renderCertificateCard(cert) {
 
     return `
         <div class="certificate-card fade-in" data-cert-id="${cert.id}">
+        ${cert.note ? `<span class="cert-note">${cert.note}</span>` : ""}
         <img src="${cert.image}" alt="${cert.title}" class="certificate-image cursor-zoom-in" onclick="openGalleryModal('${cert.image}')">
         
         <div class="certificate-details">
@@ -331,20 +408,9 @@ function renderCertificateCard(cert) {
             </details>
 
             <div class="certificate-links">
-            <a href="${cert.notionLink}" class="certificate-link" target="_blank">
-                <span class="notes-icon">
-                View Notes : <img src="notion.webp" width="20" class="notion-icon">
-                Notion
-                </span>
-            </a>
-
-            <a href="${cert.costlink}" class="certificate-link" target="_blank">
-                <span class="cost-icon"> Course Value : ${cert.cost}</span>
-            </a>
-
-            <a href="${cert.certificateLink}" class="certificate-link" target="_blank">
-                <span class="cost-icon">Verify Certificate</span>
-            </a>
+            ${certLink(cert.notionLink, NOTION_ICON)}
+            ${certLink(cert.costlink, `<span class="cost-icon"> Course Value : ${cert.cost}</span>`)}
+            ${certLink(cert.certificateLink, `<span class="cost-icon">Verify Certificate</span>`)}
             </div>
         </div>
         </div>
@@ -392,6 +458,7 @@ function renderSlideshowView() {
 
         slideshowView.innerHTML = `
             <div class="slideshow-container fade-in">
+                ${cert.note ? `<span class="cert-note">${cert.note}</span>` : ""}
                 <div class="slideshow-image">
                     <img src="${cert.image}" alt="${cert.title}">
                     <div class="slideshow-nav">
@@ -411,21 +478,10 @@ function renderSlideshowView() {
                     <p class="certificate-description link-cursor">${cert.description}</p>
 
                     <div class="certificate-links">
-                        <a href="${cert.notionLink}" class="certificate-link" target="_blank">
-                            <span class="notes-icon">
-                                View Notes : <img src="notion.webp" width="20" class="notion-icon">
-                                Notion
-                            </span>
-                        </a>
-                        
-                        <a href="${cert.costlink}" class="certificate-link"  target="_blank">
-                            <span class="cost-icon"> Course Value : ${cert.cost}</span>
-                        </a>
-                        
-                        <a href="${cert.certificateLink}" class="certificate-link" target="_blank">
-                            <span class="cost-icon">Verify Certificate</span>
-                        </a>
-                    </div>
+            ${certLink(cert.notionLink, NOTION_ICON)}
+            ${certLink(cert.costlink, `<span class="cost-icon"> Course Value : ${cert.cost}</span>`)}
+            ${certLink(cert.certificateLink, `<span class="cost-icon">Verify Certificate</span>`)}
+            </div>
                 </div>
             </div>
         `;
@@ -484,19 +540,15 @@ function renderListView() {
                                 <td>${renderSchoolInfo(cert)}</td>
 
                                 <td>
-                                  <a target="_blank" href="${cert.costlink}" class="check">
-                                    ${cert.cost}
-                                  </a>
+                                  ${certLink(cert.costlink, cert.cost, "check") || "–"}
                                 </td>
 
                                 <td>
-                                  <a target="_blank" href="${cert.notionLink}" class="check">
-                                    <img src="notion.webp" width="20" class="notion-icon"> Notion
-                                  </a>
+                                  ${certLink(cert.notionLink, `<img src="notion.webp" width="20" class="notion-icon"> Notion`, "check") || "–"}
                                 </td>
 
                                 <td>
-                                  <a target="_blank" href="${cert.certificateLink}" class="check">Verify</a>
+                                  ${certLink(cert.certificateLink, "Verify", "check") || "–"}
                                 </td>
                             </tr>
                         `).join('')}

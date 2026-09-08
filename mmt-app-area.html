@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สรุปสถานประกอบการและโรงเรียน — พื้นที่ตัวอย่าง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D2B29;--ink-2:#24413F;--muted:#617876;--faint:#95AAA8;
+--rule:#D9E5E4;--rule-soft:#E9F1F0;--paper:#FCFDFD;--panel:#F2F8F7;
+--bar:#2F615E;--bar-2:#8AAFAD;--accent:#00726E;--accent-soft:#E4F1F0;--pos:#00726E;--warn:#8A6D1F;
+--sans:'IBM Plex Sans Thai',-apple-system,'Noto Sans Thai',sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1220px;margin:0 auto;padding:0 26px 80px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header.mast{padding:46px 0 22px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
+h1{font-size:clamp(23px,3.4vw,33px);line-height:1.16;margin:0 0 11px;font-weight:600;letter-spacing:-.014em}
+.dek{font-size:15px;color:var(--ink-2);max-width:86ch;margin:0}
+nav.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin:0 0 34px;position:sticky;top:0;background:var(--paper);z-index:20}
+nav.tabs button{appearance:none;border:0;background:none;font-family:var(--sans);font-size:15.5px;font-weight:500;
+ color:var(--muted);padding:16px 24px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;transition:.15s}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+nav.tabs button span{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-left:8px}
+section.panel[hidden]{display:none}
+.sec{padding:8px 0 44px;border-bottom:1px solid var(--rule);margin-bottom:36px}
+.sec:last-child{border-bottom:0}
+.sec-head{display:flex;align-items:baseline;gap:13px;margin-bottom:6px}
+.sec-num{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.14em;padding-top:4px}
+h2{font-size:clamp(18px,2.4vw,23px);margin:0;font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin:0 0 26px 38px;max-width:84ch}
+@media(max-width:640px){.sub{margin-left:0}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:34px}
+.kpi{background:#fff;padding:17px 19px 15px}
+.kpi .k{font-family:var(--mono);font-size:9.6px;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.kpi .v{font-family:var(--mono);font-size:29px;font-weight:500;letter-spacing:-.02em;margin:7px 0 2px;line-height:1}
+.kpi .v.hi{color:var(--accent)}
+.kpi .n{font-size:12.3px;color:var(--muted)}
+/* histogram */
+.hist{border:1px solid var(--rule);background:#fff;padding:20px 22px 16px}
+.hist-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding-bottom:12px;margin-bottom:18px;border-bottom:2px solid var(--ink)}
+.hist-t{font-size:17px;font-weight:600}
+.hist-t small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:3px}
+.hist-n{font-family:var(--mono);font-size:20px;font-weight:500;text-align:right;line-height:1.15}
+.hist-n small{display:block;font-size:11px;color:var(--muted);font-family:var(--sans)}
+.cols{display:grid;align-items:end;height:250px;gap:7px}
+.col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px}
+.v{font-family:var(--mono);font-size:15px;font-weight:600}
+.v.z{color:var(--faint);font-weight:400}
+.bar{width:100%;background:var(--bar)}
+.bar.zero{height:2px;background:var(--rule)}
+.labs{display:grid;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--rule)}
+.lab{font-size:10px;color:var(--muted);text-align:center;line-height:1.35}
+.axis{text-align:center;font-size:11.5px;color:var(--faint);font-style:italic;margin-top:13px}
+.hfoot{margin-top:15px;padding-top:12px;border-top:1px solid var(--rule-soft);font-size:12.6px;color:var(--ink-2);line-height:1.65}
+.pair{display:grid;gap:30px}
+@media(min-width:940px){.pair{grid-template-columns:1fr 1fr}}
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--rule);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.3px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+thead th{background:var(--ink);color:#fff;font-weight:500;font-size:11.4px;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);white-space:nowrap}
+thead th.sortable{cursor:pointer;user-select:none;padding-right:26px;position:relative;transition:background .12s}
+thead th.sortable:hover{background:#164B48}
+thead th.sortable::after{content:"\2195";position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:11px;opacity:.32}
+thead th.sortable[aria-sort="ascending"]::after{content:"\2191";opacity:1;color:#7FD4D0}
+thead th.sortable[aria-sort="descending"]::after{content:"\2193";opacity:1;color:#7FD4D0}
+thead th.sortable:focus-visible{outline:2px solid #7FD4D0;outline-offset:-2px}
+.sorthint{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.04em;margin:0 0 9px 38px}
+@media(max-width:640px){.sorthint{margin-left:0}}
+tbody tr:hover{background:var(--panel)}
+td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.muted{color:var(--muted)}
+tfoot td{font-weight:600;background:var(--panel);font-family:var(--mono)}
+.mini{height:9px;background:var(--rule-soft);min-width:74px;position:relative}
+.mini i{position:absolute;top:0;bottom:0;left:0;background:var(--bar)}
+.mini i.hi{background:var(--accent)}
+.pill{display:inline-block;font-family:var(--mono);font-size:10.2px;padding:2px 7px;border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+.pill.sa{border-color:#B6D6D4;background:#E4F1F0;background:#E4F1F0;color:var(--accent)}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:15px 19px;font-size:14px;color:#124A47;margin-top:24px}
+.callout b{color:#00524F}
+.zgrid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media(min-width:760px){.zgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1080px){.zgrid{grid-template-columns:repeat(4,1fr)}}
+.zc{background:#fff;padding:17px 19px}
+.zc-t{font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.zc-v{font-family:var(--mono);font-size:25px;font-weight:500;margin:9px 0 1px;line-height:1}
+.zc-n{font-size:12.2px;color:var(--muted)}
+.zc-b{margin-top:11px;padding-top:10px;border-top:1px solid var(--rule-soft);font-size:11.4px;color:var(--faint);line-height:1.7}
+footer{padding:30px 0 0;border-top:2px solid var(--ink);font-size:12.4px;color:var(--muted);margin-top:44px}
+@media print{nav.tabs{display:none}section.panel[hidden]{display:block!important}.wrap{padding:0 10mm}}
+</style></head><body><div class="wrap">
+
+<header class="mast">
+  <div class="eyebrow">สรุปพื้นที่โดยรอบสาขา · พื้นที่ตัวอย่าง</div>
+  <h1>สถานประกอบการและโรงเรียนรอบสาขา</h1>
+  <p class="dek">แท็บแรกดูการกระจายขนาดสถานประกอบการและโอกาสรับพนักงานรายสาขา/รายโซน
+  แท็บที่สองดูการกระจายขนาดโรงเรียนแยกรัฐกับเอกชน</p>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" id="t-biz" aria-selected="true" aria-controls="p-biz">บริษัท<span id="tb-n"></span></button>
+  <button role="tab" id="t-sch" aria-selected="false" aria-controls="p-sch">โรงเรียน<span id="ts-n"></span></button>
+</nav>
+
+<!-- ================= BIZ ================= -->
+<section class="panel" id="p-biz" role="tabpanel" aria-labelledby="t-biz">
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><h2>ภาพรวมสถานประกอบการ</h2></div>
+    <p class="sub">นับจากรายการในจำนวนพนักงานเป็นค่าประมาณตามขนาดของสถานประกอบการ</p>
+    <div class="kpis" id="biz-kpis"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><h2>การกระจายขนาดสถานประกอบการ</h2></div>
+    <p class="sub">แบ่งช่วงตามจำนวนพนักงาน — ตัวเลขบนแท่งคือจำนวนสถานประกอบการในช่วงนั้น</p>
+    <div id="biz-hist"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><h2>สาขาไหนมีโอกาสรับพนักงานได้มากที่สุด</h2></div>
+    <p class="sub">เรียงตามจำนวนพนักงานรวมของสถานประกอบการที่อยู่ใกล้สาขานั้น — สถานประกอบการที่ระบุหลายสาขาจะนับให้ทุกสาขาที่ระบุ</p>
+    <p class="sorthint">คลิกหัวตารางเพื่อเรียงลำดับ</p><div id="biz-branchbar"></div>
+    <div class="tbl-wrap" style="margin-top:26px"><table id="t-branch"></table></div>
+    <div class="callout" id="branch-callout"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><h2>5 โซน + 2 stand alone</h2></div>
+    <p class="sub">จัดกลุ่มสาขาตามเขตที่รับผิดชอบ · นับสถานประกอบการแบบไม่ซ้ำภายในโซน</p>
+    <div class="zgrid" id="zone-cards"></div>
+    <p class="sorthint" style="margin-top:26px">คลิกหัวตารางเพื่อเรียงลำดับ</p><div class="tbl-wrap"><table id="t-zone"></table></div>
+    <div class="callout" id="zone-callout"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">05</span><h2>รายการสถานประกอบการทั้งหมด</h2></div>
+    <p class="sub">เรียงตามจำนวนพนักงานมากไปน้อย</p>
+    <p class="sorthint">คลิกหัวตารางเพื่อเรียงลำดับ</p><div class="tbl-wrap"><table id="tbl-biz"></table></div>
+  </div>
+</section>
+
+<!-- ================= SCHOOL ================= -->
+<section class="panel" id="p-sch" role="tabpanel" aria-labelledby="t-sch" hidden>
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">01</span><h2>ภาพรวมโรงเรียน</h2></div>
+    <p class="sub">นับแบบไม่ซ้ำ หลังรวมรายการที่เป็นโรงเรียนเดียวกันแต่สะกดต่างกันแล้ว</p>
+    <div class="kpis" id="sch-kpis"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">02</span><h2>การกระจายขนาดโรงเรียน — รัฐ vs เอกชน</h2></div>
+    <p class="sub">แกนช่วงจำนวนนักเรียนเหมือนกันทั้งสองกราฟ จึงเทียบรูปทรงการกระจายได้ตรง ๆ</p>
+    <div class="pair" id="sch-hist"></div>
+    <div class="callout" id="sch-callout"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">03</span><h2>เทียบช่วงต่อช่วง</h2></div>
+    <p class="sub">จำนวนโรงเรียนในแต่ละช่วง แยกตามสังกัด</p>
+    <p class="sorthint">คลิกหัวตารางเพื่อเรียงลำดับ</p><div class="tbl-wrap"><table id="t-schbin"></table></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-num">04</span><h2>แยกตามสังกัด</h2></div>
+    <p class="sub">โรงเรียนไม่ซ้ำทั้งหมด จำแนกตามหน่วยงานต้นสังกัด</p>
+    <p class="sorthint">คลิกหัวตารางเพื่อเรียงลำดับ</p><div id="sch-affil"></div>
+  </div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+<script>
+const D={"biz":{"biz":[{"no":1,"name":"สถานประกอบการ 001","emp":97,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":2,"name":"สถานประกอบการ 002","emp":579,"raw_branch":"สาขา P13","branches":["สาขา P13"],"zones":["พื้นที่ 01"]},{"no":3,"name":"สถานประกอบการ 003","emp":51,"raw_branch":"สาขา P01","branches":["สาขา P01"],"zones":["พื้นที่ 05"]},{"no":4,"name":"สถานประกอบการ 004","emp":180,"raw_branch":"สาขา P02","branches":["สาขา P02"],"zones":["พื้นที่ 03"]},{"no":5,"name":"สถานประกอบการ 005","emp":176,"raw_branch":"สาขา P11","branches":["สาขา P11"],"zones":["พื้นที่ 06"]},{"no":6,"name":"สถานประกอบการ 006","emp":173,"raw_branch":"สาขา P20","branches":["สาขา P20"],"zones":["พื้นที่ 05"]},{"no":7,"name":"สถานประกอบการ 007","emp":189,"raw_branch":"สาขา P20","branches":["สาขา P20"],"zones":["พื้นที่ 05"]},{"no":8,"name":"สถานประกอบการ 008","emp":23,"raw_branch":"สาขา P17","branches":["สาขา P17"],"zones":["พื้นที่ 03"]},{"no":9,"name":"สถานประกอบการ 009","emp":76,"raw_branch":"สาขา P03","branches":["สาขา P03"],"zones":["พื้นที่ 01"]},{"no":10,"name":"สถานประกอบการ 010","emp":98,"raw_branch":"สาขา P07","branches":["สาขา P07"],"zones":["พื้นที่ 01"]},{"no":11,"name":"สถานประกอบการ 011","emp":102,"raw_branch":"สาขา P24","branches":["สาขา P24"],"zones":["พื้นที่ 05"]},{"no":12,"name":"สถานประกอบการ 012","emp":20,"raw_branch":"สาขา P09","branches":["สาขา P09"],"zones":["พื้นที่ 03"]},{"no":13,"name":"สถานประกอบการ 013","emp":35,"raw_branch":"สาขา P16","branches":["สาขา P16"],"zones":["พื้นที่ 04"]},{"no":14,"name":"สถานประกอบการ 014","emp":22,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":15,"name":"สถานประกอบการ 015","emp":27,"raw_branch":"สาขา P17","branches":["สาขา P17"],"zones":["พื้นที่ 03"]},{"no":16,"name":"สถานประกอบการ 016","emp":125,"raw_branch":"สาขา P05","branches":["สาขา P05"],"zones":["พื้นที่ 05"]},{"no":17,"name":"สถานประกอบการ 017","emp":29,"raw_branch":"สาขา P07","branches":["สาขา P07"],"zones":["พื้นที่ 01"]},{"no":18,"name":"สถานประกอบการ 018","emp":159,"raw_branch":"พื้นที่ 07","branches":["พื้นที่ 07"],"zones":["พื้นที่ 07"]},{"no":19,"name":"สถานประกอบการ 019","emp":20,"raw_branch":"สาขา P03","branches":["สาขา P03"],"zones":["พื้นที่ 01"]},{"no":20,"name":"สถานประกอบการ 020","emp":8,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":21,"name":"สถานประกอบการ 021","emp":37,"raw_branch":"สาขา P01","branches":["สาขา P01"],"zones":["พื้นที่ 05"]},{"no":22,"name":"สถานประกอบการ 022","emp":8,"raw_branch":"พื้นที่ 02","branches":["พื้นที่ 02"],"zones":["พื้นที่ 02"]},{"no":23,"name":"สถานประกอบการ 023","emp":171,"raw_branch":"สาขา P03","branches":["สาขา P03"],"zones":["พื้นที่ 01"]},{"no":24,"name":"สถานประกอบการ 024","emp":27,"raw_branch":"สาขา P08","branches":["สาขา P08"],"zones":["พื้นที่ 03"]},{"no":25,"name":"สถานประกอบการ 025","emp":72,"raw_branch":"สาขา P07","branches":["สาขา P07"],"zones":["พื้นที่ 01"]},{"no":26,"name":"สถานประกอบการ 026","emp":116,"raw_branch":"สาขา P09","branches":["สาขา P09"],"zones":["พื้นที่ 03"]},{"no":27,"name":"สถานประกอบการ 027","emp":472,"raw_branch":"สาขา P23","branches":["สาขา P23"],"zones":["พื้นที่ 04"]},{"no":28,"name":"สถานประกอบการ 028","emp":110,"raw_branch":"สาขา P11","branches":["สาขา P11"],"zones":["พื้นที่ 06"]},{"no":29,"name":"สถานประกอบการ 029","emp":21,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":30,"name":"สถานประกอบการ 030","emp":123,"raw_branch":"สาขา P19","branches":["สาขา P19"],"zones":["พื้นที่ 06"]},{"no":31,"name":"สถานประกอบการ 031","emp":21,"raw_branch":"สาขา P21","branches":["สาขา P21"],"zones":["พื้นที่ 04"]},{"no":32,"name":"สถานประกอบการ 032","emp":34,"raw_branch":"พื้นที่ 07","branches":["พื้นที่ 07"],"zones":["พื้นที่ 07"]},{"no":33,"name":"สถานประกอบการ 033","emp":9,"raw_branch":"สาขา P06","branches":["สาขา P06"],"zones":["พื้นที่ 06"]},{"no":34,"name":"สถานประกอบการ 034","emp":88,"raw_branch":"พื้นที่ 07","branches":["พื้นที่ 07"],"zones":["พื้นที่ 07"]},{"no":35,"name":"สถานประกอบการ 035","emp":190,"raw_branch":"พื้นที่ 07","branches":["พื้นที่ 07"],"zones":["พื้นที่ 07"]},{"no":36,"name":"สถานประกอบการ 036","emp":122,"raw_branch":"สาขา P01","branches":["สาขา P01"],"zones":["พื้นที่ 05"]},{"no":37,"name":"สถานประกอบการ 037","emp":521,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":38,"name":"สถานประกอบการ 038","emp":66,"raw_branch":"สาขา P09","branches":["สาขา P09"],"zones":["พื้นที่ 03"]},{"no":39,"name":"สถานประกอบการ 039","emp":91,"raw_branch":"สาขา P15","branches":["สาขา P15"],"zones":["พื้นที่ 06"]},{"no":40,"name":"สถานประกอบการ 040","emp":431,"raw_branch":"สาขา P02","branches":["สาขา P02"],"zones":["พื้นที่ 03"]},{"no":41,"name":"สถานประกอบการ 041","emp":19,"raw_branch":"สาขา P12","branches":["สาขา P12"],"zones":["พื้นที่ 04"]},{"no":42,"name":"สถานประกอบการ 042","emp":187,"raw_branch":"สาขา P12","branches":["สาขา P12"],"zones":["พื้นที่ 04"]},{"no":43,"name":"สถานประกอบการ 043","emp":93,"raw_branch":"สาขา P06","branches":["สาขา P06"],"zones":["พื้นที่ 06"]},{"no":44,"name":"สถานประกอบการ 044","emp":205,"raw_branch":"พื้นที่ 07","branches":["พื้นที่ 07"],"zones":["พื้นที่ 07"]}],"bins":[{"label":"1–25","n":10,"emp":171,"names":["สถานประกอบการ 008","สถานประกอบการ 012","สถานประกอบการ 014","สถานประกอบการ 019","สถานประกอบการ 020","สถานประกอบการ 022","สถานประกอบการ 029","สถานประกอบการ 031","สถานประกอบการ 033","สถานประกอบการ 041"]},{"label":"26–50","n":6,"emp":189,"names":["สถานประกอบการ 013","สถานประกอบการ 015","สถานประกอบการ 017","สถานประกอบการ 021","สถานประกอบการ 024","สถานประกอบการ 032"]},{"label":"51–100","n":9,"emp":732,"names":["สถานประกอบการ 001","สถานประกอบการ 003","สถานประกอบการ 009","สถานประกอบการ 010","สถานประกอบการ 025","สถานประกอบการ 034","สถานประกอบการ 038","สถานประกอบการ 039","สถานประกอบการ 043"]},{"label":"101–200","n":14,"emp":2123,"names":["สถานประกอบการ 004","สถานประกอบการ 005","สถานประกอบการ 006","สถานประกอบการ 007","สถานประกอบการ 011","สถานประกอบการ 016","สถานประกอบการ 018","สถานประกอบการ 023","สถานประกอบการ 026","สถานประกอบการ 028","สถานประกอบการ 030","สถานประกอบการ 035","สถานประกอบการ 036","สถานประกอบการ 042"]},{"label":"201–500","n":3,"emp":1108,"names":["สถานประกอบการ 027","สถานประกอบการ 040","สถานประกอบการ 044"]},{"label":"501–1,000","n":2,"emp":1100,"names":["สถานประกอบการ 002","สถานประกอบการ 037"]},{"label":"มากกว่า 1,000","n":0,"emp":0,"names":[]}],"branches":[{"branch":"สาขา P15","zone":"พื้นที่ 06","n":7,"emp":760,"known":6,"unk":1,"items":[{"name":"สถานประกอบการ 037","emp":521},{"name":"สถานประกอบการ 001","emp":97},{"name":"สถานประกอบการ 039","emp":91},{"name":"สถานประกอบการ 014","emp":22},{"name":"สถานประกอบการ 029","emp":21},{"name":"สถานประกอบการ 020","emp":8}]},{"branch":"พื้นที่ 07","zone":"พื้นที่ 07","n":5,"emp":676,"known":5,"unk":0,"items":[{"name":"สถานประกอบการ 044","emp":205},{"name":"สถานประกอบการ 035","emp":190},{"name":"สถานประกอบการ 018","emp":159},{"name":"สถานประกอบการ 034","emp":88},{"name":"สถานประกอบการ 032","emp":34}]},{"branch":"สาขา P02","zone":"พื้นที่ 03","n":2,"emp":611,"known":2,"unk":0,"items":[{"name":"สถานประกอบการ 040","emp":431},{"name":"สถานประกอบการ 004","emp":180}]},{"branch":"สาขา P13","zone":"พื้นที่ 01","n":2,"emp":579,"known":1,"unk":1,"items":[{"name":"สถานประกอบการ 002","emp":579}]},{"branch":"สาขา P23","zone":"พื้นที่ 04","n":1,"emp":472,"known":1,"unk":0,"items":[{"name":"สถานประกอบการ 027","emp":472}]},{"branch":"สาขา P20","zone":"พื้นที่ 05","n":2,"emp":362,"known":2,"unk":0,"items":[{"name":"สถานประกอบการ 007","emp":189},{"name":"สถานประกอบการ 006","emp":173}]},{"branch":"สาขา P11","zone":"พื้นที่ 06","n":3,"emp":286,"known":2,"unk":1,"items":[{"name":"สถานประกอบการ 005","emp":176},{"name":"สถานประกอบการ 028","emp":110}]},{"branch":"สาขา P03","zone":"พื้นที่ 01","n":3,"emp":267,"known":3,"unk":0,"items":[{"name":"สถานประกอบการ 023","emp":171},{"name":"สถานประกอบการ 009","emp":76},{"name":"สถานประกอบการ 019","emp":20}]},{"branch":"สาขา P01","zone":"พื้นที่ 05","n":4,"emp":210,"known":3,"unk":1,"items":[{"name":"สถานประกอบการ 036","emp":122},{"name":"สถานประกอบการ 003","emp":51},{"name":"สถานประกอบการ 021","emp":37}]},{"branch":"สาขา P12","zone":"พื้นที่ 04","n":2,"emp":206,"known":2,"unk":0,"items":[{"name":"สถานประกอบการ 042","emp":187},{"name":"สถานประกอบการ 041","emp":19}]},{"branch":"สาขา P09","zone":"พื้นที่ 03","n":3,"emp":202,"known":3,"unk":0,"items":[{"name":"สถานประกอบการ 026","emp":116},{"name":"สถานประกอบการ 038","emp":66},{"name":"สถานประกอบการ 012","emp":20}]},{"branch":"สาขา P07","zone":"พื้นที่ 01","n":4,"emp":199,"known":3,"unk":1,"items":[{"name":"สถานประกอบการ 010","emp":98},{"name":"สถานประกอบการ 025","emp":72},{"name":"สถานประกอบการ 017","emp":29}]},{"branch":"สาขา P05","zone":"พื้นที่ 05","n":2,"emp":125,"known":1,"unk":1,"items":[{"name":"สถานประกอบการ 016","emp":125}]},{"branch":"สาขา P19","zone":"พื้นที่ 06","n":1,"emp":123,"known":1,"unk":0,"items":[{"name":"สถานประกอบการ 030","emp":123}]},{"branch":"สาขา P06","zone":"พื้นที่ 06","n":3,"emp":102,"known":2,"unk":1,"items":[{"name":"สถานประกอบการ 043","emp":93},{"name":"สถานประกอบการ 033","emp":9}]},{"branch":"สาขา P24","zone":"พื้นที่ 05","n":2,"emp":102,"known":1,"unk":1,"items":[{"name":"สถานประกอบการ 011","emp":102}]},{"branch":"สาขา P17","zone":"พื้นที่ 03","n":2,"emp":50,"known":2,"unk":0,"items":[{"name":"สถานประกอบการ 015","emp":27},{"name":"สถานประกอบการ 008","emp":23}]},{"branch":"สาขา P16","zone":"พื้นที่ 04","n":1,"emp":35,"known":1,"unk":0,"items":[{"name":"สถานประกอบการ 013","emp":35}]},{"branch":"สาขา P08","zone":"พื้นที่ 03","n":1,"emp":27,"known":1,"unk":0,"items":[{"name":"สถานประกอบการ 024","emp":27}]},{"branch":"สาขา P21","zone":"พื้นที่ 04","n":1,"emp":21,"known":1,"unk":0,"items":[{"name":"สถานประกอบการ 031","emp":21}]},{"branch":"พื้นที่ 02","zone":"พื้นที่ 02","n":2,"emp":8,"known":1,"unk":1,"items":[{"name":"สถานประกอบการ 022","emp":8}]}],"allBranches":[{"branch":"สาขา P15","zone":"พื้นที่ 06","n":7,"emp":760,"known":6,"unk":1},{"branch":"พื้นที่ 07","zone":"พื้นที่ 07","n":5,"emp":676,"known":5,"unk":0},{"branch":"สาขา P02","zone":"พื้นที่ 03","n":2,"emp":611,"known":2,"unk":0},{"branch":"สาขา P13","zone":"พื้นที่ 01","n":2,"emp":579,"known":1,"unk":1},{"branch":"สาขา P23","zone":"พื้นที่ 04","n":1,"emp":472,"known":1,"unk":0},{"branch":"สาขา P20","zone":"พื้นที่ 05","n":2,"emp":362,"known":2,"unk":0},{"branch":"สาขา P11","zone":"พื้นที่ 06","n":3,"emp":286,"known":2,"unk":1},{"branch":"สาขา P03","zone":"พื้นที่ 01","n":3,"emp":267,"known":3,"unk":0},{"branch":"สาขา P01","zone":"พื้นที่ 05","n":4,"emp":210,"known":3,"unk":1},{"branch":"สาขา P12","zone":"พื้นที่ 04","n":2,"emp":206,"known":2,"unk":0},{"branch":"สาขา P09","zone":"พื้นที่ 03","n":3,"emp":202,"known":3,"unk":0},{"branch":"สาขา P07","zone":"พื้นที่ 01","n":4,"emp":199,"known":3,"unk":1},{"branch":"สาขา P05","zone":"พื้นที่ 05","n":2,"emp":125,"known":1,"unk":1},{"branch":"สาขา P19","zone":"พื้นที่ 06","n":1,"emp":123,"known":1,"unk":0},{"branch":"สาขา P06","zone":"พื้นที่ 06","n":3,"emp":102,"known":2,"unk":1},{"branch":"สาขา P24","zone":"พื้นที่ 05","n":2,"emp":102,"known":1,"unk":1},{"branch":"สาขา P17","zone":"พื้นที่ 03","n":2,"emp":50,"known":2,"unk":0},{"branch":"สาขา P16","zone":"พื้นที่ 04","n":1,"emp":35,"known":1,"unk":0},{"branch":"สาขา P08","zone":"พื้นที่ 03","n":1,"emp":27,"known":1,"unk":0},{"branch":"สาขา P21","zone":"พื้นที่ 04","n":1,"emp":21,"known":1,"unk":0},{"branch":"พื้นที่ 02","zone":"พื้นที่ 02","n":2,"emp":8,"known":1,"unk":1},{"branch":"พื้นที่ 01","zone":"พื้นที่ 01","n":0,"emp":0,"known":0,"unk":0},{"branch":"สาขา P14","zone":"พื้นที่ 01","n":0,"emp":0,"known":0,"unk":0},{"branch":"สาขา P18","zone":"พื้นที่ 03","n":0,"emp":0,"known":0,"unk":0},{"branch":"สาขา P25","zone":"พื้นที่ 04","n":0,"emp":0,"known":0,"unk":0}],"zones":[{"zone":"พื้นที่ 06","branches":4,"n":14,"emp":1271,"unk":3,"standalone":false,"blist":["สาขา P06","สาขา P11","สาขา P15","สาขา P19"]},{"zone":"พื้นที่ 01","branches":5,"n":9,"emp":1045,"unk":2,"standalone":false,"blist":["พื้นที่ 01","สาขา P03","สาขา P07","สาขา P13","สาขา P14"]},{"zone":"พื้นที่ 03","branches":5,"n":8,"emp":890,"unk":0,"standalone":false,"blist":["สาขา P02","สาขา P08","สาขา P09","สาขา P17","สาขา P18"]},{"zone":"พื้นที่ 05","branches":4,"n":10,"emp":799,"unk":3,"standalone":false,"blist":["สาขา P01","สาขา P05","สาขา P20","สาขา P24"]},{"zone":"พื้นที่ 04","branches":5,"n":5,"emp":734,"unk":0,"standalone":false,"blist":["สาขา P12","สาขา P16","สาขา P21","สาขา P23","สาขา P25"]},{"zone":"พื้นที่ 07","branches":1,"n":5,"emp":676,"unk":0,"standalone":true,"blist":["พื้นที่ 07"]},{"zone":"พื้นที่ 02","branches":1,"n":2,"emp":8,"unk":1,"standalone":true,"blist":["พื้นที่ 02"]}],"zoneBranches":{"พื้นที่ 02":["พื้นที่ 02"],"พื้นที่ 06":["สาขา P06","สาขา P11","สาขา P15","สาขา P19"],"พื้นที่ 03":["สาขา P02","สาขา P08","สาขา P09","สาขา P17","สาขา P18"],"พื้นที่ 04":["สาขา P12","สาขา P16","สาขา P21","สาขา P23","สาขา P25"],"พื้นที่ 05":["สาขา P01","สาขา P05","สาขา P20","สาขา P24"],"พื้นที่ 01":["สาขา P03","พื้นที่ 01","สาขา P07","สาขา P13","สาขา P14"],"พื้นที่ 07":["พื้นที่ 07"]},"stats":{"total":53,"known":44,"unknown":9,"emp":5423,"mapped":44,"unmapped":9,"med":93,"mx":579,"mn":8},"unmapped":["สถานประกอบการ 045","สถานประกอบการ 046","สถานประกอบการ 047","สถานประกอบการ 048","สถานประกอบการ 049","สถานประกอบการ 050","สถานประกอบการ 051","สถานประกอบการ 052","สถานประกอบการ 053"]},"sch":{"binsPub":[{"label":"ต่ำกว่า 100","n":10,"conf":8,"est":2,"stu":717,"names":["โรงเรียน 004","โรงเรียน 007","โรงเรียน 013","โรงเรียน 023","โรงเรียน 045","โรงเรียน 051","โรงเรียน 054","โรงเรียน 070","โรงเรียน 084","โรงเรียน 090"]},{"label":"100–200","n":12,"conf":8,"est":4,"stu":1765,"names":["โรงเรียน 020","โรงเรียน 036","โรงเรียน 039","โรงเรียน 040","โรงเรียน 049","โรงเรียน 076","โรงเรียน 093","โรงเรียน 094","โรงเรียน 097","โรงเรียน 101","โรงเรียน 103","โรงเรียน 114"]},{"label":"201–500","n":19,"conf":9,"est":10,"stu":5928,"names":["โรงเรียน 025","โรงเรียน 026","โรงเรียน 034","โรงเรียน 037","โรงเรียน 038","โรงเรียน 043","โรงเรียน 046","โรงเรียน 047","โรงเรียน 064","โรงเรียน 069","โรงเรียน 077","โรงเรียน 081","โรงเรียน 092","โรงเรียน 098","โรงเรียน 102","โรงเรียน 111","โรงเรียน 112","โรงเรียน 118","โรงเรียน 123"]},{"label":"501–1,000","n":25,"conf":15,"est":10,"stu":18732,"names":["โรงเรียน 003","โรงเรียน 005","โรงเรียน 010","โรงเรียน 012","โรงเรียน 015","โรงเรียน 017","โรงเรียน 027","โรงเรียน 028","โรงเรียน 035","โรงเรียน 044","โรงเรียน 048","โรงเรียน 050","โรงเรียน 056","โรงเรียน 062","โรงเรียน 063","โรงเรียน 075","โรงเรียน 086","โรงเรียน 091","โรงเรียน 099","โรงเรียน 109","โรงเรียน 113","โรงเรียน 116","โรงเรียน 119","โรงเรียน 121","โรงเรียน 122"]},{"label":"1,001–2,000","n":12,"conf":5,"est":7,"stu":17213,"names":["โรงเรียน 001","โรงเรียน 011","โรงเรียน 019","โรงเรียน 031","โรงเรียน 055","โรงเรียน 060","โรงเรียน 083","โรงเรียน 096","โรงเรียน 100","โรงเรียน 104","โรงเรียน 108","โรงเรียน 117"]},{"label":"มากกว่า 2,000","n":8,"conf":3,"est":5,"stu":22588,"names":["โรงเรียน 033","โรงเรียน 041","โรงเรียน 058","โรงเรียน 067","โรงเรียน 078","โรงเรียน 106","โรงเรียน 110","โรงเรียน 115"]}],"binsPrv":[{"label":"ต่ำกว่า 100","n":3,"conf":0,"est":3,"stu":178,"names":["โรงเรียน 018","โรงเรียน 032","โรงเรียน 080"]},{"label":"100–200","n":8,"conf":0,"est":8,"stu":1244,"names":["โรงเรียน 022","โรงเรียน 029","โรงเรียน 042","โรงเรียน 053","โรงเรียน 057","โรงเรียน 059","โรงเรียน 065","โรงเรียน 073"]},{"label":"201–500","n":11,"conf":0,"est":11,"stu":3810,"names":["โรงเรียน 006","โรงเรียน 008","โรงเรียน 021","โรงเรียน 061","โรงเรียน 072","โรงเรียน 079","โรงเรียน 082","โรงเรียน 085","โรงเรียน 087","โรงเรียน 095","โรงเรียน 107"]},{"label":"501–1,000","n":14,"conf":0,"est":14,"stu":9533,"names":["โรงเรียน 002","โรงเรียน 009","โรงเรียน 014","โรงเรียน 016","โรงเรียน 024","โรงเรียน 030","โรงเรียน 052","โรงเรียน 066","โรงเรียน 068","โรงเรียน 071","โรงเรียน 074","โรงเรียน 088","โรงเรียน 089","โรงเรียน 120"]},{"label":"1,001–2,000","n":1,"conf":0,"est":1,"stu":1579,"names":["โรงเรียน 105"]},{"label":"มากกว่า 2,000","n":0,"conf":0,"est":0,"stu":0,"names":[]}],"pub":{"n":86,"stu":66943,"conf":48,"mn":30,"mx":3400},"prv":{"n":37,"stu":16344,"conf":0,"mn":44,"mx":1579},"stats":{"rows":143,"schoolRows":131,"uniq":123,"stu":83287,"confN":48,"confStu":29680},"affil":[{"a":"สังกัด 02","n":12,"stu":11793},{"a":"สังกัด 01","n":11,"stu":8913},{"a":"สังกัด 08","n":9,"stu":8143},{"a":"สังกัด 05","n":14,"stu":7501},{"a":"สังกัด 06","n":8,"stu":6500},{"a":"สังกัด 10","n":9,"stu":6408},{"a":"สังกัด 12","n":6,"stu":6346},{"a":"สังกัด 03","n":9,"stu":5546},{"a":"สังกัด 14","n":7,"stu":5053},{"a":"สังกัด 04","n":3,"stu":4893},{"a":"สังกัด 07","n":10,"stu":3329},{"a":"สังกัด 11","n":7,"stu":3246},{"a":"สังกัด 09","n":7,"stu":3014},{"a":"สังกัด 13","n":11,"stu":2602}]}}, B=D.biz, S=D.sch;
+const nf=n=>n==null?'–':Math.round(n).toLocaleString('en-US');
+const el=i=>document.getElementById(i);
+
+/* tabs */
+const tabs=[['t-biz','p-biz'],['t-sch','p-sch']];
+tabs.forEach(([t,p])=>el(t).addEventListener('click',()=>{
+  tabs.forEach(([t2,p2])=>{const on=t2===t;el(t2).setAttribute('aria-selected',on);el(p2).hidden=!on;});
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+el('tb-n').textContent=B.stats.total; el('ts-n').textContent=S.stats.uniq;
+
+/* generic histogram */
+function hist(title,sub,bins,total,totalLabel,axis,foot,key){
+  const mx=Math.max(...bins.map(b=>b[key]),1), H=232, n=bins.length;
+  return `<div class="hist">
+   <div class="hist-h"><div class="hist-t">${title}<small>${sub}</small></div>
+   <div class="hist-n num">${total}<small>${totalLabel}</small></div></div>
+   <div class="cols" style="grid-template-columns:repeat(${n},1fr)">${bins.map(b=>{
+     const v=b[key], h=v?Math.max(v/mx*H,5):0;
+     return `<div class="col"><div class="v${v?'':' z'}">${v}</div>
+      <div class="bar${v?'':' zero'}" ${v?`style="height:${h}px"`:''}></div></div>`;
+   }).join('')}</div>
+   <div class="labs" style="grid-template-columns:repeat(${n},1fr)">${bins.map(b=>`<div class="lab">${b.label}</div>`).join('')}</div>
+   <div class="axis">${axis}</div>
+   <div class="hfoot">${foot}</div></div>`;
+}
+
+/* ---------- BIZ ---------- */
+const bs=B.stats;
+el('biz-kpis').innerHTML=[
+ ['สถานประกอบการ',nf(bs.total),`ระบุจำนวนพนักงาน ${bs.known} แห่ง`,true],
+ ['พนักงานรวม',nf(bs.emp),'คน จากที่ระบุตัวเลข',false],
+ ['ค่ามัธยฐาน',nf(bs.med),'คนต่อแห่ง',false],
+ ['ช่วงขนาด',nf(bs.mn)+'–'+nf(bs.mx),'เล็กสุด – ใหญ่สุด',false],
+ ['ระบุสาขาใกล้เคียง',nf(bs.mapped),`ไม่ระบุ ${bs.unmapped} แห่ง`,false],
+].map(([k,v,n,hi])=>`<div class="kpi"><div class="k">${k}</div><div class="v num${hi?' hi':''}">${v}</div><div class="n">${n}</div></div>`).join('');
+
+const bigN=B.bins.slice(4).reduce((s,b)=>s+b.n,0), bigE=B.bins.slice(4).reduce((s,b)=>s+b.emp,0);
+el('biz-hist').innerHTML=hist('ขนาดสถานประกอบการ','แบ่งตามจำนวนพนักงาน · '+bs.known+' แห่งที่ระบุตัวเลข',
+ B.bins,bs.known,'แห่ง · '+nf(bs.emp)+' คน','จำนวนพนักงาน (คน)',
+ `<b>ส่วนใหญ่เป็นรายเล็กถึงกลาง</b> — ${B.bins.slice(0,4).reduce((s,b)=>s+b.n,0)} จาก ${bs.known} แห่ง (${Math.round(B.bins.slice(0,4).reduce((s,b)=>s+b.n,0)/bs.known*100)}%) มีพนักงานไม่เกิน 200 คน
+  แต่กลุ่มใหญ่ ${bigN} แห่งที่เกิน 200 คน กลับมีพนักงานรวม <b>${nf(bigE)} คน หรือ ${Math.round(bigE/bs.emp*100)}%</b> ของทั้งหมด`,'n');
+
+/* branch bar */
+const bl=B.allBranches.filter(b=>b.n>0), mxE=Math.max(...bl.map(b=>b.emp));
+el('biz-branchbar').innerHTML=`<div class="tbl-wrap"><table><thead><tr>
+ <th>สาขา</th><th>โซน</th><th style="text-align:right">สถานประกอบการ</th>
+ <th style="text-align:right">พนักงานรวม</th><th>สัดส่วน</th></tr></thead><tbody>`+
+ bl.map((b,i)=>`<tr><td><b>${b.branch}</b></td><td class="muted">${b.zone}</td>
+  <td class="n">${b.n}${b.unk?`<span class="muted" style="font-size:11px"> (ไม่ระบุ ${b.unk})</span>`:''}</td>
+  <td class="n"><b>${nf(b.emp)}</b></td>
+  <td><div class="mini"><i class="${i===0?'hi':''}" style="width:${b.emp/mxE*100}%"></i></div></td></tr>`).join('')+
+ `</tbody></table></div>`;
+
+const zeroB=B.allBranches.filter(b=>b.n===0);
+el('t-branch').innerHTML=`<thead><tr><th>สาขาที่ยังไม่มีสถานประกอบการในรายการ</th><th>โซน</th></tr></thead><tbody>`+
+ zeroB.map(b=>`<tr><td>${b.branch}</td><td class="muted">${b.zone}</td></tr>`).join('')+`</tbody>`;
+
+const t1=bl[0],t2=bl[1];
+el('branch-callout').innerHTML=`<b>สาขาที่มีโอกาสรับพนักงานสูงสุด:</b>
+ <b>${t1.branch}</b> (โซน${t1.zone}) — ${t1.n} แห่ง รวม <b>${nf(t1.emp)} คน</b>
+ รองลงมา <b>${t2.branch}</b> (โซน${t2.zone}) ${t2.n} แห่ง รวม ${nf(t2.emp)} คน
+ <br><br><b>ข้อสังเกต:</b> ${t2.branch} มีสถานประกอบการน้อยกว่า แต่พนักงานรวมเกือบเท่ากัน เพราะมีรายใหญ่กระจุกอยู่
+ — <b>จำนวนสถานประกอบการไม่ได้บอกโอกาสรับพนักงาน ต้องดูขนาดด้วย</b>
+ · ยังมี <b>${zeroB.length} สาขา</b> ที่ยังไม่มีสถานประกอบการในรายการนี้`;
+
+/* zones */
+const zmaxE=Math.max(...B.zones.map(z=>z.emp));
+el('zone-cards').innerHTML=B.zones.map(z=>`<div class="zc">
+ <div class="zc-t"><span>${z.zone}</span>${z.standalone?'<span class="pill sa">stand alone</span>':`<span class="pill">${z.branches} สาขา</span>`}</div>
+ <div class="zc-v num">${nf(z.emp)}</div><div class="zc-n">คน · ${z.n} สถานประกอบการ${z.unk?` (ไม่ระบุ ${z.unk})`:''}</div>
+ <div class="zc-b">${z.blist.join(' · ')}</div></div>`).join('');
+
+el('t-zone').innerHTML=`<thead><tr><th>โซน</th><th>ประเภท</th><th style="text-align:right">สาขา</th>
+ <th style="text-align:right">สถานประกอบการ</th><th style="text-align:right">พนักงานรวม</th>
+ <th style="text-align:right">เฉลี่ยต่อสาขา</th><th>สัดส่วน</th></tr></thead><tbody>`+
+ B.zones.slice().sort((a,b)=>b.emp-a.emp).map(z=>`<tr><td><b>${z.zone}</b></td>
+  <td class="muted">${z.standalone?'stand alone':'โซน'}</td><td class="n">${z.branches}</td>
+  <td class="n">${z.n||'–'}</td><td class="n"><b>${z.emp?nf(z.emp):'–'}</b></td>
+  <td class="n muted">${z.emp?nf(z.emp/z.branches):'–'}</td>
+  <td><div class="mini"><i class="${z.emp===zmaxE?'hi':''}" style="width:${z.emp/zmaxE*100}%"></i></div></td></tr>`).join('')+
+ `</tbody><tfoot><tr><td>รวม</td><td></td><td class="n">${B.zones.reduce((s,z)=>s+z.branches,0)}</td>
+  <td class="n">${bs.mapped}</td><td class="n">${nf(B.zones.reduce((s,z)=>s+z.emp,0))}</td><td></td><td></td></tr></tfoot>`;
+
+const zs=B.zones.slice().sort((a,b)=>b.emp-a.emp);
+el('zone-callout').innerHTML=`<b>โซน${zs[0].zone}และโซน${zs[1].zone}คือแหล่งแรงงานหลัก</b> —
+ รวมกัน ${zs[0].n+zs[1].n} สถานประกอบการ และ <b>${nf(zs[0].emp+zs[1].emp)} คน</b> หรือ
+ ${Math.round((zs[0].emp+zs[1].emp)/B.zones.reduce((s,z)=>s+z.emp,0)*100)}% ของพนักงานทั้งหมดที่สำรวจได้
+ <br><br>ส่วน <b>โซนพื้นที่ 01</b> มี 5 สาขาแต่พบสถานประกอบการเพียง 1 แห่ง และ
+ <b>พื้นที่ 02</b> (stand alone) ยังไม่พบเลย — สองจุดนี้น่าจะเป็นช่องว่างของการสำรวจมากกว่าพื้นที่ที่ไม่มีสถานประกอบการจริง`;
+
+/* biz table */
+const sorted=B.biz.slice().sort((a,b)=>(b.emp||-1)-(a.emp||-1));
+el("tbl-biz").innerHTML=`<thead><tr><th>#</th><th>ชื่อสถานประกอบการ</th>
+ <th style="text-align:right">พนักงาน</th><th>ช่วงขนาด</th><th>สาขาใกล้เคียง</th><th>โซน</th></tr></thead><tbody>`+
+ sorted.map((b,i)=>`<tr><td class="n muted">${i+1}</td><td><b>${b.name}</b></td>
+  <td class="n">${b.emp!=null?'<b>'+nf(b.emp)+'</b>':'<span class="muted">ไม่ระบุ</span>'}</td>
+  <td class="muted">${b.emp!=null?(function(n){for(const[lo,hi,l]of[[1,25,'1–25'],[26,50,'26–50'],[51,100,'51–100'],[101,200,'101–200'],[201,500,'201–500'],[501,1000,'501–1,000'],[1001,1e9,'มากกว่า 1,000']])if(n>=lo&&n<=hi)return l;})(b.emp):'–'}</td>
+  <td class="muted">${b.branches.length?b.branches.join(', '):'<span style="color:var(--faint)">ไม่ระบุ</span>'}</td>
+  <td class="muted">${b.zones.length?b.zones.join(', '):'–'}</td></tr>`).join('')+
+ `</tbody><tfoot><tr><td></td><td>รวม ${bs.total} แห่ง</td><td class="n">${nf(bs.emp)}</td><td></td><td></td><td></td></tr></tfoot>`;
+
+/* ---------- SCHOOL ---------- */
+const ss=S.stats;
+el('sch-kpis').innerHTML=[
+ ['โรงเรียนไม่ซ้ำ',nf(ss.uniq),`จาก ${ss.schoolRows} แถวที่เป็นโรงเรียน`,true],
+ ['นักเรียนรวม','~'+nf(ss.stu),'คน (ยืนยัน+ประมาณการ)',false],
+ ['ยืนยันแล้ว',nf(ss.confStu),`คน · ${ss.confN} โรงเรียน`,false],
+ ['สังกัดรัฐ',nf(S.pub.n),'โรงเรียน · ~'+nf(S.pub.stu)+' คน',false],
+ ['สังกัดเอกชน',nf(S.prv.n),'โรงเรียน · ~'+nf(S.prv.stu)+' คน',false],
+].map(([k,v,n,hi])=>`<div class="kpi"><div class="k">${k}</div><div class="v num${hi?' hi':''}">${v}</div><div class="n">${n}</div></div>`).join('');
+
+el('sch-hist').innerHTML=
+ hist('โรงเรียนสังกัดรัฐ','สังกัดรัฐทุกประเภท',S.binsPub,S.pub.n,
+  'โรงเรียน · ~'+nf(S.pub.stu)+' คน','จำนวนนักเรียน (คน)',
+  `<b>กระจายกว้าง มีครบทุกช่วง</b> — เล็กสุด ${nf(S.pub.mn)} คน ใหญ่สุด ${nf(S.pub.mx)} คน ·
+   ยืนยันตัวเลขแล้ว ${S.pub.conf} จาก ${S.pub.n} แห่ง`,'n') +
+ hist('โรงเรียนสังกัดเอกชน','สังกัดเอกชนทุกประเภท',S.binsPrv,S.prv.n,
+  'โรงเรียน · ~'+nf(S.prv.stu)+' คน','จำนวนนักเรียน (คน)',
+  `<b>เกาะกลุ่มแคบที่ช่วงกลาง</b> — ${S.binsPrv[1].n+S.binsPrv[2].n} จาก ${S.prv.n} แห่งอยู่ในช่วง 100–500 คน ·
+   ไม่มีแห่งใดในช่วง 501–1,000 · <b>ยังไม่มีตัวเลขยืนยันแม้แห่งเดียว</b>`,'n');
+
+el('sch-callout').innerHTML=`<b>สองฝั่งมีโครงสร้างขนาดต่างกันชัดเจน:</b> ฝั่งรัฐมีโรงเรียนเกิน 1,000 คนถึง
+ <b>${S.binsPub[4].n+S.binsPub[5].n} แห่ง</b> ขณะที่ฝั่งเอกชนมีเพียง <b>${S.binsPrv[4].n+S.binsPrv[5].n} แห่ง</b>
+ ในทางกลับกันฝั่งเอกชนกระจุกที่ช่วง 201–500 คน ถึง ${S.binsPrv[2].n} แห่ง
+ `;
+
+el('t-schbin').innerHTML=`<thead><tr><th>ช่วงจำนวนนักเรียน</th><th style="text-align:right">รัฐ</th>
+ <th style="text-align:right">เอกชน</th><th style="text-align:right">รวม</th>
+ <th style="text-align:right">สัดส่วนเอกชน</th><th>รายชื่อฝั่งเอกชนในช่วงนี้</th></tr></thead><tbody>`+
+ S.binsPub.map((p,i)=>{const q=S.binsPrv[i],t=p.n+q.n;
+  return `<tr><td><b>${p.label}</b></td><td class="n">${p.n||'–'}</td><td class="n">${q.n||'–'}</td>
+  <td class="n"><b>${t||'–'}</b></td><td class="n muted">${t?Math.round(q.n/t*100)+'%':'–'}</td>
+  <td class="muted" style="font-size:12.2px">${q.names.length?q.names.join(' · '):'—'}</td></tr>`}).join('')+
+ `</tbody><tfoot><tr><td>รวม</td><td class="n">${S.pub.n}</td><td class="n">${S.prv.n}</td>
+  <td class="n">${ss.uniq}</td><td class="n">${Math.round(S.prv.n/ss.uniq*100)}%</td><td></td></tr></tfoot>`;
+
+const amax=Math.max(...S.affil.map(a=>a.stu));
+el('sch-affil').innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>สังกัด</th>
+ <th style="text-align:right">โรงเรียน</th><th style="text-align:right">นักเรียน</th><th>สัดส่วน</th></tr></thead><tbody>`+
+ S.affil.map(a=>`<tr><td><b>${a.a}</b></td><td class="n">${a.n}</td><td class="n"><b>~${nf(a.stu)}</b></td>
+  <td><div class="mini"><i class="${a.stu===amax?'hi':''}" style="width:${a.stu/amax*100}%"></i></div></td></tr>`).join('')+
+ `</tbody><tfoot><tr><td>รวม</td><td class="n">${ss.uniq}</td><td class="n">~${nf(ss.stu)}</td><td></td></tr></tfoot></table></div>`;
+
+
+/* ---------- sortable tables ---------- */
+function cellValue(td){
+  if(!td) return {n:NaN,s:''};
+  const bar=td.querySelector('.mini i');
+  if(bar) return {n:parseFloat(bar.style.width)||0,s:''};
+  const raw=(td.textContent||'').trim();
+  const cleaned=raw.replace(/[,\s~]/g,'').replace(/[–—-]/g,'-');
+  const m=cleaned.match(/-?\d+(\.\d+)?/);
+  const hasDigit=/\d/.test(raw);
+  return {n:hasDigit&&m?parseFloat(m[0]):NaN,s:raw};
+}
+function makeSortable(table){
+  const thead=table.tHead, tbody=table.tBodies[0];
+  if(!thead||!tbody) return;
+  const ths=[...thead.rows[0].cells];
+  ths.forEach((th,idx)=>{
+    th.classList.add('sortable'); th.tabIndex=0;
+    th.setAttribute('role','columnheader'); th.title='คลิกเพื่อเรียงลำดับ';
+    const run=()=>{
+      const rows=[...tbody.rows];
+      const vals=rows.map(r=>cellValue(r.cells[idx]));
+      const numeric=vals.filter(v=>!isNaN(v.n)).length >= Math.max(1,Math.ceil(rows.length*0.6));
+      const cur=th.getAttribute('aria-sort');
+      const dir = cur==='descending' ? 'ascending'
+                : cur==='ascending'  ? 'descending'
+                : (numeric?'descending':'ascending');
+      ths.forEach(o=>o.removeAttribute('aria-sort'));
+      th.setAttribute('aria-sort',dir);
+      const sign = dir==='ascending' ? 1 : -1;
+      const idxOf=new Map(rows.map((r,i)=>[r,i]));
+      rows.sort((a,b)=>{
+        const va=cellValue(a.cells[idx]), vb=cellValue(b.cells[idx]);
+        let c;
+        if(numeric){
+          const na=isNaN(va.n)?-Infinity:va.n, nb=isNaN(vb.n)?-Infinity:vb.n;
+          c = na===nb ? 0 : (na<nb?-1:1);
+        } else {
+          c = va.s.localeCompare(vb.s,'th',{numeric:true,sensitivity:'base'});
+        }
+        return c!==0 ? c*sign : idxOf.get(a)-idxOf.get(b);   /* stable */
+      });
+      const frag=document.createDocumentFragment();
+      rows.forEach(r=>frag.appendChild(r));
+      tbody.appendChild(frag);
+    };
+    th.addEventListener('click',run);
+    th.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run();}});
+  });
+}
+document.querySelectorAll('table').forEach(makeSortable);
+
+el('foot').innerHTML=`<p>ทุกตารางคลิกหัวคอลัมน์เพื่อเรียงลำดับได้ (คลิกซ้ำเพื่อสลับมาก→น้อย / น้อย→มาก)<br>
+ <b>ข้อมูลจำลองทั้งหมด</b> — ชื่อสถานประกอบการ ชื่อโรงเรียน ชื่อสาขา และตัวเลขทุกตัวถูกสมมติขึ้นใหม่เพื่อใช้นำเสนอผลงาน</p>`;
+</script></body></html>

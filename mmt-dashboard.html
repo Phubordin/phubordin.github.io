@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MKCCGG3QF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0MKCCGG3QF');
+    </script>
+    <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Phubordin Phanyosri">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, Dashboard">
+    <title>Performance Dashboard — มิตรไมตรีการแพทย์</title>
+    <meta name="description" content="แดชบอร์ดติดตามผลประกอบการรายสาขา 8 หน้า เขียนด้วย HTML และ JavaScript ล้วน (ข้อมูลจำลอง)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body class="fade-slide-in">
+    <header>
+        <div class="header-background"></div>
+        <span class="link-cursor strong1">Performance Dashboard</span>
+    </header>
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <a style="text-decoration: none;" href="experience_mmt.html">
+        <button class="back-button">⬅︎ ผลงานที่ มิตรไมตรีการแพทย์</button>
+    </a>
+
+    <section>
+        <div class="demo-banner">
+            <span aria-hidden="true">🔒</span>
+            <span><b>ข้อมูลในหน้านี้เป็นข้อมูลจำลองทั้งหมด</b> — ชื่อองค์กร ชื่อสาขา ชื่อผู้รับบริการ
+                และตัวเลขทุกตัว ถูกสร้างขึ้นใหม่เพื่อการนำเสนอ ไม่มีข้อมูลจริงของบริษัทหรือผู้รับบริการอยู่เลย
+                ส่วนโครงสร้างข้อมูล ตรรกะการคำนวณ และรูปแบบการนำเสนอ คงไว้ตามงานจริงทุกอย่าง</span>
+        </div>
+
+        <h2 class="link-cursor">แดชบอร์ดติดตามผลประกอบการรายสาขา</h2>
+        <p class="hero-lede">แดชบอร์ด 8 หน้าในไฟล์เดียว เปิดจากเบราว์เซอร์ได้เลยโดยไม่ต้องมีเซิร์ฟเวอร์ ครอบคลุมตั้งแต่เทียบเป้ารายเดือน ไปจนถึงการวิเคราะห์ลูกค้าเก่า–ใหม่ และเวลารอรับบริการ</p>
+
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>โจทย์</h3>
+                <p>ผู้บริหารต้องรอรายงานสรุปรายเดือนที่ประกอบจากหลายไฟล์ กว่าจะเห็นว่าสาขาไหนหลุดเป้าก็ผ่านไปครึ่งเดือน และเมื่อเห็นแล้วก็ยังไม่มีที่ให้เจาะต่อว่าหลุดเพราะอะไร</p>
+            </div>
+            <div class="brief">
+                <h3>ข้อมูล</h3>
+                <p>รวมจากระบบขายระดับรายบรรทัด ตารางเป้ารายสาขา ข้อมูลประชากรในพื้นที่ กำลังคน และพิกัดที่ตั้ง ผ่าน Power Query แล้วสรุปเป็นตารางย่อยฝังไว้ในไฟล์เดียว</p>
+            </div>
+            <div class="brief">
+                <h3>สิ่งที่ทำ</h3>
+                <p>ออกแบบโครงข้อมูลให้ทุกหน้าใช้ชุดเดียวกัน เขียนกราฟเป็น SVG เองทั้งหมดโดยไม่พึ่งไลบรารีภายนอก ทำตัวกรองที่จำค่าข้ามหน้า และคุมขนาดไฟล์ให้เปิดบนเว็บได้จริง</p>
+            </div>
+            <div class="brief">
+                <h3>ผลลัพธ์</h3>
+                <p>เห็นสถานะได้ทันทีโดยไม่ต้องรอรอบรายงาน เจาะจากภาพรวมลงถึงรายสาขารายวันได้ในไม่กี่คลิก และเปิดบนมือถือได้เพราะเป็นไฟล์เดียวจบ</p>
+            </div>
+        </div>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="mmt-app-dashboard.html" target="_blank" rel="noopener">เปิดแบบเต็มจอ ↗</a>
+            <a class="btn btn-ghost" href="experience_mmt.html">ดูผลงานชิ้นอื่น</a>
+        </div>
+
+        <div class="app-stage">
+            <iframe src="mmt-app-dashboard.html" title="แดชบอร์ดติดตามผลประกอบการรายสาขา" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

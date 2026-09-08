@@ -1,6 +1,5 @@
-<!-- project_DB.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 
 <head>
     <!-- Google Analytics -->
@@ -15,24 +14,21 @@
     <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
          ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
     <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
-    <!-- ใส่ธีมก่อนเบราว์เซอร์วาดหน้าแรก กันหน้าจอแฟลชขาวตอนเปลี่ยนหน้า -->
-    <script>try{if(localStorage.getItem("theme")==="dark")document.documentElement.classList.add("dark-mode")}catch(e){}</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, GitHub Pages">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, Dashboard, Cohort, RFM">
     <meta name="author" content="Phubordin Phanyosri">
     <title>Experience - มิตรไมตรีการแพทย์</title>
+    <meta name="description" content="ผลงานในตำแหน่ง Data Analyst ที่มิตรไมตรีการแพทย์ — แดชบอร์ดผลประกอบการ วิเคราะห์การเปลี่ยนสิทธิ์ ฟอร์มแผนปฏิบัติการ และศูนย์รวมข้อมูลของฝ่าย">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="certificate-style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
-    <meta name="description" content="ผลงานในตำแหน่ง Data Analyst ที่มิตรไมตรีการแพทย์ (Nov 2025 - ปัจจุบัน) โดย Phubordin Phanyosri">
 </head>
 
 <body class="fade-slide-in">
     <header>
         <div class="header-background"></div>
-        <span class= "link-cursor strong1">มิตรไมตรีการแพทย์</span>
+        <span class="link-cursor strong1">มิตรไมตรีการแพทย์</span>
     </header>
 
     <nav class="primary" aria-label="เมนูหลัก"></nav>
@@ -49,20 +45,184 @@
             <span class="date-info" data-since="2025-11">Nov 2025 – ปัจจุบัน</span>
         </p>
 
-        <p class="link-cursor" style="text-align: justify; text-indent: 1em;">
-            <mark>กำลังเรียบเรียงผลงานในตำแหน่งนี้อยู่ครับ</mark>
-            เนื้อหาจะทยอยอัปเดตเร็วๆ นี้ ระหว่างนี้ดูตัวอย่างงานที่ผมทำในตำแหน่ง Data Analyst
-            ได้จากหน้า Leowood Intertrade ซึ่งมีรายงานและแดชบอร์ดครบทุกส่วนครับ
+        <p class="hero-lede" style="max-width:46rem">
+            ดูแลข้อมูลของเครือคลินิกที่มีสาขากระจายอยู่หลายจังหวัด งานหลักคือทำให้ตัวเลขที่กระจัดกระจาย
+            อยู่ในหลายระบบ กลายเป็นภาพเดียวที่ผู้บริหารและทีมหน้าร้านใช้ตัดสินใจได้จริง
+            ตั้งแต่งานวางท่อข้อมูล ไปจนถึงหน้าเว็บที่คนในทีมเปิดใช้ทุกวัน
         </p>
 
-        <div class="hero-actions">
-            <a class="btn btn-primary" href="experience_leowood.html">ดูผลงานที่ Leowood</a>
+        <div class="panel" style="margin-bottom:var(--s6)">
+            <div class="panel-head">
+                <span class="panel-title">ขอบเขตงานที่ดูแล</span>
+                <span class="panel-note">ข้อมูลจำลองเพื่อการนำเสนอ</span>
+            </div>
+            <div class="kpi-row">
+                <div class="kpi">
+                    <span class="kpi-note">ทั้งเครือ</span>
+                    <span class="kpi-num">75</span><span class="kpi-label">สาขา</span>
+                </div>
+                <div class="kpi"><span class="kpi-num">32</span><span class="kpi-label">เดือนย้อนหลัง</span></div>
+                <div class="kpi"><span class="kpi-num">7</span><span class="kpi-label">ระบบที่ส่งมอบ</span></div>
+            </div>
+        </div>
+
+        <div class="demo-banner">
+            <span aria-hidden="true">🔒</span>
+            <span><b>ผลงานทุกชิ้นด้านล่างใช้ข้อมูลจำลองทั้งหมด</b> — ชื่อองค์กร ชื่อสาขา ชื่อผู้รับบริการ
+                และตัวเลขทุกตัว ถูกสร้างขึ้นใหม่เพื่อการนำเสนอ ไม่มีข้อมูลจริงของบริษัทหรือผู้รับบริการอยู่เลย
+                ส่วนโครงสร้างข้อมูล ตรรกะการคำนวณ และรูปแบบการนำเสนอ คงไว้ตามงานจริงทุกอย่าง</span>
+        </div>
+    </section>
+
+    <section>
+        <h3>What I Do Here</h3>
+        <div class="grid-2">
+            <div class="brief">
+                <h3>Data Pipeline</h3>
+                <p>รวมข้อมูลการรับบริการระดับรายบรรทัดจากหลายแหล่ง ทำความสะอาด จับคู่รหัสที่สะกดไม่ตรงกัน
+                    แล้วสรุปเป็นตารางที่พร้อมใช้ ด้วย Python และ Power Query</p>
+            </div>
+            <div class="brief">
+                <h3>Data Modeling</h3>
+                <p>จัดโครงแบบ Star Schema ใน Power BI เขียน DAX สำหรับตัวชี้วัดที่ทีมใช้ประจำ
+                    และทำ Calculation Group ให้สลับมุมมองได้โดยไม่ต้องสร้าง measure ซ้ำ</p>
+            </div>
+            <div class="brief">
+                <h3>Advanced Analytics</h3>
+                <p>Cohort Analysis ดูการกลับมาใช้บริการ, RFM แบ่งกลุ่มลูกค้า,
+                    Market Basket หาบริการที่มักถูกใช้ร่วมกัน และวิเคราะห์การเปลี่ยนสิทธิ์การชำระ</p>
+            </div>
+            <div class="brief">
+                <h3>Product Delivery</h3>
+                <p>ไม่หยุดที่รายงาน แต่ทำเป็นหน้าเว็บที่คนในทีมเปิดใช้เองได้ทุกวัน
+                    ทั้งแดชบอร์ด ฟอร์มกรอกแผน และศูนย์รวมข้อมูลที่แยกสิทธิ์ตามเขต</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h3>Selected Work</h3>
+        <p class="hero-lede">กดเข้าไปดูได้ทุกชิ้น แต่ละหน้าจะเล่าโจทย์และวิธีคิดก่อน แล้วค่อยให้เปิดตัวงานจริง</p>
+
+        <div class="grid-2">
+            <a class="project" href="mmt-dashboard.html">
+                <h3>⭐️ แดชบอร์ดติดตามผลประกอบการ</h3>
+                <p class="text-description">
+                    8 หน้าในไฟล์เดียว เทียบเป้ารายเดือน หาสาขาที่หลุดเป้า ดูการกลับมาใช้บริการ
+                    และเวลารอรับบริการ กราฟทั้งหมดเขียนเป็น SVG เองโดยไม่ใช้ไลบรารีภายนอก
+                </p>
+                <div class="tags">
+                    <span class="tag tag-accent">JavaScript</span>
+                    <span class="tag">SVG</span>
+                    <span class="tag">Cohort</span>
+                    <span class="tag">Geo Map</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-rights-switching.html">
+                <h3>⭐️ วิเคราะห์ลูกค้าเปลี่ยนสิทธิ์ + Line OA</h3>
+                <p class="text-description">
+                    ตามรอยการเปลี่ยนสิทธิ์การชำระของลูกค้าคนเดียวกัน 4 ครั้งล่าสุด
+                    แล้วแปลงเป็นรายชื่อที่ทีมหน้าร้านหยิบไปติดต่อได้ พร้อม Sankey และหน้ารายบุคคล
+                </p>
+                <div class="tags">
+                    <span class="tag tag-accent"><img src="python.png" alt=""> Python</span>
+                    <span class="tag">Sankey</span>
+                    <span class="tag">Segmentation</span>
+                    <span class="tag">Line OA</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-branch-daily.html">
+                <h3>รายงานยอดขายรายวัน รายสาขา</h3>
+                <p class="text-description">
+                    หน้าที่ผู้จัดการสาขาเปิดดูเองทุกเช้า ยอดเมื่อวานเทียบวันก่อนหน้า
+                    เทียบค่าเฉลี่ย 7 วัน และความคืบหน้าเป้าเดือนนี้ อ่านจบใน 15 วินาที
+                </p>
+                <div class="tags">
+                    <span class="tag">Templating</span>
+                    <span class="tag">Daily Report</span>
+                    <span class="tag">Mobile First</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-target-group.html">
+                <h3>⭐️ คัดกลุ่มเป้าหมายสินค้าราคาสูง</h3>
+                <p class="text-description">
+                    ผู้ซื้อจริงมีแค่หลักสิบคน แต่ฐานลูกค้าเกือบแสนห้า จึงใช้ look-alike
+                    ให้คะแนนทุกคนด้วยเกณฑ์ชุดเดียว ได้รายชื่อพร้อมโทรที่กดดูเหตุผลรายคนได้
+                </p>
+                <div class="tags">
+                    <span class="tag tag-accent"><img src="python.png" alt=""> Python</span>
+                    <span class="tag">Lead Scoring</span>
+                    <span class="tag">Market Basket</span>
+                    <span class="tag">Look-alike</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-portal.html">
+                <h3>ศูนย์รวมข้อมูลของฝ่าย</h3>
+                <p class="text-description">
+                    หน้าเดียวที่รวมทุกรายงานไว้ พร้อมระบบล็อกอินแยกสิทธิ์ตามเขต
+                    หน้าจัดการผู้ใช้ และระบบโหวตวาระประชุม
+                </p>
+                <div class="tags">
+                    <span class="tag">Apps Script</span>
+                    <span class="tag">Auth</span>
+                    <span class="tag">UX</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-action-plan.html">
+                <h3>ฟอร์มแผนปฏิบัติการรายเขต</h3>
+                <p class="text-description">
+                    เปลี่ยนการทำแผนจากไฟล์เอกสารที่ส่งกันไปมา เป็นฟอร์มที่กรอกเสร็จแล้ว
+                    ได้ PDF, Excel และ PowerPoint พร้อมนำเสนอทันที
+                </p>
+                <div class="tags">
+                    <span class="tag">Google Sheet</span>
+                    <span class="tag">Apps Script</span>
+                    <span class="tag">Export</span>
+                </div>
+            </a>
+
+            <a class="project" href="mmt-area-survey.html">
+                <h3>สำรวจพื้นที่รอบสาขา</h3>
+                <p class="text-description">
+                    สรุปสถานประกอบการและโรงเรียนรอบสาขา เพื่อจัดลำดับว่าควรเข้าไปคุย
+                    กับสาขาไหนก่อนในการหาลูกค้าองค์กร
+                </p>
+                <div class="tags">
+                    <span class="tag">Data Cleaning</span>
+                    <span class="tag">Entity Matching</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <h3>Tools &amp; Stack</h3>
+        <div class="tags">
+            <span class="tag tag-accent"><img src="python.png" alt=""> Python</span>
+            <span class="tag tag-accent"><img src="SQL.png" alt=""> SQL</span>
+            <span class="tag tag-accent">Power BI</span>
+            <span class="tag">DAX</span>
+            <span class="tag">Power Query</span>
+            <span class="tag">Star Schema</span>
+            <span class="tag tag-accent"><img src="sheets.png" alt=""> Google Sheets</span>
+            <span class="tag">Apps Script</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">HTML / CSS</span>
+        </div>
+
+        <div class="hero-actions" style="margin-top:var(--s6)">
+            <a class="btn btn-primary" href="mmt-dashboard.html">เริ่มดูจากแดชบอร์ด</a>
+            <a class="btn btn-ghost" href="experience_leowood.html">ดูผลงานที่ Leowood</a>
             <a class="btn btn-ghost" href="project.html">ดูโปรเจกต์ทั้งหมด</a>
         </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="script.js"></script>
-    <script src="certificate-script.js"></script>
 </body>
+
 </html>

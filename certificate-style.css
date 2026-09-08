@@ -414,3 +414,68 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ป้ายก้อนเมฆลอยบนการ์ดใบเซอร์ — ใช้กับใบที่มีเรื่องเล่าเพิ่ม เช่น ใบที่ลงทุนสูงเป็นพิเศษ
+   การ์ดตั้ง overflow:hidden ไว้เพื่อตัดมุมรูป จึงต้องเปิดให้ป้ายล้นออกมาได้เฉพาะการ์ดที่มีป้าย */
+.certificate-card:has(.cert-note) {
+    overflow: visible;
+    margin-top: var(--s5);
+}
+
+.certificate-card {
+    position: relative;
+}
+
+.cert-note {
+    position: absolute;
+    top: -13px;
+    right: -8px;
+    z-index: 2;
+    padding: 3px 11px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--r-full);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--accent);
+    white-space: nowrap;
+    box-shadow:
+        0 6px 14px -4px rgba(0, 0, 0, .28),
+        0 2px 4px rgba(0, 0, 0, .14);
+    animation: floatCloud 4.5s ease-in-out infinite;
+}
+
+/* ปุ่มนูนสองก้อน ทำให้เป็นทรงก้อนเมฆ */
+.cert-note::before,
+.cert-note::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+}
+
+.cert-note::before {
+    width: 15px;
+    height: 15px;
+    top: -7px;
+    left: 16px;
+}
+
+.cert-note::after {
+    width: 10px;
+    height: 10px;
+    top: -5px;
+    left: 33px;
+}
+
+/* มุมมองสไลด์ก็ให้ป้ายลอยได้เหมือนกัน */
+.slideshow-container {
+    position: relative;
+}
+
+.slideshow-container:has(.cert-note) {
+    margin-top: var(--s5);
+}

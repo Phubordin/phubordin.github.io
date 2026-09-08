@@ -15,7 +15,14 @@ const NAV = [
     ["about.html", "About Me"],
     ["experience.html", "Work Experience", [
         ["experience_mmt.html", `${ic("mmt_logo.jpg", 35)} มิตรไมตรีการแพทย์`],
-        ["experience_leowood.html", `${ic("leowood_logo.png", 35)} Leowood Intertrade Co Ltd.`],
+        ["mmt-dashboard.html", "&nbsp;&nbsp;↳ แดชบอร์ดผลประกอบการ"],
+        ["mmt-branch-daily.html", "&nbsp;&nbsp;↳ รายงานรายวันรายสาขา"],
+        ["mmt-target-group.html", "&nbsp;&nbsp;↳ คัดกลุ่มเป้าหมายสินค้าราคาสูง"],
+        ["mmt-rights-switching.html", "&nbsp;&nbsp;↳ วิเคราะห์เปลี่ยนสิทธิ์ + Line OA"],
+        ["mmt-portal.html", "&nbsp;&nbsp;↳ ศูนย์รวมข้อมูลของฝ่าย"],
+        ["mmt-action-plan.html", "&nbsp;&nbsp;↳ ฟอร์มแผนปฏิบัติการรายเขต"],
+        ["mmt-area-survey.html", "&nbsp;&nbsp;↳ สำรวจพื้นที่รอบสาขา"],
+        ["experience_leowood.html", `${ic("leowood_logo.png", 35)} Leowood Intertrade`],
     ]],
     ["project.html", "Project Overview", [
         ["p13_pokemon_card.html", `⭐️ P13 : Pokemon Card - Skooldio Project`],
@@ -163,7 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
         link.textContent = heading.textContent.replace(/\s+/g, " ").replace(/^[\s|·:–-]+/, "").trim();
         link.addEventListener("click", function (event) {
             event.preventDefault();
-            heading.scrollIntoView({ behavior: "smooth", block: "center" });
+            const y = heading.getBoundingClientRect().top + window.scrollY - topOffset();
+            window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
             tocLinks.forEach(l => l.classList.remove("highlighted"));
             link.classList.add("highlighted");
         });
@@ -174,15 +182,28 @@ document.addEventListener("DOMContentLoaded", function () {
         tocLinks.push(link);
     });
 
+    /* แถบเมนูลอยอยู่ด้านบน หัวข้อจึงต้องหยุดต่ำกว่านั้นถึงจะไม่โดนบัง
+       ค่านี้ใช้เป็นทั้งจุดหยุดตอนกดลิงก์ และเส้นวัดว่าหัวข้อไหน "ขึ้นบนสุดแล้ว" */
+    function topOffset() {
+        const nav = document.querySelector("nav.primary");
+        const h = nav ? nav.getBoundingClientRect().height : 0;
+        return Math.round(h + 16);
+    }
+
     function updateTOCHighlight() {
-        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        // หัวข้อที่ใช้งานอยู่ = อันล่างสุดที่เลื่อนพ้นเส้นใกล้ขอบบนจอไปแล้ว
+        const line = topOffset() + 8;
         let current = -1;
         headings.forEach((heading, index) => {
-            const parent = heading.closest("section");
-            if (!parent) return;
-            if (scrollPosition >= parent.offsetTop - window.innerHeight * 0.55 &&
-                scrollPosition < parent.offsetTop + parent.offsetHeight) current = index;
+            if (heading.getBoundingClientRect().top <= line) current = index;
         });
+        // เลื่อนถึงท้ายหน้าแล้ว หัวข้อสุดท้ายอาจสั้นเกินกว่าจะพ้นเส้น จึงตรึงไว้ให้
+        const atEnd = window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 2;
+        if (atEnd) current = headings.length - 1;
+        // ช่วงบนสุดยังไม่มีหัวข้อไหนขึ้นถึงเส้น ค้างไว้ที่หัวข้อแรก
+        // จะได้ไม่มีจังหวะที่สารบัญว่างเปล่าจนดูเหมือนใช้งานไม่ได้
+        if (current === -1) current = 0;
         tocLinks.forEach((link, i) => link.classList.toggle("highlighted", i === current));
     }
 
@@ -535,6 +556,25 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll("details").forEach(detail => {
         detail.addEventListener("toggle", () => {
             if (detail.open) setTimeout(() => requestAnimationFrame(renderMermaids), 500);
+        });
+    });
+});
+
+/* =========================================================================
+   โหลดแอปที่ฝังไว้เมื่อผู้ใช้กดเท่านั้น
+   ไฟล์งานบางตัวหนักสิบเมกะไบต์ ถ้าโหลดทันทีที่เปิดหน้า คนอ่านจะรอนานโดยไม่จำเป็น
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-app-src]").forEach(stage => {
+        const btn = stage.querySelector("[data-app-load]");
+        if (!btn) return;
+        btn.addEventListener("click", () => {
+            const frame = document.createElement("iframe");
+            frame.src = stage.dataset.appSrc;
+            frame.title = stage.dataset.appTitle || "ตัวอย่างงาน";
+            frame.loading = "lazy";
+            stage.innerHTML = "";
+            stage.appendChild(frame);
         });
     });
 });

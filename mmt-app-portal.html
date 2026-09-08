@@ -1,0 +1,4092 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<base target="_top"><!-- needed inside the Apps Script iframe; harmless locally -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="app-version" content="2026-08-14.5-sec">
+<title>ศูนย์รวมข้อมูลฝ่าย A</title>
+<link rel="icon" id="favicon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* mmi — Department A :: shared design tokens */
+:root {
+  --mmi-teal-900: #052e2a;
+  --mmi-teal-800: #06413b;
+  --mmi-teal-700: #0a564e;
+  --mmi-teal-600: #0e7a70;
+  --mmi-teal-500: #12a094;
+  --mmi-teal-400: #2ec4b6;
+  --mmi-orange: #f5a623;
+  --mmi-orange-soft: #ffc45f;
+  --ink: #eafffb;
+  --ink-dim: #9dc9c2;
+  --ink-faint: #5f8b85;
+
+  --glass: rgba(6, 46, 42, 0.72);
+  --glass-line: rgba(46, 196, 182, 0.28);
+  --glass-line-hot: rgba(46, 196, 182, 0.6);
+
+  --font: 'Sarabun', 'Segoe UI', Tahoma, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --glow: 0 0 24px rgba(46, 196, 182, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--mmi-teal-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Futuristic lab backdrop: deep teal + scanning grid + vignette */
+.lab-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(18, 160, 148, 0.28), transparent 70%),
+    radial-gradient(900px 600px at 100% 100%, rgba(245, 166, 35, 0.12), transparent 65%),
+    linear-gradient(160deg, #052e2a 0%, #04211f 55%, #021513 100%);
+}
+
+.lab-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(46, 196, 182, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 196, 182, 0.07) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, #000 20%, transparent 78%);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-lockup img {
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  /* sits flush in the panel — a drop shadow here made the logo look
+     like a separate tile floating above the bar */
+  box-shadow: inset 0 0 0 1px rgba(122, 231, 220, 0.18);
+  flex: none;
+}
+
+.brand-lockup .brand-text b {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.brand-lockup .brand-text span {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-dim);
+}
+
+/* Author credit — Department A */
+.credit {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--ink-faint);
+  text-align: center;
+}
+
+/* each part on its own line */
+.credit .credit-en,
+.credit b,
+.credit .credit-org {
+  display: block;
+}
+
+.credit b {
+  color: var(--ink-dim);
+  font-weight: 700;
+  margin: 2px 0 3px;
+}
+
+.credit .credit-en {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 10px;
+  color: var(--mmi-orange);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mmi-teal-400);
+  background: rgba(46, 196, 182, 0.08);
+}
+
+.chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--mmi-teal-400);
+  box-shadow: 0 0 8px var(--mmi-teal-400);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001s !important; transition-duration: 0.001s !important; }
+}
+/* Login screen — auth panel floating over the live physics lab */
+
+.login-body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-playground {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.login-brand {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 8;
+  max-width: min(70vw, 420px);
+  padding: 10px 18px 10px 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-md);
+  backdrop-filter: blur(14px);
+  pointer-events: none;
+}
+
+/* company name + FP&A department line, top-left of the login screen */
+.login-brand .brand-text b { font-size: 14px; }
+.login-brand .brand-text span {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-dim);
+}
+
+.login-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 24px 40px;
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  width: 366px;
+  max-width: 100%;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 30px 28px 22px;
+  background: linear-gradient(165deg, rgba(6, 46, 42, 0.9), rgba(3, 26, 24, 0.94));
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(122, 231, 220, 0.16);
+  pointer-events: auto;
+  animation: cardIn 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(26px) rotateY(-9deg); }
+  to { opacity: 1; transform: none; }
+}
+
+/* orange accent sweep along the top edge */
+.login-card-glow {
+  position: absolute;
+  top: 0;
+  left: 14%;
+  width: 72%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mmi-orange), transparent);
+  filter: blur(0.4px);
+}
+
+.login-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.login-logo {
+  width: 62px;
+  height: 62px;
+  border-radius: 15px;
+  box-shadow: 0 0 0 1px rgba(122, 231, 220, 0.2);
+}
+
+.login-head h1 {
+  margin: 13px 0 5px;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.login-head p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+}
+
+.login-field { margin-bottom: 14px; }
+
+.login-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.login-field input {
+  width: 100%;
+  padding: 11px 13px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  background: rgba(2, 21, 19, 0.75);
+  border: 1px solid rgba(46, 196, 182, 0.22);
+  border-radius: var(--r-sm);
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.login-field input::placeholder { color: rgba(157, 201, 194, 0.4); }
+
+.login-field input:focus {
+  border-color: var(--mmi-teal-400);
+  box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.15), var(--glow);
+}
+
+.login-error {
+  margin: 0 0 13px;
+  padding: 9px 12px;
+  font-size: 12px;
+  color: #ffd9c2;
+  background: rgba(245, 90, 35, 0.14);
+  border: 1px solid rgba(245, 120, 35, 0.42);
+  border-radius: var(--r-sm);
+}
+
+.login-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: #04211f;
+  background: linear-gradient(135deg, var(--mmi-teal-400), var(--mmi-teal-500) 55%, var(--mmi-orange) 190%);
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.login-submit:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 10px 30px rgba(46, 196, 182, 0.42);
+  transform: translateY(-1px);
+}
+
+.login-submit:active { transform: translateY(1px); }
+
+/* one flowing sentence — flex made the label and the e-mail separate
+   items and forced an ugly wrap */
+.login-meta {
+  margin: 16px 0 15px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  text-align: center;
+}
+
+.login-meta a {
+  font-size: 11px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(157, 201, 194, 0.4);
+}
+
+.login-meta a:hover { color: var(--mmi-teal-400); border-bottom-color: var(--mmi-teal-400); }
+
+.login-card .credit {
+  padding-top: 13px;
+  border-top: 1px solid rgba(46, 196, 182, 0.14);
+}
+
+/* credential-source badge */
+.login-mode {
+  margin-bottom: 12px;
+  padding: 7px 11px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(46, 196, 182, 0.28);
+  background: rgba(46, 196, 182, 0.09);
+  color: var(--mmi-teal-400);
+}
+
+.login-mode[data-mode='demo'],
+.login-mode[data-mode='unconfigured'] {
+  border-color: rgba(245, 166, 35, 0.42);
+  background: rgba(245, 166, 35, 0.1);
+  color: var(--mmi-orange-soft);
+}
+
+.login-card.shake { animation: shake 0.4s ease; }
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+/* success hand-off to the module hub */
+.login-exit .login-card {
+  animation: cardOut 0.6s cubic-bezier(0.6, 0, 0.8, 0.2) forwards;
+}
+
+@keyframes cardOut {
+  to { opacity: 0; transform: translateZ(240px) scale(1.18); filter: blur(6px); }
+}
+
+@media (max-width: 900px) {
+  .login-wrap { justify-content: center; padding: 20px; }
+  .login-card { width: 100%; max-width: 380px; }
+  .login-brand { top: 14px; left: 14px; transform: scale(0.9); transform-origin: top left; }
+}
+/* Module Center — 3D coverflow presentation */
+
+.hub-body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.hub-top,
+.hub-main,
+.hub-foot { position: relative; z-index: 2; }
+
+/* ---------- top bar ---------- */
+.hub-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 30px;
+  border-bottom: 1px solid rgba(46, 196, 182, 0.16);
+  background: rgba(4, 33, 31, 0.55);
+  backdrop-filter: blur(14px);
+}
+
+.hub-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hub-user-info { text-align: right; }
+
+.hub-user-info b {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.hub-user-info span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mmi-teal-400);
+}
+
+.hub-logout {
+  padding: 8px 15px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.hub-logout:hover { color: var(--ink); border-color: var(--mmi-orange); }
+
+/* ---------- heading ---------- */
+.hub-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 20px 10px;
+}
+
+.hub-heading {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.hub-heading h1 {
+  margin: 12px 0 6px;
+  font-size: clamp(21px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.hub-heading p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-dim);
+}
+
+/* ---------- 3D stage ---------- */
+.hub-stage {
+  flex: 1;
+  position: relative;
+  min-height: 400px;
+  /* การ์ดที่อยู่ข้างๆ ถูกเลื่อนออกไปไกลด้วย translateX ถ้าไม่ตัดขอบ
+     ความกว้างเอกสารจะบานออกจนเกิดสกรอลล์แนวนอนทุกขนาดจอ */
+  overflow: hidden;
+  perspective: 1700px;
+  perspective-origin: 50% 45%;
+  outline: none;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.hub-stage.dragging { cursor: grabbing; }
+
+.hub-track {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* ---------- module card ---------- */
+.hub-card {
+  /* ขนาดการ์ดผูกกับตัวแปร เพื่อให้ margin ที่ใช้จัดกึ่งกลางคำนวณตามอัตโนมัติ
+     เวลาย่อขนาดบนจอเล็ก (การ์ดใช้ transform ของ coverflow อยู่แล้ว
+     จึงใช้ translate(-50%,-50%) แทน margin ไม่ได้) */
+  --cw: 306px;
+  --ch: 366px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--cw);
+  height: var(--ch);
+  margin: calc(var(--ch) / -2) 0 0 calc(var(--cw) / -2);
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--glass-line);
+  background: linear-gradient(165deg, rgba(7, 51, 47, 0.94), rgba(3, 24, 22, 0.96));
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  transition: transform 0.62s cubic-bezier(0.22, 0.9, 0.16, 1),
+              opacity 0.5s ease,
+              border-color 0.4s ease,
+              box-shadow 0.4s ease;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+
+.hub-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent, var(--mmi-teal-400)), transparent);
+  opacity: 0.85;
+}
+
+/* faint scanline sheen */
+.hub-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(122, 231, 220, 0.09) 0%, transparent 42%);
+  pointer-events: none;
+}
+
+.hub-card.is-active {
+  border-color: var(--glass-line-hot);
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.7), 0 0 46px rgba(46, 196, 182, 0.24);
+}
+
+.hub-card-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--accent, #2ec4b6) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent, #2ec4b6) 45%, transparent);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent, #2ec4b6) 30%, transparent);
+}
+
+.hub-card-tag {
+  margin-top: 16px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent, var(--mmi-teal-400));
+}
+
+.hub-card h2 {
+  margin: 7px 0 8px;
+  font-size: 18.5px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.hub-card p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.72;
+  color: var(--ink-dim);
+}
+
+.hub-card-open {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 15px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #04211f;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--accent, var(--mmi-teal-400)), color-mix(in srgb, var(--accent, #2ec4b6) 62%, #0a564e));
+  border: none;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: filter 0.18s ease, box-shadow 0.22s ease, transform 0.14s ease;
+}
+
+.hub-card-open:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent, #2ec4b6) 40%, transparent);
+}
+
+.hub-card-open.is-pending {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--ink-faint);
+  border: 1px dashed rgba(157, 201, 194, 0.35);
+  cursor: not-allowed;
+}
+
+.hub-card-open.is-pending:hover { filter: none; transform: none; box-shadow: none; }
+
+/* side cards stay clickable to bring them to the front,
+   but only the focused card's call-to-action is reachable */
+.hub-card:not(.is-active) .hub-card-open { pointer-events: none; }
+.hub-card.is-far { visibility: hidden; pointer-events: none; }
+
+/* ---------- navigation ---------- */
+.hub-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 6px 0 16px;
+}
+
+.hub-arrow {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: 50%;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.18s ease, box-shadow 0.2s ease, transform 0.14s ease;
+}
+
+.hub-arrow:hover {
+  border-color: var(--mmi-teal-400);
+  box-shadow: var(--glow);
+  transform: scale(1.07);
+}
+
+.hub-arrow:active { transform: scale(0.94); }
+
+.hub-dots {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.hub-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(157, 201, 194, 0.28);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.hub-dot.is-active {
+  width: 26px;
+  border-radius: 5px;
+  background: var(--mmi-teal-400);
+  box-shadow: 0 0 12px rgba(46, 196, 182, 0.7);
+}
+
+/* ---------- footer ---------- */
+.hub-foot {
+  padding: 12px 20px 20px;
+  border-top: 1px solid rgba(46, 196, 182, 0.12);
+}
+
+@media (max-width: 700px) {
+  .hub-top { padding: 14px 16px; }
+  .hub-user-info { display: none; }
+  /* ขนาดการ์ด/ความสูงเวที คุมรวมอยู่ในบล็อก RESPONSIVE ท้ายไฟล์
+     (ตั้ง width/height ตรงนี้จะทับตัวแปร --cw/--ch จนแก้ที่เดียวไม่พอ) */
+}
+
+/* ===================== SPA + standalone overrides ===================== */
+.view { display: none; }
+.view.is-active { display: block; }
+
+body { background: var(--mmi-teal-900); min-height: 100vh; }
+body.on-login,
+body.on-vote { height: auto; }
+body.on-login { height: 100vh; overflow: hidden; }
+body.on-modules { overflow-x: hidden; overflow-y: auto; }
+
+#view-login .login-playground { position: fixed; inset: 0; z-index: 1; }
+
+/* ---- sign-in transition: card pulls toward the viewer and dissolves,
+        the hub then zooms in behind it ---- */
+@keyframes cardWarp {
+  0%   { opacity: 1; transform: scale(1); filter: blur(0); }
+  35%  { opacity: 1; transform: scale(0.975); }
+  100% { opacity: 0; transform: scale(1.22); filter: blur(9px); }
+}
+@keyframes chromeOut { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes hubZoomIn {
+  from { opacity: 0; transform: scale(0.9) translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+#view-login.is-leaving .login-card {
+  animation: cardWarp 0.58s cubic-bezier(0.55, 0, 0.85, 0.35) both;
+}
+#view-login.is-leaving .login-brand,
+#view-login.is-leaving .dv-quote {
+  animation: chromeOut 0.4s ease both;
+}
+#view-modules.is-entering {
+  animation: hubZoomIn 0.66s cubic-bezier(0.18, 0.9, 0.24, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #view-login.is-leaving .login-card,
+  #view-login.is-leaving .login-brand,
+  #view-login.is-leaving .dv-quote,
+  #view-modules.is-entering { animation-duration: 0.001s !important; }
+}
+
+/* rotating data quote, bottom-left of the login screen */
+.dv-quote {
+  position: fixed;
+  left: 34px;
+  bottom: 30px;
+  z-index: 6;
+  max-width: min(30vw, 340px);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  pointer-events: none;
+}
+.dv-quote.is-in { opacity: 1; transform: none; }
+.dv-quote b {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--ink-dim);
+  text-wrap: balance;
+}
+.dv-quote span {
+  display: block;
+  margin-top: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mmi-orange);
+}
+@media (max-width: 1080px) { .dv-quote { display: none; } }
+
+/* must stay scoped to .is-active — a bare `#view-modules { display:flex }`
+   outranks `.view { display:none }` (ID beats class) and the hub would never
+   hide, leaving login stacked on top of it */
+#view-modules.is-active { display: flex; flex-direction: column; min-height: 100vh; }
+
+
+@media (max-width: 900px) {
+}
+
+/* ---- admin "add user" button in the hub top bar ---- */
+.hub-actions { display: flex; align-items: center; gap: 10px; }
+.hub-adduser {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+  font-family: inherit; font-size: 12px; font-weight: 700; color: #04211f;
+  background: linear-gradient(135deg, var(--mmi-teal-400), var(--mmi-teal-500));
+  border: none; border-radius: var(--r-sm); cursor: pointer;
+  transition: filter 0.16s ease, box-shadow 0.2s ease, transform 0.14s ease;
+}
+.hub-adduser:hover { filter: brightness(1.08); box-shadow: 0 8px 22px rgba(46,196,182,0.4); transform: translateY(-1px); }
+.hub-adduser[hidden] { display: none; }
+
+/* ---- modal (add user) ---- */
+.umodal { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 20px;
+  background: rgba(2, 15, 14, 0.72); backdrop-filter: blur(6px); }
+.umodal[hidden] { display: none; }
+.umodal-card {
+  width: 380px; max-width: 100%; max-height: calc(100vh - 40px); overflow-y: auto;
+  padding: 24px 22px; border-radius: var(--r-lg);
+  background: linear-gradient(165deg, rgba(6,46,42,0.96), rgba(3,24,22,0.98));
+  border: 1px solid var(--glass-line); box-shadow: 0 28px 80px rgba(0,0,0,0.65);
+  animation: cardIn 0.4s cubic-bezier(0.2,0.9,0.2,1) both;
+}
+.umodal-card h2 { margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+.umodal-card .umodal-sub { margin: 0 0 16px; font-size: 11.5px; color: var(--ink-dim); }
+.umodal-field { margin-bottom: 12px; }
+.umodal-field label { display: block; margin-bottom: 6px; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.umodal-field input, .umodal-field select {
+  width: 100%; padding: 10px 12px; font-family: inherit; font-size: 13.5px; color: var(--ink);
+  background: rgba(2,21,19,0.75); border: 1px solid rgba(46,196,182,0.22);
+  border-radius: var(--r-sm); outline: none; transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.umodal-field input:focus, .umodal-field select:focus {
+  border-color: var(--mmi-teal-400); box-shadow: 0 0 0 3px rgba(46,196,182,0.15); }
+.umodal-field select option { color: #04211f; }
+.umodal-msg { margin: 4px 0 12px; font-size: 12px; padding: 9px 12px; border-radius: var(--r-sm); }
+.umodal-msg[hidden] { display: none; }
+.umodal-msg.err { color: #ffd9c2; background: rgba(245,90,35,0.14); border: 1px solid rgba(245,120,35,0.42); }
+.umodal-msg.ok  { color: #cffff5; background: rgba(46,196,182,0.14); border: 1px solid rgba(46,196,182,0.42); }
+/* ---- toast (bottom-right) ---- */
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  background: linear-gradient(140deg, rgba(8, 58, 53, 0.97), rgba(4, 32, 30, 0.97));
+  border: 1px solid rgba(46, 196, 182, 0.45);
+  border-radius: var(--r-sm);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(122, 231, 220, 0.08) inset;
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.2, 0.9, 0.2, 1);
+  pointer-events: none;
+}
+.toast.is-in { opacity: 1; transform: none; }
+.toast::before {
+  content: '✓';
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  font-size: 12px;
+  color: #04211f;
+  background: var(--mmi-teal-400);
+  border-radius: 50%;
+}
+.toast small { display: block; font-weight: 400; font-size: 11px; color: var(--ink-dim); }
+
+/* clickable e-mail that copies instead of opening a mail client */
+.copy-mail {
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;      /* matches the credit lines below */
+  font-weight: 600;
+  line-height: inherit;
+  white-space: nowrap;     /* never split the address across lines */
+  color: var(--mmi-teal-400);
+  background: none;
+  border: none;
+  border-bottom: 1px dashed rgba(46, 196, 182, 0.5);
+  cursor: pointer;
+  transition: color 0.16s ease, border-color 0.16s ease;
+}
+.copy-mail:hover { color: var(--mmi-teal-300, #7ae7dc); border-bottom-color: var(--mmi-teal-400); }
+
+/* ---- topic search ---- */
+.hub-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(520px, 92vw);
+  margin: 16px auto 10px;
+  padding: 0 14px;
+  background: rgba(3, 32, 30, 0.72);
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.18s ease, box-shadow 0.2s ease;
+}
+.hub-search:focus-within { border-color: var(--mmi-teal-400); box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.14); }
+.hub-search svg { flex: none; color: var(--mmi-teal-400); }
+.hub-search input {
+  flex: 1;
+  padding: 12px 0;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  background: none;
+  border: none;
+  outline: none;
+}
+.hub-search input::placeholder { color: rgba(160, 214, 208, 0.45); }
+.hub-search-clear {
+  flex: none;
+  width: 22px; height: 22px;
+  font-size: 11px;
+  color: var(--ink-faint);
+  background: rgba(255, 255, 255, 0.07);
+  border: none; border-radius: 50%;
+  cursor: pointer;
+}
+.hub-search-clear:hover { color: var(--ink); }
+
+.hub-search-hint {
+  margin: 0 0 4px !important;
+  font-size: 11.5px !important;
+  min-height: 16px;
+}
+.hub-search-hint b { color: var(--mmi-teal-400); }
+.hub-search-hint.miss { color: var(--mmi-orange) !important; }
+
+/* the card the search landed on */
+.hub-card.is-found { box-shadow: 0 0 0 2px var(--mmi-teal-400), 0 26px 60px rgba(0, 0, 0, 0.5); }
+
+/* ---- user management ---- */
+.umodal-wide { width: 720px; }
+.umodal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.umodal-x {
+  flex: none; width: 30px; height: 30px; font-size: 15px; line-height: 1;
+  color: var(--ink-dim); background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-line); border-radius: 9px; cursor: pointer;
+  transition: color 0.16s, border-color 0.16s;
+}
+.umodal-x:hover { color: var(--ink); border-color: var(--mmi-teal-400); }
+
+.utable-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0 12px; }
+.utable-stats { font-size: 11.5px; color: var(--ink-dim); }
+.utable-stats b { color: var(--mmi-teal-400); }
+
+.utable-wrap { max-height: 46vh; overflow: auto; border: 1px solid var(--glass-line); border-radius: var(--r-sm); }
+.utable { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.utable th {
+  position: sticky; top: 0; z-index: 1;
+  padding: 9px 12px; text-align: left; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
+  background: rgba(3, 34, 31, 0.96); border-bottom: 1px solid var(--glass-line);
+}
+.utable td { padding: 9px 12px; border-bottom: 1px solid rgba(122, 231, 220, 0.09); vertical-align: middle; }
+.utable tr:last-child td { border-bottom: none; }
+.utable tbody tr:hover { background: rgba(46, 196, 182, 0.06); }
+.utable .u-name { font-family: 'JetBrains Mono', monospace; color: var(--ink); font-weight: 700; }
+.utable .u-me { margin-left: 6px; font-size: 9.5px; color: var(--mmi-orange); }
+
+.ubadge { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+.ubadge.admin { color: #04211f; background: var(--mmi-amber, #ffc45f); }
+.ubadge.user { color: var(--ink-dim); background: rgba(255, 255, 255, 0.08); }
+.ubadge.on { color: #04211f; background: var(--mmi-teal-400); }
+.ubadge.off { color: #ffd9c2; background: rgba(245, 90, 35, 0.3); }
+
+.urow-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.ubtn {
+  padding: 5px 11px; font-family: inherit; font-size: 11px; font-weight: 700;
+  color: var(--ink-dim); background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-line); border-radius: 7px; cursor: pointer;
+  transition: color 0.16s, border-color 0.16s, background 0.16s;
+}
+.ubtn:hover { color: var(--ink); border-color: var(--mmi-teal-400); }
+.ubtn.danger:hover { color: #ffd9c2; border-color: rgba(245, 120, 35, 0.7); background: rgba(245, 90, 35, 0.16); }
+.ubtn:disabled { opacity: 0.34; cursor: not-allowed; }
+
+.uform-title { margin: 4px 0 14px; font-size: 13px; font-weight: 800; color: var(--mmi-teal-400); }
+.uhint { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink-faint); }
+.umodal-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+@media (max-width: 780px) {
+  .umodal-wide { width: 100%; }
+  .umodal-two { grid-template-columns: 1fr; }
+  .utable .u-hide-sm { display: none; }
+}
+
+.umodal-row { display: flex; gap: 10px; margin-top: 6px; }
+.umodal-row button { flex: 1; padding: 11px; font-family: inherit; font-size: 13.5px; font-weight: 800;
+  border: none; border-radius: var(--r-sm); cursor: pointer; transition: filter 0.16s, transform 0.14s; }
+.umodal-save { color: #04211f; background: linear-gradient(135deg, var(--mmi-teal-400), var(--mmi-orange) 220%); }
+.umodal-cancel { color: var(--ink-dim); background: rgba(255,255,255,0.06); border: 1px solid var(--glass-line) !important; }
+.umodal-row button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+
+/* ---- flying from the hub into a module ---- */
+@keyframes cardLaunch {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.94); }
+  100% { transform: scale(1.9); opacity: 0; filter: blur(10px); }
+}
+@keyframes hubLaunch {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.14); filter: blur(7px); }
+}
+@keyframes viewWarpIn {
+  from { opacity: 0; transform: scale(0.9) translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.hub-card.is-launching { animation: cardLaunch 0.52s cubic-bezier(0.5, 0, 0.85, 0.4) both; z-index: 200 !important; }
+#view-modules.is-launching { animation: hubLaunch 0.52s cubic-bezier(0.5, 0, 0.85, 0.4) both; }
+#view-vote.is-entering { animation: viewWarpIn 0.7s cubic-bezier(0.18, 0.9, 0.24, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .hub-card.is-launching, #view-modules.is-launching, #view-vote.is-entering { animation-duration: 0.001s !important; }
+}
+
+/* ===================== VOTE MODULE ===================== */
+#view-vote.is-active { display: flex; flex-direction: column; min-height: 100vh; }
+
+.vote-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(300px, 400px) 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 22px clamp(16px, 4vw, 44px) 40px;
+}
+@media (max-width: 900px) { .vote-main { grid-template-columns: 1fr; } }
+
+.vpanel {
+  padding: 22px;
+  background: linear-gradient(165deg, rgba(6, 46, 42, 0.82), rgba(3, 26, 24, 0.9));
+  border: 1px solid var(--glass-line);
+  border-radius: var(--r-lg);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.44);
+}
+.vpanel-title {
+  margin: 0 0 16px;
+  font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mmi-teal-400);
+}
+
+/* ตัวเลขลำดับขั้นตอนหน้ากล่อง */
+.vpanel-title { display: flex; align-items: center; gap: 9px; }
+.vstep {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; flex: none;
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+  color: #04211f; background: var(--mmi-teal-400); border-radius: 50%;
+  box-shadow: 0 0 14px rgba(46, 196, 182, 0.45);
+}
+
+/* ---- กล่องวาระที่กำลังโหวต (มีได้หลายกล่องพร้อมกัน) ---- */
+#voteLiveList { display: flex; flex-direction: column; gap: 16px; }
+
+.vlive-card {
+  position: relative;
+  padding: 18px;
+  border-radius: var(--r-md);
+  background: rgba(2, 21, 19, 0.55);
+  border: 1px solid rgba(46, 196, 182, 0.55);
+  animation: liveGlow 2.2s ease-in-out infinite;
+}
+/* ขอบฟุ้งกระพริบ = ยังอยู่ระหว่างการโหวต */
+@keyframes liveGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(46, 196, 182, 0), inset 0 0 22px rgba(46, 196, 182, 0.05); border-color: rgba(46, 196, 182, 0.4); }
+  50%      { box-shadow: 0 0 26px rgba(46, 196, 182, 0.45), inset 0 0 22px rgba(46, 196, 182, 0.12); border-color: rgba(46, 196, 182, 0.95); }
+}
+/* โหวตแล้ว = หยุดกระพริบ ให้โฟกัสไปวาระที่ยังไม่ได้ทำ */
+.vlive-card.is-voted { animation: none; border-color: var(--glass-line); box-shadow: none; }
+.vlive-card.is-voted .vlive-flag { opacity: 0.35; }
+.vlive-card.is-voted .vlive-dot { animation: none; }
+
+.vlive-flag {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-bottom: 9px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--mmi-teal-400);
+}
+.vlive-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--mmi-teal-400);
+  box-shadow: 0 0 10px var(--mmi-teal-400);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.vlive-card h3 { margin: 0 0 5px; font-size: 18px; font-weight: 800; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vlive-card, .vlive-dot { animation: none !important; }
+}
+
+/* ---- admin แก้หัวเอกสารวาระ ---- */
+.dt-edit {
+  margin-bottom: 14px; padding: 13px 15px;
+  background: rgba(245, 166, 35, 0.07);
+  border: 1px solid rgba(245, 166, 35, 0.3); border-radius: var(--r-sm);
+}
+.dt-edit-head {
+  margin-bottom: 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mmi-orange);
+}
+.dt-edit-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+.dt-edit-row .umodal-field { margin-bottom: 0; }
+.dt-edit-row .vbtn { padding: 10px 18px; font-size: 12.5px; white-space: nowrap; }
+@media (max-width: 700px) { .dt-edit-row { grid-template-columns: 1fr; } }
+
+.vfield { margin-bottom: 13px; }
+.vfield label {
+  display: block; margin-bottom: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.vfield input, .vfield textarea {
+  width: 100%; padding: 11px 13px;
+  font-family: inherit; font-size: 13.5px; line-height: 1.6; color: var(--ink);
+  background: rgba(2, 21, 19, 0.75);
+  border: 1px solid rgba(46, 196, 182, 0.22); border-radius: var(--r-sm);
+  outline: none; resize: vertical;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.vfield input:focus, .vfield textarea:focus {
+  border-color: var(--mmi-teal-400); box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.15);
+}
+.vhint { margin: 10px 0 0; font-size: 11px; line-height: 1.6; color: var(--ink-faint); }
+
+.vbtn {
+  padding: 12px 18px; font-family: inherit; font-size: 13.5px; font-weight: 800;
+  color: #04211f; background: linear-gradient(135deg, var(--mmi-teal-400), var(--mmi-teal-500));
+  border: none; border-radius: var(--r-sm); cursor: pointer;
+  transition: filter 0.16s, transform 0.14s, box-shadow 0.2s;
+}
+.vbtn:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 10px 26px rgba(46, 196, 182, 0.32); }
+.vbtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.vbtn-start { width: 100%; }
+.vbtn.ghost {
+  color: var(--ink-dim); background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-line); font-size: 12px; padding: 9px 14px;
+}
+.vbtn.ghost:hover { color: var(--ink); border-color: var(--mmi-teal-400); box-shadow: none; }
+.vbtn.ghost.danger:hover { color: #ffd9c2; border-color: rgba(245, 120, 35, 0.66); background: rgba(245, 90, 35, 0.14); }
+
+/* idle state */
+.vidle { padding: 40px 20px; text-align: center; }
+.vidle-mark { font-size: 40px; color: rgba(122, 231, 220, 0.32); animation: pulse 2.6s ease-in-out infinite; }
+.vidle p { margin: 10px 0 4px; font-size: 15px; font-weight: 700; color: var(--ink-dim); }
+.vidle span { font-size: 12px; color: var(--ink-faint); }
+
+/* live topic */
+#voteLive h3 { margin: 0 0 6px; font-size: 20px; font-weight: 800; }
+.vlive-meta { margin: 0 0 12px; font-size: 11.5px; color: var(--ink-faint); }
+.vlive-detail {
+  padding: 14px 16px; margin-bottom: 16px;
+  font-size: 13.5px; line-height: 1.75; color: var(--ink-dim);
+  white-space: pre-wrap;
+  background: rgba(2, 21, 19, 0.6);
+  border-left: 3px solid var(--mmi-teal-400); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.vtally { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.vtally-box {
+  padding: 14px; text-align: center; border-radius: var(--r-sm);
+  border: 1px solid var(--glass-line); background: rgba(2, 21, 19, 0.5);
+}
+.vtally-box span { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+.vtally-box b { display: block; margin-top: 4px; font-size: 30px; font-weight: 800; font-family: var(--mono); }
+.vtally-box.ok b { color: var(--mmi-teal-400); }
+.vtally-box.no b { color: var(--mmi-orange); }
+.vtally-box.ok { border-color: rgba(46, 196, 182, 0.34); }
+.vtally-box.no { border-color: rgba(245, 166, 35, 0.34); }
+
+.vote-mine {
+  margin-bottom: 12px; padding: 9px 13px; border-radius: var(--r-sm);
+  font-size: 12px; font-weight: 700; text-align: center;
+}
+.vote-mine.agree { color: #04211f; background: var(--mmi-teal-400); }
+.vote-mine.disagree { color: #2b1400; background: var(--mmi-orange); }
+
+.vrow { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.vresult { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--glass-line); }
+.vresult-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 12px; }
+
+.vres-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .vres-grid { grid-template-columns: 1fr; } }
+.vres-col { padding: 13px; border-radius: var(--r-sm); border: 1px solid var(--glass-line); background: rgba(2, 21, 19, 0.5); }
+.vres-col h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+.vres-col h4 b { font-size: 16px; font-family: var(--mono); }
+.vres-col.ok h4 b { color: var(--mmi-teal-400); }
+.vres-col.no h4 b { color: var(--mmi-orange); }
+.vres-col ul { margin: 0; padding: 0; list-style: none; }
+.vres-col li {
+  display: flex; justify-content: space-between; gap: 8px;
+  padding: 6px 0; font-size: 12.5px; color: var(--ink-dim);
+  border-bottom: 1px solid rgba(122, 231, 220, 0.08);
+}
+.vres-col li:last-child { border-bottom: none; }
+.vres-col li span { font-size: 10px; color: var(--ink-faint); font-family: var(--mono); }
+.vres-empty { margin: 0; font-size: 12px; color: var(--ink-faint); }
+
+/* ---- vote popup ---- */
+.vdialog { width: 520px; }
+.vd-clockwrap { text-align: center; margin-bottom: 14px; }
+.vd-label { display: block; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+.vd-clock {
+  display: block; font-family: var(--mono); font-size: 40px; font-weight: 700;
+  color: var(--mmi-teal-400); line-height: 1.15;
+}
+.vd-clock.warn { color: var(--mmi-orange); animation: clockPulse 0.9s ease-in-out infinite; }
+.vd-clock.done { color: var(--ink-faint); }
+@keyframes clockPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.09); opacity: 0.72; } }
+.vd-track { height: 5px; margin-top: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); overflow: hidden; }
+.vd-bar { height: 100%; width: 100%; background: linear-gradient(90deg, var(--mmi-teal-500), var(--mmi-teal-400)); transition: width 0.9s linear; }
+.vd-bar.warn { background: linear-gradient(90deg, var(--mmi-orange), var(--mmi-amber, #ffc45f)); }
+
+.vdialog h2 { margin: 0 0 5px; font-size: 19px; }
+.vd-meta { margin: 0 0 12px; font-size: 11.5px; color: var(--ink-faint); }
+.vd-detail {
+  max-height: 30vh; overflow-y: auto; padding: 14px 16px;
+  font-size: 14px; line-height: 1.78; color: var(--ink); white-space: pre-wrap;
+  background: rgba(2, 21, 19, 0.65);
+  border-left: 3px solid var(--mmi-orange); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+.vd-ask { margin: 16px 0 12px; text-align: center; font-size: 13px; font-weight: 700; color: var(--ink-dim); }
+.vd-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vchoice {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 15px; font-family: inherit; font-size: 14px; font-weight: 800;
+  border: 1px solid transparent; border-radius: var(--r-md); cursor: pointer;
+  transition: transform 0.14s, filter 0.16s, box-shadow 0.2s;
+}
+.vchoice span { font-size: 20px; }
+.vchoice.agree { color: #04211f; background: linear-gradient(140deg, var(--mmi-teal-400), var(--mmi-teal-500)); }
+.vchoice.disagree { color: #2b1400; background: linear-gradient(140deg, var(--mmi-amber, #ffc45f), var(--mmi-orange)); }
+.vchoice:hover { transform: translateY(-2px); filter: brightness(1.07); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); }
+.vchoice:disabled { opacity: 0.55; cursor: wait; transform: none; }
+.vd-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; font-size: 11.5px; color: var(--ink-faint); }
+.vd-foot b { color: var(--ink-dim); font-family: var(--mono); }
+
+/* ---- history table ---- */
+.vhist tbody tr { cursor: pointer; animation: rowIn 0.4s ease both; }
+@keyframes rowIn { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
+.vhist .vsub { display: block; margin-top: 2px; font-size: 10px; color: var(--ink-faint); font-family: var(--mono); }
+.vhist .vnum { text-align: center; font-family: var(--mono); font-weight: 700; }
+.vhist .vnum.ok { color: var(--mmi-teal-400); }
+.vhist .vnum.no { color: var(--mmi-orange); }
+.vhist .vdetail-cell { text-align: right; font-size: 11px; color: var(--mmi-teal-400); white-space: nowrap; }
+.vstatus { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 10px; font-weight: 700; color: var(--ink-faint); background: rgba(255, 255, 255, 0.07); }
+.vstatus.open { color: #04211f; background: var(--mmi-teal-400); }
+.vmuted { color: var(--ink-faint); text-align: center; padding: 22px 0 !important; }
+
+.dt-detail {
+  padding: 14px 16px; margin-bottom: 14px;
+  font-size: 13.5px; line-height: 1.75; color: var(--ink-dim); white-space: pre-wrap;
+  background: rgba(2, 21, 19, 0.6);
+  border-left: 3px solid var(--mmi-teal-400); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+.dt-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.vswitch { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-dim); cursor: pointer; }
+.vswitch input { width: 16px; height: 16px; accent-color: #2ec4b6; cursor: pointer; }
+.vbtn-print { font-size: 12px; padding: 9px 15px; }
+/* ---- ช่องติ๊กสิทธิ์เข้าโมดูล ---- */
+.umod-hint { margin: 0 0 8px; font-size: 10.5px; line-height: 1.5; color: var(--ink-faint); }
+.umod-list {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px;
+  padding: 11px 12px; max-height: 190px; overflow-y: auto;
+  background: rgba(2, 21, 19, 0.6);
+  border: 1px solid rgba(46, 196, 182, 0.22); border-radius: var(--r-sm);
+}
+@media (max-width: 620px) { .umod-list { grid-template-columns: 1fr; } }
+.umod-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; line-height: 1.4; color: var(--ink-dim); cursor: pointer;
+}
+.umod-item input { width: 15px; height: 15px; flex: none; accent-color: #2ec4b6; cursor: pointer; }
+.umod-item input:disabled { cursor: not-allowed; }
+.umod-item:has(input:disabled) { opacity: 0.6; cursor: not-allowed; }
+
+/* ผู้ใช้ที่ยังไม่ได้รับสิทธิ์โมดูลใดเลย */
+.hub-empty {
+  max-width: 460px; margin: 40px auto; padding: 22px;
+  text-align: center; font-size: 13.5px; line-height: 1.7; color: var(--ink-dim);
+  background: rgba(2, 21, 19, 0.5);
+  border: 1px dashed var(--glass-line); border-radius: var(--r-md);
+}
+
+/* in-app confirm (native confirm() is blocked in the Apps Script iframe) */
+.askbox { width: 400px; }
+.askbox h2 { margin: 0 0 8px; font-size: 17px; }
+.askbox-text { margin: 0 0 18px; font-size: 13px; line-height: 1.7; color: var(--ink-dim); }
+
+/* optional reason on a vote */
+.vd-reason { margin-top: 14px; }
+.vd-reason textarea {
+  width: 100%; margin-top: 9px; padding: 10px 12px;
+  font-family: inherit; font-size: 13px; line-height: 1.6; color: var(--ink);
+  background: rgba(2, 21, 19, 0.75);
+  border: 1px solid rgba(46, 196, 182, 0.22); border-radius: var(--r-sm);
+  outline: none; resize: vertical;
+}
+.vd-reason textarea:focus { border-color: var(--mmi-teal-400); box-shadow: 0 0 0 3px rgba(46, 196, 182, 0.15); }
+.vd-reason-hint { margin: 7px 0 0; font-size: 10.5px; color: var(--ink-faint); }
+
+.vres-col li { flex-direction: column; align-items: flex-start; gap: 3px; }
+.vres-name { display: flex; justify-content: space-between; width: 100%; gap: 8px; }
+.vres-reason {
+  display: block; font-style: normal; font-size: 11.5px; line-height: 1.55;
+  color: var(--ink-faint); padding-left: 9px;
+  border-left: 2px solid rgba(46, 196, 182, 0.35);
+}
+
+.vprint-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.vprint-hint { max-width: 260px; font-size: 10.5px; line-height: 1.5; color: var(--ink-faint); }
+.vprint-hint b { color: var(--ink-dim); }
+
+/* =====================================================================
+   RESPONSIVE — เก็บกวาดรวมทุกหน้าจอไว้ที่นี่ (อยู่ท้ายไฟล์เพื่อให้ทับกฎก่อนหน้า)
+   ===================================================================== */
+
+/* กันสกรอลล์แนวนอนทั้งเว็บเป็นชั้นสุดท้าย */
+html, body { max-width: 100%; overflow-x: hidden; }
+img, canvas, svg, table { max-width: 100%; }
+
+/* ---- แล็ปท็อปจอเตี้ย: การ์ดสูง 366px + หัว/ท้าย อาจล้นแนวตั้ง ---- */
+@media (max-height: 760px) {
+  .hub-card { --ch: 330px; }
+  .hub-stage { min-height: 340px; }
+  .hub-heading h1 { margin: 6px 0 4px; }
+  .hub-search { margin: 10px auto 6px; }
+}
+@media (max-height: 640px) {
+  .hub-card { --ch: 300px; }
+  .hub-stage { min-height: 300px; }
+  .hub-card p { display: none; }        /* ตัดคำอธิบายออกก่อน ไม่ให้ล้นการ์ด */
+}
+
+/* ---- แท็บเล็ต ---- */
+@media (max-width: 1024px) {
+  .hub-top { padding: 14px 18px; }
+  .vote-main { padding: 18px 16px 32px; }
+}
+
+/* ---- จอแคบ: แถบบนขึ้นบรรทัดใหม่แทนการอัดในบรรทัดเดียว ---- */
+@media (max-width: 820px) {
+  .hub-top {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 14px;
+  }
+  .hub-user { width: 100%; justify-content: center; }
+  .hub-actions { flex-wrap: wrap; justify-content: center; }
+  .brand-lockup { max-width: 100%; }
+  .brand-lockup .brand-text b { font-size: 14px; }
+  .brand-lockup .brand-text span { font-size: 10.5px; }
+  .hub-heading h1 { font-size: clamp(18px, 5vw, 24px); }
+}
+
+/* ---- มือถือ ---- */
+@media (max-width: 700px) {
+  .hub-card { --cw: min(300px, 84vw); --ch: 340px; padding: 20px 18px; }
+  .hub-card h2 { font-size: 17px; }
+  .hub-card p { font-size: 12px; line-height: 1.6; }
+  .hub-stage { min-height: 360px; }
+  .hub-nav { gap: 10px; }
+
+  .vpanel { padding: 16px; }
+  .vlive-card { padding: 14px; }
+  .vlive-card h3 { font-size: 16px; }
+  .vrow { display: grid; grid-template-columns: 1fr 1fr; }
+  .vrow .vbtn { width: 100%; }
+  .vrow .vbtn.danger { grid-column: 1 / -1; }
+
+  /* modal เต็มจอบนมือถือ อ่านง่ายกว่ากล่องลอย */
+  .umodal { padding: 0; }
+  .umodal-card {
+    width: 100% !important;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+  .vdialog { height: auto; max-height: 100%; }
+  .vd-clock { font-size: 34px; }
+  .vd-actions { grid-template-columns: 1fr; }
+  .vd-detail { max-height: 34vh; }
+
+  .utable-wrap { max-height: 58vh; }
+  .utable { font-size: 11.5px; }
+  .utable th, .utable td { padding: 7px 8px; }
+  .urow-actions { flex-direction: column; gap: 4px; }
+
+  .dt-bar, .vprint-wrap { width: 100%; justify-content: stretch; }
+  .vprint-wrap .vbtn, .vprint-wrap .ubtn { flex: 1; }
+  .vprint-hint { max-width: none; }
+}
+
+/* ---- มือถือจอเล็กมาก ---- */
+@media (max-width: 400px) {
+  .hub-card { --cw: 86vw; --ch: 322px; }
+  .hub-top { gap: 8px; }
+  .hub-adduser, .hub-logout { font-size: 11px; padding: 7px 11px; }
+  .vstep { width: 19px; height: 19px; font-size: 11px; }
+  .vpanel-title { font-size: 11px; }
+}
+
+/* ===================== PRINT (A4 resolution document) ===================== */
+#printArea { display: none; }
+
+@media print {
+  @page { size: A4; margin: 18mm 16mm 16mm; }
+
+  body { background: #fff !important; height: auto !important; overflow: visible !important; }
+  body > *:not(#printArea) { display: none !important; }
+
+  #printArea { display: block !important; color: #111; font-family: 'Sarabun', sans-serif; }
+  .p-page { width: 100%; }
+
+  .p-head { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #0e7a70; padding-bottom: 8px; }
+  .p-head img { width: 52px; height: 52px; border-radius: 8px; }
+  .p-org b { display: block; font-size: 14pt; color: #0e7a70; }
+  .p-org span { display: block; font-size: 9pt; color: #444; }
+
+  .p-title { margin: 16px 0 14px; text-align: center; font-size: 17pt; font-weight: 800; }
+
+  .p-meta { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 10.5pt; }
+  .p-meta th { width: 28mm; text-align: left; padding: 5px 8px; background: #eef7f5; border: 1px solid #cfe3df; font-weight: 700; }
+  .p-meta td { padding: 5px 8px; border: 1px solid #cfe3df; }
+
+  .p-sec {
+    margin: 14px 0 7px; padding: 5px 9px;
+    font-size: 10.5pt; font-weight: 800; color: #fff; background: #0e7a70; border-radius: 3px;
+  }
+  .p-detail { font-size: 11pt; line-height: 1.8; white-space: pre-wrap; text-indent: 1.2em; }
+
+  .p-tally { width: 100%; border-collapse: collapse; font-size: 11pt; }
+  .p-tally td { width: 33.33%; padding: 9px; text-align: center; border: 1px solid #cfe3df; }
+  .p-tally b { font-size: 14pt; color: #0e7a70; }
+
+  .p-list { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 10pt; }
+  .p-list th { padding: 6px; background: #eef7f5; border: 1px solid #b9d8d2; font-weight: 700; }
+  .p-list td {
+    padding: 9px 6px; border: 1px solid #cfe3df; height: 12mm; vertical-align: middle;
+    word-wrap: break-word; overflow-wrap: break-word;
+  }
+  .p-list .p-no { width: 6%; text-align: center; }
+  .p-list .p-name { width: 25%; }
+  .p-list .p-choice { width: 12%; text-align: center; }
+  .p-list .p-reason { width: 25%; font-size: 9pt; line-height: 1.5; }
+  .p-list .p-reason .p-none { color: #999; font-size: 8.5pt; }
+  .p-list .p-sign { width: 21%; }
+  .p-list .p-date { width: 11%; }
+  /* keep the header repeating and rows unbroken across pages */
+  .p-list thead { display: table-header-group; }
+  .p-list tr { page-break-inside: avoid; }
+
+  .p-approve { display: flex; justify-content: space-between; gap: 12mm; margin-top: 18mm; page-break-inside: avoid; }
+  .p-box { flex: 1; text-align: center; font-size: 10pt; }
+  .p-line { border-bottom: 1px dotted #333; margin-bottom: 6px; height: 16mm; }
+  .p-box b { display: block; font-weight: 700; }
+  .p-box span { display: block; color: #555; font-size: 9pt; }
+
+  .p-foot { margin-top: 10mm; text-align: center; font-size: 8.5pt; color: #777; }
+}
+
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+</head>
+<body class="on-login">
+
+<div class="lab-bg"></div>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="view-login" class="view is-active">
+  <main id="login-playground" class="login-playground" aria-hidden="true"></main>
+  <div class="dv-quote" id="dvQuote" aria-hidden="true"></div>
+
+  <header class="login-brand">
+    <div class="brand-lockup">
+      <img data-logo alt="โลโก้ องค์กรตัวอย่าง (ORG)">
+      <div class="brand-text">
+        <b>องค์กรตัวอย่าง (ORG)</b>
+        <span>ฝ่าย A</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="login-wrap">
+    <form class="login-card" id="loginForm" novalidate>
+      <div class="login-card-glow"></div>
+      <div class="login-head">
+        <img data-logo alt="" class="login-logo">
+        <h1>ยินดีต้อนรับเข้าสู่ระบบ</h1>
+        <p>ฝ่าย A</p>
+      </div>
+      <div class="login-field">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="off" placeholder="ชื่อผู้ใช้" value="admin" required autofocus>
+      </div>
+      <div class="login-field">
+        <label for="password">Password</label>
+        <input type="text" id="password" name="password" autocomplete="off" placeholder="รหัสผ่าน" value="demo1234" required>
+      </div>
+      <p class="login-error" id="loginError" role="alert" hidden></p>
+      <button type="submit" class="login-submit">
+        <span>เข้าสู่ระบบ</span>
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <div class="login-meta">
+        โหมดสาธิต · ระบบกรอกข้อมูลและพาเข้าสู่ระบบให้อัตโนมัติ · ติดต่อ
+        <button type="button" class="copy-mail" data-copy="data@example.com"
+                title="คลิกเพื่อคัดลอกอีเมล">data@example.com</button>
+      </div>
+      <footer class="credit">
+        <span class="credit-en">Department A</span>
+        <b>ฝ่าย A</b>
+        <span class="credit-org">องค์กรตัวอย่าง (ORG) · data@example.com</span>
+      </footer>
+    </form>
+  </section>
+</div>
+
+<!-- ===================== MODULES ===================== -->
+<div id="view-modules" class="view">
+  <header class="hub-top">
+    <div class="brand-lockup">
+      <img data-logo alt="โลโก้ องค์กรตัวอย่าง (ORG)">
+      <div class="brand-text">
+        <b>องค์กรตัวอย่าง (ORG)</b>
+        <span>ฝ่าย A</span>
+      </div>
+    </div>
+    <div class="hub-user">
+      <div class="hub-user-info">
+        <b id="userName">—</b>
+        <span id="userRole">—</span>
+      </div>
+      <div class="hub-actions">
+        <button class="hub-adduser" id="manageUserBtn" type="button" hidden>จัดการผู้ใช้งาน</button>
+        <button class="hub-logout" id="logoutBtn" type="button">ออกจากระบบ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="hub-main">
+    <div class="hub-heading">
+      <h1>เลือกหัวข้อที่ต้องการใช้งาน</h1>
+
+      <div class="hub-search">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2"/></svg>
+        <input type="text" id="hubSearch" autocomplete="off" spellcheck="false"
+               placeholder="ค้นหาหัวข้อ เช่น dashboard, งบประมาณ, รายงาน, โหวต…">
+        <button type="button" class="hub-search-clear" id="hubSearchClear" aria-label="ล้างคำค้นหา" hidden>✕</button>
+      </div>
+      <p class="hub-search-hint" id="searchHint" hidden></p>
+
+      <p>เลื่อนซ้าย–ขวาเพื่อดูหัวข้อทั้งหมด · ใช้ปุ่มลูกศร, ลากเมาส์ หรือปัดหน้าจอ</p>
+    </div>
+    <p class="hub-empty" id="hubEmpty" hidden>
+      บัญชีของคุณยังไม่ได้รับสิทธิ์เข้าใช้งานโมดูลใด — กรุณาติดต่อผู้ดูแลระบบเพื่อขอสิทธิ์
+    </p>
+
+    <div class="hub-stage" id="stage" tabindex="0" aria-label="รายการโมดูล">
+      <div class="hub-track" id="track"></div>
+    </div>
+    <div class="hub-nav">
+      <button class="hub-arrow" id="prevBtn" type="button" aria-label="โมดูลก่อนหน้า">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+      <div class="hub-dots" id="dots"></div>
+      <button class="hub-arrow" id="nextBtn" type="button" aria-label="โมดูลถัดไป">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <footer class="hub-foot">
+    <div class="credit">
+      <span class="credit-en">Department A</span>
+      <b>ฝ่าย A</b>
+      <span class="credit-org">องค์กรตัวอย่าง (ORG) · data@example.com</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== VOTE MODULE ===================== -->
+<div id="view-vote" class="view">
+  <header class="hub-top">
+    <div class="brand-lockup">
+      <img data-logo alt="โลโก้ องค์กรตัวอย่าง (ORG)">
+      <div class="brand-text">
+        <b>ลงวาระที่ประชุม</b>
+      </div>
+    </div>
+    <div class="hub-user">
+      <div class="hub-user-info">
+        <b id="voteWho">—</b>
+        <span>ผู้เข้าร่วมประชุม</span>
+      </div>
+      <div class="hub-actions">
+        <button class="hub-adduser" id="voteHistoryBtn" type="button">วาระทั้งหมด</button>
+        <button class="hub-logout" id="voteBackBtn" type="button">← กลับ</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="vote-main">
+    <!-- เสนอวาระใหม่ -->
+    <section class="vpanel">
+      <h2 class="vpanel-title"><span class="vstep">1</span>เสนอวาระเพื่อพิจารณา</h2>
+      <form id="voteForm" novalidate>
+        <div class="vfield">
+          <label for="vTitle">ชื่อเรื่อง</label>
+          <input type="text" id="vTitle" autocomplete="off" placeholder="เช่น ปรับขึ้นค่าตอบแทนพนักงาน A Player" required>
+        </div>
+        <div class="vfield">
+          <label for="vDetail">รายละเอียดที่ให้ที่ประชุมพิจารณา</label>
+          <textarea id="vDetail" rows="5" placeholder="สรุปข้อความที่ต้องการให้ที่ประชุมลงมติ…" required></textarea>
+        </div>
+        <div class="vfield">
+          <label for="vDate">วันที่พิจารณา</label>
+          <input type="date" id="vDate" required>
+        </div>
+        <button type="submit" class="vbtn vbtn-start">เริ่มโหวต</button>
+        <p class="vhint">เมื่อกดเริ่มโหวต ทุกคนที่เปิดหน้านี้อยู่จะเห็นวาระเด้งขึ้นมาให้ลงมติทันที</p>
+      </form>
+    </section>
+
+    <!-- วาระที่กำลังโหวต (แสดงทุกวาระที่ยังไม่ปิด) -->
+    <section class="vpanel">
+      <h2 class="vpanel-title"><span class="vstep">2</span>วาระที่กำลังพิจารณา</h2>
+
+      <div id="voteIdle" class="vidle">
+        <div class="vidle-mark">◎</div>
+        <p>ยังไม่มีวาระที่เปิดโหวตอยู่</p>
+        <span>เสนอวาระทางด้านซ้ายเพื่อเริ่มการลงมติ</span>
+      </div>
+
+      <div id="voteLiveList" hidden></div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ VOTE POPUP ============ -->
+<div id="voteDialog" class="umodal" hidden>
+  <div class="umodal-card vdialog">
+    <div class="vd-clockwrap">
+      <span class="vd-label">เหลือเวลา</span>
+      <span class="vd-clock" id="vdClock">10:00</span>
+      <div class="vd-track"><div class="vd-bar" id="vdBar"></div></div>
+    </div>
+    <h2 id="vdTitle">—</h2>
+    <p id="vdMeta" class="vd-meta">—</p>
+    <div id="vdDetail" class="vd-detail">—</div>
+    <div class="vd-reason">
+      <label class="vswitch">
+        <input type="checkbox" id="vdWantReason">
+        <span>ประสงค์ใส่เหตุผลประกอบการลงมติ</span>
+      </label>
+      <textarea id="vdReason" rows="3" hidden
+                placeholder="ระบุเหตุผลของท่าน (จะแสดงในสรุปผลและเอกสารลงนาม)"></textarea>
+      <p class="vd-reason-hint" id="vdReasonHint">ไม่ประสงค์ใส่เหตุผล — ติ๊กช่องด้านบนหากต้องการระบุ</p>
+    </div>
+
+    <p class="vd-ask">จากข้อความข้างต้น ท่านเห็นด้วยหรือไม่?</p>
+    <div class="vd-actions">
+      <button type="button" class="vchoice agree" data-vote="agree"><span>✓</span>เห็นด้วย</button>
+      <button type="button" class="vchoice disagree" data-vote="disagree"><span>✕</span>ไม่เห็นด้วย</button>
+    </div>
+    <div class="vd-foot">
+      <span>เห็นด้วย <b id="vdAgree">0</b> · ไม่เห็นด้วย <b id="vdDisagree">0</b></span>
+      <button type="button" class="ubtn" id="vdLater">ไว้ทีหลัง</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HISTORY ============ -->
+<div id="histModal" class="umodal" hidden>
+  <div class="umodal-card umodal-wide">
+    <div class="umodal-head">
+      <div><h2>วาระที่เคยพิจารณาทั้งหมด</h2>
+        <p class="umodal-sub">คลิกที่แถวเพื่อดูรายละเอียดและออกเอกสาร</p></div>
+      <button type="button" class="umodal-x" id="histClose" aria-label="ปิด">✕</button>
+    </div>
+    <div class="utable-wrap">
+      <table class="utable vhist">
+        <thead><tr><th>เรื่องที่พิจารณา</th><th class="vnum">เห็นด้วย</th><th class="vnum">ไม่เห็นด้วย</th><th>สถานะ</th><th></th></tr></thead>
+        <tbody id="histRows"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOPIC DETAIL ============ -->
+<div id="detailModal" class="umodal" hidden>
+  <div class="umodal-card umodal-wide">
+    <div class="umodal-head">
+      <div><h2 id="dtTitle">—</h2><p class="umodal-sub" id="dtMeta"></p></div>
+      <button type="button" class="umodal-x" id="dtClose" aria-label="ปิด">✕</button>
+    </div>
+    <div class="dt-detail" id="dtDetail"></div>
+
+    <!-- admin แก้หัวเอกสารได้ -->
+    <div class="dt-edit" id="dtEdit" hidden>
+      <div class="dt-edit-head">แก้ไขข้อมูลวาระ (เฉพาะ admin)</div>
+      <div class="dt-edit-row">
+        <div class="umodal-field">
+          <label for="dtDate">วันที่พิจารณา</label>
+          <input type="date" id="dtDate">
+        </div>
+        <div class="umodal-field">
+          <label for="dtProposer">ผู้เสนอวาระ</label>
+          <input type="text" id="dtProposer" autocomplete="off" placeholder="ชื่อ-นามสกุล">
+        </div>
+        <button type="button" class="vbtn" id="dtSaveEdit">บันทึก</button>
+      </div>
+    </div>
+
+    <div class="dt-bar">
+      <label class="vswitch">
+        <input type="checkbox" id="dtShowVoters">
+        <span>แสดงรายชื่อผู้ลงมติ</span>
+      </label>
+      <div class="vprint-wrap">
+        <button type="button" class="ubtn danger" id="dtDelete" hidden>ลบวาระนี้</button>
+        <button type="button" class="vbtn vbtn-print" id="dtPrint">บันทึกเป็น PDF / พิมพ์</button>
+        <span class="vprint-hint">ในหน้าต่างที่เด้งขึ้น เลือกปลายทางเป็น <b>Save as PDF</b> หรือ <b>Microsoft Print to PDF</b></span>
+      </div>
+    </div>
+    <div id="dtBody" class="vres-grid"></div>
+  </div>
+</div>
+
+<!-- ============ PRINT AREA ============ -->
+<div id="printArea" aria-hidden="true"></div>
+
+<!-- ============ CONFIRM (native confirm() is blocked inside the
+     Apps Script sandbox iframe, so we ask in-app) ============ -->
+<div id="askModal" class="umodal" hidden>
+  <div class="umodal-card askbox">
+    <h2 id="askTitle">ยืนยัน</h2>
+    <p id="askText" class="askbox-text"></p>
+    <div class="umodal-row">
+      <button type="button" class="umodal-cancel" id="askNo">ยกเลิก</button>
+      <button type="button" class="umodal-save" id="askYes">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOAST (bottom-right) ============ -->
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- ============ USER MANAGEMENT (admin only) ============ -->
+<div id="userModal" class="umodal" hidden>
+  <div class="umodal-card umodal-wide">
+    <div class="umodal-head">
+      <div>
+        <h2>จัดการผู้ใช้งาน</h2>
+        <p class="umodal-sub">ดูสถานะ แก้ไข เปลี่ยนรหัสผ่าน หรือลบผู้ใช้ · <span id="uStore"></span></p>
+      </div>
+      <button type="button" class="umodal-x" id="uClose" aria-label="ปิด">✕</button>
+    </div>
+
+    <!-- ---------- list ---------- -->
+    <div id="uListPane">
+      <div class="utable-head">
+        <div class="utable-stats" id="uStats">—</div>
+        <button type="button" class="hub-adduser" id="uAddNew">＋ เพิ่มผู้ใช้งาน</button>
+      </div>
+      <div class="utable-wrap">
+        <table class="utable">
+          <thead>
+            <tr>
+              <th>Username</th><th>ชื่อ / ตำแหน่ง</th><th>สิทธิ์</th><th>สถานะ</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="uRows"></tbody>
+        </table>
+      </div>
+      <p class="umodal-msg" id="uListMsg" hidden></p>
+    </div>
+
+    <!-- ---------- add / edit form ---------- -->
+    <form id="userForm" novalidate hidden>
+      <p class="uform-title" id="uFormTitle">เพิ่มผู้ใช้งาน</p>
+      <div class="umodal-field">
+        <label for="uUsername">Username</label>
+        <input type="text" id="uUsername" autocomplete="off" placeholder="เช่น somchai" required>
+      </div>
+      <div class="umodal-field">
+        <label for="uPassword">Password <span id="uPwHint" class="uhint"></span></label>
+        <input type="text" id="uPassword" autocomplete="off" placeholder="ตั้งรหัสผ่าน">
+      </div>
+      <div class="umodal-field">
+        <label for="uFullname">ชื่อ-สกุล / ตำแหน่ง (ไม่บังคับ)</label>
+        <input type="text" id="uFullname" autocomplete="off" placeholder="เช่น สมชาย ใจดี">
+      </div>
+      <div class="umodal-two">
+        <div class="umodal-field">
+          <label for="uRole">สิทธิ์การใช้งาน</label>
+          <select id="uRole">
+            <option value="user">user — ผู้ใช้ทั่วไป</option>
+            <option value="admin">admin — จัดการผู้ใช้ได้</option>
+          </select>
+        </div>
+        <div class="umodal-field">
+          <label for="uActive">สถานะ</label>
+          <select id="uActive">
+            <option value="1">ใช้งานอยู่ (Active)</option>
+            <option value="0">ระงับการใช้งาน</option>
+          </select>
+        </div>
+      </div>
+      <div class="umodal-field" id="uModulesField">
+        <label>สิทธิ์เข้าใช้งานโมดูล</label>
+        <p class="umod-hint" id="uModHint">ติ๊กเฉพาะโมดูลที่อนุญาตให้ผู้ใช้คนนี้เข้าได้</p>
+        <div class="umod-list" id="uModules"></div>
+      </div>
+      <div class="umodal-field" id="uBranchField">
+        <label for="uBranch">สาขาที่ดูได้ (โมดูล Dashboard สาขาของฉัน)</label>
+        <input type="text" id="uBranch" placeholder="เช่น TPK  หรือหลายสาขา TPK,BBB,KL6  หรือ ALL" autocomplete="off">
+        <p class="umod-hint">ใส่ BranchCode คั่นด้วยจุลภาค · สาขาเดียว = เข้าไปเลย · หลายสาขา = มีกล่องให้เลือก
+          · <b>ALL</b> = ทุกสาขา · เว้นว่าง = เปิดโมดูลนี้ไม่ได้</p>
+      </div>
+
+      <p class="umodal-msg" id="userMsg" hidden></p>
+      <div class="umodal-row">
+        <button type="button" class="umodal-cancel" id="uCancel">ย้อนกลับ</button>
+        <button type="submit" class="umodal-save">บันทึก</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const LOGO_DATA_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='18' fill='%23007672'/%3E%3Crect x='22' y='52' width='12' height='20' rx='3' fill='%23FFA300'/%3E%3Crect x='42' y='38' width='12' height='34' rx='3' fill='%23FFA300'/%3E%3Crect x='62' y='24' width='12' height='48' rx='3' fill='%23ffffff'/%3E%3C/svg%3E";
+
+
+/* ============================================================
+   mmi FP&A — standalone app (classic script, always runs)
+   Works two ways automatically:
+   • ONLINE  — served by Google Apps Script: auth + add-user go to
+     the Google Sheet via google.script.run.
+   • OFFLINE — opened by double-clicking the file: a built-in admin
+     works and added users are saved in this browser (localStorage).
+   The 3D backdrop is loaded separately (module below) so login
+   still works even if Three.js can't load.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---- logo everywhere (incl. the browser-tab icon) ---- */
+  document.querySelectorAll('img[data-logo]').forEach(function (i) { i.src = LOGO_DATA_URI; });
+  var favicon = document.getElementById('favicon');
+  if (favicon) favicon.href = LOGO_DATA_URI;
+
+  var ONLINE = false;   /* โหมดสาธิต: ไม่เชื่อมต่อเซิร์ฟเวอร์ใด ๆ */
+
+  /* ---- 3D bridge ----------------------------------------------------
+     The module below fills __pg.data once Three.js has loaded (the login
+     backdrop). Mount requests made before then are queued and flushed.  */
+  window.__pg = { data: null, pending: [] };
+  var dataScene = null; // login backdrop instance — drives the sign-in dolly
+
+  function doMount(kind, sel) {
+    try {
+      var inst = window.__pg[kind]({ mount: sel, compact: kind === 'data' });
+      if (kind === 'data') dataScene = inst;
+      return inst;
+    } catch (e) { console.warn('3D mount failed', e); return null; }
+  }
+  function mount3D(kind, sel) {
+    if (window.__pg[kind]) return doMount(kind, sel);
+    window.__pg.pending.push({ kind: kind, sel: sel });
+    return null;
+  }
+  window.__pgFlush = function () {
+    window.__pg.pending.forEach(function (p) { doMount(p.kind, p.sel); });
+    window.__pg.pending = [];
+  };
+
+  /* ---- modules (แก้ action/href ที่นี่) ---- */
+  /* `keys` = คำค้นหาที่คนน่าจะพิมพ์ (ไทย/อังกฤษ) — เพิ่มคำได้ตามต้องการ
+     ช่องค้นหาจะจับคำเหล่านี้ก่อน แล้วค่อยเดาจากชื่อ/คำอธิบาย */
+  var MODULES = [
+        {
+            key: 'dashboard', tag: 'Performance', icon: '📈', accent: '#2ec4b6',
+            title: 'Overall Dashboard',
+            desc: 'ภาพรวมทั้งองค์กรในหน้าเดียว — ยอดขายเทียบเป้ารายเดือน สัญญาณแนวโน้มจาก Moving Average สัดส่วนลูกค้าใหม่กับลูกค้าเก่า และตำแหน่งของแต่ละสาขาเมื่อเทียบกันเอง',
+            keys: ['dashboard', 'แดชบอร์ด', 'ภาพรวม', 'overall', 'performance', 'ผลงาน', 'actual', 'target', 'เป้า', 'ยอดขาย', 'insight', 'ลูกค้า', 'branches', 'สาขา', 'fpa'],
+            href: 'mmt-app-dashboard.html', external: true
+        },
+        {
+            key: 'branch', tag: 'Branch', icon: '🏥', accent: '#12a094',
+            title: 'Branch Daily Monitor',
+            desc: 'ให้หน้าสาขาเห็นยอดของตัวเองได้ทันที ยอดวันนี้เทียบเมื่อวาน เทียบค่าเฉลี่ยสัปดาห์ที่ผ่านมา และดูได้ว่าหมวดบริการไหนกำลังพายอดขึ้นหรือลง',
+            keys: ['สาขา', 'สาขาของฉัน', 'branch', 'ของฉัน', 'my branch', 'daily', 'รายวัน', 'วันนี้', 'เมื่อวาน', 'monitor', 'แดชบอร์ดสาขา'],
+            href: 'mmt-app-branch.html', external: true
+        },
+        {
+            key: 'target-group', tag: 'Opportunity', icon: '🎯', accent: '#d97706',
+            title: 'Target Group',
+            desc: 'กลุ่มเป้าหมายสำหรับสินค้าตัวใหม่ — คัดจากโปรไฟล์ผู้ซื้อจริงด้วยวิธี look-alike ให้คะแนนโอกาสที่อธิบายได้ทีละองค์ประกอบ พร้อมรายชื่อ เบอร์โทร และ customer journey รายคน ครบทั้ง 5 เขต',
+            keys: ['target', 'target group', 'กลุ่มเป้าหมาย', 'เป้าหมาย', 'ผู้มุ่งหวัง', 'lead', 'leads',
+                   'โอกาสขาย', 'สินค้าใหม่', 'สินค้าราคาสูง', 'look-alike', 'lookalike', 'รายชื่อลูกค้า',
+                   'โทรหาลูกค้า', 'คะแนน', 'score'],
+            href: 'mmt-app-target-group.html', external: true
+        },
+        {
+            key: 'action-plan', tag: 'Zone', icon: '📋', accent: '#f5a623',
+            title: 'Action Plan',
+            desc: 'ฟอร์มกรอกแผนปฏิบัติการรายเขต ตั้งแต่กลุ่มเป้าหมาย แพ็กเกจ ช่องทางและงบ ไปจนถึงไทม์ไลน์ กรอกเสร็จแล้วสั่งออกเป็น PDF, Excel หรือ PowerPoint ได้ทันที',
+            keys: ['แผนงาน', 'แผนปฏิบัติการ', 'ติดตามงาน', 'ติดตาม', 'งาน', 'สาขา', 'เขต', 'ความคืบหน้า', 'action plan', 'task', 'operation', 'งบ'],
+            href: 'mmt-app-actionplan.html', external: true
+        },
+        {
+            key: 'vote', tag: 'Governance', icon: '🗳️', accent: '#ffc45f',
+            title: 'ลงวาระที่ประชุม',
+            desc: 'เปิดวาระให้คณะกรรมการลงมติเห็นด้วยหรือไม่เห็นด้วยแบบเรียลไทม์ ใช้ตัดสินใจเรื่องที่ต้องมีมติร่วมกัน บันทึกชื่อผู้ลงมติ สรุปผล และออกเอกสารให้ลงนามได้',
+            keys: ['โหวต', 'ลงมติ', 'มติ', 'วาระ', 'ที่ประชุม', 'ประชุม', 'vote', 'voting', 'resolution', 'พิจารณา', 'เห็นด้วย', 'ตัดสินใจ'],
+            action: 'vote'
+        }
+    ];
+
+  /* ชื่อบัญชีผู้ดูแลตั้งต้น — ใช้เทียบชื่อซ้ำและกันลบบัญชีตัวเองในโหมดออฟไลน์
+     ไม่มีรหัสผ่านอยู่ในนี้แล้ว: ของเดิมฝังรหัสจริงของระบบไว้ ซึ่งใครกด
+     View Source ที่หน้าล็อกอินก็อ่านได้ทันที และเป็นรหัสตัวเดียวกับที่ใช้
+     ตั้งบัญชี admin ฝั่ง Google Sheet
+     โหมดออนไลน์ไม่เคยแตะค่านี้อยู่แล้ว — authenticate() วิ่งเข้า
+     google.script.run ตั้งแต่บรรทัดแรก การตรวจรหัสเกิดบนเซิร์ฟเวอร์เท่านั้น */
+  var BUILTIN_ADMIN = { username: 'admin', full_name: 'ผู้ดูแลระบบ (Admin)', role: 'admin', zone: 'ALL' };
+  var LS_KEY = 'mmi_local_users';
+  var AUTH = null; // { username, password, user } — password kept in memory to authorize add-user
+
+  /* ---------- offline user store (localStorage) ---------- */
+  function loadLocal() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function saveLocal(list) { localStorage.setItem(LS_KEY, JSON.stringify(list)); }
+
+  /* ---------- auth dispatch ---------- */
+  function gsr(method, arg) {
+    return new Promise(function (resolve) {
+      google.script.run
+        .withSuccessHandler(function (r) { resolve(r || { ok: false, message: 'ไม่มีข้อมูลตอบกลับ' }); })
+        .withFailureHandler(function (e) { resolve({ ok: false, message: 'เชื่อมต่อ Google Sheet ไม่สำเร็จ: ' + e.message }); })
+      [method](arg);
+    });
+  }
+
+  function authenticate(username, password) {
+    if (ONLINE) return gsr('authenticate', { username: username, password: password });
+    /* โหมดออฟไลน์ (ดับเบิลคลิกเปิดไฟล์เอง ไม่ได้ผ่าน Apps Script)
+       เดิม: ล็อกอิน admin ด้วยรหัสที่ฝังไว้ในไฟล์ได้เลย
+       ตอนนี้: ครั้งแรกที่ยังไม่มีบัญชีในเครื่อง ให้คนใช้ตั้งรหัสเองด้วยการ
+       พิมพ์สิ่งที่ต้องการลงไป ระบบจะจำไว้เป็นบัญชีผู้ดูแลของเครื่องนั้น
+       ไม่มีรหัสสำเร็จรูปที่เหมือนกันทุกเครื่องอีกต่อไป
+       (ข้อมูลตรงนี้อยู่ในเบราว์เซอร์เครื่องเดียว ไม่เกี่ยวกับ Google Sheet) */
+    var u = username.toLowerCase();
+    var local = loadLocal();
+    if (!local.length && u === BUILTIN_ADMIN.username) {
+      if (String(password).length < 8) {
+        return Promise.resolve({ ok: false, message: 'ใช้งานครั้งแรกในเครื่องนี้ — ตั้งรหัสผ่าน admin อย่างน้อย 8 ตัวอักษร' });
+      }
+      saveLocal([{ username: 'admin', password: password, full_name: BUILTIN_ADMIN.full_name,
+                   role: 'admin', zone: 'ALL', active: true, modules: 'ALL' }]);
+      return Promise.resolve({ ok: true, user: { username: 'admin', full_name: BUILTIN_ADMIN.full_name, role: 'admin', zone: 'ALL', modules: 'ALL' } });
+    }
+    var hit = local.filter(function (x) { return String(x.username).toLowerCase() === u && x.password === password; })[0];
+    if (!hit) return Promise.resolve({ ok: false, message: 'Username หรือ Password ไม่ถูกต้อง' });
+    // a suspended account must not get in, same rule the sheet enforces
+    if (hit.active !== undefined && !hit.active) {
+      return Promise.resolve({ ok: false, message: 'บัญชีนี้ถูกระงับการใช้งาน — ติดต่อ data@example.com' });
+    }
+    return Promise.resolve({ ok: true, user: {
+      username: hit.username, full_name: hit.full_name || hit.username,
+      role: hit.role || 'user', zone: hit.zone || '',
+      modules: (hit.role === 'admin') ? 'ALL' : String(hit.modules || ''),
+    } });
+  }
+
+  /* ---------- สิทธิ์เข้าโมดูลรายบุคคล ----------
+     'ALL' (หรือ role=admin) = เข้าได้ทุกโมดูล
+     นอกนั้นเก็บเป็นรายการคั่นจุลภาค เช่น 'dashboard,vote' */
+  function allowedKeys(user) {
+    if (!user) return [];
+    if (String(user.role).toLowerCase() === 'admin') return ['ALL'];
+    var raw = String(user.modules || '').trim();
+    if (!raw) return [];
+    if (raw.toUpperCase() === 'ALL') return ['ALL'];
+    return raw.split(',').map(function (s) { return s.trim().toLowerCase(); }).filter(Boolean);
+  }
+  function canSee(user, moduleKey) {
+    var a = allowedKeys(user);
+    return a.indexOf('ALL') !== -1 || a.indexOf(String(moduleKey).toLowerCase()) !== -1;
+  }
+  /* โมดูลที่ผู้ใช้คนนี้เห็น (ใช้แทน MODULES ทั้งหน้า hub) */
+  function visibleModules() {
+    return MODULES.filter(function (m) { return canSee(AUTH && AUTH.user, m.key); });
+  }
+
+  function me() { return { username: AUTH.username, password: AUTH.password }; }
+  function sameName(a, b) { return String(a).trim().toLowerCase() === String(b).trim().toLowerCase(); }
+
+  function addUser(data) {
+    if (ONLINE) {
+      return gsr('addUser', {
+        requester: me(),
+        username: data.username, password: data.password,
+        full_name: data.full_name, role: data.role, zone: data.zone,
+        modules: data.modules, branch: data.branch,
+      });
+    }
+    var u = String(data.username || '').trim();
+    var p = String(data.password || '');
+    if (!u || !p) return Promise.resolve({ ok: false, message: 'กรุณากรอก username และ password' });
+    if (p.length < 4) return Promise.resolve({ ok: false, message: 'password ต้องยาวอย่างน้อย 4 ตัวอักษร' });
+    if (sameName(u, BUILTIN_ADMIN.username)) return Promise.resolve({ ok: false, message: 'มี username นี้อยู่แล้ว' });
+    var list = loadLocal();
+    if (list.some(function (x) { return sameName(x.username, u); }))
+      return Promise.resolve({ ok: false, message: 'มี username นี้อยู่แล้ว' });
+    list.push({ username: u, password: p, full_name: data.full_name || u,
+                role: data.role || 'user', zone: data.zone || '', active: true,
+                modules: data.role === 'admin' ? 'ALL' : (data.modules || '') });
+    saveLocal(list);
+    return Promise.resolve({ ok: true, message: 'เพิ่มผู้ใช้ ' + u + ' สำเร็จ (เก็บในเครื่องนี้)' });
+  }
+
+  function listUsers() {
+    if (ONLINE) return gsr('listUsers', { requester: me() });
+    /* ไม่ต้องเติมแถว admin ปลอมแล้ว เพราะบัญชีผู้ดูแลของโหมดออฟไลน์
+       ถูกบันทึกลง localStorage จริงตั้งแต่ล็อกอินครั้งแรก */
+    var out = [];
+    loadLocal().forEach(function (x) {
+      out.push({
+        username: x.username, full_name: x.full_name || x.username,
+        role: x.role || 'user', zone: x.zone || '',
+        active: x.active === undefined ? true : !!x.active,
+        modules: (x.role === 'admin') ? 'ALL' : String(x.modules || ''),
+      });
+    });
+    return Promise.resolve({ ok: true, users: out, me: AUTH.username });
+  }
+
+  function updateUser(data) {
+    if (ONLINE) {
+      var p = { requester: me(), username: data.username };
+      ['full_name', 'role', 'zone', 'active', 'password', 'modules'].forEach(function (k) {
+        if (data[k] !== undefined && data[k] !== '') p[k] = data[k];
+      });
+      if (data.active !== undefined) p.active = data.active; // false must survive
+      /* branch ต้องส่งแม้เป็นค่าว่าง เพื่อให้ "ลบสาขาที่ผูกไว้" ทำได้
+         และต้องอยู่นอกลูปข้างบน เพราะลูปนั้นตัดค่าว่างทิ้ง
+         เดิมไม่ได้ส่งคีย์นี้เลย ค่าที่พิมพ์ในช่อง "สาขาที่ดูได้" จึงไม่เคยถึงชีต */
+      if (data.branch !== undefined) p.branch = data.branch;
+      return gsr('updateUser', p);
+    }
+    if (sameName(data.username, BUILTIN_ADMIN.username)) {
+      return Promise.resolve({ ok: false, message: 'บัญชี admin ในตัว แก้ไขได้เฉพาะเมื่อเชื่อม Google Sheet แล้ว' });
+    }
+    var list = loadLocal();
+    var hit = null;
+    list.forEach(function (x) { if (sameName(x.username, data.username)) hit = x; });
+    if (!hit) return Promise.resolve({ ok: false, message: 'ไม่พบผู้ใช้' });
+    if (data.password) {
+      if (String(data.password).length < 4) return Promise.resolve({ ok: false, message: 'password ต้องยาวอย่างน้อย 4 ตัวอักษร' });
+      hit.password = data.password;
+    }
+    if (data.full_name !== undefined) hit.full_name = data.full_name;
+    if (data.role !== undefined) hit.role = data.role;
+    if (data.zone !== undefined) hit.zone = data.zone;
+    if (data.active !== undefined) hit.active = !!data.active;
+    if (data.modules !== undefined) hit.modules = (hit.role === 'admin') ? 'ALL' : data.modules;
+    saveLocal(list);
+    return Promise.resolve({ ok: true, message: 'บันทึกการแก้ไข ' + data.username + ' แล้ว' });
+  }
+
+  function deleteUser(username) {
+    if (ONLINE) return gsr('deleteUser', { requester: me(), username: username });
+    if (sameName(username, BUILTIN_ADMIN.username)) {
+      return Promise.resolve({ ok: false, message: 'ลบบัญชี admin ในตัวไม่ได้' });
+    }
+    if (sameName(username, AUTH.username)) {
+      return Promise.resolve({ ok: false, message: 'ลบบัญชีตัวเองไม่ได้' });
+    }
+    var list = loadLocal().filter(function (x) { return !sameName(x.username, username); });
+    saveLocal(list);
+    return Promise.resolve({ ok: true, message: 'ลบผู้ใช้ ' + username + ' แล้ว' });
+  }
+
+  /* ---------- router ---------- */
+  var VIEWS = { login: 'view-login', modules: 'view-modules', vote: 'view-vote' };
+  function show(name) {
+    // the add-user dialog lives outside the views, so it would otherwise stay
+    // on screen after logout and look like logout did nothing
+    closeModal();
+    Object.keys(VIEWS).forEach(function (k) { document.getElementById(VIEWS[k]).classList.remove('is-active'); });
+    document.getElementById(VIEWS[name]).classList.add('is-active');
+    document.body.className = 'on-' + name;
+    if (name === 'modules') { layout(); stage.focus(); }
+  }
+
+  /* ---------- login backdrop: analytics scene ---------- */
+  mount3D('data', '#login-playground');
+
+  /* ---------- login form ---------- */
+  var form = document.getElementById('loginForm');
+  var errorBox = document.getElementById('loginError');
+  var submit = form.querySelector('.login-submit');
+  var submitLabel = submit.querySelector('span');
+  // not shown on screen any more — kept in the console for troubleshooting
+  console.info(ONLINE ? '[auth] Google Sheet · Apps Script' : '[auth] offline mode (this browser only)');
+
+  function showError(msg) {
+    errorBox.textContent = msg; errorBox.hidden = false;
+    form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
+  }
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    errorBox.hidden = true;
+    var username = form.username.value.trim();
+    var password = form.password.value;
+    if (!username || !password) { showError('กรุณากรอก Username และ Password'); return; }
+    submit.disabled = true; submitLabel.textContent = 'กำลังตรวจสอบ...';
+    authenticate(username, password).then(function (res) {
+      submit.disabled = false; submitLabel.textContent = 'เข้าสู่ระบบ';
+      if (!res.ok) { form.password.value = ''; showError(res.message || 'เข้าสู่ระบบไม่สำเร็จ'); return; }
+      AUTH = { username: username, password: password, user: res.user };
+      buildHub();
+      enterApp();
+    });
+  });
+
+  /* ---------- sign-in transition ---------- */
+  var CALM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function enterApp() {
+    var login = document.getElementById('view-login');
+    var hub = document.getElementById('view-modules');
+    if (CALM) { show('modules'); return; }
+
+    login.classList.add('is-leaving');
+    if (dataScene && dataScene.flyIn) dataScene.flyIn(620);
+
+    setTimeout(function () {
+      login.classList.remove('is-leaving');
+      show('modules');
+      hub.classList.add('is-entering');
+      // drop the class so its transform stops being a containing block
+      setTimeout(function () { hub.classList.remove('is-entering'); }, 700);
+    }, 520);
+  }
+
+  /* ---------- module hub + coverflow ---------- */
+  var track = document.getElementById('track');
+  var dots = document.getElementById('dots');
+  var stage = document.getElementById('stage');
+  var cards = [];
+  var active = 0;
+  var built = false;
+
+  var SHOWN = [];   // โมดูลที่ผู้ใช้ที่ล็อกอินอยู่มีสิทธิ์เห็น
+
+  function buildHub() {
+    document.getElementById('userName').textContent = AUTH.user.full_name || AUTH.user.username || 'ผู้ใช้งาน';
+    document.getElementById('userRole').textContent = [AUTH.user.role, AUTH.user.zone].filter(Boolean).join(' · ') || 'user';
+    document.getElementById('manageUserBtn').hidden = (AUTH.user.role !== 'admin');
+
+    // สร้างการ์ดใหม่ทุกครั้งที่ล็อกอิน เพราะสิทธิ์ของแต่ละคนไม่เท่ากัน
+    SHOWN = visibleModules();
+    track.innerHTML = '';
+    dots.innerHTML = '';
+    active = 0;
+    built = true;
+
+    var empty = document.getElementById('hubEmpty');
+    if (empty) empty.hidden = SHOWN.length > 0;
+    document.querySelector('.hub-stage').hidden = SHOWN.length === 0;
+    document.querySelector('.hub-nav').hidden = SHOWN.length === 0;
+    document.querySelector('.hub-search').hidden = SHOWN.length === 0;
+
+    cards = SHOWN.map(function (m, i) {
+      var el = document.createElement('article');
+      el.className = 'hub-card';
+      el.style.setProperty('--accent', m.accent);
+      var cta;
+      if (m.action) cta = '<button class="hub-card-open" type="button" data-open="' + m.action + '"><span>เปิดโมดูล</span><span>→</span></button>';
+      else if (m.href) cta = '<a class="hub-card-open" href="' + m.href + '"' + (m.external ? ' target="_blank" rel="noopener"' : '') + '><span>เปิดโมดูล</span><span>→</span></a>';
+      else cta = '<button class="hub-card-open is-pending" type="button" disabled><span>รอผูกลิงก์</span><span>◌</span></button>';
+      el.innerHTML = '<div class="hub-card-icon">' + m.icon + '</div><div class="hub-card-tag">' + m.tag +
+        '</div><h2>' + m.title + '</h2><p>' + m.desc + '</p>' + cta;
+      el.addEventListener('click', function (ev) {
+        // a card off to the side just gets brought to the front —
+        // never open its link on the same click
+        if (i !== active) { ev.preventDefault(); go(i); return; }
+        var open = ev.target.closest('[data-open]');
+        if (!open) return;
+        var dest = open.getAttribute('data-open');
+        if (dest === 'vote') enterVote(el);
+        else if (dest === 'dashboard') openDashboard();
+        else if (dest === 'branch') openBranchDashboard();
+      });
+      track.appendChild(el);
+      var dot = document.createElement('button');
+      dot.className = 'hub-dot'; dot.type = 'button'; dot.setAttribute('aria-label', m.title);
+      dot.addEventListener('click', function () { go(i); });
+      dots.appendChild(dot);
+      return { el: el, dot: dot };
+    });
+    if (!navWired) {
+      navWired = true;
+      document.getElementById('prevBtn').addEventListener('click', function () { go(active - 1); });
+      document.getElementById('nextBtn').addEventListener('click', function () { go(active + 1); });
+    }
+    layout();
+  }
+  var navWired = false;
+
+  function layout() {
+    if (!cards.length) return;
+    var narrow = innerWidth < 700;
+    var gapX = narrow ? 190 : 268, depth = narrow ? 190 : 250, tilt = narrow ? 26 : 34;
+    cards.forEach(function (c, i) {
+      var off = i - active, abs = Math.abs(off), visible = abs <= 3;
+      c.el.style.transform = 'translateX(' + off * gapX + 'px) translateZ(' + (-abs * depth) + 'px) rotateY(' + (off * -tilt) + 'deg) scale(' + (1 - abs * 0.05) + ')';
+      c.el.style.opacity = visible ? String(Math.max(0, 1 - abs * 0.3)) : '0';
+      c.el.style.zIndex = String(100 - abs);
+      c.el.classList.toggle('is-active', off === 0);
+      c.el.classList.toggle('is-far', !visible);
+      c.dot.classList.toggle('is-active', off === 0);
+    });
+  }
+  function go(i) { active = Math.max(0, Math.min(SHOWN.length - 1, i)); layout(); }
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    AUTH = null;
+    form.password.value = '';
+    if (dataScene && dataScene.reset) dataScene.reset(520); // pull the camera back out
+    show('login');
+  });
+
+  addEventListener('keydown', function (ev) {
+    if (!document.getElementById('view-modules').classList.contains('is-active')) return;
+    if (ev.key === 'ArrowLeft') go(active - 1);
+    else if (ev.key === 'ArrowRight') go(active + 1);
+  });
+
+  /* Drag to flip through cards.
+     IMPORTANT: capture the pointer only once a drag really starts. Capturing
+     on pointerdown retargets pointerup to the stage, so the browser resolves
+     the click to the stage instead of the link inside the card — which made
+     "เปิดโมดูล" do nothing at all. */
+  var dragX = null, dragged = false, captured = false, swallowClick = false;
+
+  stage.addEventListener('pointerdown', function (ev) {
+    if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+    dragX = ev.clientX;
+    dragged = false;
+    captured = false;
+    stage.classList.add('dragging');
+  });
+
+  stage.addEventListener('pointermove', function (ev) {
+    if (dragX === null || dragged) return;
+    var dx = ev.clientX - dragX;
+    if (Math.abs(dx) > 60) {
+      dragged = true;
+      swallowClick = true;                 // this gesture was a drag, not a click
+      try { stage.setPointerCapture(ev.pointerId); captured = true; } catch (e) {}
+      go(active + (dx < 0 ? 1 : -1));
+    }
+  });
+
+  function endDrag(ev) {
+    if (captured && ev && ev.pointerId != null) {
+      try { stage.releasePointerCapture(ev.pointerId); } catch (e) {}
+    }
+    dragX = null; captured = false; dragged = false;
+    stage.classList.remove('dragging');
+  }
+  stage.addEventListener('pointerup', endDrag);
+  stage.addEventListener('pointercancel', endDrag);
+
+  // a finished drag must not also open the link it happened to end on
+  stage.addEventListener('click', function (ev) {
+    if (swallowClick) { swallowClick = false; ev.preventDefault(); ev.stopPropagation(); }
+  }, true);
+  var wheelLock = false;
+  stage.addEventListener('wheel', function (ev) {
+    var dx = Math.abs(ev.deltaX) > Math.abs(ev.deltaY) ? ev.deltaX : 0;
+    if (!dx || wheelLock) return;
+    ev.preventDefault(); wheelLock = true; go(active + (dx > 0 ? 1 : -1));
+    setTimeout(function () { wheelLock = false; }, 420);
+  }, { passive: false });
+  addEventListener('resize', layout);
+
+  /* ---------- Performance Dashboard ----------
+     ออนไลน์  : ถาม Apps Script ว่า URL ของ deployment ปัจจุบันคืออะไร
+                แล้วเปิด '<Web app URL>?page=dashboard' (ไฟล์ HTML ชื่อ Dashboard)
+     ในเครื่อง : เปิดไฟล์ dashboard_v2.html ที่วางไว้ข้างๆ index.html
+     เปิดแท็บใหม่เสมอ เพราะไฟล์ใหญ่ (~9 MB) และผู้ใช้จะได้ไม่หลุดจากหน้าโมดูล */
+  var LOCAL_DASHBOARD = 'dashboard_v2 (mockup).html';
+
+  function openDashboard() {
+    if (!ONLINE) { window.open(LOCAL_DASHBOARD, '_blank', 'noopener'); return; }
+
+    // จองแท็บพร้อมหน้าจอระหว่างรอทันทีที่กด — เหตุผลเดียวกับแดชบอร์ดสาขา
+    // แดชบอร์ดรวมไฟล์ใหญ่กว่ามาก หน้านี้จึงได้อยู่บนจอนานหน่อย
+    var tab = holdTab();
+
+    // ขอตั๋วใหม่ทุกครั้ง — ไม่ cache ลิงก์ไว้ เพราะตั๋วมีอายุจำกัด
+    // และเป็นตัวกันไม่ให้ก๊อปลิงก์ไปเปิดข้ามหน้า Login
+    toast('กำลังเปิดแดชบอร์ด', 'ลิงก์ใช้ได้ครั้งเดียว · ถ้าจะดูใหม่ให้กดปุ่มนี้อีกครั้ง');
+    gsr('dashboardUrl', { requester: me() }).then(function (res) {
+      if (!res || !res.ok || !res.url) {
+        dropTab(tab);
+        toast('เปิดแดชบอร์ดไม่ได้', (res && res.message) || 'ยังไม่ได้ deploy เป็น Web App');
+        return;
+      }
+      goTab(tab, res.url);
+    });
+  }
+
+  /* ---------- แดชบอร์ดระดับสาขา ----------
+     ผู้ใช้ทั่วไป: เซิร์ฟเวอร์ยึดสาขาจากคอลัมน์ branch ในชีต ส่งค่ามาเองไม่มีผล
+     admin: ให้เลือกสาขาก่อน จะได้เข้าไปดูแทนสาขาที่ร้องเรียนมาได้ */
+  function openBranchDashboard() {
+    if (!ONLINE) { window.open(LOCAL_DASHBOARD, '_blank', 'noopener'); return; }
+    /* ถามเซิร์ฟเวอร์เสมอว่าคนนี้เข้าสาขาไหนได้บ้าง แล้วค่อยตัดสินหน้าตา
+       สาขาเดียว -> เข้าเลย · หลายสาขา -> มีกล่องเลือก (admin ก็ใช้เส้นทางเดียวกัน)
+       ฝั่งเบราว์เซอร์ไม่ได้เป็นคนตัดสินสิทธิ์ แค่แสดงผลตามที่เซิร์ฟเวอร์อนุญาต */
+    /* จองแท็บไว้ตั้งแต่วินาทีที่ผู้ใช้กด — เบราว์เซอร์ยอมให้ window.open
+       เฉพาะตอนที่ยังอยู่ในจังหวะการกดจริงเท่านั้น ถ้ารอจนคุยกับเซิร์ฟเวอร์เสร็จ
+       (ที่นี่ต้องคุยถึงสองรอบ) ตัวบล็อกป๊อปอัปจะกินคำสั่งเปิดไปเงียบ ๆ
+       อาการคือกดแล้วไม่มีอะไรเกิดขึ้นเลย ไม่มีข้อความ ไม่มีแท็บ */
+    var tab = holdTab();
+    toast('กำลังโหลดรายชื่อสาขา', '');
+    gsr('branchOptions', { requester: me() }).then(function (res) {
+      if (!res || !res.ok) {
+        dropTab(tab); toast('เปิดไม่ได้', (res && res.message) || 'อ่านรายชื่อสาขาไม่ได้'); return;
+      }
+      var list = res.branches || [];
+      if (!list.length) {
+        dropTab(tab);
+        toast('ยังเข้าไม่ได้', 'บัญชีนี้ยังไม่ได้ผูกสาขา — แจ้งผู้ดูแลระบบให้กำหนดสาขาให้ก่อน');
+        return;
+      }
+      if (list.length === 1) { launchBranch(list[0].code, tab); return; }
+      // ต้องเลือกสาขาก่อน แท็บที่จองไว้ยังไม่ได้ใช้ ปิดทิ้งแล้วไปจองใหม่ตอนกดปุ่มเปิด
+      dropTab(tab);
+      pickBranch(list, function (code) { launchBranch(code, holdTab()); }, res.all);
+    });
+  }
+
+  /* หน้าจอระหว่างรอของแท็บที่จองไว้ — ใช้ร่วมกันทุกแดชบอร์ด
+     เขียนด้วย document.write ลงแท็บ about:blank จึงต้องเลี้ยงตัวเองได้ 100%
+     ห้ามอ้างไฟล์ภายนอกทั้งฟอนต์ ภาพ และสคริปต์
+
+     ทำไมไม่ยก Three.js จากหน้า Login มาใช้ทั้งดุ้น
+       ฉากหน้า Login โหลด three จาก cdn.jsdelivr.net (~600 KB) แล้วค่อยตั้ง WebGL
+       กว่าจะขึ้นภาพก็ 1-3 วินาที ซึ่งนานพอ ๆ กับตัวแดชบอร์ดที่กำลังจะมาแทนที่อยู่แล้ว
+       ผู้ใช้จะเห็นจอดำเปล่ารอ CDN แทนที่จะเห็นอะไรเลย กลายเป็นใส่แล้วแย่ลง
+       จึงทำ 3D ด้วย CSS perspective + SVG แทน ขึ้นทันทีในเฟรมแรก ไม่ต้องต่อเน็ต
+       และยังได้อารมณ์แผงกราฟลอยรอบตัวแบบเดียวกับฉากหลังหน้า Login
+
+     สร้างเป็นฟังก์ชันไม่ใช่ค่าคงที่ เพราะต้องใช้ LOGO_DATA_URI ซึ่งมาจากอีกไฟล์
+     ถ้าประกอบไว้ตั้งแต่ตอนโหลดสคริปต์ อาจยังไม่มีตัวแปรนั้นให้ใช้ */
+  function holdChart(kind) {
+    var g = '<svg viewBox="0 0 120 74" width="100%" height="100%">';
+    var i, x, y;
+    if (kind === 'bars') {
+      var hs = [26, 40, 18, 52, 34, 46];
+      for (i = 0; i < hs.length; i++)
+        g += '<rect x="' + (10 + i * 18) + '" y="' + (64 - hs[i]) + '" width="11" rx="2"'
+           + ' height="' + hs[i] + '" fill="url(#gt)"/>';
+    } else if (kind === 'line') {
+      g += '<path d="M8 54 L28 40 L48 46 L68 24 L88 30 L112 12" fill="none"'
+         + ' stroke="#2ec4b6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+         + '<path d="M8 54 L28 40 L48 46 L68 24 L88 30 L112 12 L112 66 L8 66Z" fill="url(#gf)"/>';
+    } else if (kind === 'scatter') {
+      var pts = [[18,50],[30,38],[42,44],[54,28],[66,34],[78,20],[90,26],[102,14],[24,58],[60,48]];
+      for (i = 0; i < pts.length; i++)
+        g += '<circle cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" r="3.4"'
+           + ' fill="' + (i % 3 === 0 ? '#f5a623' : '#2ec4b6') + '" opacity=".85"/>';
+      g += '<path d="M10 60 L112 16" stroke="#7ae7dc" stroke-width="1.6"'
+         + ' stroke-dasharray="5 4" opacity=".7"/>';
+    } else if (kind === 'heat') {
+      for (y = 0; y < 4; y++) for (x = 0; x < 8; x++) {
+        var v = ((x * 7 + y * 11) % 10) / 10;
+        g += '<rect x="' + (8 + x * 13.5) + '" y="' + (10 + y * 13.5) + '" width="11.5" height="11.5"'
+           + ' rx="2" fill="' + (v > .6 ? '#f5a623' : '#2ec4b6') + '" opacity="' + (0.2 + v * 0.7) + '"/>';
+      }
+    } else if (kind === 'donut') {
+      g += '<circle cx="60" cy="37" r="23" fill="none" stroke="rgba(46,196,182,.2)" stroke-width="11"/>'
+         + '<circle cx="60" cy="37" r="23" fill="none" stroke="#2ec4b6" stroke-width="11"'
+         + ' stroke-dasharray="96 145" stroke-linecap="round" transform="rotate(-90 60 37)"/>'
+         + '<circle cx="60" cy="37" r="23" fill="none" stroke="#f5a623" stroke-width="11"'
+         + ' stroke-dasharray="34 145" stroke-linecap="round" transform="rotate(58 60 37)"/>';
+    } else { // flow
+      g += '<path d="M6 20 C50 20 62 14 114 14" stroke="#2ec4b6" stroke-width="9" fill="none" opacity=".75"/>'
+         + '<path d="M6 38 C50 38 62 40 114 40" stroke="#7ae7dc" stroke-width="7" fill="none" opacity=".6"/>'
+         + '<path d="M6 54 C50 54 62 62 114 62" stroke="#f5a623" stroke-width="5" fill="none" opacity=".6"/>';
+    }
+    return g + '</svg>';
+  }
+
+  function holdPanel(cls, title, kind) {
+    return '<figure class="pnl ' + cls + '"><figcaption>' + title + '</figcaption>'
+         + '<div class="cv">' + holdChart(kind) + '</div></figure>';
+  }
+
+  function holdHtml() {
+    var logo = (typeof LOGO_DATA_URI === 'string') ? LOGO_DATA_URI : '';
+    return [
+      '<!doctype html><meta charset="utf-8">',
+      '<meta name="viewport" content="width=device-width,initial-scale=1">',
+      '<title>ORG — กำลังเปิดแดชบอร์ด</title>',
+      logo ? '<link rel="icon" href="' + logo + '">' : '',
+      '<style>',
+      '*{margin:0;padding:0;box-sizing:border-box}',
+      'body{height:100vh;overflow:hidden;background:#04211f;color:#9dc9c2;',
+      ' font-family:"Anuphan","Sarabun",Tahoma,sans-serif;',
+      ' background-image:radial-gradient(58% 50% at 50% 46%,rgba(46,196,182,.17),transparent 72%),',
+      '  linear-gradient(rgba(122,231,220,.045) 1px,transparent 1px),',
+      '  linear-gradient(90deg,rgba(122,231,220,.045) 1px,transparent 1px);',
+      ' background-size:auto,44px 44px,44px 44px}',
+      /* เวที 3D — แผงกราฟลอยรอบ ๆ เหมือนฉากหลังหน้า Login */
+      '.stage{position:fixed;inset:0;perspective:1200px;perspective-origin:50% 46%}',
+      '.deck{position:absolute;inset:0;transform-style:preserve-3d;',
+      ' animation:orbit 32s linear infinite}',
+      '@keyframes orbit{from{transform:rotateY(-7deg)}50%{transform:rotateY(7deg)}to{transform:rotateY(-7deg)}}',
+      '.pnl{position:absolute;width:190px;padding:11px 12px 9px;border-radius:12px;',
+      ' background:rgba(4,34,32,.8);border:1px solid rgba(122,231,220,.2);',
+      ' box-shadow:0 22px 50px rgba(0,0,0,.42);backdrop-filter:blur(2px);',
+      ' animation:float 9s ease-in-out infinite}',
+      '.pnl figcaption{font:600 9.5px/1 Tahoma,sans-serif;letter-spacing:.19em;',
+      ' text-transform:uppercase;color:#7ae7dc;opacity:.82;margin-bottom:8px}',
+      '.pnl .cv{height:74px}',
+      '@keyframes float{0%,100%{margin-top:0}50%{margin-top:-14px}}',
+      /* วางแผงเป็นวงรอบกล่องข้อความตรงกลาง ทั้งซ้ายและขวา ลึกไม่เท่ากัน */
+      '.p1{left:5%;top:15%;transform:rotateY(20deg) rotateX(7deg) translateZ(-130px)}',
+      '.p2{left:9%;top:52%;transform:rotateY(23deg) rotateX(-6deg) translateZ(-40px);animation-delay:-2s}',
+      '.p3{left:20%;top:78%;transform:rotateY(15deg) rotateX(-9deg) translateZ(-230px);animation-delay:-4s}',
+      '.p4{right:5%;top:13%;transform:rotateY(-20deg) rotateX(7deg) translateZ(-60px);animation-delay:-1s}',
+      '.p5{right:8%;top:50%;transform:rotateY(-23deg) rotateX(-6deg) translateZ(-150px);animation-delay:-3s}',
+      '.p6{right:19%;top:79%;transform:rotateY(-16deg) rotateX(-9deg) translateZ(-240px);animation-delay:-5s}',
+      '@media (max-width:1100px){.p3,.p6{display:none}}',
+      '@media (max-width:820px){.pnl{display:none}}',
+      /* กราฟเครือข่ายจาง ๆ หลังกล่องข้อความ */
+      '.net{position:fixed;inset:0;pointer-events:none;opacity:.5}',
+      '.net circle{animation:blink 4s ease-in-out infinite}',
+      '@keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}',
+      /* กล่องข้อความกลางจอ */
+      '.wrap{position:relative;z-index:2;height:100vh;display:grid;place-items:center;text-align:center}',
+      '.in{animation:up .55s ease-out both}',
+      '@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}',
+      '.brand{display:flex;align-items:center;justify-content:center;gap:13px;margin-bottom:30px}',
+      '.brand img{width:52px;height:52px;border-radius:12px;display:block;',
+      ' box-shadow:0 0 0 1px rgba(122,231,220,.28),0 10px 26px rgba(0,0,0,.45)}',
+      '.brand .t{text-align:left}',
+      '.brand .n{font-size:20px;font-weight:700;line-height:1.2;color:#2ec4b6}',
+      '.brand .s{font-size:12.5px;color:#7fada6;margin-top:3px;max-width:270px}',
+      '.bars{display:flex;gap:8px;align-items:flex-end;justify-content:center;height:60px;margin-bottom:26px}',
+      '.bars i{width:11px;height:16px;border-radius:3px;',
+      ' background:linear-gradient(180deg,#2ec4b6,#0e7a70);animation:grow 1.15s ease-in-out infinite}',
+      '.bars i:nth-child(2){animation-delay:.1s}.bars i:nth-child(3){animation-delay:.2s}',
+      '.bars i:nth-child(4){animation-delay:.3s}.bars i:nth-child(5){animation-delay:.4s}',
+      '.bars i:nth-child(6){animation-delay:.5s}.bars i:nth-child(7){animation-delay:.6s}',
+      '@keyframes grow{0%,100%{height:16px;opacity:.38}50%{height:60px;opacity:1}}',
+      'h1{font-size:19px;font-weight:600;color:#eafffb;margin-bottom:8px}',
+      'h1+p{font-size:13.5px;color:#6f9d96}',
+      '.line{width:200px;height:2px;margin:26px auto 0;border-radius:2px;',
+      ' background:rgba(46,196,182,.16);overflow:hidden}',
+      '.line b{display:block;width:36%;height:100%;border-radius:2px;background:#2ec4b6;',
+      ' animation:slide 1.5s cubic-bezier(.65,0,.35,1) infinite}',
+      '@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(380%)}}',
+      '@media (prefers-reduced-motion:reduce){',
+      ' *{animation:none !important}.bars i{height:36px;opacity:.85}}',
+      '</style>',
+      '<svg width="0" height="0"><defs>',
+      '<linearGradient id="gt" x1="0" y1="0" x2="0" y2="1">',
+      '<stop offset="0" stop-color="#7ae7dc"/><stop offset="1" stop-color="#0e7a70"/></linearGradient>',
+      '<linearGradient id="gf" x1="0" y1="0" x2="0" y2="1">',
+      '<stop offset="0" stop-color="rgba(46,196,182,.42)"/>',
+      '<stop offset="1" stop-color="rgba(46,196,182,0)"/></linearGradient>',
+      '</defs></svg>',
+      '<div class="stage"><div class="deck">',
+      holdPanel('p1', 'Revenue', 'bars'),
+      holdPanel('p2', 'Trend', 'line'),
+      holdPanel('p3', 'Correlation', 'scatter'),
+      holdPanel('p4', 'Mix', 'donut'),
+      holdPanel('p5', 'Density', 'heat'),
+      holdPanel('p6', 'Flow', 'flow'),
+      '</div></div>',
+      '<svg class="net" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice">',
+      '<g stroke="rgba(122,231,220,.22)" stroke-width="1" fill="none">',
+      '<path d="M170 130 L330 250 L250 430 M330 250 L520 180 M520 180 L700 260',
+      ' M700 260 L830 150 M700 260 L780 450 M520 180 L470 380 M470 380 L250 430',
+      ' M470 380 L640 470"/></g>',
+      '<g fill="#2ec4b6">',
+      '<circle cx="170" cy="130" r="4.5"/><circle cx="330" cy="250" r="6.5"/>',
+      '<circle cx="520" cy="180" r="8"/><circle cx="700" cy="260" r="6"/>',
+      '<circle cx="830" cy="150" r="4"/><circle cx="250" cy="430" r="5"/>',
+      '<circle cx="470" cy="380" r="7"/><circle cx="780" cy="450" r="4.5"/>',
+      '<circle cx="640" cy="470" r="4"/></g></svg>',
+      '<div class="wrap"><div class="in">',
+      '<div class="brand">',
+      logo ? '<img src="' + logo + '" alt="">' : '',
+      '<div class="t"><div class="n">องค์กรตัวอย่าง (ORG)</div>',
+      '<div class="s">ฝ่าย A</div></div></div>',
+      '<div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>',
+      '<h1>กำลังเปิดแดชบอร์ด</h1>',
+      '<p>ตรวจสิทธิ์และเตรียมข้อมูลให้คุณ</p>',
+      '<div class="line"><b></b></div>',
+      '</div></div>'
+    ].join('');
+  }
+
+  /* จองแท็บเปล่าพร้อมหน้าจอระหว่างรอ — คืน null ถ้าถูกบล็อก แล้วค่อยไปลองวิธีเดิม */
+  function holdTab() {
+    var w = null;
+    try { w = window.open('', '_blank'); } catch (e) { w = null; }
+    if (w) {
+      try {
+        w.document.write(holdHtml());
+        w.document.close();
+      } catch (e) { /* บางเบราว์เซอร์ห้ามเขียนข้ามแท็บ ปล่อยว่างไว้ก็ได้ */ }
+    }
+    return w;
+  }
+  function dropTab(w) { try { if (w && !w.closed) w.close(); } catch (e) {} }
+
+  function launchBranch(code, tab) {
+    toast('กำลังเปิดแดชบอร์ดสาขา', 'ลิงก์ใช้ได้ครั้งเดียว · ถ้าจะดูใหม่ให้กดปุ่มนี้อีกครั้ง');
+    var p = { requester: me() };
+    if (code) p.branch = code;
+    gsr('branchDashboardUrl', p).then(function (res) {
+      if (!res || !res.ok || !res.url) {
+        dropTab(tab);
+        toast('เปิดแดชบอร์ดสาขาไม่ได้', (res && res.message) || 'ยังไม่ได้ deploy เป็น Web App');
+        return;
+      }
+      goTab(tab, res.url);
+    });
+  }
+
+  /* พาแท็บที่จองไว้ไปหน้าจริง ถ้าไม่มีแท็บก็ลองเปิดตรง ๆ เป็นทางสำรอง */
+  function goTab(tab, url) {
+    if (tab && !tab.closed) {
+      try { tab.opener = null; } catch (e) {}
+      tab.location.replace(url);
+      return;
+    }
+    var w = window.open(url, '_blank', 'noopener');
+    if (!w) toast('เบราว์เซอร์บล็อกการเปิดแท็บใหม่',
+                  'กดอนุญาตป๊อปอัปของเว็บนี้ แล้วกดปุ่มเปิดอีกครั้ง');
+  }
+
+  /* กล่องเลือกสาขาสำหรับ admin — สร้างสดแล้วเก็บทิ้งเมื่อปิด ไม่ต้องแก้ _shell.html */
+  function pickBranch(list, done, isAll) {
+    var old = document.getElementById('branch-pick'); if (old) old.remove();
+    var wrap = document.createElement('div');
+    wrap.id = 'branch-pick';
+    wrap.style.cssText = 'position:fixed;inset:0;z-index:9999;display:grid;place-items:center;'
+      + 'background:rgba(2,18,17,.72);backdrop-filter:blur(3px)';
+    var opts = list.map(function (b) {
+      return '<option value="' + b.code + '">' + b.zone + ' · ' + b.name + ' (' + b.code + ')</option>';
+    }).join('');
+    wrap.innerHTML =
+      '<div style="background:#04211f;color:#eafffb;border:1px solid #2ec4b6;border-radius:14px;'
+      + 'padding:22px;min-width:320px;max-width:92vw;font-family:Sarabun,Tahoma,sans-serif">'
+      + '<h3 style="margin:0 0 6px;color:#ffc45f;font-size:16px">เลือกสาขาที่จะเปิด</h3>'
+      + '<p style="margin:0 0 14px;color:#9dc9c2;font-size:12.5px">'
+      + (isAll ? 'คุณเปิดดูได้ทุกสาขา' : 'บัญชีนี้ดูแล ' + list.length + ' สาขา')
+      + ' (' + list.length + ' รายการ)</p>'
+      + '<select id="branch-pick-sel" style="width:100%;padding:9px;border-radius:8px;'
+      + 'background:#052e2a;color:#eafffb;border:1px solid #2ec4b6;font-size:13px">' + opts + '</select>'
+      + '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">'
+      + '<button id="branch-pick-no" style="padding:8px 14px;border-radius:8px;border:1px solid #2ec4b6;'
+      + 'background:transparent;color:#9dc9c2;cursor:pointer">ยกเลิก</button>'
+      + '<button id="branch-pick-go" style="padding:8px 16px;border-radius:8px;border:0;'
+      + 'background:#2ec4b6;color:#04211f;font-weight:700;cursor:pointer">เปิด</button>'
+      + '</div></div>';
+    document.body.appendChild(wrap);
+    var close = function () { wrap.remove(); };
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    document.getElementById('branch-pick-no').addEventListener('click', close);
+    document.getElementById('branch-pick-go').addEventListener('click', function () {
+      var v = document.getElementById('branch-pick-sel').value; close(); if (v) done(v);
+    });
+  }
+
+  /* ---------- flying into the vote module ---------- */
+  function enterVote(cardEl) {
+    if (CALM) { openVoteModule(); return; }
+    var hub = document.getElementById('view-modules');
+    if (cardEl) cardEl.classList.add('is-launching');
+    hub.classList.add('is-launching');
+    setTimeout(function () {
+      hub.classList.remove('is-launching');
+      if (cardEl) cardEl.classList.remove('is-launching');
+      if (!AUTH) return;              // ออกจากระบบไประหว่างอนิเมชัน
+      openVoteModule();
+      var v = document.getElementById('view-vote');
+      v.classList.add('is-entering');
+      setTimeout(function () { v.classList.remove('is-entering'); }, 720);
+    }, 520);
+  }
+
+  /* ---------- in-app confirm ----------
+     window.confirm() is silently blocked inside the Apps Script sandbox
+     iframe (it returns false without showing anything), which made
+     "ปิดโหวต" and "ลบผู้ใช้" look dead. Ask in the page instead. */
+  function askConfirm(text, title, okLabel) {
+    return new Promise(function (resolve) {
+      var m = document.getElementById('askModal');
+      var yes = document.getElementById('askYes');
+      var no = document.getElementById('askNo');
+      document.getElementById('askTitle').textContent = title || 'ยืนยัน';
+      document.getElementById('askText').textContent = text;
+      yes.textContent = okLabel || 'ยืนยัน';
+      m.hidden = false;
+
+      function done(v) {
+        m.hidden = true;
+        yes.removeEventListener('click', onYes);
+        no.removeEventListener('click', onNo);
+        m.removeEventListener('click', onBackdrop);
+        resolve(v);
+      }
+      function onYes() { done(true); }
+      function onNo() { done(false); }
+      function onBackdrop(ev) { if (ev.target === m) done(false); }
+
+      yes.addEventListener('click', onYes);
+      no.addEventListener('click', onNo);
+      m.addEventListener('click', onBackdrop);
+    });
+  }
+
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function toast(text, sub) {
+    if (!toastEl) return;
+    toastEl.innerHTML = '<span>' + esc(text) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</span>';
+    toastEl.hidden = false;
+    clearTimeout(toastTimer);
+    toastEl.classList.remove('is-in');
+    void toastEl.offsetWidth;          // force reflow so the transition runs
+    toastEl.classList.add('is-in');    // (not rAF — that stalls in background tabs)
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove('is-in');
+      setTimeout(function () { toastEl.hidden = true; }, 320);
+    }, 2400);
+  }
+
+  /* ---------- copy-to-clipboard (works on file:// too) ---------- */
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).then(function () { return true; }, function () { return legacyCopy(text); });
+    }
+    return Promise.resolve(legacyCopy(text));
+  }
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (e) { return false; }
+  }
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-copy]');
+    if (!btn) return;
+    ev.preventDefault();
+    var value = btn.getAttribute('data-copy');
+    copyText(value).then(function (ok) {
+      if (ok) toast('คัดลอกอีเมลแล้ว', value);
+      else toast('คัดลอกไม่สำเร็จ', value);
+    });
+  });
+
+  /* ---------- topic search (tolerates partial / misspelled input) ---------- */
+  var searchBox = document.getElementById('hubSearch');
+  var searchHint = document.getElementById('searchHint');
+  var searchClear = document.getElementById('hubSearchClear');
+
+  function norm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function bigrams(s) {
+    var out = [];
+    for (var i = 0; i < s.length - 1; i++) out.push(s.slice(i, i + 2));
+    return out;
+  }
+  /* Dice coefficient on character bigrams — forgiving of typos and of
+     half-typed words, and works for Thai as well as English. */
+  function dice(a, b) {
+    if (!a || !b) return 0;
+    if (a === b) return 1;
+    var A = bigrams(a), B = bigrams(b);
+    if (!A.length || !B.length) return 0;
+    var seen = {}, hit = 0;
+    A.forEach(function (g) { seen[g] = (seen[g] || 0) + 1; });
+    B.forEach(function (g) { if (seen[g] > 0) { seen[g]--; hit++; } });
+    return (2 * hit) / (A.length + B.length);
+  }
+
+  function scoreModule(m, q) {
+    var title = norm(m.title), tag = norm(m.tag), desc = norm(m.desc);
+    var keys = (m.keys || []).map(norm);
+
+    // 1. exact-ish hits, best first
+    for (var i = 0; i < keys.length; i++) {
+      if (keys[i] === q) return 1.4;                    // typed a keyword exactly
+      if (keys[i].indexOf(q) === 0) return 1.3;         // keyword starts with it
+    }
+    if (title.indexOf(q) === 0) return 1.25;
+    if (title.indexOf(q) !== -1) return 1.15;
+    for (var j = 0; j < keys.length; j++) {
+      if (keys[j].indexOf(q) !== -1 || (q.length > 2 && q.indexOf(keys[j]) !== -1)) return 1.05;
+    }
+    if (tag.indexOf(q) !== -1) return 1.0;
+    if (desc.indexOf(q) !== -1) return 0.9;
+
+    // 2. fuzzy fallback — handles typos and half-typed words
+    var best = Math.max(dice(q, title), dice(q, tag) * 0.9);
+    keys.forEach(function (k) { best = Math.max(best, dice(q, k) * 0.95); });
+    (desc + ' ' + title).split(' ').forEach(function (w) {
+      if (w.length > 1) best = Math.max(best, dice(q, w) * 0.85);
+    });
+    return best;
+  }
+
+  function runSearch(q) {
+    cards.forEach(function (c) { c.el.classList.remove('is-found'); });
+    q = norm(q);
+    searchClear.hidden = !q;
+    if (!q) { searchHint.hidden = true; return; }
+
+    var bestI = -1, bestScore = 0;
+    SHOWN.forEach(function (m, i) {
+      var s = scoreModule(m, q);
+      if (s > bestScore) { bestScore = s; bestI = i; }
+    });
+
+    if (bestI === -1 || bestScore < 0.2) {
+      searchHint.className = 'hub-search-hint miss';
+      searchHint.textContent = 'ไม่พบหัวข้อที่ใกล้เคียง — ลองคำอื่น เช่น “งบประมาณ”, “รายงาน”, “ข้อมูล” หรือ “ฟิสิกส์”';
+      searchHint.hidden = false;
+      return;
+    }
+    go(bestI);
+    if (cards[bestI]) cards[bestI].el.classList.add('is-found');
+    searchHint.className = 'hub-search-hint';
+    searchHint.innerHTML = 'ใกล้เคียงที่สุด: <b>' + esc(SHOWN[bestI].title) + '</b>';
+    searchHint.hidden = false;
+  }
+
+  if (searchBox) {
+    var searchTimer = null;
+    searchBox.addEventListener('input', function () {
+      clearTimeout(searchTimer);
+      var v = searchBox.value;
+      searchTimer = setTimeout(function () { runSearch(v); }, 140);
+    });
+    searchBox.addEventListener('keydown', function (ev) {
+      // let the search box own the arrow keys / Enter while it is focused
+      if (ev.key === 'Enter') { ev.preventDefault(); clearTimeout(searchTimer); runSearch(searchBox.value); }
+      ev.stopPropagation();
+    });
+    searchClear.addEventListener('click', function () {
+      searchBox.value = '';
+      runSearch('');
+      searchBox.focus();
+    });
+  }
+
+  /* ---------- user management (admin only) ---------- */
+  var modal = document.getElementById('userModal');
+  var uForm = document.getElementById('userForm');
+  var uMsg = document.getElementById('userMsg');
+  var uListPane = document.getElementById('uListPane');
+  var uRows = document.getElementById('uRows');
+  var uListMsg = document.getElementById('uListMsg');
+  var editing = null; // null = add mode, otherwise the username being edited
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function msg(el, kind, text) { el.className = 'umodal-msg ' + kind; el.textContent = text; el.hidden = false; }
+
+  function openModal() {
+    document.getElementById('uStore').textContent = ONLINE
+      ? 'บันทึกลง Google Sheet (ใช้ได้ทุกเครื่อง)'
+      : 'บันทึกในเครื่องนี้ (โหมดออฟไลน์)';
+    modal.hidden = false;
+    showList();
+  }
+  function closeModal() { if (modal) modal.hidden = true; }
+
+  function showList() {
+    uForm.hidden = true;
+    uListPane.hidden = false;
+    uListMsg.hidden = true;
+    uRows.innerHTML = '<tr><td colspan="5" style="color:var(--ink-faint)">กำลังโหลด…</td></tr>';
+    listUsers().then(function (res) {
+      if (!res.ok) {
+        uRows.innerHTML = '';
+        msg(uListMsg, 'err', res.message || 'โหลดรายชื่อผู้ใช้ไม่สำเร็จ');
+        return;
+      }
+      renderRows(res.users || []);
+    });
+  }
+
+  function renderRows(users) {
+    var actives = users.filter(function (u) { return u.active; }).length;
+    var admins = users.filter(function (u) { return u.role === 'admin' && u.active; }).length;
+    document.getElementById('uStats').innerHTML =
+      'ทั้งหมด <b>' + users.length + '</b> คน · ใช้งานอยู่ <b>' + actives + '</b> · ผู้ดูแล <b>' + admins + '</b>';
+
+    if (!users.length) {
+      uRows.innerHTML = '<tr><td colspan="5" style="color:var(--ink-faint)">ยังไม่มีผู้ใช้</td></tr>';
+      return;
+    }
+    uRows.innerHTML = users.map(function (u) {
+      var isMe = sameName(u.username, AUTH.username);
+      return '<tr>' +
+        '<td><span class="u-name">' + esc(u.username) + '</span>' + (isMe ? '<span class="u-me">(คุณ)</span>' : '') + '</td>' +
+        '<td class="u-hide-sm">' + esc(u.full_name || '—') + '</td>' +
+        '<td><span class="ubadge ' + (u.role === 'admin' ? 'admin' : 'user') + '">' + esc(u.role || 'user') + '</span></td>' +
+        '<td><span class="ubadge ' + (u.active ? 'on' : 'off') + '">' + (u.active ? 'Active' : 'ระงับ') + '</span></td>' +
+        '<td><div class="urow-actions">' +
+          '<button type="button" class="ubtn" data-edit="' + esc(u.username) + '">แก้ไข</button>' +
+          '<button type="button" class="ubtn danger" data-del="' + esc(u.username) + '"' +
+            (isMe ? ' disabled title="ลบบัญชีตัวเองไม่ได้"' : '') + '>ลบ</button>' +
+        '</div></td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  uRows.addEventListener('click', function (ev) {
+    var edit = ev.target.closest('[data-edit]');
+    var del = ev.target.closest('[data-del]');
+    if (edit) return openForm(edit.getAttribute('data-edit'));
+    if (del) {
+      var name = del.getAttribute('data-del');
+      askConfirm('ลบผู้ใช้ "' + name + '" ออกจากระบบ? การลบนี้ย้อนกลับไม่ได้',
+                 'ยืนยันลบผู้ใช้', 'ลบผู้ใช้').then(function (ok) {
+        if (!ok) return;
+        del.disabled = true;
+        deleteUser(name).then(function (res) {
+          if (res.ok) { showList(); setTimeout(function () { msg(uListMsg, 'ok', res.message); }, 60); }
+          else { del.disabled = false; msg(uListMsg, 'err', res.message || 'ลบไม่สำเร็จ'); }
+        });
+      });
+    }
+  });
+
+  /* ---------- ช่องติ๊กสิทธิ์โมดูล ---------- */
+  var uModulesBox = document.getElementById('uModules');
+  function paintModuleChecks(selected) {
+    var sel = String(selected || '').trim();
+    var all = sel.toUpperCase() === 'ALL';
+    var list = all ? [] : sel.split(',').map(function (s) { return s.trim().toLowerCase(); });
+    uModulesBox.innerHTML = MODULES.map(function (m) {
+      var on = all || list.indexOf(m.key) !== -1;
+      return '<label class="umod-item">' +
+        '<input type="checkbox" value="' + esc(m.key) + '"' + (on ? ' checked' : '') + '>' +
+        '<span>' + esc(m.title) + '</span></label>';
+    }).join('');
+  }
+  function readModuleChecks() {
+    var on = [].slice.call(uModulesBox.querySelectorAll('input:checked')).map(function (i) { return i.value; });
+    return on.length === MODULES.length ? 'ALL' : on.join(',');
+  }
+  /* role = admin ให้เข้าได้ทุกโมดูลอยู่แล้ว จึงล็อกช่องติ๊กไว้ */
+  function syncModuleLock() {
+    var isAdmin = document.getElementById('uRole').value === 'admin';
+    uModulesBox.querySelectorAll('input').forEach(function (i) {
+      i.disabled = isAdmin;
+      if (isAdmin) i.checked = true;
+    });
+    document.getElementById('uModHint').textContent = isAdmin
+      ? 'ผู้ใช้สิทธิ์ admin เข้าได้ทุกโมดูลโดยอัตโนมัติ'
+      : 'ติ๊กเฉพาะโมดูลที่อนุญาตให้ผู้ใช้คนนี้เข้าได้';
+  }
+  document.getElementById('uRole').addEventListener('change', syncModuleLock);
+
+  /* open the form: name = undefined -> add mode, else edit that user */
+  function openForm(name) {
+    editing = name || null;
+    uForm.reset();
+    uMsg.hidden = true;
+    uListPane.hidden = true;
+    uForm.hidden = false;
+    paintModuleChecks('');
+    syncModuleLock();
+
+    var uname = document.getElementById('uUsername');
+    document.getElementById('uFormTitle').textContent = editing ? 'แก้ไขผู้ใช้: ' + editing : 'เพิ่มผู้ใช้งาน';
+    document.getElementById('uPwHint').textContent = editing ? '(เว้นว่างไว้ = ใช้รหัสเดิม)' : '';
+    document.getElementById('uPassword').placeholder = editing ? 'ตั้งรหัสผ่านใหม่' : 'ตั้งรหัสผ่าน';
+    uname.disabled = !!editing;
+
+    if (editing) {
+      listUsers().then(function (res) {
+        var u = (res.users || []).filter(function (x) { return sameName(x.username, editing); })[0];
+        if (!u) return;
+        uname.value = u.username;
+        document.getElementById('uFullname').value = u.full_name || '';
+        document.getElementById('uRole').value = u.role === 'admin' ? 'admin' : 'user';
+        document.getElementById('uActive').value = u.active ? '1' : '0';
+        document.getElementById('uBranch').value = u.branch || '';
+        paintModuleChecks(u.modules);
+        syncModuleLock();
+      });
+      document.getElementById('uPassword').focus();
+    } else {
+      uname.value = '';
+      uname.focus();
+    }
+  }
+
+  document.getElementById('manageUserBtn').addEventListener('click', openModal);
+  document.getElementById('uAddNew').addEventListener('click', function () { openForm(); });
+  document.getElementById('uClose').addEventListener('click', closeModal);
+  document.getElementById('uCancel').addEventListener('click', showList);
+  modal.addEventListener('click', function (ev) { if (ev.target === modal) closeModal(); });
+  addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !modal.hidden) closeModal(); });
+
+  uForm.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    uMsg.hidden = true;
+    var data = {
+      username: document.getElementById('uUsername').value.trim(),
+      password: document.getElementById('uPassword').value,
+      full_name: document.getElementById('uFullname').value.trim(),
+      role: document.getElementById('uRole').value,
+      active: document.getElementById('uActive').value === '1',
+      modules: readModuleChecks(),
+      branch: document.getElementById('uBranch').value.trim().toUpperCase(),
+    };
+    if (!data.username) { msg(uMsg, 'err', 'กรุณากรอก username'); return; }
+    if (!editing && !data.password) { msg(uMsg, 'err', 'กรุณากรอก password'); return; }
+
+    var save = uForm.querySelector('.umodal-save');
+    save.disabled = true; save.textContent = 'กำลังบันทึก...';
+    var job = editing ? updateUser(data) : addUser(data);
+    job.then(function (res) {
+      save.disabled = false; save.textContent = 'บันทึก';
+      if (!res.ok) { msg(uMsg, 'err', res.message || 'บันทึกไม่สำเร็จ'); return; }
+      // changing your own password invalidates the credentials held in memory
+      if (res.self_password_changed) {
+        closeModal();
+        AUTH = null;
+        form.password.value = '';
+        show('login');
+        toast('เปลี่ยนรหัสผ่านตัวเองแล้ว', 'กรุณาเข้าสู่ระบบใหม่');
+        return;
+      }
+      showList();
+      setTimeout(function () { msg(uListMsg, 'ok', res.message || 'บันทึกสำเร็จ'); }, 60);
+    });
+  });
+
+  /* ---------- vote module (spliced in by build.py) ---------- */
+  
+/* ============================================================
+   โมดูลลงวาระที่ประชุม
+   ถูกแทรกเข้าไปใน _app.js จึงใช้ AUTH / gsr / toast / esc / show ร่วมกันได้
+   ออนไลน์ = เก็บใน Google Sheet อีกไฟล์ (VOTE_SHEET_ID)
+   ออฟไลน์ = เก็บใน localStorage เพื่อให้ทดลองได้ตอนดับเบิลคลิกไฟล์
+   ============================================================ */
+
+var VOTE_LS = 'mmi_vote_data';
+var votePoll = null;
+var voteState = { activeId: null, shownId: null, tick: null };
+
+function vLoad() {
+  try { return JSON.parse(localStorage.getItem(VOTE_LS) || '{"topics":[],"votes":[]}'); }
+  catch (e) { return { topics: [], votes: [] }; }
+}
+function vSave(d) { localStorage.setItem(VOTE_LS, JSON.stringify(d)); }
+function nowStamp() {
+  var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' +
+         p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
+
+/* ---------- data layer (online = sheet, offline = localStorage) ---------- */
+function voteCreateTopic(data) {
+  if (ONLINE) return gsr('voteCreateTopic', { requester: me(), title: data.title, detail: data.detail, consider_date: data.consider_date });
+  var d = vLoad();
+  if (!data.title) return Promise.resolve({ ok: false, message: 'กรุณาใส่ชื่อเรื่องที่จะพิจารณา' });
+  if (!data.detail) return Promise.resolve({ ok: false, message: 'กรุณาใส่รายละเอียดที่จะให้โหวต' });
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data.consider_date || '')) return Promise.resolve({ ok: false, message: 'วันที่พิจารณาต้องเป็น yyyy-mm-dd' });
+  // เปิดโหวตพร้อมกันได้หลายวาระ — ไม่ปิดวาระเดิมอัตโนมัติ
+
+  // เลขที่วาระรันนิ่ง AGENDA + ปีเดือน + ลำดับ 4 หลัก (ให้ตรงกับฝั่งชีต)
+  var now = new Date();
+  var prefix = 'AGENDA' + now.getFullYear() + ('0' + (now.getMonth() + 1)).slice(-2);
+  var used = {}, max = 0;
+  d.topics.forEach(function (t) {
+    var v = String(t.topic_id || '');
+    used[v] = true;
+    if (v.indexOf(prefix) === 0) {
+      var n = parseInt(v.slice(prefix.length), 10);
+      if (!isNaN(n) && n > max) max = n;
+    }
+  });
+  var id;
+  do { max++; id = prefix + ('0000' + max).slice(-4); } while (used[id]);
+  d.topics.push({
+    topic_id: id, title: data.title, detail: data.detail, consider_date: data.consider_date,
+    created_by: AUTH.username, created_name: AUTH.user.full_name || AUTH.username,
+    created_at: nowStamp(), status: 'open', show_voters: true, duration_sec: 600,
+  });
+  vSave(d);
+  return Promise.resolve({ ok: true, topic_id: id, message: 'เปิดโหวตวาระ "' + data.title + '" แล้ว' });
+}
+
+function voteOpenList() {
+  if (ONLINE) return gsr('voteOpenList', { requester: me() });
+  var d = vLoad();
+  var open = d.topics.filter(function (t) { return t.status === 'open'; }).map(function (t) {
+    var vs = d.votes.filter(function (v) { return v.topic_id === t.topic_id; });
+    var mine = vs.filter(function (v) { return sameName(v.username, AUTH.username); })[0];
+    return Object.assign({}, t, {
+      agree: vs.filter(function (v) { return v.choice === 'agree'; }).length,
+      disagree: vs.filter(function (v) { return v.choice === 'disagree'; }).length,
+      my_choice: mine ? mine.choice : null,
+      my_comment: mine ? (mine.comment || '') : '',
+    });
+  });
+  return Promise.resolve({ ok: true, topics: open });
+}
+
+function voteUpdateTopic(topicId, fields) {
+  if (ONLINE) {
+    return gsr('voteUpdateTopic', {
+      requester: me(), topic_id: topicId,
+      consider_date: fields.consider_date, created_name: fields.created_name,
+    });
+  }
+  if (AUTH.user.role !== 'admin') return Promise.resolve({ ok: false, message: 'เฉพาะ admin เท่านั้นที่แก้ไขวาระได้' });
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fields.consider_date || '')) {
+    return Promise.resolve({ ok: false, message: 'วันที่พิจารณาต้องเป็นรูปแบบ yyyy-mm-dd' });
+  }
+  if (!String(fields.created_name || '').trim()) {
+    return Promise.resolve({ ok: false, message: 'กรุณาระบุชื่อผู้เสนอวาระ' });
+  }
+  var d = vLoad();
+  d.topics.forEach(function (t) {
+    if (t.topic_id === topicId) {
+      t.consider_date = fields.consider_date;
+      t.created_name = String(fields.created_name).trim();
+    }
+  });
+  vSave(d);
+  return Promise.resolve({ ok: true, message: 'บันทึกการแก้ไขวาระแล้ว' });
+}
+
+function voteCast(topicId, choice, comment) {
+  comment = String(comment || '').trim();
+  if (ONLINE) return gsr('voteCast', { requester: me(), topic_id: topicId, choice: choice, comment: comment });
+  var d = vLoad();
+  var hit = d.votes.filter(function (v) { return v.topic_id === topicId && sameName(v.username, AUTH.username); })[0];
+  if (hit) { hit.choice = choice; hit.voted_at = nowStamp(); hit.comment = comment; }
+  else d.votes.push({ topic_id: topicId, username: AUTH.username,
+        full_name: AUTH.user.full_name || AUTH.username, choice: choice,
+        voted_at: nowStamp(), comment: comment });
+  vSave(d);
+  return Promise.resolve({ ok: true, message: choice === 'agree' ? 'บันทึกแล้ว: เห็นด้วย' : 'บันทึกแล้ว: ไม่เห็นด้วย' });
+}
+
+function voteClose(topicId) {
+  if (ONLINE) return gsr('voteClose', { requester: me(), topic_id: topicId });
+  var d = vLoad();
+  d.topics.forEach(function (t) { if (t.topic_id === topicId) t.status = 'closed'; });
+  vSave(d);
+  return Promise.resolve({ ok: true, message: 'ปิดโหวตแล้ว' });
+}
+
+function voteSetShowVoters(topicId, show) {
+  if (ONLINE) return gsr('voteSetShowVoters', { requester: me(), topic_id: topicId, show: show });
+  var d = vLoad();
+  d.topics.forEach(function (t) { if (t.topic_id === topicId) t.show_voters = show; });
+  vSave(d);
+  return Promise.resolve({ ok: true, show_voters: show });
+}
+
+function voteDeleteTopic(topicId) {
+  if (ONLINE) return gsr('voteDeleteTopic', { requester: me(), topic_id: topicId });
+  if (AUTH.user.role !== 'admin') return Promise.resolve({ ok: false, message: 'เฉพาะ admin เท่านั้นที่ลบวาระได้' });
+  var d = vLoad();
+  var t = d.topics.filter(function (x) { return x.topic_id === topicId; })[0];
+  if (!t) return Promise.resolve({ ok: false, message: 'ไม่พบวาระนี้' });
+  var n = d.votes.filter(function (v) { return v.topic_id === topicId; }).length;
+  d.topics = d.topics.filter(function (x) { return x.topic_id !== topicId; });
+  d.votes = d.votes.filter(function (v) { return v.topic_id !== topicId; });
+  vSave(d);
+  return Promise.resolve({ ok: true, message: 'ลบวาระ "' + t.title + '" และคะแนน ' + n + ' รายการแล้ว' });
+}
+
+function voteListTopics() {
+  if (ONLINE) return gsr('voteListTopics', { requester: me() });
+  var d = vLoad();
+  var out = d.topics.map(function (t) {
+    var vs = d.votes.filter(function (v) { return v.topic_id === t.topic_id; });
+    return Object.assign({}, t, {
+      agree: vs.filter(function (v) { return v.choice === 'agree'; }).length,
+      disagree: vs.filter(function (v) { return v.choice === 'disagree'; }).length,
+      total: vs.length,
+    });
+  });
+  out.reverse();
+  return Promise.resolve({ ok: true, topics: out });
+}
+
+function voteTopicDetail(topicId) {
+  if (ONLINE) return gsr('voteTopicDetail', { requester: me(), topic_id: topicId });
+  var d = vLoad();
+  var t = d.topics.filter(function (x) { return x.topic_id === topicId; })[0];
+  if (!t) return Promise.resolve({ ok: false, message: 'ไม่พบวาระนี้' });
+  var vs = d.votes.filter(function (v) { return v.topic_id === topicId; });
+  return Promise.resolve({ ok: true, votes: vs, topic: Object.assign({}, t, {
+    agree: vs.filter(function (v) { return v.choice === 'agree'; }).length,
+    disagree: vs.filter(function (v) { return v.choice === 'disagree'; }).length,
+  }) });
+}
+
+/* ---------- เข้า/ออกโมดูล ---------- */
+function openVoteModule() {
+  if (!AUTH) return;                 // กันกรณีถูกเรียกหลังออกจากระบบ
+  document.getElementById('voteWho').textContent = AUTH.user.full_name || AUTH.username;
+  var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+  document.getElementById('vDate').value = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  show('vote');
+  startVotePolling();
+  refreshVoteBoard();
+}
+function startVotePolling() {
+  stopVotePolling();
+  votePoll = setInterval(refreshVoteBoard, 5000);   // ทุกคนเห็นวาระใหม่พร้อมกัน
+}
+function stopVotePolling() { if (votePoll) { clearInterval(votePoll); votePoll = null; } }
+
+/* ---------- กระดานหลัก: แสดงทุกวาระที่ยังเปิดโหวตอยู่ ---------- */
+function refreshVoteBoard() {
+  if (!AUTH) return stopVotePolling();
+  voteOpenList().then(function (res) {
+    if (!res.ok) return;
+    var list = res.topics || [];
+    var wrap = document.getElementById('voteLiveList');
+    var idle = document.getElementById('voteIdle');
+    voteState.open = list;
+
+    if (!list.length) {
+      voteState.activeId = null;
+      wrap.innerHTML = '';
+      wrap.hidden = true; idle.hidden = false;
+      closeVoteDialog();
+      return;
+    }
+    idle.hidden = true; wrap.hidden = false;
+
+    // วาดใหม่เฉพาะเมื่อชุดวาระเปลี่ยน เพื่อไม่ให้จอกระพริบทุก 5 วินาที
+    var sig = list.map(function (t) { return t.topic_id; }).join('|');
+    if (voteState.sig !== sig) {
+      voteState.sig = sig;
+      wrap.innerHTML = list.map(function (t) {
+        return '<article class="vlive-card" data-topic="' + esc(t.topic_id) + '">' +
+          '<div class="vlive-flag"><span class="vlive-dot"></span>กำลังอยู่ในการโหวต</div>' +
+          '<h3>' + esc(t.title) + '</h3>' +
+          '<p class="vlive-meta">เลขที่ ' + esc(t.topic_id) + ' · เสนอโดย ' + esc(t.created_name || '—') +
+            ' · วันที่พิจารณา ' + esc(t.consider_date || '—') + '</p>' +
+          '<div class="vlive-detail">' + esc(t.detail) + '</div>' +
+          '<div class="vtally">' +
+            '<div class="vtally-box ok"><span>เห็นด้วย</span><b data-agree>0</b></div>' +
+            '<div class="vtally-box no"><span>ไม่เห็นด้วย</span><b data-disagree>0</b></div>' +
+          '</div>' +
+          '<div class="vote-mine" data-mine hidden></div>' +
+          '<div class="vrow">' +
+            '<button type="button" class="vbtn ghost" data-act="open">เปิดหน้าต่างลงมติ</button>' +
+            '<button type="button" class="vbtn ghost" data-act="result">ดูผลสรุป</button>' +
+            '<button type="button" class="vbtn ghost danger" data-act="close">ปิดโหวต</button>' +
+          '</div>' +
+          '<div class="vresult" data-result hidden>' +
+            '<div class="vresult-head"><b>ผลการลงมติ</b>' +
+              '<button type="button" class="ubtn" data-act="hide">ซ่อน</button></div>' +
+            '<div class="vres-grid" data-resultbody></div>' +
+          '</div>' +
+        '</article>';
+      }).join('');
+    }
+
+    // อัปเดตตัวเลขในแต่ละกล่อง
+    list.forEach(function (t) {
+      var card = wrap.querySelector('[data-topic="' + cssEsc(t.topic_id) + '"]');
+      if (!card) return;
+      card.querySelector('[data-agree]').textContent = t.agree;
+      card.querySelector('[data-disagree]').textContent = t.disagree;
+      var mine = card.querySelector('[data-mine]');
+      if (t.my_choice) {
+        mine.hidden = false;
+        mine.className = 'vote-mine ' + t.my_choice;
+        mine.textContent = (t.my_choice === 'agree' ? 'คุณโหวต: เห็นด้วย' : 'คุณโหวต: ไม่เห็นด้วย') +
+          (t.my_comment ? ' — “' + t.my_comment + '”' : '');
+      } else mine.hidden = true;
+      card.classList.toggle('is-voted', !!t.my_choice);
+    });
+
+    // เด้ง popup ให้วาระแรกที่ยังไม่ได้โหวต (ทีละวาระ)
+    var pending = list.filter(function (t) { return !t.my_choice; })[0];
+    if (pending && voteState.shownId !== pending.topic_id) openVoteDialog(pending);
+    else if (voteState.shownId) {
+      var cur = list.filter(function (t) { return t.topic_id === voteState.shownId; })[0];
+      if (cur) syncDialogCounts(cur);
+      else closeVoteDialog();     // วาระที่เปิดค้างถูกปิดไปแล้ว
+    }
+  });
+}
+
+/** escape สำหรับใช้ใน querySelector */
+function cssEsc(s) { return String(s).replace(/["\\]/g, '\\$&'); }
+
+/* ---------- popup โหวต + นับถอยหลัง ---------- */
+function openVoteDialog(t) {
+  voteState.shownId = t.topic_id;
+  // ล้างช่องเหตุผลทุกครั้งที่เปิดวาระใหม่
+  var wr = document.getElementById('vdWantReason');
+  if (wr) {
+    wr.checked = false;
+    document.getElementById('vdReason').value = '';
+    document.getElementById('vdReason').hidden = true;
+    document.getElementById('vdReasonHint').hidden = false;
+  }
+  document.getElementById('vdTitle').textContent = t.title;
+  document.getElementById('vdDetail').textContent = t.detail;
+  document.getElementById('vdMeta').textContent =
+    'เสนอโดย ' + (t.created_name || '—') + ' · วันที่พิจารณา ' + (t.consider_date || '—');
+  document.getElementById('voteDialog').hidden = false;
+  syncDialogCounts(t);
+
+  var total = Number(t.duration_sec) || 600;
+  var started = Date.parse(String(t.created_at).replace(' ', 'T')) || Date.now();
+  startCountdown(started, total);
+}
+
+function startCountdown(startedMs, totalSec) {
+  stopCountdown();
+  var el = document.getElementById('vdClock');
+  var bar = document.getElementById('vdBar');
+  function paint() {
+    var left = Math.max(0, Math.round(totalSec - (Date.now() - startedMs) / 1000));
+    var m = Math.floor(left / 60), s = left % 60;
+    el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    bar.style.width = Math.max(0, Math.min(100, (left / totalSec) * 100)) + '%';
+    el.classList.toggle('warn', left <= 60 && left > 0);
+    bar.classList.toggle('warn', left <= 60 && left > 0);
+    el.classList.toggle('done', left === 0);
+    // ถึง 0 แล้วไม่มีอะไรเกิดขึ้น — แค่หยุดนับตามที่กำหนด
+    if (left === 0) stopCountdown();
+  }
+  paint();
+  voteState.tick = setInterval(paint, 1000);
+}
+function stopCountdown() { if (voteState.tick) { clearInterval(voteState.tick); voteState.tick = null; } }
+
+function syncDialogCounts(t) {
+  document.getElementById('vdAgree').textContent = t.agree;
+  document.getElementById('vdDisagree').textContent = t.disagree;
+}
+function closeVoteDialog() {
+  document.getElementById('voteDialog').hidden = true;
+  stopCountdown();
+}
+
+/* ---------- ผลสรุป + ประวัติ ---------- */
+function renderResultList(topic, votes, wrap) {
+  if (!wrap) return;
+  var show = topic.show_voters;
+  var agree = votes.filter(function (v) { return v.choice === 'agree'; });
+  var dis = votes.filter(function (v) { return v.choice === 'disagree'; });
+
+  function col(list, kind, label) {
+    return '<div class="vres-col ' + kind + '">' +
+      '<h4>' + label + ' <b>' + list.length + '</b></h4>' +
+      (show
+        ? (list.length
+            ? '<ul>' + list.map(function (v) {
+                return '<li><span class="vres-name">' + esc(v.full_name) + '</span>' +
+                  (v.comment ? '<em class="vres-reason">“' + esc(v.comment) + '”</em>' : '') + '</li>';
+              }).join('') + '</ul>'
+            : '<p class="vres-empty">—</p>')
+        : '<p class="vres-empty">ซ่อนรายชื่อผู้โหวตอยู่</p>') +
+      '</div>';
+  }
+  wrap.innerHTML = col(agree, 'ok', 'เห็นด้วย') + col(dis, 'no', 'ไม่เห็นด้วย');
+}
+
+function openHistory() {
+  var m = document.getElementById('histModal');
+  var body = document.getElementById('histRows');
+  m.hidden = false;
+  body.innerHTML = '<tr><td colspan="5" class="vmuted">กำลังโหลด…</td></tr>';
+  voteListTopics().then(function (res) {
+    if (!res.ok) { body.innerHTML = '<tr><td colspan="5" class="vmuted">' + esc(res.message || 'โหลดไม่สำเร็จ') + '</td></tr>'; return; }
+    if (!res.topics.length) { body.innerHTML = '<tr><td colspan="5" class="vmuted">ยังไม่มีวาระที่เคยโหวต</td></tr>'; return; }
+    body.innerHTML = res.topics.map(function (t, i) {
+      return '<tr data-topic="' + esc(t.topic_id) + '" style="animation-delay:' + (i * 45) + 'ms">' +
+        '<td><b>' + esc(t.title) + '</b><span class="vsub">' + esc(t.consider_date || '') + '</span></td>' +
+        '<td class="vnum ok">' + t.agree + '</td>' +
+        '<td class="vnum no">' + t.disagree + '</td>' +
+        '<td><span class="vstatus ' + (t.status === 'open' ? 'open' : '') + '">' +
+          (t.status === 'open' ? 'กำลังโหวต' : 'ปิดแล้ว') + '</span></td>' +
+        '<td class="vdetail-cell">รายละเอียด →</td></tr>';
+    }).join('');
+  });
+}
+
+function openTopicDetail(topicId) {
+  var m = document.getElementById('detailModal');
+  m.hidden = false;
+  document.getElementById('dtTitle').textContent = 'กำลังโหลด…';
+  document.getElementById('dtBody').innerHTML = '';
+  voteTopicDetail(topicId).then(function (res) {
+    if (!res.ok) { document.getElementById('dtTitle').textContent = res.message || 'ไม่พบวาระ'; return; }
+    var t = res.topic, votes = res.votes || [];
+    voteState.detail = { topic: t, votes: votes };
+
+    document.getElementById('dtTitle').textContent = t.title;
+    document.getElementById('dtMeta').innerHTML =
+      'วันที่พิจารณา <b>' + esc(t.consider_date || '—') + '</b> · เสนอโดย <b>' + esc(t.created_name || '—') + '</b>';
+    document.getElementById('dtDetail').textContent = t.detail;
+    document.getElementById('dtShowVoters').checked = !!t.show_voters;
+    // ปุ่มลบ/แก้ไข เห็นเฉพาะ admin (ฝั่งเซิร์ฟเวอร์ตรวจสิทธิ์ซ้ำอีกชั้นอยู่แล้ว)
+    var isAdmin = (AUTH.user.role === 'admin');
+    document.getElementById('dtDelete').hidden = !isAdmin;
+    document.getElementById('dtEdit').hidden = !isAdmin;
+    if (isAdmin) {
+      document.getElementById('dtDate').value = t.consider_date || '';
+      document.getElementById('dtProposer').value = t.created_name || '';
+    }
+
+    var agree = votes.filter(function (v) { return v.choice === 'agree'; });
+    var dis = votes.filter(function (v) { return v.choice === 'disagree'; });
+    function block(list, kind, label) {
+      return '<div class="vres-col ' + kind + '"><h4>' + label + ' <b>' + list.length + '</b></h4>' +
+        (t.show_voters
+          ? (list.length ? '<ul>' + list.map(function (v) {
+              return '<li><span class="vres-name">' + esc(v.full_name) +
+                '<span>' + esc(v.voted_at || '') + '</span></span>' +
+                (v.comment ? '<em class="vres-reason">“' + esc(v.comment) + '”</em>' : '') + '</li>';
+            }).join('') + '</ul>'
+            : '<p class="vres-empty">—</p>')
+          : '<p class="vres-empty">ซ่อนรายชื่ออยู่</p>') + '</div>';
+    }
+    document.getElementById('dtBody').innerHTML = block(agree, 'ok', 'เห็นด้วย') + block(dis, 'no', 'ไม่เห็นด้วย');
+  });
+}
+
+/* สไตล์ของเอกสารในแท็บใหม่ — ต้องอยู่ในตัวเอง ไม่พึ่ง CSS ของแอป */
+var PRINT_DOC_CSS = [
+  '*{box-sizing:border-box}',
+  'body{margin:0;padding:24px;background:#e7ecea;color:#111;font-family:Sarabun,sans-serif}',
+  '.p-toolbar{max-width:190mm;margin:0 auto 16px;padding:12px 16px;display:flex;align-items:center;',
+  ' gap:14px;justify-content:space-between;background:#0e7a70;color:#fff;border-radius:8px;font-size:12.5px;line-height:1.6}',
+  '.p-toolbar button{padding:9px 18px;font-family:inherit;font-size:13px;font-weight:800;color:#04211f;',
+  ' background:#2ec4b6;border:none;border-radius:6px;cursor:pointer;white-space:nowrap}',
+  '.p-toolbar button:hover{filter:brightness(1.08)}',
+  '.p-page{max-width:190mm;margin:0 auto;padding:14mm 15mm;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.18)}',
+  '.p-head{display:flex;align-items:center;gap:12px;border-bottom:2px solid #0e7a70;padding-bottom:8px}',
+  '.p-head img{width:52px;height:52px;border-radius:8px}',
+  '.p-org b{display:block;font-size:15px;color:#0e7a70}',
+  '.p-org span{display:block;font-size:11px;color:#444}',
+  '.p-title{margin:16px 0 14px;text-align:center;font-size:21px;font-weight:800}',
+  '.p-meta{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:13px}',
+  '.p-meta th{width:28mm;text-align:left;padding:6px 9px;background:#eef7f5;border:1px solid #cfe3df;font-weight:700}',
+  '.p-meta td{padding:6px 9px;border:1px solid #cfe3df}',
+  '.p-sec{margin:15px 0 8px;padding:6px 10px;font-size:13px;font-weight:800;color:#fff;background:#0e7a70;border-radius:3px}',
+  '.p-detail{font-size:14px;line-height:1.85;white-space:pre-wrap;text-indent:1.2em}',
+  '.p-tally{width:100%;border-collapse:collapse;font-size:14px}',
+  '.p-tally td{width:33.33%;padding:10px;text-align:center;border:1px solid #cfe3df}',
+  '.p-tally b{font-size:18px;color:#0e7a70}',
+  /* สัดส่วนเป็น % เพื่อไม่ให้คอลัมน์รวมกันเกินหน้ากระดาษจนชื่อตกบรรทัด */
+  '.p-list{width:100%;table-layout:fixed;border-collapse:collapse;font-size:12.5px}',
+  '.p-list th{padding:7px 6px;background:#eef7f5;border:1px solid #b9d8d2;font-weight:700}',
+  '.p-list td{padding:9px 6px;border:1px solid #cfe3df;height:12mm;vertical-align:middle;',
+  ' word-wrap:break-word;overflow-wrap:break-word}',
+  '.p-list .p-no{width:6%;text-align:center}',
+  '.p-list .p-name{width:25%}',
+  '.p-list .p-choice{width:12%;text-align:center}',
+  '.p-list .p-reason{width:25%;font-size:11.5px;line-height:1.5}',
+  '.p-list .p-reason .p-none{color:#999;font-size:10.5px}',
+  '.p-list .p-sign{width:21%}.p-list .p-date{width:11%}',
+  '.p-list thead{display:table-header-group}.p-list tr{page-break-inside:avoid}',
+  '.p-approve{display:flex;justify-content:space-between;gap:12mm;margin-top:18mm;page-break-inside:avoid}',
+  '.p-box{flex:1;text-align:center;font-size:13px}',
+  '.p-line{border-bottom:1px dotted #333;margin-bottom:6px;height:16mm}',
+  '.p-box b{display:block;font-weight:700}.p-box span{display:block;color:#555;font-size:11px}',
+  '.p-foot{margin-top:10mm;text-align:center;font-size:11px;color:#777}',
+  /* ขอบกระดาษตอนพิมพ์ — เว้นให้พอเจาะรู/เข้าแฟ้มได้ ไม่ชิดขอบ */
+  '@media print{@page{size:A4;margin:18mm 16mm 16mm}',
+  ' body{padding:0;background:#fff}.no-print{display:none!important}',
+  ' .p-page{max-width:none;width:auto;margin:0;padding:0;box-shadow:none}',
+  ' .p-title{margin:12px 0 12px}',
+  ' .p-approve{margin-top:14mm}}',
+].join('');
+
+/* ---------- เอกสารสำหรับพิมพ์ / บันทึกเป็น PDF ---------- */
+function buildPrintDoc() {
+  var d = voteState.detail;
+  if (!d) return;
+  var t = d.topic, votes = d.votes.slice();
+  var agree = votes.filter(function (v) { return v.choice === 'agree'; });
+  var dis = votes.filter(function (v) { return v.choice === 'disagree'; });
+
+  var rows = votes.map(function (v, i) {
+    return '<tr>' +
+      '<td class="p-no">' + (i + 1) + '</td>' +
+      '<td class="p-name">' + esc(v.full_name) + '</td>' +
+      '<td class="p-choice">' + (v.choice === 'agree' ? 'เห็นด้วย' : 'ไม่เห็นด้วย') + '</td>' +
+      '<td class="p-reason">' + (v.comment ? esc(v.comment) : '<span class="p-none">— ไม่ประสงค์ระบุ —</span>') + '</td>' +
+      '<td class="p-sign"></td>' +
+      '<td class="p-date"></td>' +
+    '</tr>';
+  }).join('');
+
+  var docHtml =
+    '<div class="p-page">' +
+      '<div class="p-head">' +
+        '<img src="' + LOGO_DATA_URI + '" alt="">' +
+        '<div class="p-org"><b>องค์กรตัวอย่าง (ORG) จำกัด</b>' +
+          '<span>ฝ่าย A</span></div>' +
+      '</div>' +
+      '<h1 class="p-title">บันทึกมติที่ประชุม</h1>' +
+      '<table class="p-meta"><tbody>' +
+        '<tr><th>เรื่อง</th><td>' + esc(t.title) + '</td></tr>' +
+        '<tr><th>วันที่พิจารณา</th><td>' + esc(t.consider_date || '—') + '</td></tr>' +
+        '<tr><th>ผู้เสนอวาระ</th><td>' + esc(t.created_name || '—') + '</td></tr>' +
+        '<tr><th>เลขที่วาระ</th><td>' + esc(t.topic_id) + '</td></tr>' +
+      '</tbody></table>' +
+      '<div class="p-sec">รายละเอียดที่นำเสนอ</div>' +
+      '<div class="p-detail">' + esc(t.detail) + '</div>' +
+      '<div class="p-sec">ผลการพิจารณา</div>' +
+      '<table class="p-tally"><tbody><tr>' +
+        '<td>เห็นด้วย <b>' + agree.length + '</b> เสียง</td>' +
+        '<td>ไม่เห็นด้วย <b>' + dis.length + '</b> เสียง</td>' +
+        '<td>รวมผู้ลงมติ <b>' + votes.length + '</b> คน</td>' +
+      '</tr></tbody></table>' +
+      '<div class="p-sec">รายชื่อผู้ลงมติและลายมือชื่อ</div>' +
+      '<table class="p-list"><thead><tr>' +
+        '<th class="p-no">ลำดับ</th><th>ชื่อ - นามสกุล</th><th class="p-choice">มติ</th>' +
+        '<th class="p-reason">เหตุผลประกอบ</th><th class="p-sign">ลายมือชื่อ</th><th class="p-date">วันที่</th>' +
+      '</tr></thead><tbody>' + (rows || '<tr><td colspan="6">— ยังไม่มีผู้ลงมติ —</td></tr>') + '</tbody></table>' +
+      '<div class="p-approve">' +
+        '<div class="p-box"><div class="p-line"></div><b>ผู้บันทึกการประชุม</b><span>(............................................)</span></div>' +
+        '<div class="p-box"><div class="p-line"></div><b>ผู้ตรวจทาน</b><span>(............................................)</span></div>' +
+        '<div class="p-box"><div class="p-line"></div><b>ผู้อนุมัติ</b><span>(............................................)</span></div>' +
+      '</div>' +
+      '<div class="p-foot">เอกสารนี้ออกโดยระบบ ORG · พิมพ์เมื่อ ' + nowStamp() + '</div>' +
+    '</div>';
+
+  // ชื่อไฟล์ตั้งต้นตอนกด Save as PDF มาจาก title ของหน้าที่สั่งพิมพ์
+  var fileName = 'มติที่ประชุม_' + String(t.title).replace(/[\\/:*?"<>|]/g, '') + '_' + (t.consider_date || '');
+
+  /* เปิดเอกสารในแท็บใหม่แล้วสั่งพิมพ์จากตรงนั้น
+     เหตุผล: Apps Script เสิร์ฟหน้าเว็บใน sandboxed iframe ซึ่ง "บล็อก window.print()"
+     เหมือนที่บล็อก confirm() — สั่งพิมพ์ในหน้าเดิมจะเงียบ ไม่มีหน้าต่างใดเด้งขึ้น
+     แท็บใหม่เป็น top-level window จึงพิมพ์ได้ปกติ และได้ preview ให้ตรวจก่อนด้วย */
+  var w = null;
+  try { w = window.open('', '_blank'); } catch (e) { w = null; }
+
+  if (!w || !w.document) {
+    // ป๊อปอัปโดนบล็อก -> ใช้วิธีเดิมเป็นทางสำรอง
+    document.getElementById('printArea').innerHTML = docHtml;
+    toast('เบราว์เซอร์บล็อกป๊อปอัป', 'อนุญาต popup ให้เว็บนี้เพื่อเปิดหน้าเอกสาร');
+    var prevTitle = document.title;
+    document.title = fileName;
+    setTimeout(function () {
+      try { window.print(); } catch (e) {}
+      setTimeout(function () { document.title = prevTitle; }, 800);
+    }, 350);
+    return;
+  }
+
+  w.document.open();
+  w.document.write(
+    '<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8">' +
+    '<title>' + esc(fileName) + '</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">' +
+    '<style>' + PRINT_DOC_CSS + '</style></head><body>' +
+    '<div class="p-toolbar no-print">' +
+      '<span>ตรวจเอกสารแล้วกดปุ่มพิมพ์ · เลือกปลายทางเป็น <b>Save as PDF</b> หรือ <b>Microsoft Print to PDF</b> เพื่อเลือกโฟลเดอร์ที่จะบันทึก</span>' +
+      '<button onclick="window.print()">พิมพ์ / บันทึก PDF</button>' +
+    '</div>' + docHtml + '</body></html>'
+  );
+  w.document.close();
+  w.focus();
+
+  toast('เปิดเอกสารในแท็บใหม่แล้ว', 'เลือกปลายทางเป็น PDF เพื่อเลือกโฟลเดอร์');
+
+  // รอให้ฟอนต์/โลโก้โหลดเสร็จก่อน แล้วค่อยเปิดหน้าต่างพิมพ์ให้อัตโนมัติ
+  var fire = function () { setTimeout(function () { try { w.print(); } catch (e) {} }, 450); };
+  if (w.document.readyState === 'complete') fire();
+  else w.addEventListener('load', fire);
+}
+
+/* ---------- ผูก event ---------- */
+function initVoteModule() {
+  var form = document.getElementById('voteForm');
+  if (!form) return;
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var data = {
+      title: document.getElementById('vTitle').value.trim(),
+      detail: document.getElementById('vDetail').value.trim(),
+      consider_date: document.getElementById('vDate').value.trim(),
+    };
+    var btn = form.querySelector('.vbtn-start');
+    btn.disabled = true; btn.textContent = 'กำลังเปิดโหวต...';
+    voteCreateTopic(data).then(function (res) {
+      btn.disabled = false; btn.textContent = 'เริ่มโหวต';
+      if (!res.ok) { toast(res.message || 'เปิดโหวตไม่สำเร็จ'); return; }
+      form.reset();
+      var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+      document.getElementById('vDate').value = d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+      voteState.shownId = null;
+      toast('เปิดโหวตแล้ว', 'ทุกคนที่อยู่ในหน้านี้จะเห็นวาระ');
+      refreshVoteBoard();
+    });
+  });
+
+  document.getElementById('voteBackBtn').addEventListener('click', function () {
+    stopVotePolling(); closeVoteDialog(); show('modules');
+  });
+
+  // ปุ่มโหวตใน popup
+  // ติ๊ก "ประสงค์ใส่เหตุผล" แล้วค่อยเปิดช่องกรอก
+  var wantReason = document.getElementById('vdWantReason');
+  var reasonBox = document.getElementById('vdReason');
+  var reasonHint = document.getElementById('vdReasonHint');
+  wantReason.addEventListener('change', function () {
+    reasonBox.hidden = !wantReason.checked;
+    reasonHint.hidden = wantReason.checked;
+    if (wantReason.checked) reasonBox.focus();
+  });
+
+  document.querySelectorAll('[data-vote]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var choice = b.getAttribute('data-vote');
+      if (!voteState.shownId) return;
+      var comment = wantReason.checked ? reasonBox.value.trim() : '';
+      if (wantReason.checked && !comment) {
+        toast('กรุณาระบุเหตุผล', 'หรือเอาเครื่องหมายถูกออกหากไม่ประสงค์');
+        reasonBox.focus();
+        return;
+      }
+      b.disabled = true;
+      voteCast(voteState.shownId, choice, comment).then(function (res) {
+        b.disabled = false;
+        toast(res.ok ? res.message : (res.message || 'บันทึกไม่สำเร็จ'));
+        if (res.ok) { closeVoteDialog(); refreshVoteBoard(); }
+      });
+    });
+  });
+  document.getElementById('vdLater').addEventListener('click', closeVoteDialog);
+
+  // ปุ่มในแต่ละกล่องวาระ (กล่องถูกสร้างใหม่เรื่อยๆ จึงดักที่ตัวครอบ)
+  document.getElementById('voteLiveList').addEventListener('click', function (ev) {
+    var btn = ev.target.closest('[data-act]');
+    if (!btn) return;
+    var card = btn.closest('[data-topic]');
+    if (!card) return;
+    var id = card.getAttribute('data-topic');
+    var act = btn.getAttribute('data-act');
+
+    if (act === 'open') {
+      var t = (voteState.open || []).filter(function (x) { return x.topic_id === id; })[0];
+      if (t) { voteState.shownId = null; openVoteDialog(t); }
+
+    } else if (act === 'close') {
+      askConfirm('ปิดการลงมติวาระนี้? หลังปิดแล้วจะลงคะแนนเพิ่มไม่ได้',
+                 'ยืนยันปิดโหวต', 'ปิดโหวต').then(function (ok) {
+        if (!ok) return;
+        voteClose(id).then(function (res) {
+          toast(res.message || 'ปิดโหวตแล้ว');
+          if (voteState.shownId === id) { voteState.shownId = null; closeVoteDialog(); }
+          voteState.sig = null;              // บังคับวาดใหม่
+          refreshVoteBoard();
+        });
+      });
+
+    } else if (act === 'result') {
+      voteTopicDetail(id).then(function (res) {
+        if (!res.ok) return toast(res.message || 'โหลดไม่สำเร็จ');
+        card.querySelector('[data-result]').hidden = false;
+        renderResultList(res.topic, res.votes || [], card.querySelector('[data-resultbody]'));
+      });
+
+    } else if (act === 'hide') {
+      card.querySelector('[data-result]').hidden = true;
+    }
+  });
+
+  // ประวัติวาระ
+  document.getElementById('voteHistoryBtn').addEventListener('click', openHistory);
+  document.getElementById('histClose').addEventListener('click', function () { document.getElementById('histModal').hidden = true; });
+  document.getElementById('histRows').addEventListener('click', function (ev) {
+    var tr = ev.target.closest('tr[data-topic]');
+    if (tr) openTopicDetail(tr.getAttribute('data-topic'));
+  });
+  document.getElementById('dtClose').addEventListener('click', function () { document.getElementById('detailModal').hidden = true; });
+  document.getElementById('dtPrint').addEventListener('click', buildPrintDoc);
+
+  document.getElementById('dtSaveEdit').addEventListener('click', function () {
+    var d = voteState.detail;
+    if (!d) return;
+    var btn = this;
+    btn.disabled = true; btn.textContent = 'กำลังบันทึก...';
+    voteUpdateTopic(d.topic.topic_id, {
+      consider_date: document.getElementById('dtDate').value.trim(),
+      created_name: document.getElementById('dtProposer').value.trim(),
+    }).then(function (res) {
+      btn.disabled = false; btn.textContent = 'บันทึก';
+      toast(res.message || (res.ok ? 'บันทึกแล้ว' : 'บันทึกไม่สำเร็จ'));
+      if (!res.ok) return;
+      openTopicDetail(d.topic.topic_id);   // โหลดค่าที่แก้แล้วกลับมาแสดง
+      voteState.sig = null;
+      refreshVoteBoard();
+    });
+  });
+
+  document.getElementById('dtDelete').addEventListener('click', function () {
+    var d = voteState.detail;
+    if (!d) return;
+    askConfirm('ลบวาระ "' + d.topic.title + '" พร้อมคะแนนทั้งหมด ' + d.votes.length +
+               ' รายการ? การลบนี้ย้อนกลับไม่ได้',
+               'ยืนยันลบวาระ', 'ลบวาระ').then(function (ok) {
+      if (!ok) return;
+      voteDeleteTopic(d.topic.topic_id).then(function (res) {
+        toast(res.message || (res.ok ? 'ลบแล้ว' : 'ลบไม่สำเร็จ'));
+        if (!res.ok) return;
+        document.getElementById('detailModal').hidden = true;
+        voteState.detail = null;
+        voteState.shownId = null;
+        openHistory();        // โหลดตารางประวัติใหม่
+        refreshVoteBoard();   // เผื่อลบวาระที่กำลังเปิดโหวตอยู่
+      });
+    });
+  });
+  document.getElementById('dtShowVoters').addEventListener('change', function () {
+    var d = voteState.detail; if (!d) return;
+    voteSetShowVoters(d.topic.topic_id, this.checked).then(function () { openTopicDetail(d.topic.topic_id); });
+  });
+
+  [['histModal', 'histModal'], ['detailModal', 'detailModal']].forEach(function (p) {
+    var el = document.getElementById(p[0]);
+    el.addEventListener('click', function (ev) { if (ev.target === el) el.hidden = true; });
+  });
+}
+
+
+  initVoteModule();
+
+  /* start */
+  show('login');
+})();
+
+</script>
+<script type="module">
+/* 3D layer — dynamic import ทำให้จับ error ได้ ถ้า CDN ถูกบล็อกหรือไม่มีเน็ต
+   จะเสียแค่ฉากพื้นหลัง ไม่กระทบการล็อกอิน
+   (โมดูล 3D Physics Playground ถูกถอดออกแล้ว จึงไม่ต้องโหลด cannon-es
+    และ OrbitControls อีกต่อไป — ฉากหน้า Login ใช้ THREE อย่างเดียว) */
+(async () => {
+try {
+const THREE = await import('three');
+
+/* ฉากพื้นหลังหน้า Login ถูกแทรกตรงนี้โดย build.py */
+/* ============================================================
+   Login backdrop — Data Analytics scene
+   Floating analytics panels (scatter / box / heatmap / sankey)
+   around a large Obsidian-style knowledge graph.
+   Calm, slow motion on purpose: this sits behind a login form.
+   ============================================================ */
+
+const C = {
+  teal: '#2ec4b6', tealLite: '#7ae7dc', tealDeep: '#12a094',
+  orange: '#f5a623', amber: '#ffc45f',
+  ink: '#cdeeea', faint: 'rgba(160, 214, 208, 0.55)',
+  panel: 'rgba(4, 34, 32, 0.82)', grid: 'rgba(122, 231, 220, 0.15)',
+};
+
+/* ---------------- chart painters (drawn once to a canvas) ---------------- */
+function makeCanvas(w, h) {
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  return cv;
+}
+
+function panelFrame(ctx, w, h, title) {
+  const r = 18;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = C.panel;
+  ctx.beginPath();
+  ctx.moveTo(r, 0); ctx.arcTo(w, 0, w, h, r); ctx.arcTo(w, h, 0, h, r);
+  ctx.arcTo(0, h, 0, 0, r); ctx.arcTo(0, 0, w, 0, r); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(122, 231, 220, 0.34)';
+  ctx.lineWidth = 2; ctx.stroke();
+
+  ctx.fillStyle = C.tealLite;
+  ctx.font = '600 21px "JetBrains Mono", monospace';
+  ctx.fillText(title, 26, 40);
+  ctx.strokeStyle = 'rgba(122, 231, 220, 0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(26, 56); ctx.lineTo(w - 26, 56); ctx.stroke();
+}
+
+function axes(ctx, x0, y0, x1, y1) {
+  ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = y1 - ((y1 - y0) * i) / 4;
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+  }
+  ctx.strokeStyle = 'rgba(122, 231, 220, 0.4)';
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+}
+
+function drawScatter(w, h) {
+  const cv = makeCanvas(w, h), ctx = cv.getContext('2d');
+  panelFrame(ctx, w, h, 'SCATTERPLOT · correlation');
+  const x0 = 60, y0 = 82, x1 = w - 34, y1 = h - 46;
+  axes(ctx, x0, y0, x1, y1);
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 80; i++) {
+    const t = rnd();
+    const px = x0 + t * (x1 - x0);
+    const noise = (rnd() - 0.5) * (y1 - y0) * 0.42;
+    const py = y1 - t * (y1 - y0) * 0.82 + noise - 10;
+    const rad = 3 + rnd() * 3.4;
+    ctx.beginPath();
+    ctx.arc(px, Math.max(y0 + 4, Math.min(y1 - 4, py)), rad, 0, Math.PI * 2);
+    ctx.fillStyle = rnd() > 0.78 ? 'rgba(245, 166, 35, 0.85)' : 'rgba(46, 196, 182, 0.72)';
+    ctx.fill();
+  }
+  ctx.strokeStyle = C.amber; ctx.lineWidth = 2.6; ctx.setLineDash([9, 7]);
+  ctx.beginPath(); ctx.moveTo(x0 + 6, y1 - 24); ctx.lineTo(x1 - 8, y0 + 34); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = C.faint; ctx.font = '500 16px "JetBrains Mono", monospace';
+  ctx.fillText('r = 0.87', x1 - 108, y0 + 26);
+  return cv;
+}
+
+function drawBox(w, h) {
+  const cv = makeCanvas(w, h), ctx = cv.getContext('2d');
+  panelFrame(ctx, w, h, 'BOXPLOT · distribution');
+  const x0 = 56, y0 = 82, x1 = w - 30, y1 = h - 46;
+  axes(ctx, x0, y0, x1, y1);
+  const groups = [[0.30, 0.46, 0.56, 0.68, 0.86], [0.20, 0.34, 0.44, 0.58, 0.74],
+                  [0.38, 0.52, 0.63, 0.74, 0.90], [0.26, 0.40, 0.50, 0.62, 0.80],
+                  [0.34, 0.48, 0.58, 0.70, 0.88]];
+  const span = (x1 - x0) / groups.length;
+  const Y = (v) => y1 - v * (y1 - y0);
+  groups.forEach((g, i) => {
+    const cx = x0 + span * (i + 0.5), bw = span * 0.44;
+    ctx.strokeStyle = 'rgba(122, 231, 220, 0.7)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, Y(g[0])); ctx.lineTo(cx, Y(g[4])); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - bw * 0.4, Y(g[0])); ctx.lineTo(cx + bw * 0.4, Y(g[0]));
+    ctx.moveTo(cx - bw * 0.4, Y(g[4])); ctx.lineTo(cx + bw * 0.4, Y(g[4])); ctx.stroke();
+    ctx.fillStyle = i === 2 ? 'rgba(245, 166, 35, 0.34)' : 'rgba(46, 196, 182, 0.3)';
+    ctx.fillRect(cx - bw / 2, Y(g[3]), bw, Y(g[1]) - Y(g[3]));
+    ctx.strokeStyle = i === 2 ? C.orange : C.teal;
+    ctx.strokeRect(cx - bw / 2, Y(g[3]), bw, Y(g[1]) - Y(g[3]));
+    ctx.strokeStyle = i === 2 ? C.amber : C.tealLite; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(cx - bw / 2, Y(g[2])); ctx.lineTo(cx + bw / 2, Y(g[2])); ctx.stroke();
+  });
+  return cv;
+}
+
+function drawHeatmap(w, h) {
+  const cv = makeCanvas(w, h), ctx = cv.getContext('2d');
+  panelFrame(ctx, w, h, 'HEATMAP · density');
+  const cols = 13, rows = 7, x0 = 40, y0 = 80;
+  const cw = (w - 80) / cols, ch = (h - 130) / rows;
+  let seed = 23;
+  const rnd = () => ((seed = (seed * 48271) % 2147483647) / 2147483647);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const v = Math.max(0, Math.min(1,
+        0.5 + 0.5 * Math.sin((c / cols) * 3.1) * Math.cos((r / rows) * 2.6) + (rnd() - 0.5) * 0.34));
+      ctx.fillStyle = v > 0.72
+        ? 'rgba(245, 166, 35, ' + (0.35 + v * 0.6) + ')'
+        : 'rgba(46, 196, 182, ' + (0.14 + v * 0.72) + ')';
+      ctx.fillRect(x0 + c * cw + 1.5, y0 + r * ch + 1.5, cw - 3, ch - 3);
+    }
+  }
+  const gy = h - 40;
+  for (let i = 0; i < 60; i++) {
+    ctx.fillStyle = 'rgba(46, 196, 182, ' + (0.15 + (i / 60) * 0.85) + ')';
+    ctx.fillRect(x0 + i * ((w - 200) / 60), gy, (w - 200) / 60 + 1, 9);
+  }
+  ctx.fillStyle = C.faint; ctx.font = '500 14px "JetBrains Mono", monospace';
+  ctx.fillText('low', x0, gy + 26); ctx.fillText('high', x0 + (w - 210), gy + 26);
+  return cv;
+}
+
+function drawSankey(w, h) {
+  const cv = makeCanvas(w, h), ctx = cv.getContext('2d');
+  panelFrame(ctx, w, h, 'SANKEY · flow');
+  const lx = 62, rx = w - 62, top = 86, bot = h - 44;
+  const src = [[0.00, 0.34], [0.38, 0.68], [0.74, 1.00]];
+  const dst = [[0.00, 0.24], [0.28, 0.50], [0.54, 0.78], [0.82, 1.00]];
+  const Y = (t) => top + t * (bot - top);
+  const flows = [[0, 0, 0.55], [0, 1, 0.45], [1, 1, 0.4], [1, 2, 0.6], [2, 2, 0.35], [2, 3, 0.65]];
+  const sCur = src.map((s) => Y(s[0])), dCur = dst.map((d) => Y(d[0]));
+  flows.forEach((f, i) => {
+    const [si, di, amt] = f;
+    const sh = (Y(src[si][1]) - Y(src[si][0])) * amt;
+    const dh = (Y(dst[di][1]) - Y(dst[di][0])) * amt;
+    const y1 = sCur[si], y2 = sCur[si] + sh, y3 = dCur[di], y4 = dCur[di] + dh;
+    sCur[si] += sh; dCur[di] += dh;
+    const mid = (lx + rx) / 2;
+    ctx.beginPath();
+    ctx.moveTo(lx + 16, y1);
+    ctx.bezierCurveTo(mid, y1, mid, y3, rx - 16, y3);
+    ctx.lineTo(rx - 16, y4);
+    ctx.bezierCurveTo(mid, y4, mid, y2, lx + 16, y2);
+    ctx.closePath();
+    ctx.fillStyle = i % 3 === 1 ? 'rgba(245, 166, 35, 0.3)' : 'rgba(46, 196, 182, 0.26)';
+    ctx.fill();
+  });
+  src.forEach((s) => { ctx.fillStyle = C.tealLite; ctx.fillRect(lx, Y(s[0]), 14, Y(s[1]) - Y(s[0])); });
+  dst.forEach((d) => { ctx.fillStyle = C.amber; ctx.fillRect(rx - 14, Y(d[0]), 14, Y(d[1]) - Y(d[0])); });
+  return cv;
+}
+
+/* ---------------- scene ---------------- */
+function createDataScene({ mount } = {}) {
+  const host = typeof mount === 'string' ? document.querySelector(mount) : mount;
+  if (!host) return null;
+
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x03211f, 0.031);
+
+  const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 200);
+  camera.position.set(0, 0.4, 17);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearAlpha(0);
+  host.appendChild(renderer.domElement);
+  Object.assign(renderer.domElement.style, { width: '100%', height: '100%', display: 'block' });
+
+  scene.add(new THREE.AmbientLight(0x9ffff2, 1.1));
+  const key = new THREE.PointLight(0x7ae7dc, 220, 90);
+  key.position.set(6, 8, 14);
+  scene.add(key);
+
+  /* ---- Obsidian-style knowledge graph (the centrepiece) ---- */
+  const graph = new THREE.Group();
+  scene.add(graph);
+
+  const NODES = 78;
+  const nodeGeo = new THREE.SphereGeometry(1, 14, 14);
+  const matTeal = new THREE.MeshBasicMaterial({ color: 0x7ae7dc, transparent: true, opacity: 0.95 });
+  const matHub = new THREE.MeshBasicMaterial({ color: 0xffc45f, transparent: true, opacity: 0.98 });
+
+  let s = 99;
+  const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+
+  const nodes = [];
+  for (let i = 0; i < NODES; i++) {
+    // flattened cluster: wide in x/y, shallow in z, denser near the middle
+    const a = rnd() * Math.PI * 2;
+    const rad = Math.pow(rnd(), 0.62) * 9.6;
+    const base = new THREE.Vector3(
+      Math.cos(a) * rad * 1.28,
+      Math.sin(a) * rad * 0.82,
+      (rnd() - 0.5) * 7.5
+    );
+    const hub = rnd() > 0.86;
+    const size = hub ? 0.2 + rnd() * 0.13 : 0.062 + rnd() * 0.085;
+    const m = new THREE.Mesh(nodeGeo, hub ? matHub : matTeal);
+    m.position.copy(base);
+    m.scale.setScalar(size);
+    graph.add(m);
+    nodes.push({ mesh: m, base, size, phase: rnd() * Math.PI * 2, speed: 0.16 + rnd() * 0.26 });
+  }
+
+  // connect each node to its nearest neighbours -> organic graph look
+  const pairs = [];
+  for (let i = 0; i < NODES; i++) {
+    const d = [];
+    for (let j = 0; j < NODES; j++) if (i !== j) d.push([nodes[i].base.distanceTo(nodes[j].base), j]);
+    d.sort((a, b) => a[0] - b[0]);
+    const links = nodes[i].size > 0.18 ? 4 : 2;
+    for (let k = 0; k < links; k++) if (d[k] && d[k][0] < 6.4 && i < d[k][1]) pairs.push([i, d[k][1]]);
+  }
+  const edgePos = new Float32Array(pairs.length * 6);
+  const edgeGeo = new THREE.BufferGeometry();
+  edgeGeo.setAttribute('position', new THREE.BufferAttribute(edgePos, 3));
+  graph.add(new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({
+    color: 0x2ec4b6, transparent: true, opacity: 0.26,
+  })));
+
+  /* ---- floating analytics panels ---- */
+  const panels = [];
+  function addPanel(canvas, x, y, z, scale, rotY) {
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 4;
+    const ratio = canvas.height / canvas.width;
+    const mesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(scale, scale * ratio),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.93, depthWrite: false })
+    );
+    mesh.position.set(x, y, z);
+    mesh.rotation.y = rotY;
+    scene.add(mesh);
+    panels.push({ mesh, base: mesh.position.clone(), rotY, phase: rnd() * Math.PI * 2, amp: 0.3 + rnd() * 0.3 });
+  }
+
+  addPanel(drawScatter(640, 420), -8.6, 3.1, 3.4, 6.2, 0.36);
+  addPanel(drawBox(640, 420), 9.0, 3.5, 2.0, 5.9, -0.36);
+  addPanel(drawHeatmap(660, 400), -8.2, -3.9, 1.4, 6.1, 0.3);
+  addPanel(drawSankey(640, 400), 8.6, -3.7, 3.2, 6.0, -0.3);
+
+  /* ---- motion ---- */
+  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  addEventListener('pointermove', (ev) => {
+    pointer.tx = (ev.clientX / innerWidth - 0.5) * 2;
+    pointer.ty = (ev.clientY / innerHeight - 0.5) * 2;
+  });
+
+  /* camera dolly used by the sign-in transition (1 = resting, 0.3 = flown in) */
+  let baseZ = 17, flyK = 1, fly = null;
+
+  function flyIn(dur) { fly = { t0: performance.now(), dur: dur || 620, from: flyK, to: 0.34 }; }
+  function reset(dur) { fly = { t0: performance.now(), dur: dur || 520, from: flyK, to: 1 }; }
+
+  function resize() {
+    const w = host.clientWidth || 1, h = host.clientHeight || 1;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    // keep the graph in frame on narrow screens
+    baseZ = w < 900 ? 22 : 17;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(host);
+  resize();
+
+  const clock = new THREE.Clock();
+  function tick() {
+    requestAnimationFrame(tick);
+    const t = clock.getElapsedTime();
+    const k = calm ? 0.16 : 1;
+
+    graph.rotation.y = t * 0.035 * k;
+    graph.rotation.x = Math.sin(t * 0.09) * 0.07 * k;
+
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const w = t * n.speed * k + n.phase;
+      n.mesh.position.set(
+        n.base.x + Math.sin(w) * 0.2,
+        n.base.y + Math.cos(w * 0.85) * 0.2,
+        n.base.z + Math.sin(w * 0.6) * 0.16
+      );
+      n.mesh.scale.setScalar(n.size * (1 + Math.sin(t * 1.1 * k + n.phase) * 0.09));
+    }
+    for (let p = 0; p < pairs.length; p++) {
+      const a = nodes[pairs[p][0]].mesh.position, b = nodes[pairs[p][1]].mesh.position;
+      edgePos[p * 6] = a.x; edgePos[p * 6 + 1] = a.y; edgePos[p * 6 + 2] = a.z;
+      edgePos[p * 6 + 3] = b.x; edgePos[p * 6 + 4] = b.y; edgePos[p * 6 + 5] = b.z;
+    }
+    edgeGeo.attributes.position.needsUpdate = true;
+
+    panels.forEach((p, i) => {
+      const w = t * (0.15 + i * 0.03) * k + p.phase;
+      p.mesh.position.y = p.base.y + Math.sin(w) * p.amp;
+      p.mesh.position.x = p.base.x + Math.cos(w * 0.7) * p.amp * 0.4;
+      p.mesh.rotation.y = p.rotY + Math.sin(w * 0.5) * 0.05;
+      p.mesh.rotation.z = Math.sin(w * 0.4) * 0.014;
+    });
+
+    if (fly) {
+      const p = Math.min(1, (performance.now() - fly.t0) / fly.dur);
+      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; // easeInOutCubic
+      flyK = fly.from + (fly.to - fly.from) * e;
+      if (p >= 1) fly = null;
+    }
+
+    pointer.x += (pointer.tx - pointer.x) * 0.03;
+    pointer.y += (pointer.ty - pointer.y) * 0.03;
+    camera.position.x = pointer.x * 1.15 * flyK;
+    camera.position.y = (0.4 - pointer.y * 0.7) * flyK;
+    camera.position.z = baseZ * flyK;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }
+  tick();
+
+  return { scene, camera, renderer, flyIn, reset };
+}
+
+/* ---------------- rotating data quotes (DOM overlay) ---------------- */
+function startQuotes(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  const QUOTES = [
+    ['Garbage in, garbage out.', 'A model can only be as honest as the data you feed it.'],
+    ['Without data, you are just another person with an opinion.', 'W. Edwards Deming'],
+    ['AI does not create truth — it amplifies whatever your data already says.', ''],
+    ['Clean data beats clever algorithms.', 'Every single time.'],
+    ['Numbers describe the past. Analysis decides the future.', ''],
+    ['If the input is noise, the intelligence is artificial in the worst way.', ''],
+  ];
+  let i = 0;
+  function paint() {
+    const q = QUOTES[i % QUOTES.length];
+    el.classList.remove('is-in');
+    setTimeout(() => {
+      el.innerHTML = '<b>&ldquo;' + q[0] + '&rdquo;</b>' + (q[1] ? '<span>' + q[1] + '</span>' : '');
+      el.classList.add('is-in');
+    }, 700);
+    i++;
+  }
+  paint();
+  setInterval(paint, 7000);
+}
+
+
+window.__pg = window.__pg || { data: null, pending: [] };
+window.__pg.data = createDataScene;
+if (typeof window.__pgFlush === 'function') window.__pgFlush();
+startQuotes('#dvQuote');
+
+} catch (err) {
+  console.warn('[3D] โหลด Three.js ไม่สำเร็จ — หน้า Login ยังใช้งานได้ปกติ (ต้องต่ออินเทอร์เน็ตเพื่อดูฉาก 3D):', err);
+}
+})();
+
+</script>
+
+<script>
+/* โหมดสาธิตสำหรับพอร์ตโฟลิโอ — คนดูไม่ควรต้องหารหัสก่อนถึงจะเห็นงาน
+   จึงกรอกบัญชีผู้ดูแลให้ แล้วกดส่งฟอร์มให้เองหลังหน้าโหลดเสร็จ */
+(function () {
+    function autoLogin() {
+        var u = document.getElementById("username");
+        var p = document.getElementById("password");
+        var f = u && u.form;
+        if (!u || !p || !f) return;
+        u.value = "admin";
+        p.value = "demo1234";
+        if (typeof f.requestSubmit === "function") f.requestSubmit();
+        else f.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () { setTimeout(autoLogin, 350); });
+    } else {
+        setTimeout(autoLogin, 350);
+    }
+})();
+</script>
+</body>
+</html>

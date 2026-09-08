@@ -1,0 +1,4187 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Action Plan — แผนปฏิบัติการเจาะกลุ่มลูกค้า</title>
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Google Font Thai -->
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- PptxGenJS -->
+<!-- SheetJS — โค้ดส่งออก Excel เรียกใช้ XLSX อยู่ 6 จุด แต่ไฟล์เดิมไม่เคยโหลดไลบรารีนี้
+     ทำให้ปุ่มส่งออก Excel พังมาตลอด เติมกลับให้ตรงกับที่โค้ดต้องการ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<!-- Three.js — ใช้กับฉากอนิเมชัน 3D หน้า Login (ไม่มีก็ไม่พัง แค่ไม่มีอนิเมชัน) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+:root {
+  --teal:       #1a7a6e;
+  --teal-dark:  #145f56;
+  --teal-light: #e8f5f3;
+  --teal-mid:   #2a9d8f;
+  --accent:     #f4a261;
+  --text:       #1a1a1a;
+  --text-light: #555;
+  --border:     #b2d8d4;
+  --bg:         #f0f7f6;
+  --white:      #ffffff;
+  --shadow:     0 2px 8px rgba(26,122,110,.10);
+}
+
+body {
+  font-family: 'Sarabun', 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Login screen — ฉาก 3D + การ์ดเข้าสู่ระบบ
+   ══════════════════════════════════════════════════════════════════ */
+#loginScreen {
+  position: fixed; inset: 0; z-index: 20000;
+  /* ห้องบัญชาการ — ไล่เฉดเขียวของธีมจากอ่อนกลางจอไปเข้มที่ขอบ */
+  background:
+    radial-gradient(120% 100% at 50% 38%, #0f5a52 0%, #073d38 45%, #03211f 100%);
+  display: flex; align-items: stretch; overflow: hidden;
+  font-family: 'Sarabun','Segoe UI',Arial,sans-serif;
+}
+
+/* ── เวทีอนิเมชัน 3D — เต็มจอเป็นฉากหลัง ── */
+.login-stage { position: absolute; inset: 0; z-index: 1; }
+#mmiCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ── ตารางกริด + เส้นสแกน แบบจอบัญชาการ ── */
+.cc-grid, .cc-scan { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.cc-grid {
+  background-image:
+    linear-gradient(rgba(90,220,200,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(90,220,200,.055) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(115% 100% at 50% 45%, #000 28%, transparent 80%);
+          mask-image: radial-gradient(115% 100% at 50% 45%, #000 28%, transparent 80%);
+}
+.cc-scan {
+  opacity: .30;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.20) 0 1px, transparent 1px 3px);
+}
+/* ขอบมุมจอ */
+.cc-corner { position: absolute; width: 44px; height: 44px; z-index: 3;
+  border: 2px solid rgba(245,160,30,.55); pointer-events: none; }
+.cc-corner.tl { top: 18px; left: 18px;  border-right: 0; border-bottom: 0; }
+.cc-corner.tr { top: 18px; right: 18px; border-left: 0;  border-bottom: 0; }
+.cc-corner.bl { bottom: 18px; left: 18px;  border-right: 0; border-top: 0; }
+.cc-corner.br { bottom: 18px; right: 18px; border-left: 0;  border-top: 0; }
+
+/* ── แถบสถานะด้านบน ── */
+.cc-top {
+  position: absolute; top: 0; left: 0; right: 0; height: 52px; z-index: 4;
+  display: flex; align-items: center; gap: 14px; padding: 0 20px;
+  background: linear-gradient(180deg, rgba(3,33,31,.92), rgba(3,33,31,.35));
+  border-bottom: 1px solid rgba(90,220,200,.16);
+  backdrop-filter: blur(10px); pointer-events: none;
+}
+.cc-top img { width: 32px; height: 32px; border-radius: 8px; }
+.cc-top .ttl { font-weight: 800; font-size: 15px; letter-spacing: .6px; color: #d8fbf4;
+  line-height: 1.2; }
+.cc-top .ttl small { display: block; font-size: 10px; letter-spacing: .3px;
+  color: rgba(216,251,244,.55); font-weight: 600; margin-top: 1px; }
+.cc-top .sp { flex: 1 }
+.cc-stat { display: flex; flex-direction: column; line-height: 1.25 }
+.cc-stat .k { font-size: 9px; letter-spacing: 1.3px; color: rgba(216,251,244,.45); font-weight: 700 }
+.cc-stat .v { font-size: 13.5px; font-weight: 800; color: #43d6c4;
+  font-variant-numeric: tabular-nums }
+.cc-live {
+  font-size: 9.5px; letter-spacing: 1.3px; font-weight: 800; padding: 4px 11px;
+  border-radius: 20px; border: 1px solid rgba(245,160,30,.45);
+  background: rgba(245,160,30,.12); color: #f8b544;
+}
+.cc-live i { display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #f8b544; margin-right: 6px; box-shadow: 0 0 8px #f8b544;
+  animation: ccblip 1.8s infinite; }
+@keyframes ccblip { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+/* ══════════════════════════════════════════════════════════════════
+   ยานอวกาศบินตามเมาส์ (เฉพาะหน้า Login บนเครื่องที่มีเมาส์)
+   ══════════════════════════════════════════════════════════════════ */
+body.ship-on #loginScreen,
+body.ship-on #loginScreen * { cursor: none !important; }
+
+#shipCursor {
+  position: fixed; left: 0; top: 0; z-index: 30;
+  width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  pointer-events: none; opacity: 0; transition: opacity .35s;
+  will-change: transform;
+}
+#shipCursor.on { opacity: 1 }
+#shipCursor svg { display: block; width: 100%; height: 100%;
+  filter: drop-shadow(0 0 10px rgba(67,214,196,.85)) drop-shadow(0 0 22px rgba(67,214,196,.35)); }
+
+/* เปลวไฟท้ายยาน */
+#shipCursor .flame {
+  position: absolute; left: 50%; top: 74%; width: 9px; height: 20px;
+  margin-left: -4.5px; border-radius: 50% 50% 60% 60%;
+  background: linear-gradient(180deg, #fff6d8, #f8b544 45%, rgba(245,160,30,0));
+  transform-origin: 50% 0%; filter: blur(.6px);
+  animation: shipFlame .10s infinite alternate;
+}
+@keyframes shipFlame { from { transform: scaleY(.72) scaleX(.85); opacity:.85 }
+                       to   { transform: scaleY(1.18) scaleX(1.05); opacity:1 } }
+
+/* ฝุ่นไอพ่นที่ทิ้งไว้ข้างหลัง */
+.ship-trail {
+  position: fixed; left: 0; top: 0; z-index: 29; pointer-events: none;
+  width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(180,255,245,.95), rgba(67,214,196,0) 70%);
+  will-change: transform, opacity;
+}
+
+/* ── แถบข้อความวิ่งด้านล่าง ── */
+.cc-bot {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 32px; z-index: 4;
+  display: flex; align-items: center; gap: 10px; padding: 0 18px;
+  background: rgba(3,33,31,.88); border-top: 1px solid rgba(90,220,200,.16);
+  backdrop-filter: blur(10px); overflow: hidden; pointer-events: none;
+}
+.cc-bot .tag { flex: 0 0 auto; font-size: 9px; letter-spacing: 1.4px; font-weight: 800;
+  color: #03211f; background: #43d6c4; padding: 3px 9px; border-radius: 4px; }
+.cc-tickwrap { flex: 1; overflow: hidden; position: relative; height: 100% }
+#ccTick { position: absolute; white-space: nowrap; line-height: 32px; font-size: 11px;
+  color: rgba(216,251,244,.62); will-change: transform; }
+#ccTick b { color: #d8fbf4 } #ccTick .d { margin: 0 20px; color: #f8b544 }
+
+/* ── การ์ดเข้าสู่ระบบ — อยู่กลางจอ ── */
+.login-pane {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; pointer-events: none;
+}
+.login-card {
+  pointer-events: auto;
+  /* โปร่งใสพอให้เห็นลูกโลกและป้ายเขตด้านหลัง แต่ยังอ่านตัวหนังสือได้ชัด */
+  background: linear-gradient(165deg, rgba(10,66,60,.46), rgba(3,30,28,.58));
+  backdrop-filter: blur(22px) saturate(1.35);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  border: 1px solid rgba(67,214,196,.38);
+  border-radius: 18px; padding: 26px 28px 22px;
+  width: 100%; max-width: 366px; color: #eafffb;
+  box-shadow: 0 26px 70px rgba(0,0,0,.45), 0 0 46px rgba(67,214,196,.12),
+              inset 0 1px 0 rgba(255,255,255,.10);
+  animation: cardIn .75s cubic-bezier(.16,1,.3,1) both;
+  position: relative;
+  transition: opacity .5s, transform .5s, filter .5s;
+}
+/* ตอนกดเข้าสู่ระบบ — การ์ดจางหายไป */
+.login-card.gone {
+  opacity: 0; transform: translateY(-14px) scale(.94); filter: blur(6px);
+  pointer-events: none;
+}
+
+/* ── หน้าจอกำลังโหลดหลังกดเข้าสู่ระบบ ── */
+.login-loading {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; opacity: 0; visibility: hidden;
+  transition: opacity .55s ease .25s, visibility .55s ease .25s;
+  pointer-events: none; text-align: center; padding: 20px;
+}
+.login-loading.on { opacity: 1; visibility: visible; }
+.ll-ring {
+  width: 62px; height: 62px; border-radius: 50%; margin-bottom: 16px;
+  border: 3px solid rgba(67,214,196,.18); border-top-color: #43d6c4;
+  box-shadow: 0 0 26px rgba(67,214,196,.28);
+  animation: llspin 1s linear infinite;
+}
+@keyframes llspin { to { transform: rotate(360deg) } }
+.ll-t {
+  font-size: 16px; font-weight: 800; color: #eafffb; letter-spacing: 1.4px;
+  text-shadow: 0 2px 16px rgba(0,0,0,.6);
+}
+.ll-s {
+  font-size: 12.5px; font-weight: 700; color: #f8b544; letter-spacing: .6px;
+  min-height: 19px; text-shadow: 0 2px 14px rgba(0,0,0,.6);
+}
+.ll-bar {
+  width: min(260px, 70vw); height: 4px; border-radius: 3px; margin-top: 16px;
+  background: rgba(255,255,255,.14); overflow: hidden;
+}
+.ll-bar > i {
+  display: block; height: 100%; width: 0%; border-radius: 3px;
+  background: linear-gradient(90deg, #12857a, #43d6c4, #f5a01e);
+  transition: width 2.9s cubic-bezier(.3,.9,.4,1);
+}
+.login-loading.on .ll-bar > i { width: 100%; }
+/* ขีดมุมการ์ดแบบ HUD */
+.login-card::before, .login-card::after {
+  content:''; position:absolute; width:26px; height:26px; pointer-events:none;
+  border: 2px solid rgba(245,160,30,.6);
+}
+.login-card::before { top:-1px; left:-1px;  border-right:0; border-bottom:0; border-radius:18px 0 0 0 }
+.login-card::after  { bottom:-1px; right:-1px; border-left:0; border-top:0;  border-radius:0 0 18px 0 }
+@keyframes cardIn { from { opacity:0; transform: translateY(22px) scale(.97);} to { opacity:1; transform:none; } }
+
+.login-logo { display: flex; justify-content: center; margin-bottom: 13px; }
+.login-logo img {
+  width: 76px; height: 76px; border-radius: 50%;
+  border: 2px solid rgba(67,214,196,.55);
+  box-shadow: 0 0 26px rgba(67,214,196,.32), inset 0 0 18px rgba(67,214,196,.18);
+}
+.login-card h1 {
+  font-size: 19px; font-weight: 800; color: #eafffb;
+  margin-bottom: 3px; text-align: center; letter-spacing: 1.6px;
+}
+.login-card .sub {
+  font-size: 11.5px; color: rgba(216,251,244,.72); margin-bottom: 19px;
+  text-align: center; line-height: 1.55; letter-spacing: .3px;
+  text-shadow: 0 1px 8px rgba(0,0,0,.5);
+}
+.login-card h1 { text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.login-card label {
+  font-size: 10.5px; font-weight: 800; color: #43d6c4;
+  letter-spacing: 1.3px; display: block; margin-bottom: 5px;
+}
+.login-card input {
+  border: 1px solid rgba(67,214,196,.24); border-radius: 10px; padding: 11px 13px;
+  font-size: 15px; font-family: inherit; width: 100%;
+  /* การ์ดโปร่งใสขึ้น → ช่องกรอกต้องทึบขึ้นเล็กน้อยให้ยังอ่านง่าย */
+  background: rgba(2,26,24,.42); color: #eafffb;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.login-card input::placeholder { color: rgba(216,251,244,.36) }
+.login-card input:focus {
+  outline: none; border-color: #43d6c4; background: rgba(2,26,24,.62);
+  box-shadow: 0 0 0 3px rgba(67,214,196,.18);
+}
+.login-card .btn-login {
+  background: linear-gradient(135deg, #2fbfae 0%, #12857a 100%);
+  color: #03211f; border: none; width: 100%;
+  padding: 12px; border-radius: 10px; font-weight: 800; margin-top: 6px;
+  letter-spacing: 1px; font-size: 14.5px;
+  box-shadow: 0 8px 22px rgba(47,191,174,.26);
+  transition: filter .2s, transform .1s;
+}
+.login-card .btn-login:hover:not(:disabled) { filter: brightness(1.12); color: #03211f; }
+.login-card .btn-login:active:not(:disabled) { transform: translateY(1px); }
+.login-card .btn-login:disabled { opacity: .7; }
+#loginError { color: #ff9b8f; font-size: 12.5px; min-height: 20px; text-align: center; }
+#loginHint { color: rgba(216,251,244,.42) !important; }
+#loginHint a { color: #43d6c4; text-decoration: none; }
+#loginHint a:hover { text-decoration: underline; }
+#appRoot { display: none; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cc-top { height: 46px; padding: 0 14px; gap: 10px }
+  .cc-top .hideSm { display: none }
+}
+@media (max-width: 700px) {           /* แท็บเล็ต / มือถือ */
+  .login-pane { padding: 16px; }
+  .login-card { max-width: 400px; padding: 22px 20px 18px; border-radius: 16px; }
+  .login-logo img { width: 64px; height: 64px; }
+  .login-card h1 { font-size: 17.5px; }
+  .login-card .sub { font-size: 11px; margin-bottom: 16px; }
+  .cc-corner { width: 30px; height: 30px }
+  .cc-corner.tl,.cc-corner.tr { top: 12px } .cc-corner.bl,.cc-corner.br { bottom: 42px }
+  .cc-corner.tl,.cc-corner.bl { left: 12px } .cc-corner.tr,.cc-corner.br { right: 12px }
+  .cc-top .ttl { font-size: 12.5px }
+  .cc-top .ttl small { font-size: 8.5px }
+  .cc-live { display: none }
+}
+@media (max-height: 560px) {          /* จอเตี้ย / มือถือแนวนอน */
+  .login-pane { padding: 8px; }
+  .login-card { padding: 15px 20px 12px; max-width: 336px; }
+  .login-logo { margin-bottom: 7px; }
+  .login-logo img { width: 44px; height: 44px; }
+  .login-card h1 { font-size: 15.5px; }
+  .login-card .sub { margin-bottom: 11px; font-size: 10.5px; }
+  .login-card input { padding: 7px 11px; }
+  .login-card .btn-login { padding: 9px; }
+  #loginHint { display: none; }
+  .cc-bot { display: none }
+}
+@media (prefers-reduced-motion: reduce) {
+  .login-card { animation: none; }
+  .stage-caption .cap-main, .stage-caption .cap-sub { transition: opacity .3s; transform: none; }
+}
+
+/* ── Zone Bar ── */
+.zone-bar {
+  background: var(--teal-dark);
+  padding: 10px 20px;
+  overflow-x: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+}
+.zone-btn {
+  background: rgba(255,255,255,.15);
+  border: 2px solid rgba(255,255,255,.35);
+  color: #fff;
+  padding: 5px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all .2s;
+  cursor: pointer;
+}
+.zone-btn:hover  { background: rgba(255,255,255,.25); color:#fff; }
+.zone-btn.active { background: #fff; color: var(--teal-dark); border-color: #fff; }
+
+.btn-save  { background:#2e7d32; color:#fff; border:none; }
+.btn-table { background:#4a90d9; color:#fff; border:none; }
+.btn-pdf   { background:#e63946; color:#fff; border:none; }
+.btn-pptx  { background:#f4a261; color:#fff; border:none; }
+.btn-save:hover,.btn-table:hover,.btn-pdf:hover,.btn-pptx:hover { opacity:.88; color:#fff; }
+
+/* ── Page wrapper ── */
+.page-wrapper {
+  max-width: 1140px;
+  margin: 24px auto;
+  padding: 0 16px 40px;
+}
+.page-label {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* ── Doc page card ── */
+.doc-page {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* ── Doc header ── */
+.doc-header {
+  background: var(--teal);
+  color: #fff;
+  padding: 16px 24px 14px;
+}
+.doc-title   { font-size: 21px; font-weight: 800; line-height: 1.2; }
+.doc-subtitle { font-size: 13px; opacity: .85; margin-top: 3px; }
+.meta-label  { font-size: 11px; opacity: .75; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.meta-input  {
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.4);
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  width: 160px;
+}
+.meta-input::placeholder { color: rgba(255,255,255,.55); }
+.meta-input:focus { outline: none; background: rgba(255,255,255,.3); }
+
+/* ── Doc body grid ── */
+.doc-body {
+  padding: 18px 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.span-1 { grid-column: span 1; }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: 1 / -1; }
+
+/* ── Section ── */
+.section {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.section-header {
+  background: var(--teal);
+  color: #fff;
+  padding: 7px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-header .num {
+  background: rgba(255,255,255,.25);
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+.section-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--white);
+}
+
+/* ── Form fields ── */
+.field-group { display: flex; flex-direction: column; gap: 3px; }
+.field-group label {
+  font-size: 12px; font-weight: 700;
+  color: var(--teal-dark); letter-spacing: .2px;
+}
+.field-group input,
+.field-group textarea {
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  padding: 7px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--teal-light);
+  transition: border-color .2s, background .2s;
+  resize: vertical;
+  width: 100%;
+}
+.field-group input:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: var(--teal-mid);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(26,122,110,.12);
+}
+
+/* ── Data table ── */
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  background: var(--teal); color: #fff;
+  padding: 7px 10px; text-align: center;
+  font-weight: 700; font-size: 12px;
+}
+.data-table td { border: 1px solid var(--border); padding: 0; }
+.data-table td:first-child {
+  background: var(--teal-light);
+  padding: 6px 10px;
+  font-weight: 700; font-size: 13px;
+  color: var(--teal-dark); text-align: center; white-space: nowrap;
+}
+.data-table td input,
+.data-table td textarea {
+  border: none; outline: none;
+  padding: 6px 8px; width: 100%;
+  font-family: inherit; font-size: 13px;
+  background: transparent; resize: none;
+}
+.data-table td input:focus,
+.data-table td textarea:focus { background: var(--teal-light); }
+.data-table tbody tr:nth-child(even) td { background: #f9fdfc; }
+.data-table tbody tr:nth-child(even) td:first-child { background: var(--teal-light); }
+
+/* ── CLV Banner ── */
+.clv-banner {
+  grid-column: 1 / -1;
+  background: linear-gradient(90deg, var(--teal-dark) 0%, var(--teal-mid) 100%);
+  border-radius: 8px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.clv-formula { color: #fff; font-size: 14px; font-weight: 700; flex: 0 0 auto; }
+.clv-formula span { color: #f4e04d; }
+.clv-inputs { display: flex; gap: 12px; flex: 1; flex-wrap: wrap; align-items: flex-end; }
+.clv-field { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 100px; }
+.clv-field label { font-size: 11px; color: rgba(255,255,255,.8); font-weight: 600; }
+.clv-field input {
+  border: 1.5px solid rgba(255,255,255,.4);
+  border-radius: 5px; padding: 7px 10px;
+  font-size: 14px; font-family: inherit;
+  background: rgba(255,255,255,.18);
+  color: #fff; text-align: center; font-weight: 700;
+}
+.clv-field input::placeholder { color: rgba(255,255,255,.5); }
+.clv-field input:focus { outline: none; background: rgba(255,255,255,.28); }
+.clv-result {
+  background: rgba(255,255,255,.15);
+  border-radius: 6px; padding: 10px 16px; text-align: center; flex: 0 0 auto;
+}
+.clv-result .lbl { font-size: 11px; color: rgba(255,255,255,.75); }
+.clv-result .val { font-size: 22px; font-weight: 900; color: #f4e04d; }
+
+/* ── Approval / Signature ── */
+.approval-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.sig-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-top: 12px; padding-top: 12px;
+  border-top: 1.5px dashed var(--border);
+}
+.sig-block { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sig-line   { width: 100%; border-bottom: 1.5px solid var(--text-light); height: 32px; }
+.sig-block label { font-size: 12px; color: var(--teal-dark); font-weight: 700; text-align: center; }
+.sig-date   { font-size: 12px; color: var(--text-light); }
+.sig-input  {
+  border: none; border-bottom: 1px dashed #aaa;
+  text-align: center; font-size: 13px; background: transparent; width: 100%;
+  font-family: inherit; color: var(--text);
+}
+.sig-input:focus { outline: none; border-bottom-color: var(--teal-mid); }
+
+/* ── Toast ── */
+.toast-ap {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--teal-dark); color: #fff;
+  padding: 12px 20px; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+  opacity: 0; transform: translateY(12px);
+  transition: all .3s; z-index: 9999; pointer-events: none;
+}
+.toast-ap.show { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════════════════════════════════════════
+   Responsive ของหน้าฟอร์ม — คอม / โน้ตบุ๊ก / แท็บเล็ต / มือถือ
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ตารางในแต่ละหัวข้อ เลื่อนแนวนอนได้บนจอแคบ แทนที่จะล้นออกนอกกรอบ */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── โน้ตบุ๊ก / แท็บเล็ตแนวนอน ── */
+@media (max-width: 1100px) {
+  .page-wrapper { padding: 0 12px 32px; margin-top: 16px; }
+  .doc-body { padding: 16px 16px; gap: 13px; }
+}
+
+/* ── แท็บเล็ต ── */
+@media (max-width: 900px) {
+  body { font-size: 14.5px; }
+  .doc-body { grid-template-columns: 1fr 1fr; }
+  .span-2, .span-3 { grid-column: 1 / -1; }
+
+  /* แถบโซน: แบ่งเป็นสองแถวชัดเจน — แถวบนเลือกโซน แถวล่างเป็นปุ่มคำสั่ง */
+  .zone-bar { padding: 8px 12px; }
+  .zone-bar > .d-flex {
+    flex-direction: column; align-items: stretch !important; gap: 8px !important;
+  }
+  .zone-bar > .d-flex > * { flex: 0 0 auto; }
+  #zoneButtons {
+    display: flex !important; flex-wrap: nowrap !important;
+    overflow-x: auto; overflow-y: hidden; padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch; align-items: center;
+  }
+  #zoneButtons::-webkit-scrollbar { height: 3px; }
+  #zoneButtons::-webkit-scrollbar-thumb { background: rgba(255,255,255,.35); border-radius: 3px; }
+  .zone-btn { white-space: nowrap; flex: 0 0 auto; }
+  .zone-bar .flex-grow-1 { display: none; }
+  #userBadge { margin: 0 !important; }
+
+  /* ปุ่มคำสั่ง: กริดเท่ากันหมด อ่านง่าย กดง่าย */
+  /* ต้องไล่ลูกโดยตรง (>) เท่านั้น เพราะแถวครอบทั้งแถบก็มีคลาส d-flex gap-2 flex-wrap
+     และเป็นลูกคนสุดท้ายของ .zone-bar ด้วย ถ้าใช้ selector แบบลูกหลานจะไปโดนแถวครอบ
+     ทำให้ทั้งแถบกลายเป็น grid แล้วชิปโซนถูกยืดสูงผิดรูป
+     ปุ่มคำสั่ง: เติมเต็มความกว้างที่มี แล้วขึ้นบรรทัดใหม่เองเมื่อไม่พอ
+     ต้องใช้ minmax(0,...) ไม่งั้นคอลัมน์จะบีบไม่ต่ำกว่าความยาวป้ายปุ่ม แล้วล้นออกนอกจอ */
+  .zone-bar > .d-flex > .d-flex:last-child {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    gap: 6px !important;
+    width: 100%;
+  }
+  .zone-bar > .d-flex > .d-flex:last-child > * {
+    width: 100%; min-width: 0; font-size: 12px; padding: 7px 6px !important;
+    border-radius: 8px !important; text-align: center; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .doc-header { padding: 14px 16px 12px; }
+  .doc-title { font-size: 18px; }
+  .meta-input { width: 100%; }
+  .doc-header .d-flex.gap-3 { width: 100%; gap: 10px !important; }
+  .doc-header .d-flex.gap-3 > div { flex: 1 1 30%; min-width: 108px; }
+}
+
+/* ── มือถือ ── */
+@media (max-width: 640px) {
+  body { font-size: 14px; }
+  .page-wrapper { margin: 12px auto; padding: 0 9px 28px; }
+  .doc-body { grid-template-columns: 1fr; padding: 12px 11px; gap: 12px; }
+  .span-3, .span-2, .span-1 { grid-column: 1; }
+  .doc-page { border-radius: 10px; margin-bottom: 16px; }
+
+  .zone-bar > .d-flex > .d-flex:last-child { grid-template-columns: repeat(2, 1fr); }
+  /* บนจอแคบแถบนี้สูงเกินกว่าจะตรึงไว้ได้ ปล่อยให้เลื่อนหายไปกับหน้า
+     ไม่งั้นมันกินพื้นที่อ่านฟอร์มไปเกือบครึ่งจอตลอดเวลา */
+  .zone-bar { position: static; }
+
+  .doc-title { font-size: 16.5px; line-height: 1.3; }
+  .doc-subtitle { font-size: 12px; }
+  .doc-header .d-flex.gap-3 > div { flex: 1 1 100%; }
+  .section-header { font-size: 13px; padding: 7px 11px; }
+  .section-body { padding: 11px; }
+
+  /* ตารางในข้อ 4 / 6 / 7 — เลื่อนแนวนอนแทนการบีบจนอ่านไม่ออก */
+  .section-body > .data-table,
+  .table-scroll > .data-table { min-width: 460px; }
+  .data-table th, .data-table td:first-child { font-size: 11.5px; padding: 6px 7px; }
+  .data-table td input, .data-table td textarea { font-size: 13px; }
+
+  /* CLV: เรียงลงมาเป็นแถว อ่านง่ายบนจอแคบ */
+  .clv-banner { flex-direction: column; align-items: stretch; gap: 11px; padding: 13px 14px; }
+  .clv-formula { font-size: 12.5px; text-align: center; }
+  .clv-inputs { gap: 8px; }
+  .clv-field { min-width: 0; flex: 1 1 30%; }
+  .clv-field label { font-size: 10px; }
+  .clv-result { width: 100%; }
+  .clv-result .val { font-size: 20px; }
+
+  /* เป้าหมาย + ลายเซ็น */
+  .approval-grid { grid-template-columns: 1fr; gap: 10px; }
+  .approval-grid .d-grid { grid-template-columns: 1fr 1fr; }
+  .sig-row { grid-template-columns: 1fr; gap: 16px; }
+  .sig-line { height: 26px; }
+
+  /* Modal เต็มจอบนมือถือ */
+  .modal-dialog { margin: 0; max-width: 100%; height: 100%; }
+  .modal-content { border-radius: 0; min-height: 100%; }
+  #tableModal .modal-header, #historyModal .modal-header,
+  #usersModal .modal-header, #pdfModal .modal-header { flex-wrap: wrap; gap: 8px; }
+  #tableModal .modal-header .btn { font-size: 12px; padding: 5px 9px; }
+  #summaryTable th, #summaryTable td { padding: 6px 8px; font-size: 12px; }
+  #summaryTable th:first-child, #summaryTable td:first-child { min-width: 130px !important; }
+
+  /* หน้าจอเลือกโซน PDF: เอา preview ลงล่าง */
+  #pdfModal .row.g-0 { min-height: auto !important; }
+  #pdfModal .col-md-8 > div[style*="height:520px"] { height: 300px !important; }
+
+  /* ตารางในหน้าประวัติ / จัดการผู้ใช้ */
+  #historyBody table, #usersBody table { font-size: 12.5px; }
+  #historyBody .btn, #usersBody .btn { font-size: 11.5px; padding: 3px 7px; }
+  #usersBody .row.g-2 > [class*="col-"] { flex: 0 0 50%; max-width: 50%; }
+}
+
+/* ── มือถือจอเล็กมาก ── */
+@media (max-width: 400px) {
+  .zone-bar > .d-flex > .d-flex:last-child > * { font-size: 11px; }
+  .clv-field { flex: 1 1 100%; }
+  .approval-grid .d-grid { grid-template-columns: 1fr; }
+  #usersBody .row.g-2 > [class*="col-"] { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* ── อุปกรณ์สัมผัส: ขยายพื้นที่กดให้นิ้วโดนง่าย + กัน iOS ซูมตอนโฟกัส ── */
+@media (hover: none) and (pointer: coarse) {
+  .field-group input, .field-group textarea,
+  .data-table td input, .data-table td textarea,
+  .clv-field input, .meta-input, .sig-input, .form-select { font-size: 16px; }
+  .zone-btn, .btn { min-height: 38px; }
+}
+
+/* ── Print ── */
+@media print {
+  body { background: #fff; font-size: 11px; }
+  .zone-bar { display: none !important; }
+  .page-wrapper { margin: 0; padding: 0; max-width: 100%; }
+  .doc-page { box-shadow: none; border-radius: 0; margin: 0; page-break-after: always; }
+  .doc-page:last-child { page-break-after: avoid; }
+  .doc-body { gap: 10px; padding: 14px 16px; }
+  .field-group input, .field-group textarea,
+  .data-table td input, .data-table td textarea {
+    border: 1px solid #ccc !important; background: #fff !important;
+  }
+  .clv-field input { color: #000; background: rgba(255,255,255,.3) !important; }
+  @page { size: A4 landscape; margin: 10mm; }
+}
+
+/* ── Modal table ── */
+#tableModal .modal-header { background: #0f4a32; color: #fff; }
+#tableModal .modal-title  { font-weight: 700; }
+#tableModal .close-btn    { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); color: #fff; }
+#summaryTable th { background: #0f4a32; color: #fff; padding: 9px 12px; white-space: nowrap; }
+#summaryTable td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
+.tbl-section-row { background: #e8f4ee !important; color: #0f4a32; font-weight: 700; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- ══ Login Screen ══ -->
+<div id="loginScreen">
+
+  <!-- เวทีอนิเมชัน 3D -->
+  <div class="login-stage">
+    <canvas id="mmiCanvas"></canvas>
+  </div>
+  <div class="cc-grid"></div>
+  <div class="cc-scan"></div>
+  <div class="cc-corner tl"></div><div class="cc-corner tr"></div>
+  <div class="cc-corner bl"></div><div class="cc-corner br"></div>
+
+  <!-- ยานอวกาศบินตามเมาส์ -->
+  <div id="shipCursor">
+    <div class="flame"></div>
+    <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+      <!-- ปีกซ้าย-ขวา -->
+      <path d="M24 8 L10 36 L24 30 Z" fill="#12857a"/>
+      <path d="M24 8 L38 36 L24 30 Z" fill="#2fbfae"/>
+      <!-- ลำตัว -->
+      <path d="M24 4 L31 32 L24 28 L17 32 Z" fill="#eafffb"/>
+      <!-- ห้องนักบิน -->
+      <circle cx="24" cy="18" r="4.2" fill="#0a4a44"/>
+      <circle cx="24" cy="18" r="2.4" fill="#43d6c4"/>
+      <!-- ครีบท้าย -->
+      <path d="M20 31 L24 41 L28 31 Z" fill="#f5a01e"/>
+    </svg>
+  </div>
+
+  <!-- แถบสถานะบน -->
+  <div class="cc-top">
+    <img id="brandLogo" alt="องค์กรตัวอย่าง (ORG)">
+    <div class="ttl">องค์กรตัวอย่าง (ORG)<small>ฝ่าย A</small></div>
+    <div class="sp"></div>
+    <div class="cc-stat hideSm"><span class="k">ZONES</span><span class="v">5</span></div>
+    <div class="cc-stat"><span class="k">TIME</span><span class="v" id="ccClock">--:--:--</span></div>
+    <span class="cc-live"><i></i>SYSTEM ONLINE</span>
+  </div>
+
+  <!-- แถบข้อความวิ่งล่าง -->
+  <div class="cc-bot">
+    <span class="tag">STATUS</span>
+    <div class="cc-tickwrap"><div id="ccTick"></div></div>
+  </div>
+
+  <!-- การ์ดเข้าสู่ระบบ -->
+  <div class="login-pane">
+  <div class="login-card">
+    <div class="login-logo"><img id="cardLogo" alt="องค์กรตัวอย่าง (ORG)"></div>
+    <h1>ACTION PLAN</h1>
+    <div class="sub">องค์กรตัวอย่าง (ORG)<br>ฝ่าย A</div>
+    <form id="loginForm" autocomplete="on">
+      <div class="mb-3">
+        <label for="loginUser">ชื่อผู้ใช้</label>
+        <input type="text" id="loginUser" name="username" autocomplete="off" value="admin" required>
+      </div>
+      <div class="mb-2">
+        <label for="loginPass">รหัสผ่าน</label>
+        <input type="text" id="loginPass" name="current-password" autocomplete="off" value="demo1234" required>
+      </div>
+      <div id="loginError"></div>
+      <button type="submit" class="btn btn-login" id="loginBtn">เข้าสู่ระบบ</button>
+    </form>
+    <div class="text-center mt-3" style="font-size:11px;color:#999" id="loginHint"></div>
+  </div>
+
+  <!-- หน้าจอกำลังโหลด (ขึ้นแทนกล่อง login หลังเข้าสู่ระบบสำเร็จ) -->
+  <div class="login-loading" id="loginLoading">
+    <div class="ll-ring"></div>
+    <div class="ll-t" id="llTitle">กำลังเข้าสู่ระบบ</div>
+    <div class="ll-s" id="llSub"></div>
+    <div class="ll-bar"><i></i></div>
+  </div>
+  </div>
+</div>
+
+<!-- ══ App ══ -->
+<div id="appRoot">
+
+<!-- ══ Zone Bar ══ -->
+<div class="zone-bar">
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    <span class="text-white fw-bold me-1" style="white-space:nowrap">📍 โซน:</span>
+    <span id="zoneButtons" class="d-flex gap-2 flex-wrap"></span>
+
+    <div class="flex-grow-1"></div>
+
+    <span class="text-white small me-2" id="userBadge"></span>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-sm btn-save rounded-pill px-3" title="บันทึกเป็นรายการใหม่" onclick="saveToDB()">💾 บันทึก</button>
+      <button class="btn btn-sm rounded-pill px-3" style="background:#f59e0b;color:#fff" onclick="clearCurrentZoneForm()">🧹 ล้างฟอร์ม</button>
+      <button class="btn btn-sm rounded-pill px-3" style="background:#0ea5e9;color:#fff" onclick="openHistory()">🕒 ประวัติ</button>
+      <button class="btn btn-sm rounded-pill px-3" style="background:#dc2626;color:#fff" title="ลบประวัติทั้งหมด" onclick="deleteAllHistory()">🗑️ ลบประวัติ</button>
+      <button class="btn btn-sm btn-table rounded-pill px-3"    onclick="openDataTable()">📋 ตารางสรุป</button>
+      <button class="btn btn-sm rounded-pill px-3" id="btnUsers" style="background:#0891b2;color:#fff;display:none" onclick="openUsers()">⚙️ Users</button>
+      <button class="btn btn-sm btn-pdf rounded-pill px-3"   onclick="exportPDF()">🖨️ PDF</button>
+      <button class="btn btn-sm btn-pptx rounded-pill px-3"  onclick="exportPPTX()">📊 PPTX</button>
+      <button class="btn btn-sm rounded-pill px-3" style="background:#6b7280;color:#fff" onclick="logout()">🚪 ออก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Pages ══ -->
+<div class="page-wrapper" id="pageWrapper">
+
+  <!-- ─── PAGE 1 ─── -->
+  <p class="page-label">หน้า 1 / 2 — Action Plan</p>
+  <div class="doc-page" id="page1">
+
+    <div class="doc-header">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+          <div class="doc-title">Action Plan — แผนปฏิบัติการเจาะกลุ่มลูกค้า</div>
+          <div class="doc-subtitle">องค์กรตัวอย่าง (ORG) &nbsp;|&nbsp; One-Page Summary</div>
+        </div>
+        <div class="d-flex gap-3 flex-wrap align-items-end">
+          <div><div class="meta-label">สาขา</div>
+            <input class="meta-input" type="text" id="branch" placeholder="ชื่อสาขา" oninput="saveData()"></div>
+          <div><div class="meta-label">ผู้จัดทำ</div>
+            <input class="meta-input" type="text" id="author" placeholder="ชื่อผู้จัดทำ" oninput="saveData()"></div>
+          <div><div class="meta-label">วันที่</div>
+            <input class="meta-input" type="date" id="docDate" oninput="saveData()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-body">
+
+      <!-- 1 กลุ่มลูกค้าเป้าหมาย -->
+      <div class="section span-1">
+        <div class="section-header"><span class="num">1</span> กลุ่มลูกค้าเป้าหมาย</div>
+        <div class="section-body">
+          <div class="field-group">
+            <label>Personal หลัก</label>
+            <input type="text" id="s1_personal" placeholder="เพศ-อายุ-อาชีพ-รายได้" oninput="saveData()">
+          </div>
+          <div class="field-group">
+            <label>Pain Point</label>
+            <textarea id="s1_pain" rows="2" placeholder="ปัญหาที่อยากแก้" oninput="saveData()"></textarea>
+          </div>
+          <div class="field-group">
+            <label>Insight + ที่มา</label>
+            <textarea id="s1_insight" rows="2" placeholder="เช่น สอบถามลูกค้า 20 คน" oninput="saveData()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 Hook Product -->
+      <div class="section span-1">
+        <div class="section-header"><span class="num">2</span> Hook Product</div>
+        <div class="section-body">
+          <div class="field-group">
+            <label>ชื่อ Hook</label>
+            <input type="text" id="s2_name" placeholder="ชื่อโปรแกรม/บริการ Hook" oninput="saveData()">
+          </div>
+          <div class="d-grid gap-2" style="grid-template-columns:1fr 1fr">
+            <div class="field-group">
+              <label>ราคา (ปกติ/ลด)</label>
+              <input type="text" id="s2_price" placeholder="590 (1,990)" oninput="saveData()">
+            </div>
+            <div class="field-group">
+              <label>ผลเห็นภายใน</label>
+              <input type="text" id="s2_result" placeholder="กี่น/วัน" oninput="saveData()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Script Upsell ไป Main</label>
+            <textarea id="s2_script" rows="3" placeholder="บทพูดพนักงาน..." oninput="saveData()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Main Product -->
+      <div class="section span-1">
+        <div class="section-header"><span class="num">3</span> Main Product</div>
+        <div class="section-body">
+          <div class="field-group">
+            <label>ชื่อ Main</label>
+            <input type="text" id="s3_name" placeholder="ชื่อโปรแกรม Main" oninput="saveData()">
+          </div>
+          <div class="d-grid gap-2" style="grid-template-columns:1fr 1fr">
+            <div class="field-group">
+              <label>ราคา/ครั้ง</label>
+              <input type="text" id="s3_price" placeholder="บาท/ครั้ง" oninput="saveData()">
+            </div>
+            <div class="field-group">
+              <label>Package</label>
+              <input type="text" id="s3_package" placeholder="5 ครั้ง 15,000" oninput="saveData()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>USP ต่างจากคู่แข่ง</label>
+            <textarea id="s3_usp" rows="3" placeholder="เครื่องมือ/หมอ/เทคโนโลยี..." oninput="saveData()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 ช่องทางการรับรู้ -->
+      <div class="section span-2">
+        <div class="section-header"><span class="num">4</span> ช่องทางการรับรู้ + งบประมาณ</div>
+        <div class="section-body table-scroll" style="padding:10px">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:80px">ช่องทาง</th>
+                <th>กิจกรรม / Content</th>
+                <th style="width:100px">งบ (บาท)</th>
+                <th style="width:110px">KPI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Online</td>
+                <td><input type="text"   id="ch_online_activity" placeholder="เช่น โพสต์ FB ทุกอาทิตย์" oninput="saveData()"></td>
+                <td><input type="number" id="ch_online_budget"   placeholder="0" oninput="saveData();calcTotalBudget()"></td>
+                <td><input type="text"   id="ch_online_kpi"      placeholder="Reach / Engagement" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>Paid Ads</td>
+                <td><input type="text"   id="ch_ads_activity" placeholder="เช่น Facebook Ads" oninput="saveData()"></td>
+                <td><input type="number" id="ch_ads_budget"   placeholder="0" oninput="saveData();calcTotalBudget()"></td>
+                <td><input type="text"   id="ch_ads_kpi"      placeholder="CPL / ROAS" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>KOL</td>
+                <td><input type="text"   id="ch_kol_activity" placeholder="ชื่อ KOL / หัวข้อ" oninput="saveData()"></td>
+                <td><input type="number" id="ch_kol_budget"   placeholder="0" oninput="saveData();calcTotalBudget()"></td>
+                <td><input type="text"   id="ch_kol_kpi"      placeholder="View / Follower" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>Offline</td>
+                <td><input type="text"   id="ch_offline_activity" placeholder="เช่น Flyer / Event" oninput="saveData()"></td>
+                <td><input type="number" id="ch_offline_budget"   placeholder="0" oninput="saveData();calcTotalBudget()"></td>
+                <td><input type="text"   id="ch_offline_kpi"      placeholder="Walk-in / แจกของ" oninput="saveData()"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5 ระบบบอกต่อ -->
+      <div class="section span-1">
+        <div class="section-header"><span class="num">5</span> ระบบบอกต่อ</div>
+        <div class="section-body">
+          <div class="d-grid gap-2" style="grid-template-columns:1fr 1fr">
+            <div class="field-group">
+              <label>ผู้แนะนำได้</label>
+              <input type="text" id="s5_referrer" placeholder="ลด 500" oninput="saveData()">
+            </div>
+            <div class="field-group">
+              <label>ผู้ถูกแนะนำได้</label>
+              <input type="text" id="s5_referred" placeholder="ฟรี 1 ครั้ง" oninput="saveData()">
+            </div>
+          </div>
+          <div class="field-group">
+            <label>กลไก + เป้า %</label>
+            <input type="text" id="s5_mechanism" placeholder="QR / 20%" oninput="saveData()">
+          </div>
+          <div class="field-group">
+            <label>Tracking โดยใคร</label>
+            <input type="text" id="s5_tracking" placeholder="ใคร / ความถี่" oninput="saveData()">
+          </div>
+        </div>
+      </div>
+
+      <!-- CLV Count Selector -->
+      <div style="display:flex;justify-content:space-between;align-items:center;background:#e8f5f3;padding:10px 16px;border-radius:8px;border:1.5px solid #b2d8d4">
+        <div>
+          <strong style="color:#145f56">💰 Customer Lifetime Value (CLV)</strong>
+          <span style="color:#666;font-size:12px;margin-left:8px">— เลือกจำนวนกล่องที่ต้องการใช้</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <label style="color:#145f56;font-weight:700;font-size:13px;margin-bottom:0">จำนวนกล่อง:</label>
+          <select id="clv_count" class="form-select form-select-sm" style="width:auto;font-weight:700;color:#145f56" onchange="applyClvCount(this.value); saveData()">
+            <option value="1">1 กล่อง</option>
+            <option value="2">2 กล่อง</option>
+            <option value="3">3 กล่อง</option>
+            <option value="4">4 กล่อง</option>
+            <option value="5">5 กล่อง</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- CLV Banner #1 -->
+      <div class="clv-banner">
+        <div class="clv-formula">
+          <span style="background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;font-size:12px;margin-right:8px">CLV #1</span>
+          CLV = <span>P (ราคา/ครั้ง)</span> × <span>Q (ครั้ง/เดือน)</span> × <span>จำนวนเดือน</span>
+        </div>
+        <div class="clv-inputs">
+          <div class="clv-field">
+            <label>P — ราคา/ครั้ง (บาท)</label>
+            <input type="number" id="clv_p" placeholder="3,000" oninput="saveData();calcCLV(1)">
+          </div>
+          <div class="clv-field">
+            <label>Q — ครั้ง/เดือน</label>
+            <input type="number" id="clv_q" placeholder="1" oninput="saveData();calcCLV(1)">
+          </div>
+          <div class="clv-field">
+            <label>ระยะเวลา (เดือน)</label>
+            <input type="number" id="clv_months" placeholder="6" oninput="saveData();calcCLV(1)">
+          </div>
+        </div>
+        <div class="clv-result">
+          <div class="lbl">CLV รวม</div>
+          <div class="val" id="clv_result">—</div>
+        </div>
+      </div>
+
+      <!-- CLV Banner #2 -->
+      <div class="clv-banner clv-extra" data-clv-idx="2">
+        <div class="clv-formula">
+          <span style="background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;font-size:12px;margin-right:8px">CLV #2</span>
+          CLV = <span>P (ราคา/ครั้ง)</span> × <span>Q (ครั้ง/เดือน)</span> × <span>จำนวนเดือน</span>
+        </div>
+        <div class="clv-inputs">
+          <div class="clv-field"><label>P — ราคา/ครั้ง (บาท)</label><input type="number" id="clv_p2" placeholder="3,000" oninput="saveData();calcCLV(2)"></div>
+          <div class="clv-field"><label>Q — ครั้ง/เดือน</label><input type="number" id="clv_q2" placeholder="1" oninput="saveData();calcCLV(2)"></div>
+          <div class="clv-field"><label>ระยะเวลา (เดือน)</label><input type="number" id="clv_months2" placeholder="6" oninput="saveData();calcCLV(2)"></div>
+        </div>
+        <div class="clv-result"><div class="lbl">CLV รวม</div><div class="val" id="clv_result2">—</div></div>
+      </div>
+
+      <!-- CLV Banner #3 -->
+      <div class="clv-banner clv-extra" data-clv-idx="3">
+        <div class="clv-formula">
+          <span style="background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;font-size:12px;margin-right:8px">CLV #3</span>
+          CLV = <span>P (ราคา/ครั้ง)</span> × <span>Q (ครั้ง/เดือน)</span> × <span>จำนวนเดือน</span>
+        </div>
+        <div class="clv-inputs">
+          <div class="clv-field"><label>P — ราคา/ครั้ง (บาท)</label><input type="number" id="clv_p3" placeholder="3,000" oninput="saveData();calcCLV(3)"></div>
+          <div class="clv-field"><label>Q — ครั้ง/เดือน</label><input type="number" id="clv_q3" placeholder="1" oninput="saveData();calcCLV(3)"></div>
+          <div class="clv-field"><label>ระยะเวลา (เดือน)</label><input type="number" id="clv_months3" placeholder="6" oninput="saveData();calcCLV(3)"></div>
+        </div>
+        <div class="clv-result"><div class="lbl">CLV รวม</div><div class="val" id="clv_result3">—</div></div>
+      </div>
+
+      <!-- CLV Banner #4 -->
+      <div class="clv-banner clv-extra" data-clv-idx="4">
+        <div class="clv-formula">
+          <span style="background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;font-size:12px;margin-right:8px">CLV #4</span>
+          CLV = <span>P (ราคา/ครั้ง)</span> × <span>Q (ครั้ง/เดือน)</span> × <span>จำนวนเดือน</span>
+        </div>
+        <div class="clv-inputs">
+          <div class="clv-field"><label>P — ราคา/ครั้ง (บาท)</label><input type="number" id="clv_p4" placeholder="3,000" oninput="saveData();calcCLV(4)"></div>
+          <div class="clv-field"><label>Q — ครั้ง/เดือน</label><input type="number" id="clv_q4" placeholder="1" oninput="saveData();calcCLV(4)"></div>
+          <div class="clv-field"><label>ระยะเวลา (เดือน)</label><input type="number" id="clv_months4" placeholder="6" oninput="saveData();calcCLV(4)"></div>
+        </div>
+        <div class="clv-result"><div class="lbl">CLV รวม</div><div class="val" id="clv_result4">—</div></div>
+      </div>
+
+      <!-- CLV Banner #5 -->
+      <div class="clv-banner clv-extra" data-clv-idx="5">
+        <div class="clv-formula">
+          <span style="background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;font-size:12px;margin-right:8px">CLV #5</span>
+          CLV = <span>P (ราคา/ครั้ง)</span> × <span>Q (ครั้ง/เดือน)</span> × <span>จำนวนเดือน</span>
+        </div>
+        <div class="clv-inputs">
+          <div class="clv-field"><label>P — ราคา/ครั้ง (บาท)</label><input type="number" id="clv_p5" placeholder="3,000" oninput="saveData();calcCLV(5)"></div>
+          <div class="clv-field"><label>Q — ครั้ง/เดือน</label><input type="number" id="clv_q5" placeholder="1" oninput="saveData();calcCLV(5)"></div>
+          <div class="clv-field"><label>ระยะเวลา (เดือน)</label><input type="number" id="clv_months5" placeholder="6" oninput="saveData();calcCLV(5)"></div>
+        </div>
+        <div class="clv-result"><div class="lbl">CLV รวม</div><div class="val" id="clv_result5">—</div></div>
+      </div>
+
+    </div><!-- /doc-body page 1 -->
+  </div><!-- /doc-page page 1 -->
+
+  <!-- ─── PAGE 2 ─── -->
+  <p class="page-label">หน้า 2 / 2 — Timeline, Risks &amp; Goals</p>
+  <div class="doc-page" id="page2">
+
+    <div class="doc-header">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+          <div class="doc-title">Action Plan — แผนปฏิบัติการเจาะกลุ่มลูกค้า
+            <span style="font-weight:400;font-size:16px;opacity:.8">(ต่อ)</span>
+          </div>
+          <div class="doc-subtitle">องค์กรตัวอย่าง (ORG) &nbsp;|&nbsp; Timeline · Risks · Goals</div>
+        </div>
+        <div class="d-flex gap-3 flex-wrap align-items-end" style="font-size:14px;font-weight:600;color:#fff">
+          <div><div class="meta-label">สาขา</div><div id="p2_branch">—</div></div>
+          <div><div class="meta-label">ผู้จัดทำ</div><div id="p2_author">—</div></div>
+          <div><div class="meta-label">วันที่</div><div id="p2_date">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-body">
+
+      <!-- 6 Timeline -->
+      <div class="section span-2">
+        <div class="section-header"><span class="num">6</span> Timeline + เกณฑ์ตัดสินใจ</div>
+        <div class="section-body table-scroll" style="padding:10px">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px">ช่วง</th>
+                <th>กิจกรรม + เป้า</th>
+                <th style="width:140px">Go / Stop / Adjust</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Wk 1-2</td>
+                <td><textarea id="tl_wk12_activity" rows="2" placeholder="กิจกรรมและเป้าหมาย..." oninput="saveData()"></textarea></td>
+                <td><input type="text" id="tl_wk12_decision" placeholder="เกณฑ์" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>Wk 3-4</td>
+                <td><textarea id="tl_wk34_activity" rows="2" placeholder="กิจกรรมและเป้าหมาย..." oninput="saveData()"></textarea></td>
+                <td><input type="text" id="tl_wk34_decision" placeholder="เกณฑ์" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>M 2-3</td>
+                <td><textarea id="tl_m23_activity" rows="2" placeholder="กิจกรรมและเป้าหมาย..." oninput="saveData()"></textarea></td>
+                <td><input type="text" id="tl_m23_decision" placeholder="เกณฑ์" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td>M 4-6</td>
+                <td><textarea id="tl_m46_activity" rows="2" placeholder="กิจกรรมและเป้าหมาย..." oninput="saveData()"></textarea></td>
+                <td><input type="text" id="tl_m46_decision" placeholder="เกณฑ์" oninput="saveData()"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 7 Top Risks -->
+      <div class="section span-1">
+        <div class="section-header"><span class="num">7</span> Top Risks + Plan B</div>
+        <div class="section-body table-scroll" style="padding:10px">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ความเสี่ยง</th>
+                <th>Plan B รับมือ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="background:#fff;padding:0"><input type="text" id="risk1_risk" placeholder="ความเสี่ยงที่ 1" oninput="saveData()"></td>
+                <td><input type="text" id="risk1_planb" placeholder="แผนรับมือ" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td style="background:#fff;padding:0"><input type="text" id="risk2_risk" placeholder="ความเสี่ยงที่ 2" oninput="saveData()"></td>
+                <td><input type="text" id="risk2_planb" placeholder="แผนรับมือ" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td style="background:#fff;padding:0"><input type="text" id="risk3_risk" placeholder="ความเสี่ยงที่ 3" oninput="saveData()"></td>
+                <td><input type="text" id="risk3_planb" placeholder="แผนรับมือ" oninput="saveData()"></td>
+              </tr>
+              <tr>
+                <td style="background:#fff;padding:0"><input type="text" id="risk4_risk" placeholder="ความเสี่ยงที่ 4" oninput="saveData()"></td>
+                <td><input type="text" id="risk4_planb" placeholder="แผนรับมือ" oninput="saveData()"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8 เป้าหมาย + อนุมัติ -->
+      <div class="section span-3">
+        <div class="section-header"><span class="num">8</span> เป้าหมาย + อนุมัติ</div>
+        <div class="section-body">
+          <div class="approval-grid">
+            <div class="d-grid gap-2" style="grid-template-columns:1fr 1fr">
+              <div class="field-group">
+                <label>รายได้รวม (บาท)</label>
+                <input type="number" id="goal_revenue" placeholder="กรอกรายได้ที่คาดหวัง" oninput="saveData(); calcROI()">
+              </div>
+              <div class="field-group">
+                <label>ลูกค้าใหม่ (คน)</label>
+                <input type="number" id="goal_newcust" placeholder="คน" oninput="saveData()">
+              </div>
+            </div>
+            <div class="d-grid gap-2" style="grid-template-columns:1fr 1fr">
+              <div class="field-group">
+                <label>ROI / ROAS (%) <span style="color:var(--teal-mid);font-weight:700;font-size:11px">🔒 Auto</span></label>
+                <input type="text" id="goal_roi" placeholder="Auto: (รายได้ − งบ) / งบ × 100" readonly>
+              </div>
+              <div class="field-group">
+                <label>งบรวม (บาท) <span id="totalBudgetDisplay" style="color:var(--teal-mid);font-weight:700;font-size:11px">🔒 Auto</span></label>
+                <input type="number" id="goal_budget" placeholder="Auto จากช่องทางในข้อ 4" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="sig-row">
+            <div class="sig-block">
+              <div class="sig-line"></div>
+              <label>ผู้จัดทำ</label>
+              <input class="sig-input" type="text" id="sig_maker" placeholder="ชื่อ-สกุล" oninput="saveData()">
+              <div class="sig-date">วันที่ ____/____/________</div>
+            </div>
+            <div class="sig-block">
+              <div class="sig-line"></div>
+              <label>ผู้จัดการ</label>
+              <input class="sig-input" type="text" id="sig_manager" placeholder="ชื่อ-สกุล" oninput="saveData()">
+              <div class="sig-date">วันที่ ____/____/________</div>
+            </div>
+            <div class="sig-block">
+              <div class="sig-line"></div>
+              <label>ผู้อนุมัติ</label>
+              <input class="sig-input" type="text" id="sig_approver" placeholder="ชื่อ-สกุล" oninput="saveData()">
+              <div class="sig-date">วันที่ ____/____/________</div>
+            </div>
+          </div>
+
+          <div class="mt-3 p-2 rounded" style="background:var(--teal-light);font-size:12px;color:var(--teal-dark)">
+            <strong>หมายเหตุ:</strong> ตอบทุกช่องให้ละเอียด ระบุตัวเลข รับผิดชอบ/เกณฑ์วัดผล หลีกเลี่ยงคำตอบกว้างๆ
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /doc-body page 2 -->
+  </div><!-- /doc-page page 2 -->
+
+</div><!-- /page-wrapper -->
+
+<!-- ══ Data Table Modal ══ -->
+<div class="modal fade" id="tableModal" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen-lg-down modal-xl">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#0f4a32;color:#fff">
+        <div>
+          <div class="modal-title fs-6 fw-bold">📋 ตารางสรุปข้อมูล Action Plan — ทุกเขต</div>
+          <div style="font-size:11px;opacity:.7;margin-top:2px">องค์กรตัวอย่าง (ORG) | อัปเดตทุกครั้งที่เปิดตาราง</div>
+        </div>
+        <div class="d-flex gap-2 align-items-center ms-auto">
+          <button onclick="downloadTableCSV()"   class="btn btn-sm" style="background:#4a90d9;color:#fff">📥 CSV</button>
+          <button onclick="downloadTableExcel()" class="btn btn-sm" style="background:#1a6b4a;color:#fff">📥 Excel</button>
+          <button onclick="downloadTablePDF()"   class="btn btn-sm" style="background:#1a7a6e;color:#fff">📄 PDF</button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+      </div>
+      <div class="modal-body p-0" style="overflow-x:auto">
+        <table id="summaryTable" class="table table-sm mb-0"></table>
+      </div>
+      <div class="modal-footer" style="font-size:11px;color:#6b7280">
+        💡 กรอกข้อมูลแต่ละเขตให้ครบก่อน แล้วกด "ดูตารางข้อมูล" เพื่อเปรียบเทียบทุกเขต
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Zone Selector Modal -->
+<div class="modal fade" id="pdfModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#1a7a6e;color:#fff">
+        <div class="modal-title fw-bold">🖨️ เลือกโซนที่จะพิมพ์ / Export PDF</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="row g-0" style="min-height:560px">
+          <!-- Left: checkbox panel -->
+          <div class="col-md-4 p-3 border-end" style="background:#f0f7f6">
+            <p class="small text-muted mb-2">เลือก 1 หรือหลายโซน — รวมในไฟล์เดียว</p>
+            <div id="pdfZoneCheckboxes" class="d-grid gap-2 mb-3"></div>
+            <div class="d-flex gap-2 mb-3">
+              <button class="btn btn-sm btn-outline-success" onclick="togglePdfZones(true)">เลือกทั้งหมด</button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="togglePdfZones(false)">ล้าง</button>
+            </div>
+            <div class="alert alert-success p-2 small mb-0">
+              <strong>👁️ Preview ทางขวา</strong> — จะอัปเดตทันทีเมื่อติ๊กเลือก
+            </div>
+          </div>
+
+          <!-- Right: live preview -->
+          <div class="col-md-8" style="background:#525659">
+            <div class="text-center py-2 text-white small" style="background:#37393b">
+              📄 ตัวอย่างก่อนพิมพ์ — <span id="pdfPreviewCount">0</span> หน้า
+            </div>
+            <div style="height:520px;overflow:auto;padding:10px">
+              <iframe id="pdfPreviewFrame" style="width:100%;min-height:500px;background:#fff;border:none;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.3)"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="text-muted small me-auto">💡 หลังกดปุ่ม "พิมพ์" จะเปิดหน้าต่างใหม่ → เลือก "Save as PDF" จาก Print Dialog</span>
+        <button class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn fw-bold" style="background:#1a7a6e;color:#fff" onclick="doExportPDF()">🖨️ พิมพ์ / บันทึก PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- History Modal -->
+<div class="modal fade" id="historyModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#0ea5e9;color:#fff">
+        <div class="modal-title fw-bold">🕒 ประวัติการบันทึก (Transactions)</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="historyBody">
+        <div class="text-muted">กำลังโหลด...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Users Modal (admin) -->
+<div class="modal fade" id="usersModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background:#0891b2;color:#fff">
+        <div class="modal-title fw-bold">⚙️ จัดการผู้ใช้</div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="usersBody">
+        <div class="text-muted">กำลังโหลด...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-ap" id="toast"></div>
+
+</div><!-- /appRoot -->
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   CONFIG — ⚠️ ใส่ URL ของ Apps Script Web App ตรงนี้
+   (Deploy → New deployment → Web app → Execute as: Me / Access: Anyone)
+   ═══════════════════════════════════════════════════════════════════════ */
+const API_URL = ''   /* โหมดสาธิต: ไม่มีปลายทางภายนอก */;
+
+// อีเมลผู้ดูแลระบบ — แสดงในหน้า Login สำหรับคนที่ลืม/อยากเปลี่ยนรหัสผ่าน
+const SUPPORT_EMAIL = 'data@example.com';
+
+/* โลโก้องค์กรตัวอย่าง (ORG) — ฝังเป็น data URI ในไฟล์เลย
+   ข้อดี: ไม่ต้องพึ่งไฟล์ภายนอก ใช้ได้แม้ไม่มีเน็ต และย้ายไฟล์ไปไหนก็ยังมีโลโก้
+   ถ้าจะเปลี่ยนโลโก้: แปลงรูปเป็น base64 แล้วแทนที่ข้อความหลัง "base64," */
+const LOGO_URI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAA9UlEQVR42u3cMREAIAwEQVCAU0qMoY0aJNBkIMVmTsFvn9JG18eKCQAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAnBpBx0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIhozRoSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADINxkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN5WZg8AAAACAEAAAAgAAAEAIAAABACAHnQAIDzHkW2YNbsAAAAASUVORK5CYII=';
+
+// ลิงก์ Google Sheet ที่ใช้เป็นฐานข้อมูล (ไม่ได้แสดงในหน้าเว็บ — เก็บไว้อ้างอิงเฉยๆ)
+const SHEET_URL = ''   /* โหมดสาธิต: ไม่ผูกกับสเปรดชีตใด */;
+
+const ZONE_COUNT = 5;
+const ZONE_NAMES = { 1:'Zone A', 2:'Zone B', 3:'Zone C', 4:'Zone D', 5:'Zone E' };
+
+// ── Session state (แทน $ME / $IS_ADMIN / $MY_ZONE ของ PHP) ─────────────
+let ME          = null;   // {id, username, full_name, role, zone}
+let TOKEN       = '';
+let IS_ADMIN    = false;
+let MY_ZONE     = 1;
+let VIEW_USER_ID = 0;     // admin ดูข้อมูลของ user คนอื่น
+let VIEW_USER_INFO = null;
+let currentZone = 1;
+
+const FIELD_IDS = [
+  'branch','author','docDate',
+  's1_personal','s1_pain','s1_insight',
+  's2_name','s2_price','s2_result','s2_script',
+  's3_name','s3_price','s3_package','s3_usp',
+  'ch_online_activity','ch_online_budget','ch_online_kpi',
+  'ch_ads_activity','ch_ads_budget','ch_ads_kpi',
+  'ch_kol_activity','ch_kol_budget','ch_kol_kpi',
+  'ch_offline_activity','ch_offline_budget','ch_offline_kpi',
+  's5_referrer','s5_referred','s5_mechanism','s5_tracking',
+  'clv_count',
+  'clv_p','clv_q','clv_months',
+  'clv_p2','clv_q2','clv_months2',
+  'clv_p3','clv_q3','clv_months3',
+  'clv_p4','clv_q4','clv_months4',
+  'clv_p5','clv_q5','clv_months5',
+  'tl_wk12_activity','tl_wk12_decision',
+  'tl_wk34_activity','tl_wk34_decision',
+  'tl_m23_activity','tl_m23_decision',
+  'tl_m46_activity','tl_m46_decision',
+  'risk1_risk','risk1_planb','risk2_risk','risk2_planb',
+  'risk3_risk','risk3_planb','risk4_risk','risk4_planb',
+  'goal_revenue','goal_newcust','goal_roi','goal_budget',
+  'sig_maker','sig_manager','sig_approver'
+];
+
+const store = {};
+for (let z = 1; z <= ZONE_COUNT; z++) store[z] = {};
+const loadedZones = new Set();   // zones already fetched from Sheet this session
+
+/* ═══════════════════════════════════════════════════════════════════════
+   API LAYER — คุยกับ Google Apps Script Web App
+   ใช้ POST + Content-Type: text/plain เพื่อเลี่ยง CORS preflight
+   ═══════════════════════════════════════════════════════════════════════ */
+// เช็คตอนเรียกใช้จริง (ไม่ใช่ตอนโหลดสคริปต์) เพราะ google.script.run
+// ของ Apps Script อาจยังไม่ถูกฉีดเข้ามาในจังหวะที่สคริปต์นี้ถูก parse
+function isHosted() {
+  return typeof google !== 'undefined' && !!(google.script && google.script.run);
+}
+
+/* -------------------------------------------------------------------------
+   โหมดสาธิตออฟไลน์ — ไม่มีการเชื่อมต่อเซิร์ฟเวอร์หรือ Google Sheet ใด ๆ
+   ข้อมูลทุกอย่างเป็นตัวอย่างที่สมมติขึ้น เก็บอยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น
+
+   บัญชีสาธิต — รหัสผ่านเหมือนกันทุกบัญชีคือ  demo1234
+     admin          เห็นทุกโซน จัดการผู้ใช้ได้
+     zone1 .. zone5 เห็นเฉพาะโซนของตัวเอง
+   ------------------------------------------------------------------------- */
+const DEMO = (function () {
+  var KEY = 'action_plan_demo_v1';
+  var PW = 'demo1234';
+
+  var BASE_USERS = [
+    { id: 1, username: 'admin', password: PW, full_name: 'ผู้ดูแลระบบ (ตัวอย่าง)', role: 'admin', zone: 0 },
+    { id: 2, username: 'zone1', password: PW, full_name: 'ผู้ใช้ตัวอย่าง 1', role: 'user', zone: 1 },
+    { id: 3, username: 'zone2', password: PW, full_name: 'ผู้ใช้ตัวอย่าง 2', role: 'user', zone: 2 },
+    { id: 4, username: 'zone3', password: PW, full_name: 'ผู้ใช้ตัวอย่าง 3', role: 'user', zone: 3 },
+    { id: 5, username: 'zone4', password: PW, full_name: 'ผู้ใช้ตัวอย่าง 4', role: 'user', zone: 4 },
+    { id: 6, username: 'zone5', password: PW, full_name: 'ผู้ใช้ตัวอย่าง 5', role: 'user', zone: 5 }
+  ];
+
+  function seed() {
+    /* เริ่มต้นด้วยฟอร์มเปล่าและยังไม่มีประวัติ
+       คนดูงานจะได้เห็นหน้าตาจริงของเครื่องมือ แล้วลองกรอกเองได้ตั้งแต่ช่องแรก */
+    return { users: BASE_USERS.slice(), subs: [], nextUser: 7, nextSub: 1 };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* โหมดส่วนตัวของเบราว์เซอร์อาจอ่านไม่ได้ */ }
+    return seed();
+  }
+  function save(db) { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} }
+
+  function pub(u) {
+    return { id: u.id, username: u.username, full_name: u.full_name, role: u.role, zone: u.zone };
+  }
+
+  return {
+    call: function (action, b) {
+      var db = load();
+      var me = db.users.filter(function (u) { return 'demo-' + u.id === b.token; })[0] || null;
+      var admin = !!me && me.role === 'admin';
+      var zoneOf = function () {
+        if (admin && b.user_id) {
+          var t = db.users.filter(function (u) { return u.id === Number(b.user_id); })[0];
+          return t ? t.zone : 0;
+        }
+        return me ? me.zone : 0;
+      };
+
+      if (action === 'login') {
+        var u = db.users.filter(function (x) {
+          return x.username.toLowerCase() === String(b.username || '').toLowerCase() &&
+                 x.password === b.password;
+        })[0];
+        if (!u) return { ok: false, error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง — โหมดสาธิตใช้ admin / demo1234' };
+        return { ok: true, token: 'demo-' + u.id, user: pub(u) };
+      }
+
+      if (action === 'me') {
+        return me ? { ok: true, user: pub(me) } : { ok: false, error: 'หมดเวลาเข้าใช้งาน' };
+      }
+
+      if (action === 'save') {
+        if (!me) return { ok: false, error: 'ยังไม่ได้เข้าสู่ระบบ' };
+        var z = Number(b.zone);
+        var prev = db.subs.filter(function (s) { return s.zone === z; });
+        var d = b.data || {};
+        var num = function (k) { return Number(d[k] || 0) || 0; };
+        var row = {
+          id: db.nextSub++, zone: z, seq: prev.length + 1, username: me.username,
+          created_at: new Date().toISOString().slice(0, 16).replace('T', ' '),
+          branch: d.branch || '', author: d.author || '',
+          total_budget: num('ch_online_budget') + num('ch_ads_budget') +
+                        num('ch_kol_budget') + num('ch_offline_budget'),
+          clv_total: num('clv_p') * num('clv_q') * num('clv_months') +
+                     num('clv_p2') * num('clv_q2') * num('clv_months2'),
+          data: d
+        };
+        db.subs.push(row); save(db);
+        return { ok: true, submission_id: row.id, fields_saved: Object.keys(d).length };
+      }
+
+      if (action === 'load_latest') {
+        var rows = db.subs.filter(function (s) { return s.zone === Number(b.zone); });
+        var last = rows[rows.length - 1];
+        return { ok: true, data: last ? last.data : {} };
+      }
+
+      if (action === 'load_all_latest') {
+        var data = {}, owner = {}, zz;
+        for (zz = 1; zz <= 5; zz++) {
+          var rs = db.subs.filter(function (s) { return s.zone === zz; });
+          var lt = rs[rs.length - 1];
+          if (lt) { data[zz] = lt.data; owner[zz] = lt.username; }
+        }
+        return { ok: true, data: data, owner: owner };
+      }
+
+      if (action === 'list_submissions') {
+        var list = db.subs.slice();
+        var global = admin && !b.zone;
+        if (b.zone) list = list.filter(function (s) { return s.zone === Number(b.zone); });
+        else if (!admin) list = list.filter(function (s) { return s.zone === zoneOf(); });
+        list = list.reverse().slice(0, Number(b.limit) || 200);
+        return { ok: true, count: list.length, global: global, submissions: list };
+      }
+
+      if (action === 'load_submission') {
+        var r = db.subs.filter(function (s) { return s.id === Number(b.id); })[0];
+        return r ? { ok: true, data: r.data } : { ok: false, error: 'ไม่พบรายการนี้' };
+      }
+
+      if (action === 'delete_submission') {
+        var before = db.subs.length;
+        db.subs = db.subs.filter(function (s) { return s.id !== Number(b.id); });
+        save(db);
+        return before === db.subs.length ? { ok: false, error: 'ไม่พบรายการนี้' } : { ok: true };
+      }
+
+      if (action === 'clear_history') {
+        var n0 = db.subs.length;
+        db.subs = (b.scope === 'all' && admin)
+          ? [] : db.subs.filter(function (s) { return s.zone !== zoneOf(); });
+        save(db);
+        return { ok: true, deleted: n0 - db.subs.length };
+      }
+
+      if (action === 'list_users') {
+        if (!admin) return { ok: false, error: 'เฉพาะผู้ดูแลระบบเท่านั้น' };
+        return { ok: true, users: db.users.map(pub) };
+      }
+
+      if (action === 'save_user') {
+        if (!admin) return { ok: false, error: 'เฉพาะผู้ดูแลระบบเท่านั้น' };
+        var uid = Number(b.id) || 0;
+        var hit = db.users.filter(function (x) { return x.id === uid; })[0];
+        if (hit) {
+          hit.username = b.username || hit.username;
+          hit.full_name = b.full_name || hit.full_name;
+          hit.role = b.role || hit.role;
+          hit.zone = Number(b.zone) || hit.zone;
+          if (b.password) hit.password = b.password;
+        } else {
+          db.users.push({
+            id: db.nextUser++, username: b.username, password: b.password || PW,
+            full_name: b.full_name || b.username, role: b.role || 'user',
+            zone: Number(b.zone) || 1
+          });
+        }
+        save(db);
+        return { ok: true };
+      }
+
+      if (action === 'delete_user') {
+        if (!admin) return { ok: false, error: 'เฉพาะผู้ดูแลระบบเท่านั้น' };
+        db.users = db.users.filter(function (x) { return x.id !== Number(b.id); });
+        save(db);
+        return { ok: true };
+      }
+
+      return { ok: false, error: 'โหมดสาธิตยังไม่รองรับคำสั่ง ' + action };
+    }
+  };
+})();
+
+async function api(action, payload) {
+  var body = Object.assign({ action: action, token: TOKEN }, payload || {});
+  if (VIEW_USER_ID && body.user_id === undefined) body.user_id = VIEW_USER_ID;
+  return DEMO.call(action, body);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MMI3D — ฉากอนิเมชัน 3D หน้า Login (Three.js)
+   ---------------------------------------------------------------------
+   เล่าเรื่อง: ผู้สูงอายุ 2 ท่านเดินมาที่คลินิก → พนักงานออกมาต้อนรับด้วยการไหว้
+   → พาเข้าไปดูแลอย่างใกล้ชิด → ขึ้นข้อความยินดีต้อนรับ  (วนลูป)
+   ตอนกด Login สำเร็จ: เล่นฉากคนไข้เดินออกมาอย่างพึงพอใจ แล้วค่อยเข้าหน้าฟอร์ม
+
+   ทุกอย่างสร้างจาก primitive ของ Three.js ล้วน ๆ ไม่มีไฟล์โมเดลภายนอก
+   ถ้าโหลด Three.js ไม่ได้ (เช่นไม่มีเน็ต) จะข้ามไปเงียบ ๆ หน้า Login ยังใช้ได้ปกติ
+   ═══════════════════════════════════════════════════════════════════════ */
+const MMI3D = (function () {
+  const C = {
+    // แบรนด์ (ใช้เป็นจุดเน้นเล็ก ๆ เท่านั้น ไม่ให้เขียวทั้งภาพ)
+    teal:0x1a8a7c, tealDark:0x0f6b60, orange:0xf5a01e,
+    // โทนอบอุ่น — แสงแดดยามบ่าย
+    wall:0xfff4e2, wall2:0xffe9cc, roof:0xd98b52, cream:0xfff1dc,
+    ground:0x9fce76, grass2:0x8ac263, path:0xefdcbd, soil:0xc9a06a,
+    leaf:0x76bf5c, leaf2:0x9ad46f, leaf3:0x5da84a, trunk:0x9b6b45,
+    // ผิว/ผม
+    skinA:0xf7d3ad, skinB:0xf0c39a, skinC:0xfadfbf,
+    hairW:0xf4f4f4, hairG:0xdfdfdf, hairD:0x3a2a20,
+    cheek:0xf29d92, mouth:0xa4544c, eye:0x3a2b25, white:0xffffff,
+    pink:0xff8fa8, sun:0xffe9b8
+  };
+
+  let renderer, scene, camera, clock, rafId = null;
+  let alive = false, started = false, reduced = false;
+  const people = {};
+  let motes = [], leavesSway = [], hearts = [];
+  let t = 0, outroT = 0, outroDone = null;
+  let mode = 'idle';          // 'idle' | 'outro'
+  let focusIdx = -1, focusK = 0, focusYaw0 = 0, focusYaw1 = 0;   // การซูมเข้าโซนตอน Login
+  // ระยะ/ความสูงกล้อง — ปรับตามขนาดจอใน resize() เพื่อให้เห็นครบทุกคน
+  let camRad = 29, camY = 3.4, camLookY = 3.4;
+  // เครื่องเล็ก/มือถือ → ลดรายละเอียดฉากลง ให้ยังลื่นอยู่
+  const LOW = (window.matchMedia && matchMedia('(hover:none) and (pointer:coarse)').matches)
+              || window.innerWidth < 820;
+
+  // ── helper ──
+  const mat = (c, opts) => new THREE.MeshLambertMaterial(Object.assign({ color:c }, opts||{}));
+  function box(w,h,d,c,x,y,z,parent){
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat(c));
+    m.position.set(x||0,y||0,z||0); m.castShadow = true; m.receiveShadow = true;
+    (parent||scene).add(m); return m;
+  }
+  function cyl(rt,rb,h,c,x,y,z,parent,seg){
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg||12), mat(c));
+    m.position.set(x||0,y||0,z||0); m.castShadow = true;
+    (parent||scene).add(m); return m;
+  }
+  function ball(r,c,x,y,z,parent){
+    const m = new THREE.Mesh(new THREE.SphereGeometry(r,16,12), mat(c));
+    m.position.set(x||0,y||0,z||0); m.castShadow = true;
+    (parent||scene).add(m); return m;
+  }
+  const lerp  = (a,b,t) => a + (b-a) * Math.min(Math.max(t,0),1);
+  const ease  = t => t<0 ? 0 : t>1 ? 1 : t*t*(3-2*t);          // smoothstep
+  const clamp01 = t => Math.min(Math.max(t,0),1);
+
+  /* ══════════════════════════════════════════════════════════════
+     ตัวละครสไตล์การ์ตูน (chibi) — หัวโต ตัวกลม ดูอบอุ่นเป็นมิตร
+     สัดส่วนหัว : ลำตัว ประมาณ 1 : 1.6  ให้ดูน่ารักแบบตัวการ์ตูน
+     ══════════════════════════════════════════════════════════════ */
+  function makePerson(o) {
+    const g  = new THREE.Group();
+    const s  = o.scale || 1;
+    const HR = .40*s;                 // รัศมีหัว (โตกว่าคนจริงมาก = การ์ตูน)
+    const legH = .40*s, bodyH = .60*s;
+
+    const hip = new THREE.Group(); hip.position.y = legH; g.add(hip);
+
+    // ── ขา (สั้น อ้วน กลม) ──
+    const mkLeg = (side) => {
+      const pivot = new THREE.Group();
+      pivot.position.set(side*.145*s, .02*s, 0); hip.add(pivot);
+      cyl(.105*s,.10*s,legH,o.pants,0,-legH/2,0,pivot,14);
+      ball(.105*s,o.pants,0,-legH,0,pivot);                       // ข้อเท้ากลม
+      const shoe = ball(.135*s,o.shoe||0x6b4a34,0,-legH-.02*s,.045*s,pivot);
+      shoe.scale.set(1,.62,1.35);                                  // รองเท้ามน ๆ
+      return pivot;
+    };
+    const legL = mkLeg(-1), legR = mkLeg(1);
+
+    // ── ลำตัวทรงหยดน้ำ (ล่างกว้าง บนแคบ) ──
+    const inner = o.inner || o.cloth;
+    const body = cyl(.30*s,.36*s,bodyH,inner,0,bodyH*.5,0,hip,20);
+    const belly = ball(.335*s,inner,0,bodyH*.34,0,hip); belly.scale.set(1,.85,.92);
+    ball(.29*s,inner,0,bodyH*.92,0,hip);                          // ไหล่มน
+
+    // เสื้อคลุม / สูท / แจ็คเก็ตยีนส์ — ผ่าหน้าอกให้เห็นเสื้อตัวในตรงกลาง
+    if (o.inner) {
+      // ปลอกเสื้อคลุมโอบรอบตัว เว้นช่องกลางหน้าอกไว้ให้เห็นเสื้อตัวใน
+      // (theta = 0 ของ CylinderGeometry อยู่ที่ด้านหน้า +Z พอดี)
+      const gap = o.gap || .46;
+      const geo = new THREE.CylinderGeometry(.318*s,.376*s,bodyH*.95,22,1,false,
+                  gap, Math.PI*2 - gap*2);
+      const coat = new THREE.Mesh(geo, mat(o.cloth));
+      coat.position.y = bodyH*.475; coat.castShadow = true; hip.add(coat);
+      ball(.302*s,o.cloth,0,bodyH*.92,-.02*s,hip);                // บ่าเสื้อคลุม
+    }
+    if (o.necklace) {                                              // สร้อยคอ
+      const nk = new THREE.Mesh(new THREE.TorusGeometry(.135*s,.017*s,7,18),
+                 new THREE.MeshBasicMaterial({color:o.necklace}));
+      nk.position.set(0,bodyH*.965,.085*s); nk.rotation.x = 1.30; hip.add(nk);
+    }
+    if (o.collar) {                                                // ปกเสื้อ / คอวี
+      const col = cyl(.30*s,.30*s,.09*s,o.collar,0,bodyH*.94,0,hip,20);
+      col.scale.set(1,1,.92);
+    }
+    if (o.vneck) {                                                 // คอวีชุดสครับ
+      const v = new THREE.Mesh(new THREE.ConeGeometry(.13*s,.22*s,4),
+                mat(o.vneck));
+      v.position.set(0,bodyH*.86,.26*s); v.rotation.set(Math.PI,Math.PI/4,0); hip.add(v);
+    }
+    if (o.apron) box(.42*s,.40*s,.02*s,o.apron,0,bodyH*.42,.30*s,hip);
+    if (o.badge) box(.10*s,.14*s,.02*s,0xffffff,-.19*s,bodyH*.66,.30*s,hip);   // ป้ายชื่อ
+
+    // ── แขน (อ้วนกลม ปลายเป็นมือกลม) ──
+    const mkArm = (side) => {
+      const pivot = new THREE.Group();
+      pivot.position.set(side*.315*s, bodyH*.86, 0); hip.add(pivot);
+      const up = cyl(.085*s,.075*s,.40*s,o.cloth,0,-.20*s,0,pivot,14);
+      ball(.082*s,o.cloth,0,-.40*s,0,pivot);                       // ข้อศอก
+      cyl(.072*s,.068*s,.16*s,o.skin,0,-.48*s,0,pivot,12);
+      ball(.098*s,o.skin,0,-.58*s,0,pivot);                        // มือกลม
+      return pivot;
+    };
+    const armL = mkArm(-1), armR = mkArm(1);
+
+    // ── หัว ──
+    const head = new THREE.Group();
+    head.position.y = bodyH + HR*.86; hip.add(head);
+    const skull = ball(HR,o.skin,0,0,0,head); skull.scale.set(1,.98,.96);
+
+    // หู
+    [-1,1].forEach(sd => { const e = ball(HR*.17,o.skin,sd*HR*.93,-HR*.05,0,head); e.scale.set(.55,1,.85); });
+
+    // ── ทรงผม ──
+    const HS = o.hairStyle;
+    if (HS !== 'bald') {
+      const cap = ball(HR*1.04,o.hair,0,HR*.10,-HR*.03,head);
+      cap.scale.set(1,.80,1.02);
+
+      if (HS === 'wave') {            // คุณยาย — ผมขาวหยักศกฟูรอบหน้า
+        cap.scale.set(1.06,.86,1.06); cap.position.y = HR*.14;
+        [[-.80,.16,.30],[.80,.16,.30],[-.72,.02,-.62],[.72,.02,-.62],[0,.52,-.28]]
+          .forEach(v => { const w = ball(HR*.40,o.hair,v[0]*HR,v[1]*HR,v[2]*HR,head); w.scale.set(1,.86,1); });
+      }
+      if (HS === 'sweep') {           // คุณตา — ผมขาวหวีเสยไปด้านหลัง หน้าผากโล่ง
+        cap.scale.set(1.02,.62,1.04); cap.position.set(0,HR*.30,-HR*.16);
+        [-1,1].forEach(sd => { const p2 = ball(HR*.44,o.hair,sd*HR*.76,HR*.02,-HR*.08,head); p2.scale.set(.72,.92,1.02); });
+        const back = ball(HR*.52,o.hair,0,HR*.16,-HR*.66,head); back.scale.set(1,.86,.8);
+      }
+      if (HS === 'bob') {             // บุคลากรหญิง — ผมบ๊อบสีเข้ม
+        cap.scale.set(1.05,.92,1.05);
+        [-1,1].forEach(sd => { const sd2 = ball(HR*.46,o.hair,sd*HR*.82,-HR*.30,-HR*.06,head); sd2.scale.set(.70,1.30,1.02); });
+        const bk = ball(HR*.60,o.hair,0,-HR*.16,-HR*.62,head); bk.scale.set(1.02,1.24,.82);
+      }
+      if (HS === 'long') {            // แม่ — ผมยาวสีน้ำตาลสยายลงไหล่
+        cap.scale.set(1.05,.90,1.05);
+        [-1,1].forEach(sd => { const ln = ball(HR*.44,o.hair,sd*HR*.80,-HR*.72,-HR*.10,head); ln.scale.set(.66,2.10,1.00); });
+        const bk = ball(HR*.62,o.hair,0,-HR*.62,-HR*.62,head); bk.scale.set(1.04,2.05,.86);
+      }
+      if (HS === 'short') {           // บุคลากรชาย / เด็กชาย — ผมสั้นตั้ง
+        cap.scale.set(1.03,.84,1.04); cap.position.y = HR*.14;
+        const tuft = ball(HR*.36,o.hair,-HR*.12,HR*.62,HR*.20,head);
+        tuft.scale.set(1.25,.62,.90); tuft.rotation.z = .38;
+        ball(HR*.26,o.hair,HR*.34,HR*.56,HR*.14,head).scale.set(1.1,.6,.9);
+      }
+    }
+    // ต่างหู
+    if (o.earring) [-1,1].forEach(sd => {
+      const er = new THREE.Mesh(new THREE.TorusGeometry(HR*.075,HR*.022,6,12),
+                 new THREE.MeshBasicMaterial({color:o.earring}));
+      er.position.set(sd*HR*.94,-HR*.24,0); head.add(er);
+    });
+
+    // หมวกพยาบาล
+    if (o.nurseCap) {
+      const capG = new THREE.Group(); capG.position.set(0,HR*.80,-HR*.05); head.add(capG);
+      const cc = box(HR*.85,HR*.34,HR*.62,C.white,0,0,0,capG); cc.rotation.x = -.12;
+      box(HR*.09,HR*.26,.01,C.orange,0,HR*.02,HR*.32,capG);
+      box(HR*.26,HR*.09,.01,C.orange,0,HR*.02,HR*.32,capG);
+    }
+
+    // ── ใบหน้า ──
+    const face = new THREE.Group(); face.position.z = 0; head.add(face);
+    const mkEye = (sd) => {
+      const eg = new THREE.Group(); eg.position.set(sd*HR*.34,HR*.04,HR*.80); face.add(eg);
+      const w = ball(HR*.145,C.white,0,0,0,eg); w.scale.set(1,1.12,.55);
+      const ir = new THREE.Mesh(new THREE.SphereGeometry(HR*.093,14,12),
+                 new THREE.MeshBasicMaterial({color:C.eye}));
+      ir.position.z = HR*.055; ir.scale.set(1,1.05,.6); eg.add(ir);
+      const gl = new THREE.Mesh(new THREE.SphereGeometry(HR*.036,10,8),
+                 new THREE.MeshBasicMaterial({color:0xffffff}));
+      gl.position.set(-sd*HR*.028,HR*.045,HR*.10); eg.add(gl);     // ประกายตา
+      return eg;
+    };
+    const eyeL = mkEye(-1), eyeR = mkEye(1);
+
+    // คิ้ว
+    [-1,1].forEach(sd => {
+      const br = box(HR*.24,HR*.052,HR*.05,o.brow||o.hair,sd*HR*.34,HR*.26,HR*.80,face);
+      br.rotation.z = sd*.13;
+    });
+    // แก้มแดง
+    [-1,1].forEach(sd => {
+      const ch = new THREE.Mesh(new THREE.SphereGeometry(HR*.155,12,10),
+                 new THREE.MeshBasicMaterial({color:C.cheek, transparent:true, opacity:.5}));
+      ch.position.set(sd*HR*.55,-HR*.17,HR*.66); ch.scale.set(1,.62,.25); face.add(ch);
+    });
+    // ปากยิ้ม
+    const smile = new THREE.Mesh(
+      new THREE.TorusGeometry(HR*.19,HR*.045,8,20,Math.PI*0.95),
+      new THREE.MeshBasicMaterial({ color:C.mouth })
+    );
+    smile.position.set(0,-HR*.20,HR*.79); smile.rotation.z = Math.PI; face.add(smile);
+
+    // แว่นตา (คุณตา)
+    if (o.glasses) {
+      const gm = new THREE.MeshBasicMaterial({ color:0x4a3a30 });
+      [-1,1].forEach(sd => {
+        const r = new THREE.Mesh(new THREE.TorusGeometry(HR*.20,HR*.028,8,20), gm);
+        r.position.set(sd*HR*.34,HR*.04,HR*.80); face.add(r);
+      });
+      const br2 = new THREE.Mesh(new THREE.BoxGeometry(HR*.20,HR*.030,HR*.03), gm);
+      br2.position.set(0,HR*.05,HR*.82); face.add(br2);
+    }
+
+    // ── ไม้เท้า ──
+    let cane = null;
+    if (o.cane) {
+      // ยาวพอดีจากมือถึงพื้น (สะโพกอยู่สูง legH = .40*s)
+      cane = new THREE.Group();
+      cane.position.set(.44*s, .02*s, .16*s); hip.add(cane);
+      cyl(.028*s,.032*s,.42*s,0xa87448,0,-.21*s,0,cane,10);
+      const hk = new THREE.Mesh(new THREE.TorusGeometry(.070*s,.027*s,8,16,Math.PI),
+                 mat(0xa87448));
+      hk.position.y = .01*s; hk.rotation.y = Math.PI/2; cane.add(hk);
+    }
+
+    return { group:g, hip, head, face, body, armL, armR, legL, legR, eyeL, eyeR, cane, s, HR };
+  }
+
+  /* ── ท่านั่ง: พับขาไปข้างหน้า ── */
+  function sitPose(p) {
+    p.legL.rotation.x = p.legR.rotation.x = -Math.PI/2 * .92;
+    p.group.position.y += 0;
+  }
+  /* ── หายใจ + ขยับเบา ๆ (ไม่มีการเดิน) ── */
+  function breathe(p, tt, sp, amp) {
+    const a = (amp === undefined ? 1 : amp);
+    const b = Math.sin(tt * (sp || 1.5));
+    p.body.scale.set(1 + b*.018*a, 1 + b*.012*a, 1 + b*.018*a);
+    p.head.position.y = p.baseHeadY + b*.014*a*p.s;
+    p.head.rotation.z = Math.sin(tt*.62 + p.phase) * .045*a;
+    p.head.rotation.y = p.headYaw + Math.sin(tt*.44 + p.phase) * .13*a;
+  }
+  /* ── กะพริบตา ── */
+  function blink(p, tt) {
+    const c = (tt + p.phase*3) % 4.2;
+    const k = c < .13 ? 1 - Math.abs(c - .065)/.065 : 0;
+    const sy = 1 - k*.92;
+    p.eyeL.scale.y = sy; p.eyeR.scale.y = sy;
+  }
+  function resetPose(p) {
+    p.armL.rotation.set(0,0,0); p.armR.rotation.set(0,0,0);
+    p.hip.rotation.set(0,0,0);
+  }
+  /* ── โบกมือ ── */
+  function waveArm(p, tt) {
+    p.armR.rotation.z = -2.15;
+    p.armR.rotation.x = Math.sin(tt*6.2) * .34 - .12;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     ลูกโลกโลโก้องค์กร — แกนกลางของหน้าจอบัญชาการ
+     ทรงกลมหุ้มด้วยภาพโลโก้ + จุดแผ่นดิน + เส้นละติจูด/ลองจิจูด
+     + วงโคจรสีส้ม + หมุดโซนทั้ง 5 พร้อมเส้นโค้งเชื่อมถึงกัน
+     ══════════════════════════════════════════════════════════════ */
+  const GR = 6.2;                              // รัศมีลูกโลก (เห็นทั้งลูกพอดีในเฟรม)
+  const GC = new THREE.Vector3(0, 3.4, 0);     // จุดศูนย์กลางลูกโลก
+  // ระยะวงป้ายเขต + ขนาดป้าย — คำนวณใหม่ทุกครั้งที่จอเปลี่ยนขนาดใน resize()
+  let labelRad = GR * 1.62, labelScale = 1;
+
+  // เขตพื้นที่ทั้ง 5 — ป้ายลอยรอบลูกโลก
+  const ZONE_CARDS = [
+      { t:'Zone A', br: 8, s:'พื้นที่ตัวอย่าง A', lat:13.74, lon:100.52 },
+      { t:'Zone B', br:11, s:'พื้นที่ตัวอย่าง B', lat:13.57, lon:100.44 },
+      { t:'Zone C', br:15, s:'พื้นที่ตัวอย่าง C', lat:12.92, lon:101.20 },
+      { t:'Zone D', br:25, s:'พื้นที่ตัวอย่าง D', lat:13.86, lon:100.51 },
+      { t:'Zone E', br:14, s:'พื้นที่ตัวอย่าง E', lat:14.02, lon:100.53 }
+    ];
+
+  // แปลงพิกัดภูมิศาสตร์เป็นตำแหน่งบนทรงกลม
+  function geo(lat, lon, rad) {
+    const p = (90 - lat) * Math.PI/180, t = (lon + 180) * Math.PI/180;
+    return new THREE.Vector3(
+      -rad * Math.sin(p) * Math.cos(t),
+       rad * Math.cos(p),
+       rad * Math.sin(p) * Math.sin(t)
+    );
+  }
+
+  // กรอบพิกัดทวีปแบบหยาบ (ใช้โรยจุดแผ่นดิน) [lonMin, lonMax, latMin, latMax]
+  const LAND = [
+    [-168,-141,55,71],[-141,-95,49,70],[-96,-57,45,70],[-112,-62,68,80],
+    [-125,-96,31,49],[-96,-67,25,47],[-117,-86,15,32],[-92,-77,8,18],
+    [-56,-20,60,83],[-70,-30,68,82],
+    [-79,-35,-5,12],[-77,-35,-20,-5],[-73,-40,-35,-20],[-73,-53,-45,-35],[-75,-65,-55,-45],
+    [-10,15,36,60],[-8,2,50,59],[5,31,55,71],[15,40,40,60],[7,18,37,47],
+    [-17,35,15,37],[-17,43,5,20],[8,42,-12,10],[11,41,-35,-8],[35,51,3,15],[43,51,-26,-12],
+    [40,90,50,72],[90,180,50,72],[60,140,42,55],[45,80,35,52],[34,60,12,40],
+    [68,90,8,32],[75,123,22,45],[95,110,5,23],[126,146,31,46],
+    [95,141,-10,6],[117,127,5,19],[131,151,-10,-1],
+    [113,154,-39,-11],[166,179,-47,-34],[-180,180,-90,-63]
+  ];
+  const isLand = (la,lo) => {
+    for (let i=0;i<LAND.length;i++){ const b=LAND[i];
+      if (lo>=b[0]&&lo<=b[1]&&la>=b[2]&&la<=b[3]) return true; }
+    return false;
+  };
+
+  let globe, globeCore, orbitRing, zoneNodes = [], zoneArcs = [];
+  let labelRing = null, zoneLabels = [];
+
+  /* ── ป้ายเขตพื้นที่: วาดด้วย canvas แล้วใช้เป็น Sprite (หันหน้าเข้ากล้องเสมอ) ── */
+  function makeZoneLabel(z) {
+    const W = 512, H = 196, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+
+    // กล่องพื้นหลังมุมมน
+    const rr = (x,y,w,h,r) => {
+      g.beginPath();
+      g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
+      g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath();
+    };
+    const grd = g.createLinearGradient(0,0,W,H);
+    grd.addColorStop(0,'rgba(9,64,58,.94)');
+    grd.addColorStop(1,'rgba(4,38,35,.94)');
+    rr(10,10,W-20,H-20,26); g.fillStyle = grd; g.fill();
+    g.strokeStyle = 'rgba(67,214,196,.55)'; g.lineWidth = 3; g.stroke();
+
+    // แถบเน้นสีส้มด้านซ้าย
+    rr(24,32,10,H-64,5); g.fillStyle = '#f5a01e'; g.fill();
+
+    g.textAlign = 'left';
+
+    // บรรทัดบนสุด — ชื่อเขต
+    g.fillStyle = '#eafffb';
+    g.font = '800 54px Sarabun, Arial, sans-serif';
+    g.fillText(z.t, 54, 78);
+
+    // บรรทัดถัดมา — จำนวนสาขา
+    g.fillStyle = '#f8b544';
+    g.font = '800 44px Sarabun, Arial, sans-serif';
+    const num = String(z.br);
+    g.fillText(num, 54, 134);
+    const numW = g.measureText(num).width;
+    g.fillStyle = 'rgba(248,181,68,.82)';
+    g.font = '700 30px Sarabun, Arial, sans-serif';
+    g.fillText(' สาขา', 54 + numW, 134);
+
+    // บรรทัดล่าง — จังหวัดที่อยู่ในเขต
+    g.fillStyle = 'rgba(216,251,244,.55)';
+    g.font = '600 24px Sarabun, Arial, sans-serif';
+    g.fillText(z.s, 54, 170);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.minFilter = THREE.LinearFilter;
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: tex, transparent: true, depthTest: false, depthWrite: false
+    }));
+    sp.scale.set(6.6, 2.53, 1);
+    return sp;
+  }
+
+  /* ── วงป้ายเขตพื้นที่ ลอยรอบลูกโลก ── */
+  function buildZoneLabels() {
+    labelRing = new THREE.Group();
+    labelRing.position.copy(GC);
+    scene.add(labelRing);
+
+    ZONE_CARDS.forEach((z, i) => {
+      const holder = new THREE.Group();
+      labelRing.add(holder);
+
+      const sp = makeZoneLabel(z);
+      sp.renderOrder = 12; holder.add(sp);
+
+      // เส้นโยงจากป้ายเข้าหาผิวลูกโลก + จุดปลาย
+      // ใช้ BufferAttribute คงที่แล้วแก้ค่าในอาร์เรย์ทุกเฟรม (ไม่สร้างใหม่ทิ้ง ๆ ขว้าง ๆ)
+      const lgeo = new THREE.BufferGeometry();
+      const larr = new Float32Array(6);
+      lgeo.setAttribute('position', new THREE.BufferAttribute(larr, 3));
+      const line = new THREE.Line(lgeo, new THREE.LineBasicMaterial({
+        color:0xf5a01e, transparent:true, opacity:.42, depthTest:false }));
+      line.renderOrder = 11; labelRing.add(line);
+
+      const tipDot = new THREE.Mesh(new THREE.SphereGeometry(.15, 10, 8),
+                     new THREE.MeshBasicMaterial({ color:0xf5a01e, transparent:true, depthTest:false }));
+      tipDot.renderOrder = 11; labelRing.add(tipDot);
+
+      zoneLabels.push({
+        holder, sp, line, larr, tipDot,
+        ang: -Math.PI/2 + i * (Math.PI*2/5),     // กระจายรอบวง 72° เท่ากัน → เห็นครบ 5 เขตพร้อมกัน
+        ph: i * 1.3, idx: i,
+        baseW: 6.6, baseH: 2.53
+      });
+    });
+  }
+
+  function buildGlobe() {
+    globe = new THREE.Group();
+    globe.position.copy(GC);
+    globe.rotation.z = 0.28;                   // เอียงแกนเหมือนโลกจริง
+    scene.add(globe);
+
+    // ── แกนกลาง: หุ้มด้วยภาพโลโก้ ──
+    const tex = new THREE.TextureLoader().load(LOGO_URI);
+    tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.repeat.set(3, 1);                      // โลโก้ปรากฏ 3 ครั้งรอบลูกโลก
+    globeCore = new THREE.Mesh(
+      new THREE.SphereGeometry(GR, 46, 34),
+      new THREE.MeshPhongMaterial({
+        map: tex, color: 0x8fdfd2, emissive: 0x0a3f39,
+        shininess: 14, transparent: true, opacity: .96
+      })
+    );
+    globe.add(globeCore);
+
+    // ── เรืองแสงรอบลูกโลก ──
+    const glow = new THREE.Mesh(
+      new THREE.SphereGeometry(GR*1.16, 34, 24),
+      new THREE.MeshBasicMaterial({ color:0x2fbfae, transparent:true, opacity:.13,
+        side:THREE.BackSide, blending:THREE.AdditiveBlending, depthWrite:false })
+    );
+    globe.add(glow);
+
+    // ── เส้นละติจูด / ลองจิจูด ──
+    const lm  = new THREE.LineBasicMaterial({ color:0x2fbfae, transparent:true, opacity:.34 });
+    const lmE = new THREE.LineBasicMaterial({ color:0xf5a01e, transparent:true, opacity:.62 });
+    for (let la=-60; la<=60; la+=20) {
+      const pts = [];
+      for (let lo=-180; lo<=180; lo+=4) pts.push(geo(la, lo, GR*1.004));
+      globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), la===0?lmE:lm));
+    }
+    for (let lo=-180; lo<180; lo+=20) {
+      const pts = [];
+      for (let la=-90; la<=90; la+=4) pts.push(geo(la, lo, GR*1.004));
+      globe.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lm));
+    }
+
+    // ── จุดแผ่นดิน ──
+    const dotTexC = document.createElement('canvas'); dotTexC.width = dotTexC.height = 32;
+    { const x = dotTexC.getContext('2d');
+      const g2 = x.createRadialGradient(16,16,0,16,16,16);
+      g2.addColorStop(0,'rgba(255,255,255,1)');
+      g2.addColorStop(.55,'rgba(200,255,245,.85)');
+      g2.addColorStop(1,'rgba(200,255,245,0)');
+      x.fillStyle = g2; x.fillRect(0,0,32,32); }
+    const dotTex = new THREE.CanvasTexture(dotTexC);
+
+    const pos = [], step = LOW ? 3.2 : 2.3;
+    for (let la=-86; la<=86; la+=step) {
+      const ls = step / Math.max(.20, Math.cos(la*Math.PI/180));
+      for (let lo=-180; lo<180; lo+=ls) {
+        if (!isLand(la, lo)) continue;
+        const v = geo(la, lo, GR*1.012);
+        pos.push(v.x, v.y, v.z);
+      }
+    }
+    const dg = new THREE.BufferGeometry();
+    dg.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+    globe.add(new THREE.Points(dg, new THREE.PointsMaterial({
+      size:.135, map:dotTex, color:0xeafffb, transparent:true, opacity:.92,
+      depthWrite:false, sizeAttenuation:true
+    })));
+
+    // ── วงโคจรสีส้ม (อยู่นอกกลุ่มที่หมุน จะได้เอียงคงที่) ──
+    orbitRing = new THREE.Group();
+    orbitRing.position.copy(GC);
+    orbitRing.rotation.set(1.16, 0, .38);
+    scene.add(orbitRing);
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(GR*1.36, .022, 8, 90),
+      new THREE.MeshBasicMaterial({ color:0xf5a01e, transparent:true, opacity:.55 })
+    );
+    orbitRing.add(ring);
+    const ring2 = new THREE.Mesh(
+      new THREE.TorusGeometry(GR*1.58, .012, 8, 90),
+      new THREE.MeshBasicMaterial({ color:0x2fbfae, transparent:true, opacity:.30 })
+    );
+    ring2.rotation.x = .5; orbitRing.add(ring2);
+    // ดาวเทียมวิ่งบนวงโคจร
+    const sat = new THREE.Mesh(new THREE.SphereGeometry(.11, 10, 8),
+                new THREE.MeshBasicMaterial({ color:0xffd479 }));
+    orbitRing.add(sat); orbitRing.userData.sat = sat;
+
+    // ── หมุดเขตพื้นที่ 5 จุด บนผิวลูกโลก (พิกัดจริงในไทย) ──
+    ZONE_CARDS.forEach((z, i) => {
+      const g = new THREE.Group();
+      const v = geo(z.lat, z.lon, GR*1.02);
+      g.position.copy(v); g.lookAt(v.clone().multiplyScalar(2));
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(.10, 10, 8),
+                  new THREE.MeshBasicMaterial({ color:0xf5a01e }));
+      g.add(dot);
+      const halo = new THREE.Mesh(new THREE.SphereGeometry(.10, 10, 8),
+                   new THREE.MeshBasicMaterial({ color:0xf5a01e, transparent:true, opacity:.30,
+                     blending:THREE.AdditiveBlending, depthWrite:false }));
+      halo.scale.setScalar(3.4); g.add(halo);
+      const rg = new THREE.Mesh(new THREE.RingGeometry(.18,.23,20),
+                 new THREE.MeshBasicMaterial({ color:0xf5a01e, transparent:true, opacity:.6,
+                   side:THREE.DoubleSide, depthWrite:false }));
+      g.add(rg);
+      // เสาแสงบอกตำแหน่ง
+      const bm = new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,1.1,6),
+                 new THREE.MeshBasicMaterial({ color:0xffd479, transparent:true, opacity:.55 }));
+      bm.rotation.x = Math.PI/2; bm.position.z = .55; g.add(bm);
+      globe.add(g);
+      zoneNodes.push({ g, halo, rg, ph: i*1.25 });
+    });
+
+    // ── เส้นโค้งเชื่อมระหว่างโซน ──
+    const pairs = [[0,1],[0,3],[0,4],[0,2],[3,4],[1,2]];
+    pairs.forEach(([a,b]) => {
+      const A = geo(ZONE_CARDS[a].lat, ZONE_CARDS[a].lon, GR*1.015);
+      const B = geo(ZONE_CARDS[b].lat, ZONE_CARDS[b].lon, GR*1.015);
+      const mid = A.clone().add(B).multiplyScalar(.5).normalize()
+                   .multiplyScalar(GR + A.distanceTo(B)*1.9 + .5);
+      const pts = new THREE.QuadraticBezierCurve3(A, mid, B).getPoints(40);
+      const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),
+                   new THREE.LineBasicMaterial({ color:0xf5a01e, transparent:true, opacity:.40 }));
+      globe.add(line);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(.055, 8, 6),
+                   new THREE.MeshBasicMaterial({ color:0xfff0c8 }));
+      globe.add(head);
+      zoneArcs.push({ head, pts, t: Math.random(), sp: .32 + Math.random()*.35 });
+    });
+  }
+
+  /* ── แท่นยืนเรืองแสงใต้ตัวละคร ── */
+  function buildPlatform() {
+    const g = new THREE.Group(); g.position.set(0,0,2.6); scene.add(g);
+    // พื้นสะท้อนแสงจาง ๆ
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(11.5, 48),
+                 new THREE.MeshBasicMaterial({ color:0x0a4a44, transparent:true, opacity:.55 }));
+    disc.rotation.x = -Math.PI/2; disc.position.y = .01; g.add(disc);
+    // วงแหวนซ้อน
+    [4.2, 7.0, 9.6, 11.4].forEach((r,i) => {
+      const rg = new THREE.Mesh(new THREE.RingGeometry(r, r+.045, 64),
+                 new THREE.MeshBasicMaterial({ color: i%2 ? 0xf5a01e : 0x2fbfae,
+                   transparent:true, opacity: i%2 ? .30 : .42, side:THREE.DoubleSide }));
+      rg.rotation.x = -Math.PI/2; rg.position.y = .02; g.add(rg);
+    });
+    // เส้นรัศมีกระจายออกจากศูนย์กลาง
+    for (let i=0;i<24;i++) {
+      const a = i/24*Math.PI*2;
+      const ln = new THREE.Mesh(new THREE.BoxGeometry(.035, .012, 7.4),
+                 new THREE.MeshBasicMaterial({ color:0x2fbfae, transparent:true, opacity:.16 }));
+      ln.position.set(Math.sin(a)*7.7, .015, Math.cos(a)*7.7);
+      ln.rotation.y = a;
+      g.add(ln);
+    }
+  }
+
+  /* ── ต้นไม้ทรงการ์ตูน (พุ่มกลมซ้อนกัน) ── */
+  function makeTree(x,z,sc,tint) {
+    const tr = new THREE.Group(); tr.position.set(x,0,z); tr.scale.setScalar(sc||1); scene.add(tr);
+    const trunk = cyl(.16,.26,1.5,C.trunk,0,.75,0,tr,10);
+    trunk.castShadow = true;
+    const crown = new THREE.Group(); crown.position.y = 1.6; tr.add(crown);
+    const cols = tint || [C.leaf, C.leaf2, C.leaf3];
+    ball(.95,cols[0], 0,   .35, 0,   crown);
+    ball(.68,cols[1], .62, .10, .30, crown);
+    ball(.62,cols[2],-.60, .16,-.20, crown);
+    ball(.55,cols[1],-.12, .92, .18, crown);
+    ball(.48,cols[0], .34, .72,-.36, crown);
+    crown.children.forEach(c => c.castShadow = true);
+    leavesSway.push({ o:crown, ph:Math.random()*6.28, amp:.030+Math.random()*.022 });
+    return tr;
+  }
+
+  /* ── ม้านั่งในสวน ── */
+  function makeBench(x,z,ry) {
+    const b = new THREE.Group(); b.position.set(x,0,z); b.rotation.y = ry||0; scene.add(b);
+    // ที่นั่งเตี้ยให้พอดีสัดส่วนตัวการ์ตูน (ผิวบนอยู่ราว y = .36)
+    for (let i=0;i<3;i++) box(2.6,.09,.21,C.roof,0,.32,-.25+i*.25,b);   // ระแนงที่นั่ง
+    for (let i=0;i<3;i++) { const sl = box(2.6,.16,.08,C.roof,0,.54+i*.20,-.42,b); sl.rotation.x = -.16; }
+    [-1.10,1.10].forEach(sx => {
+      box(.11,.32,.11,0xb98a5e,sx,.16,-.22,b);
+      box(.11,.32,.11,0xb98a5e,sx,.16, .18,b);
+      box(.11,.62,.11,0xb98a5e,sx,.62,-.44,b);      // เสาพนักพิง
+    });
+    box(.13,.10,.60,0xb98a5e,-1.10,.41,-.02,b);     // ที่วางแขน
+    box(.13,.10,.60,0xb98a5e, 1.10,.41,-.02,b);
+    return b;
+  }
+
+  /* ── ละอองแสง / ฝุ่นทองลอยในอากาศ (ให้ความรู้สึกแดดอุ่น) ── */
+  function buildMotes() {
+    const gm = new THREE.SphereGeometry(1,6,5);
+    for (let i=0;i<(LOW?34:64);i++) {
+      const m = new THREE.Mesh(gm, new THREE.MeshBasicMaterial({
+        color:C.sun, transparent:true, opacity:.30+Math.random()*.38
+      }));
+      m.scale.setScalar(.020+Math.random()*.048);
+      m.position.set(-14+Math.random()*28, Math.random()*13, -12+Math.random()*18);
+      m.userData = { sp:.14+Math.random()*.30, ph:Math.random()*6.28, x0:m.position.x };
+      scene.add(m); motes.push(m);
+    }
+  }
+  function updateMotes(dt, tt) {
+    motes.forEach(m => {
+      const u = m.userData;
+      m.position.y += u.sp*dt;
+      m.position.x = u.x0 + Math.sin(tt*.5+u.ph)*.5;
+      if (m.position.y > 13.5) m.position.y = -0.5;
+    });
+  }
+
+  /* ── หัวใจลอย (สื่อถึงความเมตตา) ── */
+  function makeHeart(x,y,z,scale) {
+    const sh = new THREE.Shape();
+    sh.moveTo(0,.28);
+    sh.bezierCurveTo(0,.42,-.22,.50,-.34,.32);
+    sh.bezierCurveTo(-.48,.10,-.16,-.14,0,-.36);
+    sh.bezierCurveTo(.16,-.14,.48,.10,.34,.32);
+    sh.bezierCurveTo(.22,.50,0,.42,0,.28);
+    const geo = new THREE.ExtrudeGeometry(sh,{depth:.08,bevelEnabled:false});
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+      color:C.pink, transparent:true, opacity:.9
+    }));
+    m.position.set(x,y,z); m.scale.setScalar(scale||.4);
+    m.userData = { vy:.42+Math.random()*.35, life:0, max:2.6+Math.random(), sway:Math.random()*6.28 };
+    scene.add(m); hearts.push(m); return m;
+  }
+  function spawnHearts(x,y,z,n) {
+    for (let i=0;i<(n||3);i++) {
+      makeHeart(x+(Math.random()-.5)*1.8, y+Math.random()*.6, z+(Math.random()-.5)*1.0,
+                .48+Math.random()*.42);
+    }
+  }
+  function updateHearts(dt) {
+    for (let i=hearts.length-1;i>=0;i--) {
+      const h = hearts[i]; const u = h.userData;
+      u.life += dt;
+      h.position.y += u.vy*dt;
+      h.position.x += Math.sin(u.life*2.2+u.sway)*.35*dt;
+      h.rotation.z  = Math.sin(u.life*2+u.sway)*.28;
+      h.material.opacity = .92 * (1 - clamp01(u.life/u.max));
+      if (u.life >= u.max) { scene.remove(h); h.geometry.dispose(); h.material.dispose(); hearts.splice(i,1); }
+    }
+  }
+
+  /* ── สร้างฉากทั้งหมด ── */
+  function build(canvas) {
+    scene = new THREE.Scene();
+    scene.background = null;
+    scene.fog = new THREE.Fog(0x073d38, 26, 60);          // หมอกเขียวเข้มตัดขอบฉาก
+
+    camera = new THREE.PerspectiveCamera(40, 1, .1, 200);
+
+    renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+    renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = !LOW;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    // ── แสง: โทนเขียวของธีม + ไฟส่องส้มเป็นจุดเน้น ──
+    scene.add(new THREE.HemisphereLight(0x9ff0e2, 0x04302c, .78));
+    const keyL = new THREE.DirectionalLight(0xd8fff5, .95);
+    keyL.position.set(-5,10,8); keyL.castShadow = !LOW;
+    if (!LOW) {
+      keyL.shadow.mapSize.set(1024,1024);
+      keyL.shadow.camera.left=-14; keyL.shadow.camera.right=14;
+      keyL.shadow.camera.top=14;   keyL.shadow.camera.bottom=-14;
+      keyL.shadow.bias = -0.0012;
+    }
+    scene.add(keyL);
+    const rimL = new THREE.DirectionalLight(0xf5a01e, .45);
+    rimL.position.set(7,4,-6); scene.add(rimL);
+    scene.add(new THREE.AmbientLight(0x7fd8c8, .42));
+    const spot = new THREE.PointLight(0x9ff0e2, .8, 26, 2);
+    spot.position.set(0,7,9); scene.add(spot);
+
+    buildGlobe();
+    buildZoneLabels();
+    buildMotes();
+    resetScene();
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     จัดวางเรื่องราว — ครอบครัวกำลังมาถึงคลินิก บุคลากรรออยู่หน้าประตู
+       ซ้าย  : คุณตา–คุณยาย เดินมาด้วยกัน คุณตาถือไม้เท้า
+       กลาง  : แม่จูงมือลูกชายตามมาติด ๆ
+       ขวา   : บุคลากรเสื้อฟ้า 2 คน ยืนต้อนรับหน้าประตูคลินิก
+     ══════════════════════════════════════════════════════════════ */
+  /* ── รีเซ็ตฉากกลับสู่สถานะเริ่มต้น ── */
+  function resetScene() {
+    if (labelRing) labelRing.rotation.y = 0;
+    if (globe) globe.rotation.y = 0;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     ฉากหลัก — ลูกโลกโลโก้หมุนช้า ๆ พร้อมป้ายเขตพื้นที่ทั้ง 5 ลอยรอบ
+     ══════════════════════════════════════════════════════════════ */
+  function animateIdle(tt, dt) {
+    updateGlobe(tt, dt);
+    updateLabels(tt, dt, 1);
+    updateMotes(dt, tt);
+    updateCamera(tt);
+  }
+
+  /* ── ป้ายเขตพื้นที่: ลอยวนรอบลูกโลก + ขยับขึ้นลงเบา ๆ ── */
+  function updateLabels(tt, dt, vis) {
+    if (!labelRing) return;
+    labelRing.rotation.y = 0;                    // ให้วงอยู่ในระนาบหน้าจอเสมอ
+
+    zoneLabels.forEach(L => {
+      // ── ป้ายเป้าหมายตอน Login: ลอยเข้ากลางจอแล้วขยายใหญ่ ──
+      if (focusIdx >= 0 && L.idx === focusIdx) {
+        const k = focusK;
+        const a0 = L.ang + tt * 0.055;
+        const x0 = Math.cos(a0) * labelRad, y0 = Math.sin(a0) * labelRad;
+        // ลอยขึ้นเหนือกล่อง Login เล็กน้อย แล้วขยับเข้าหากล้อง
+        const x = lerp(x0, 0, k), y = lerp(y0, GR * .58, k), z = lerp(GR*.62, GR*1.20, k);
+        L.holder.position.set(x, y, z);
+        const s = 1 + k*.45;
+        L.sp.scale.set(L.baseW*labelScale*s, L.baseH*labelScale*s, 1);
+        L.sp.material.opacity = 1;
+        L.line.visible = L.tipDot.visible = k < .35;
+        L.line.material.opacity   = .5 * (1-k/.35);
+        L.tipDot.material.opacity = .7 * (1-k/.35);
+        L.sp.visible = true;
+        return;
+      }
+
+      const a   = L.ang + tt * 0.055;             // หมุนวงช้า ๆ (เห็นครบทั้ง 5 เขตตลอด)
+      const bob = Math.sin(tt*.9 + L.ph) * .26;
+      const ux = Math.cos(a), uy = Math.sin(a);   // เวกเตอร์หนึ่งหน่วยชี้ออกจากศูนย์กลาง
+      const x = ux * labelRad, y = uy * labelRad + bob;
+      const z = GR * .62;                         // ลอยอยู่หน้าลูกโลก ไม่โดนบัง
+      L.holder.position.set(x, y, z);
+      L.sp.scale.set(L.baseW*labelScale, L.baseH*labelScale, 1);
+
+      // เส้นโยง: จากผิวลูกโลก → ขอบด้านในของป้าย
+      const inset = 1.9 * labelScale;
+      const ix = ux * GR * .98, iy = uy * GR * .98;
+      const ox = x - ux * inset, oy = y - uy * inset;
+      L.larr[0] = ix; L.larr[1] = iy; L.larr[2] = 0;
+      L.larr[3] = ox; L.larr[4] = oy; L.larr[5] = z;
+      L.line.geometry.attributes.position.needsUpdate = true;
+      L.tipDot.position.set(ix, iy, 0);
+
+      const o = (.58 + Math.sin(tt*1.5 + L.ph)*.16) * vis;
+      L.sp.material.opacity     = Math.min(1, .92 * vis);
+      L.line.material.opacity   = o * .72;
+      L.tipDot.material.opacity = o;
+      const on = vis > .02;
+      L.sp.visible = L.line.visible = L.tipDot.visible = on;
+    });
+  }
+
+  /* ── ลูกโลก: หมุนช้า ๆ + หมุดโซนเต้น + จุดข้อมูลวิ่งตามเส้นโค้ง ── */
+  function updateGlobe(tt, dt) {
+    if (!globe) return;
+    globe.rotation.y += dt * .085;
+
+    zoneNodes.forEach(n => {
+      const p = .5 + Math.sin(tt*2.0 + n.ph)*.5;
+      n.rg.scale.setScalar(1 + p*1.5);
+      n.rg.material.opacity = .60 * (1 - p*.55);
+      n.halo.scale.setScalar(3.0 + p*1.6);
+    });
+
+    zoneArcs.forEach(a => {
+      a.t += dt * a.sp; if (a.t > 1) a.t -= 1;
+      const i = Math.min(a.pts.length-1, Math.floor(a.t*(a.pts.length-1)));
+      a.head.position.copy(a.pts[i]);
+      a.head.material.opacity = .3 + Math.sin(a.t*Math.PI)*.7;
+    });
+
+    if (orbitRing) {
+      orbitRing.rotation.z += dt * .12;
+      const s = orbitRing.userData.sat;
+      if (s) { const a = tt*.55; s.position.set(Math.cos(a)*GR*1.36, Math.sin(a)*GR*1.36, 0); }
+    }
+  }
+
+  /* ── กล้อง: ลอยช้า ๆ ให้เห็นทั้งลูกโลกและตัวละครครบเฟรม ── */
+  function updateCamera(tt) {
+    const ang = Math.sin(tt*.075) * 0.045;
+    const rad = camRad + Math.sin(tt*.06) * 0.6;
+    camera.position.set(
+      Math.sin(ang)*rad,
+      camY + Math.sin(tt*.11)*.22,
+      GC.z + Math.cos(ang)*rad
+    );
+    camera.lookAt(0, camLookY, GC.z);
+  }
+
+  /* ── ตอนกด Login: กล้องค่อย ๆ เข้าใกล้ + หัวใจฟุ้ง + พนักงานโบกมือส่ง ── */
+  function animateOutro(tt, dt) {
+    const e = ease(clamp01(tt/2.4));
+    focusK = e;
+
+    if (focusIdx >= 0 && globe) {
+      // ── ผู้ใช้ประจำเขต: หมุนลูกโลกให้หมุดของเขตนั้นหันมาหากล้อง ──
+      globe.rotation.y = focusYaw0 + (focusYaw1 - focusYaw0) * e;
+      zoneNodes.forEach((n, i) => {
+        const on = (i === focusIdx);
+        const p = .5 + Math.sin(t*3.4)*.5;
+        n.rg.scale.setScalar(on ? (1 + p*2.4) : (1 + p*1.5));
+        n.rg.material.opacity   = on ? .95 : .60 * (1-e);
+        n.halo.scale.setScalar(on ? (3.4 + p*3.2) : 3.0);
+        n.halo.material.opacity = on ? .55 : .30 * (1-e);
+      });
+      zoneArcs.forEach(a => { a.head.material.opacity = .6 * (1-e); a.head.visible = e < .9; });
+    } else {
+      // ── admin: ดิ่งเข้าหาลูกโลกทั้งลูก ลูกโลกเร่งหมุนขึ้นเรื่อย ๆ ──
+      updateGlobe(t, dt);
+      globe.rotation.y += dt * e * 2.2;
+      const p = .5 + Math.sin(t*3.0)*.5;
+      zoneNodes.forEach(n => {                      // หมุดทุกเขตสว่างพร้อมกัน
+        n.rg.material.opacity   = .55 + e*.40;
+        n.halo.material.opacity = .28 + e*.32;
+        n.halo.scale.setScalar(3.0 + p*1.6 + e*1.4);
+      });
+    }
+
+    // ป้ายเขตอื่นจางหาย เหลือเฉพาะป้ายของเขตตัวเองที่ลอยเข้ากลางจอ
+    updateLabels(t, dt, 1 - e);
+    updateMotes(dt, t);
+
+    // กล้องดิ่งเข้าใกล้ — admin เข้าลึกกว่าเพราะพุ่งเข้าหาลูกโลกโดยตรง
+    const zoom = (focusIdx >= 0) ? .46 : .74;
+    const rad  = Math.max(GR * 1.28, camRad - e * (camRad * zoom));
+    camera.position.set(0, camY - e*.25, GC.z + rad);
+    camera.lookAt(0, camLookY + e * GR * (focusIdx >= 0 ? .16 : .02), GC.z);
+
+    if (tt >= 2.7 && outroDone) { const cb = outroDone; outroDone = null; cb(); }
+  }
+
+  /* ── loop ── */
+  function tick() {
+    if (!alive) return;
+    rafId = requestAnimationFrame(tick);
+    const dt = Math.min(clock.getDelta(), .05);
+    t += dt;
+
+    if (mode === 'outro') { outroT += dt; animateOutro(outroT, dt); }
+    else                  { animateIdle(t, dt); }
+
+    renderer.render(scene, camera);
+  }
+
+  function resize() {
+    if (!renderer) return;
+    const c = renderer.domElement;
+    const w = c.clientWidth || 1, h = c.clientHeight || 1;
+    const ar = w/h;
+    // จำกัด pixel ratio ไม่ให้เครื่องเล็กทำงานหนักเกินไป
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(w, h, false);
+    camera.aspect = ar;
+
+    /* ── จัดเฟรมอัตโนมัติ ──
+       คำนวณระยะกล้องจากสิ่งที่ต้องเห็นจริง: ลูกโลกทั้งลูก + ป้ายเขตครบทั้ง 5 วง
+       จอแคบ → ย่อป้ายและหุบวงเข้ามา แทนที่จะถอยกล้องจนลูกโลกเล็กจิ๋ว          */
+    camera.fov = 38;
+    camY = 3.4; camLookY = 3.4;
+
+    if      (ar >= 1.45) { labelScale = 1.00; labelRad = GR * 1.66; }
+    else if (ar >= 1.05) { labelScale = 0.88; labelRad = GR * 1.60; }
+    else if (ar >= 0.78) { labelScale = 0.76; labelRad = GR * 1.50; }
+    else                 { labelScale = 0.64; labelRad = GR * 1.42; }
+
+    const halfW = (6.6 * labelScale) / 2;         // ครึ่งความกว้างป้าย
+    const halfH = (2.53 * labelScale) / 2;
+    const needW = 2 * (labelRad + halfW);         // ความกว้างที่ต้องเห็น
+    const needH = 2 * (labelRad + halfH + .4);    // ความสูงที่ต้องเห็น (+ ระยะขยับขึ้นลง)
+    const visH  = Math.max(needH, needW / ar) * 1.10;   // เผื่อขอบ 10%
+    camRad = visH / (2 * Math.tan(camera.fov * Math.PI/360));
+
+    camera.updateProjectionMatrix();
+  }
+
+  return {
+    init() {
+      const canvas = document.getElementById('mmiCanvas');
+      if (!canvas || started) return false;
+      if (typeof THREE === 'undefined') {
+        console.warn('[MMI3D] ไม่พบ Three.js — ข้ามอนิเมชัน หน้า Login ยังใช้งานได้ปกติ');
+        return false;
+      }
+      try {
+        reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        clock = new THREE.Clock();
+        build(canvas);
+        resize();
+        window.addEventListener('resize', resize);
+        started = true; alive = true;
+        if (reduced) {                       // ลดการเคลื่อนไหว → แสดงภาพนิ่ง
+          t = 2.0; animateIdle(t, 0); renderer.render(scene, camera);
+          alive = false;
+        } else {
+          tick();
+        }
+        // พักเรนเดอร์เมื่อสลับแท็บ — ประหยัดแบตบนมือถือ
+        document.addEventListener('visibilitychange', () => {
+          if (!started || reduced) return;
+          if (document.hidden) { alive = false; if (rafId) cancelAnimationFrame(rafId); }
+          else if (!alive && document.getElementById('loginScreen').style.display !== 'none') {
+            alive = true; clock.getDelta(); tick();
+          }
+        });
+        return true;
+      } catch (e) {
+        console.warn('[MMI3D] สร้างฉากไม่สำเร็จ:', e);
+        return false;
+      }
+    },
+
+    /**
+     * เล่นฉากตอน login สำเร็จ แล้วเรียก cb
+     * @param cb       ฟังก์ชันที่จะเรียกเมื่อจบฉาก
+     * @param zoneIdx  ดัชนีเขตใน ZONE_CARDS (0-4) — ถ้าระบุจะซูมเข้าโซนนั้น
+     */
+    playOutro(cb, zoneIdx) {
+      if (!started || !alive || reduced) { cb(); return; }
+      focusIdx = (typeof zoneIdx === 'number' && zoneIdx >= 0 && zoneIdx < ZONE_CARDS.length)
+                 ? zoneIdx : -1;      // -1 = admin → ดิ่งเข้าหาลูกโลกทั้งลูก
+      focusK = 0;
+      if (focusIdx >= 0 && globe) {
+        // หมุนลูกโลกให้หมุดโซนนั้นหันมาทางกล้อง (+Z)
+        const z = ZONE_CARDS[focusIdx];
+        const p = geo(z.lat, z.lon, 1);
+        focusYaw0 = globe.rotation.y;
+        let target = -Math.atan2(p.x, p.z);
+        // เลือกทิศหมุนที่สั้นที่สุด
+        while (target - focusYaw0 >  Math.PI) target -= Math.PI*2;
+        while (target - focusYaw0 < -Math.PI) target += Math.PI*2;
+        focusYaw1 = target;
+      }
+      mode = 'outro'; outroT = 0; outroDone = cb;
+      setTimeout(() => { if (outroDone) { const f = outroDone; outroDone = null; f(); } }, 3400);
+    },
+
+    /** ชื่อเขตที่กำลังซูมเข้าไป (ไว้แสดงข้อความระหว่างรอ) */
+    zoneName(i) { return ZONE_CARDS[i] ? ZONE_CARDS[i].t : ''; },
+
+    /** หยุดเรนเดอร์ + คืนหน่วยความจำ หลังเข้าหน้าฟอร์มแล้ว */
+    stop() {
+      alive = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      window.removeEventListener('resize', resize);
+    },
+
+    /** กลับมาเล่นใหม่ตอน logout */
+    restart() {
+      if (!started) return;
+      mode = 'idle'; outroDone = null;
+      focusIdx = -1; focusK = 0;
+      resetScene();
+      // stop() ถอด listener ออกไป ต้องต่อกลับ + วัดขนาดใหม่
+      // (หน้าต่างอาจถูกย่อ/ขยายระหว่างที่อยู่ในหน้าฟอร์ม)
+      window.addEventListener('resize', resize);
+      resize();
+      if (reduced) { animateIdle(t, 0); renderer.render(scene, camera); return; }
+      if (!alive) { alive = true; clock.getDelta(); tick(); }
+    }
+  };
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ยานอวกาศบินตามเมาส์
+   ---------------------------------------------------------------------
+   ยานจะ "ไล่ตาม" ตำแหน่งเมาส์แบบหน่วง ๆ (ไม่ติดหนึบ) และหันหัวไปตามทิศที่บิน
+   พร้อมทิ้งฝุ่นไอพ่นไว้ข้างหลัง — ทำงานเฉพาะเครื่องที่มีเมาส์จริง
+   ═══════════════════════════════════════════════════════════════════════ */
+const ShipCursor = (function () {
+  let el, flame, raf = null, on = false;
+  let mx = innerWidth/2, my = innerHeight/2;    // ตำแหน่งเมาส์
+  let sx = mx, sy = my;                          // ตำแหน่งยาน (ตามหลัง)
+  let ang = 0, lastPuff = 0;
+  const trails = [];
+
+  function onMove(e) {
+    mx = e.clientX; my = e.clientY;
+    if (!el.classList.contains('on')) el.classList.add('on');
+  }
+  function onLeave() { el.classList.remove('on'); }
+
+  function puff(x, y) {
+    const d = document.createElement('div');
+    d.className = 'ship-trail';
+    d.style.transform = `translate(${x}px,${y}px) scale(${.7 + Math.random()*.7})`;
+    document.body.appendChild(d);
+    const born = performance.now();
+    trails.push({ d, born, x, y });
+    if (trails.length > 26) { const o = trails.shift(); o.d.remove(); }
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    const px = sx, py = sy;
+    // หน่วงการเคลื่อนที่ให้ดูเหมือนยานมีมวล
+    sx += (mx - sx) * 0.14;
+    sy += (my - sy) * 0.14;
+
+    const vx = sx - px, vy = sy - py;
+    const sp = Math.hypot(vx, vy);
+    if (sp > 0.35) {
+      // หันหัวยานไปทางที่บิน (ภาพ SVG ชี้ขึ้นเป็นค่าเริ่มต้น จึงบวก 90°)
+      const target = Math.atan2(vy, vx) + Math.PI/2;
+      let d = target - ang;
+      while (d >  Math.PI) d -= Math.PI*2;
+      while (d < -Math.PI) d += Math.PI*2;
+      ang += d * 0.22;
+    }
+    // เอียงตัวยานตามความเร็วเล็กน้อย
+    const tilt = Math.min(sp / 26, 1);
+    el.style.transform =
+      `translate(${sx}px,${sy}px) rotate(${ang}rad) scale(${1 + tilt*.12})`;
+    // เปลวไฟยาวขึ้นเมื่อบินเร็ว (ใช้ height เพราะ transform/opacity ถูก keyframe คุมอยู่)
+    if (flame) flame.style.height = (11 + tilt*20).toFixed(1) + 'px';
+
+    // ปล่อยฝุ่นไอพ่นไว้ "ด้านท้าย" ของยาน
+    // ยานชี้ไปทาง ( sin(ang), -cos(ang) ) → ท้ายยานคือทิศตรงข้าม
+    const now = performance.now();
+    if (sp > 1.6 && now - lastPuff > 26) {
+      lastPuff = now;
+      puff(sx - Math.sin(ang) * 18, sy + Math.cos(ang) * 18);
+    }
+    for (let i = trails.length - 1; i >= 0; i--) {
+      const tr = trails[i], age = (now - tr.born) / 620;
+      if (age >= 1) { tr.d.remove(); trails.splice(i,1); continue; }
+      tr.d.style.opacity = String((1 - age) * .8);
+    }
+  }
+
+  return {
+    start() {
+      // ไม่ต้องมียานบนอุปกรณ์สัมผัส (ไม่มี cursor ให้แทนที่)
+      if (on || matchMedia('(hover:none) and (pointer:coarse)').matches) return;
+      el = document.getElementById('shipCursor');
+      if (!el) return;
+      flame = el.querySelector('.flame');
+      on = true;
+      document.body.classList.add('ship-on');
+      addEventListener('mousemove', onMove);
+      addEventListener('mouseleave', onLeave);
+      loop();
+    },
+    stop() {
+      if (!on) return;
+      on = false;
+      document.body.classList.remove('ship-on');
+      removeEventListener('mousemove', onMove);
+      removeEventListener('mouseleave', onLeave);
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (el) el.classList.remove('on');
+      trails.forEach(tr => tr.d.remove()); trails.length = 0;
+    }
+  };
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════
+   หน้าจอบัญชาการ — นาฬิกา + แถบข้อความวิ่ง (เฉพาะหน้า Login)
+   หยุดทำงานเองเมื่อเข้าสู่ระบบแล้ว เพื่อไม่ให้กินทรัพยากรระหว่างใช้ฟอร์ม
+   ═══════════════════════════════════════════════════════════════════════ */
+let ccTimer = null, ccRaf = null;
+function startCommandChrome() {
+  const clockEl = document.getElementById('ccClock');
+  const tickEl  = document.getElementById('ccTick');
+  if (!clockEl || !tickEl) return;
+
+  const tickClock = () => {
+    const d = new Date();
+    clockEl.textContent = [d.getHours(), d.getMinutes(), d.getSeconds()]
+      .map(n => String(n).padStart(2,'0')).join(':');
+  };
+  tickClock();
+  ccTimer = setInterval(tickClock, 1000);
+
+  const msgs = [
+    'ระบบ Action Plan พร้อมใช้งาน · โหมดสาธิตออฟไลน์พร้อมใช้งาน',
+    'โซนที่เปิดใช้งาน: Zone A · Zone B · Zone C · Zone D · Zone E',
+    'บันทึกข้อมูลอัตโนมัติทุกครั้งที่กดปุ่ม <b>บันทึก</b> — ไม่ทับรายการเดิม',
+    'ฝ่าย A · องค์กรตัวอย่าง (ORG)',
+    'ส่งออกได้ทั้ง <b>PDF</b> · <b>PPTX</b> · <b>Excel</b> · <b>CSV</b>',
+    'ต้องการเปลี่ยนรหัสผ่าน ติดต่อ <b>' + SUPPORT_EMAIL + '</b>'
+  ];
+  tickEl.innerHTML = msgs.join('<span class="d">◆</span>') + '<span class="d">◆</span>';
+
+  let x = tickEl.parentElement.clientWidth, last = performance.now();
+  const step = (now) => {
+    const dt = Math.min((now - last)/1000, .05); last = now;
+    x -= dt * 58;
+    if (-x > tickEl.scrollWidth - 30) x = tickEl.parentElement.clientWidth;
+    tickEl.style.transform = 'translateX(' + x + 'px)';
+    ccRaf = requestAnimationFrame(step);
+  };
+  ccRaf = requestAnimationFrame(step);
+}
+function stopCommandChrome() {
+  if (ccTimer) { clearInterval(ccTimer); ccTimer = null; }
+  if (ccRaf)   { cancelAnimationFrame(ccRaf); ccRaf = null; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LOGIN / LOGOUT  (แทน auth.php + login.php + logout.php)
+   ═══════════════════════════════════════════════════════════════════════ */
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginError');
+  err.textContent = '';
+  btn.disabled = true; btn.textContent = 'กำลังเข้าสู่ระบบ...';
+
+  const j = await api('login', {
+    username: document.getElementById('loginUser').value.trim(),
+    password: document.getElementById('loginPass').value
+  });
+
+  if (!j.ok) {
+    btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+    err.textContent = '❌ ' + (j.error || 'เข้าสู่ระบบไม่สำเร็จ');
+    return;
+  }
+
+  TOKEN = j.token;
+  ME    = j.user;
+  try {
+    sessionStorage.setItem('ap_token', TOKEN);
+    sessionStorage.setItem('ap_user', JSON.stringify(ME));
+  } catch (_) {}
+
+  // ซ่อนกล่อง login → ขึ้นหน้าจอกำลังโหลด → เล่นฉากซูม → เข้าหน้าฟอร์ม
+  const zi = zoneCardIndex(ME);
+  showLoginLoading(zi);
+  MMI3D.playOutro(async () => {
+    btn.disabled = false; btn.textContent = 'เข้าสู่ระบบ';
+    await startApp();
+  }, zi);
+});
+
+/** สลับจากกล่อง login เป็นหน้าจอกำลังโหลด */
+function showLoginLoading(zoneIdx) {
+  const card = document.querySelector('.login-card');
+  const load = document.getElementById('loginLoading');
+  if (card) card.classList.add('gone');
+  if (!load) return;
+  const zn = (zoneIdx >= 0) ? MMI3D.zoneName(zoneIdx) : '';
+  document.getElementById('llTitle').textContent =
+    zn ? 'กำลังเข้าสู่พื้นที่ของคุณ' : 'กำลังเปิดภาพรวมทุกเขต';
+  document.getElementById('llSub').textContent =
+    zn ? ('◈ ' + zn) : '◈ ผู้ดูแลระบบ · มองเห็นทั้ง 5 เขต';
+  load.classList.add('on');
+}
+/** คืนหน้า login กลับสู่สภาพเดิม (ใช้ตอน logout) */
+function resetLoginScreen() {
+  const card = document.querySelector('.login-card');
+  const load = document.getElementById('loginLoading');
+  if (load) load.classList.remove('on');
+  if (card) card.classList.remove('gone');
+}
+
+/**
+ * หาว่าผู้ใช้คนนี้อยู่เขตไหน เพื่อซูมเข้าโซนนั้นตอน Login
+ * ลำดับการตรวจ: ชื่อผู้ใช้ (zone1..zone5) → เลขโซนในฐานข้อมูล
+ * คืนค่า -1 ถ้าไม่เข้าเงื่อนไข (เช่น admin) = ไม่ซูมเข้าโซนใดโซนหนึ่ง
+ *
+ * ดัชนีใน ZONE_CARDS:  0=Zone D · 1=Zone B · 2=Zone E · 3=Zone A · 4=Zone C
+ */
+function zoneCardIndex(user) {
+  if (!user) return -1;
+  const byName = { zone1:0, zone2:1, zone3:2, zone4:3, zone5:4 };
+  const u = String(user.username || '').toLowerCase();
+  if (u in byName) return byName[u];
+
+  // สำรอง: แปลงจากเลขโซนในระบบ (1=Zone A 2=Zone B 3=Zone C 4=Zone D 5=Zone E)
+  const byZone = { 1:3, 2:1, 3:4, 4:0, 5:2 };
+  if (String(user.role) === 'admin') return -1;      // admin เห็นภาพรวม ไม่ซูมเข้าโซนไหน
+  const z = Number(user.zone);
+  return (z in byZone) ? byZone[z] : -1;
+}
+
+function logout() {
+  if (dirty && !confirm('มีข้อมูลที่ยังไม่ได้บันทึก — ออกจากระบบเลยหรือไม่?')) return;
+  try { sessionStorage.removeItem('ap_token'); sessionStorage.removeItem('ap_user'); } catch (_) {}
+
+  // ⚠️ ห้ามใช้ location.reload() — ตอนเปิดผ่านลิงก์ Apps Script หน้าเว็บอยู่ใน
+  // iframe ของ Google การ reload จะไปรีเฟรช iframe แทน ทำให้ค้าง/ขาว
+  // จึงรีเซ็ตสถานะในหน้าเลย ใช้ได้ทั้งเปิดจากลิงก์และเปิดจากไฟล์
+
+  // ปิด modal ที่ค้างอยู่ + เก็บกวาด backdrop
+  ['tableModal','pdfModal','historyModal','usersModal'].forEach(id => {
+    const el = document.getElementById(id);
+    const m  = el && bootstrap.Modal.getInstance(el);
+    if (m) m.hide();
+  });
+  document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+  document.body.classList.remove('modal-open');
+  document.body.style.removeProperty('overflow');
+  document.body.style.removeProperty('padding-right');
+
+  // ล้างสถานะทั้งหมด
+  TOKEN = ''; ME = null; IS_ADMIN = false;
+  VIEW_USER_ID = 0; VIEW_USER_INFO = null;
+  MY_ZONE = 1; currentZone = 1;
+  zoneOwner = {}; historyFilter = 'all';
+  for (let z = 1; z <= ZONE_COUNT; z++) store[z] = {};
+  loadedZones.clear();
+  FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  dirty = false;
+
+  // กลับไปหน้า Login
+  document.getElementById('appRoot').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').textContent = '';
+  resetLoginScreen();    // เอาหน้าจอกำลังโหลดออก คืนกล่อง login
+  MMI3D.restart();       // เล่นอนิเมชันต้อนรับใหม่อีกครั้ง
+  stopCommandChrome(); startCommandChrome();   // เริ่มนาฬิกา/ข้อความวิ่งใหม่
+  ShipCursor.start();    // ยานอวกาศกลับมาบินตามเมาส์
+  document.getElementById('loginUser').focus();
+}
+
+async function startApp() {
+  IS_ADMIN = (ME.role === 'admin');
+  MY_ZONE  = ME.zone ? Number(ME.zone) : 1;
+  currentZone = MY_ZONE;
+
+  document.getElementById('loginScreen').style.display = 'none';
+  MMI3D.stop();          // หยุดเรนเดอร์ 3D — ประหยัด CPU/แบตระหว่างใช้งานฟอร์ม
+  stopCommandChrome();   // หยุดนาฬิกา/ข้อความวิ่งของหน้า Login
+  ShipCursor.stop();     // คืน cursor ปกติเมื่อเข้าหน้าฟอร์ม
+  // ⚠️ ต้องเป็น 'block' ไม่ใช่ '' — เพราะ '' จะลบ inline style ทิ้ง
+  // แล้วกฎ CSS  #appRoot { display:none }  จะกลับมามีผล → หน้าว่างเปล่า
+  document.getElementById('appRoot').style.display = 'block';
+  document.getElementById('btnUsers').style.display = IS_ADMIN ? 'inline-block' : 'none';
+
+  renderZoneBar();
+  renderUserBadge();
+  await initData();
+}
+
+// ── Zone bar: admin เห็นทุกโซน / user เห็นเฉพาะโซนตัวเอง ────────────────
+function renderZoneBar() {
+  const visible = IS_ADMIN ? [1,2,3,4,5] : [MY_ZONE];
+  document.getElementById('zoneButtons').innerHTML = visible.map(z =>
+    `<button type="button" class="zone-btn ${z === currentZone ? 'active' : ''}" data-zone="${z}" onclick="switchZone(${z})">📍 ${ZONE_NAMES[z]}</button>`
+  ).join('');
+}
+
+function renderUserBadge() {
+  let html = `${IS_ADMIN ? '👑' : '👤'} <strong>${escapeHtml(ME.full_name || ME.username)}</strong>
+    <span class="badge bg-light text-dark ms-1">${IS_ADMIN ? 'admin' : 'user · โซน ' + MY_ZONE}</span>`;
+  if (VIEW_USER_ID && VIEW_USER_INFO) {
+    html += ` <span class="badge bg-warning text-dark ms-1">กำลังดู: ${escapeHtml(VIEW_USER_INFO.username)}</span>`;
+  }
+  document.getElementById('userBadge').innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Save / Load  (in-memory store)
+   ═══════════════════════════════════════════════════════════════════════ */
+function saveData() {
+  FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) store[currentZone][id] = el.value;
+  });
+  syncPage2Header();
+}
+
+function loadData(zone) {
+  const data = store[zone] || {};
+  FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = data[id] || '';
+  });
+  // Detect CLV count: use saved value, or auto-detect from existing data
+  let clvCount = parseInt(data.clv_count) || 0;
+  if (!clvCount) {
+    for (let i = 5; i >= 2; i--) {
+      if (data['clv_p'+i] || data['clv_q'+i] || data['clv_months'+i]) { clvCount = i; break; }
+    }
+    if (!clvCount) clvCount = 1;
+  }
+  document.getElementById('clv_count').value = String(clvCount);
+  applyClvCount(clvCount);
+  calcTotalBudget(); syncPage2Header();
+}
+
+function syncPage2Header() {
+  const b = document.getElementById('branch').value || '—';
+  const a = document.getElementById('author').value || '—';
+  const dv = document.getElementById('docDate').value;
+  const ds = dv ? new Date(dv).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}) : '—';
+  document.getElementById('p2_branch').textContent = b;
+  document.getElementById('p2_author').textContent = a;
+  document.getElementById('p2_date').textContent   = ds;
+}
+
+// ── Clear current zone form (memory only, doesn't touch Sheet) ────────
+function clearCurrentZoneForm() {
+  const zname = ZONE_NAMES[currentZone] || ('โซน ' + currentZone);
+  if (!confirm(`ล้างข้อมูลทั้งหมดในฟอร์ม "${zname}" หรือไม่?\n\n(ไม่กระทบ Google Sheet — รายการบันทึกเก่ายังอยู่)`)) return;
+  store[currentZone] = {};
+  FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('docDate').value = new Date().toISOString().split('T')[0];
+  calcCLV(); calcTotalBudget(); syncPage2Header();
+  dirty = false;
+  showToast(`🧹 ล้างฟอร์ม ${zname} แล้ว`);
+}
+
+// ── Delete all history from Sheet ────────────────────────────────────
+async function deleteAllHistory() {
+  const zname = ZONE_NAMES[currentZone] || ('โซน ' + currentZone);
+  const msg = IS_ADMIN
+    ? `ลบประวัติทั้งหมดของผู้ใช้นี้ทุกโซน?\n\n(ถ้าต้องการลบของทุก user เลือก "OK" แล้วจะถามอีกครั้ง)`
+    : `ลบประวัติทั้งหมดของ ${zname} (โซนของคุณ)?\n\nจะลบทุกครั้งที่บันทึกในโซนนี้ใน Google Sheet\nฟอร์มที่กำลังกรอกอยู่ไม่กระทบ`;
+  if (!confirm(msg)) return;
+
+  let scope = 'self';
+  if (IS_ADMIN) {
+    if (confirm('ลบของทุกผู้ใช้ทั้งระบบ?\n\nกด OK = ลบทั้งระบบ / กด Cancel = ลบเฉพาะที่กำลังดูอยู่')) {
+      scope = 'all';
+    }
+  }
+
+  try {
+    const j = await api('clear_history', { scope });
+    if (j.ok) {
+      showToast(`🗑️ ลบประวัติ ${j.deleted} รายการแล้ว`);
+      for (let z = 1; z <= ZONE_COUNT; z++) store[z] = {};
+      loadedZones.clear();
+      loadedZones.add(currentZone);
+      loadData(currentZone);
+      const hm = document.getElementById('historyModal');
+      if (hm && hm.classList.contains('show')) renderHistory();
+    } else {
+      showToast(`❌ ลบไม่สำเร็จ: ${j.error}`);
+    }
+  } catch (e) {
+    showToast('❌ เชื่อมต่อไม่ได้: ' + e.message);
+  }
+}
+
+// ── Save to Sheet (creates a NEW row each call) ───────────────────────
+async function saveToDB(explicitZone) {
+  // ALWAYS capture form first, into the CURRENT zone (the visible one)
+  saveData();
+
+  const zone = parseInt(explicitZone ?? currentZone, 10);
+  if (!(zone >= 1 && zone <= 5)) {
+    showToast(`❌ Zone ไม่ถูกต้อง: ${explicitZone}/${currentZone}`);
+    return;
+  }
+  const data = {...(store[zone] || {})};
+  console.log(`[saveToDB] zone=${zone} currentZone=${currentZone} keys=${Object.keys(data).length}`, data);
+
+  const zname = ZONE_NAMES[zone] || ('โซน ' + zone);
+  showToast('กำลังบันทึกข้อมูล...');
+  try {
+    const json = await api('save', { zone, data });
+    console.log('[saveToDB] response:', json);
+
+    if (json.ok) {
+      dirty = false;
+      showToast(`💾 บันทึก ${zname} สำเร็จ #${json.submission_id} (${json.fields_saved} ฟิลด์)`);
+      const hm = document.getElementById('historyModal');
+      if (hm && hm.classList.contains('show')) renderHistory();
+    } else {
+      showToast(`❌ บันทึก ${zname} ไม่สำเร็จ: ${json.error || 'unknown'}`);
+    }
+  } catch (e) {
+    showToast('❌ เชื่อมต่อ Google Sheet ไม่ได้: ' + e.message);
+    console.error(e);
+  }
+}
+
+// Load latest submission for a zone
+async function loadFromDB(zone) {
+  try {
+    const json = await api('load_latest', { zone });
+    if (json.ok) store[zone] = json.data || {};
+  } catch { /* use in-memory */ }
+  loadData(zone);
+}
+
+// ใครเป็นเจ้าของข้อมูลล่าสุดของแต่ละโซน (ใช้แสดงในตารางสรุปตอน admin ดูภาพรวม)
+let zoneOwner = {};
+
+// Load latest for all zones (one row per zone)
+async function loadAllFromDB() {
+  try {
+    const json = await api('load_all_latest', {});
+    if (json.ok && json.data) {
+      Object.keys(json.data).forEach(z => { store[parseInt(z)] = json.data[z]; });
+      zoneOwner = json.owner || {};
+    }
+  } catch { /* use in-memory */ }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   History (all zones combined, filterable)
+   ═══════════════════════════════════════════════════════════════════════ */
+let historyFilter = 'all';   // 'all' | '1'..'5'
+
+async function openHistory() {
+  new bootstrap.Modal(document.getElementById('historyModal')).show();
+  historyFilter = IS_ADMIN ? 'all' : String(MY_ZONE);
+  await renderHistory();
+}
+
+async function renderHistory() {
+  const box = document.getElementById('historyBody');
+  box.innerHTML = '<div class="text-muted">กำลังโหลด...</div>';
+  try {
+    const payload = { limit: 200 };
+    if (historyFilter !== 'all') payload.zone = historyFilter;
+    const j = await api('list_submissions', payload);
+    if (!j.ok) { box.innerHTML = '<div class="text-danger">'+escapeHtml(j.error)+'</div>'; return; }
+
+    let bar = '<div class="mb-3 d-flex flex-wrap gap-2 align-items-center">';
+    if (IS_ADMIN) {
+      bar += `<span class="small text-muted me-2">แสดงโซน:</span>`;
+      bar += `<button class="btn btn-sm ${historyFilter==='all'?'btn-success':'btn-outline-success'}" onclick="setHistoryFilter('all')">ทุกโซน</button>`;
+      for (let z = 1; z <= 5; z++) {
+        bar += `<button class="btn btn-sm ${historyFilter==String(z)?'btn-success':'btn-outline-success'}" onclick="setHistoryFilter('${z}')">📍 ${ZONE_NAMES[z]}</button>`;
+      }
+    } else {
+      bar += `<span class="small text-muted me-2">โซนของคุณ:</span>`;
+      bar += `<span class="badge bg-success p-2">📍 ${ZONE_NAMES[MY_ZONE]}</span>`;
+    }
+    bar += `<span class="ms-auto small text-muted">${j.count} รายการ</span></div>`;
+
+    if (j.count === 0) {
+      box.innerHTML = bar + '<div class="text-muted text-center py-4">ยังไม่มีรายการบันทึก — กด "บันทึก" ในฟอร์มเพื่อสร้างรายการแรก</div>';
+      return;
+    }
+
+    // admin โหมดภาพรวม → เพิ่มคอลัมน์บอกว่าใครเป็นคนบันทึก
+    const showOwner = !!j.global;
+
+    let html = bar + `<div class="table-responsive"><table class="table table-sm table-hover align-middle">
+      <thead class="table-light"><tr>
+        <th>โซน</th>${showOwner ? '<th>ผู้บันทึก</th>' : ''}<th>ครั้งที่</th><th>วันที่บันทึก</th><th>สาขา</th><th>ผู้จัดทำ</th>
+        <th class="text-end">งบรวม</th><th class="text-end">CLV</th><th></th>
+      </tr></thead><tbody>`;
+    j.submissions.forEach(s => {
+      html += `<tr>
+        <td><span class="badge bg-secondary">📍 ${ZONE_NAMES[s.zone]||'?'}</span></td>
+        ${showOwner ? `<td><code class="small">${escapeHtml(s.username||'—')}</code></td>` : ''}
+        <td><span class="badge bg-success">ครั้งที่ ${s.seq}</span></td>
+        <td class="small">${escapeHtml(s.created_at)}</td>
+        <td>${escapeHtml(s.branch||'—')}</td>
+        <td>${escapeHtml(s.author||'—')}</td>
+        <td class="text-end">${Number(s.total_budget).toLocaleString('th-TH')}</td>
+        <td class="text-end">${Number(s.clv_total).toLocaleString('th-TH')}</td>
+        <td class="text-nowrap">
+          <button class="btn btn-sm btn-outline-primary me-1" onclick="loadSubmission(${s.id}, ${s.zone})">📂 โหลด</button>
+          <button class="btn btn-sm btn-outline-danger" onclick="deleteOneSubmission(${s.id}, ${s.zone}, ${s.seq})">🗑️ ลบ</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table></div>';
+    box.innerHTML = html;
+  } catch (e) {
+    box.innerHTML = '<div class="text-danger">เชื่อมต่อไม่ได้: ' + escapeHtml(e.message) + '</div>';
+  }
+}
+
+function setHistoryFilter(f) { historyFilter = f; renderHistory(); }
+
+// Delete a single submission from the history modal
+async function deleteOneSubmission(id, zone, seq) {
+  const zname = ZONE_NAMES[zone] || ('โซน ' + zone);
+  if (!confirm(`ลบรายการ ${zname} — ครั้งที่ ${seq} (id #${id}) ?\n\nการลบนี้ไม่สามารถกู้คืนได้`)) return;
+
+  try {
+    const j = await api('delete_submission', { id });
+    if (!j.ok) { showToast(`❌ ลบไม่สำเร็จ: ${j.error}`); return; }
+
+    showToast(`🗑️ ลบ ${zname} ครั้งที่ ${seq} แล้ว`);
+
+    const hm = document.getElementById('historyModal');
+    if (hm && hm.classList.contains('show')) renderHistory();
+
+    if (zone === currentZone) {
+      loadedZones.delete(zone);
+      await loadFromDB(zone);
+      loadedZones.add(zone);
+    }
+  } catch (e) {
+    showToast('❌ เชื่อมต่อไม่ได้: ' + e.message);
+  }
+}
+
+async function loadSubmission(id, zone) {
+  try {
+    const j = await api('load_submission', { id });
+    if (!j.ok) { showToast('❌ '+j.error); return; }
+
+    const z = zone || currentZone;
+    currentZone = z;
+    document.querySelectorAll('.zone-btn').forEach(b => {
+      b.classList.toggle('active', parseInt(b.dataset.zone, 10) === z);
+    });
+    store[z] = j.data || {};
+    loadedZones.add(z);
+    loadData(z);
+
+    bootstrap.Modal.getInstance(document.getElementById('historyModal')).hide();
+    showToast(`📂 โหลด ${ZONE_NAMES[z]||'โซน '+z} (id=${id}) แล้ว`);
+  } catch (e) { showToast('❌ โหลดไม่ได้: ' + e.message); }
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Users admin (แทน users.php)
+   ═══════════════════════════════════════════════════════════════════════ */
+async function openUsers() {
+  new bootstrap.Modal(document.getElementById('usersModal')).show();
+  await renderUsers();
+}
+
+async function renderUsers() {
+  const box = document.getElementById('usersBody');
+  box.innerHTML = '<div class="text-muted">กำลังโหลด...</div>';
+  const j = await api('list_users', {});
+  if (!j.ok) { box.innerHTML = '<div class="text-danger">'+escapeHtml(j.error)+'</div>'; return; }
+
+  let html = `<div class="table-responsive"><table class="table table-sm align-middle">
+    <thead class="table-light"><tr><th>#</th><th>Username</th><th>ชื่อ-สกุล</th><th>สิทธิ์</th><th>โซน</th><th></th></tr></thead><tbody>`;
+  j.users.forEach(u => {
+    html += `<tr>
+      <td>${u.id}</td>
+      <td><code>${escapeHtml(u.username)}</code></td>
+      <td>${escapeHtml(u.full_name)}</td>
+      <td><span class="badge ${u.role==='admin'?'bg-warning text-dark':'bg-secondary'}">${u.role}</span></td>
+      <td>${u.zone ? '📍 '+ZONE_NAMES[u.zone] : '—'}</td>
+      <td class="text-nowrap">
+        ${u.role !== 'admin' ? `<button class="btn btn-sm btn-outline-primary me-1" onclick="viewAsUser(${u.id},'${escapeHtml(u.username)}',${u.zone})">👁️ ดูข้อมูล</button>` : ''}
+        <button class="btn btn-sm btn-outline-secondary me-1" onclick="editUser(${u.id},'${escapeHtml(u.username)}','${escapeHtml(u.full_name)}','${u.role}',${u.zone})">✏️</button>
+        ${u.id !== ME.id ? `<button class="btn btn-sm btn-outline-danger" onclick="removeUser(${u.id})">🗑️</button>` : ''}
+      </td></tr>`;
+  });
+  html += `</tbody></table></div>
+    <hr>
+    <div class="row g-2 align-items-end">
+      <input type="hidden" id="uf_id" value="0">
+      <div class="col-md-3"><label class="form-label small fw-bold mb-1">Username</label><input class="form-control form-control-sm" id="uf_username"></div>
+      <div class="col-md-3"><label class="form-label small fw-bold mb-1">ชื่อ-สกุล</label><input class="form-control form-control-sm" id="uf_fullname"></div>
+      <div class="col-md-2"><label class="form-label small fw-bold mb-1">รหัสผ่าน</label><input class="form-control form-control-sm" id="uf_password" placeholder="เว้นว่าง = ไม่เปลี่ยน"></div>
+      <div class="col-md-2"><label class="form-label small fw-bold mb-1">สิทธิ์</label>
+        <select class="form-select form-select-sm" id="uf_role"><option value="user">user</option><option value="admin">admin</option></select></div>
+      <div class="col-md-1"><label class="form-label small fw-bold mb-1">โซน</label>
+        <select class="form-select form-select-sm" id="uf_zone"><option value="0">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div class="col-md-1"><button class="btn btn-sm btn-success w-100" onclick="submitUser()">บันทึก</button></div>
+    </div>
+    ${VIEW_USER_ID ? `<div class="alert alert-warning mt-3 p-2 small mb-0">กำลังดูข้อมูลของ <b>${escapeHtml(VIEW_USER_INFO?VIEW_USER_INFO.username:'')}</b> — <a href="javascript:clearViewAs()">กลับมาดูของตัวเอง</a></div>` : ''}`;
+  box.innerHTML = html;
+}
+
+function editUser(id, username, full_name, role, zone) {
+  document.getElementById('uf_id').value = id;
+  document.getElementById('uf_username').value = username;
+  document.getElementById('uf_fullname').value = full_name;
+  document.getElementById('uf_role').value = role;
+  document.getElementById('uf_zone').value = String(zone || 0);
+  document.getElementById('uf_password').value = '';
+}
+
+async function submitUser() {
+  const j = await api('save_user', {
+    id:        parseInt(document.getElementById('uf_id').value, 10) || 0,
+    username:  document.getElementById('uf_username').value.trim(),
+    full_name: document.getElementById('uf_fullname').value.trim(),
+    password:  document.getElementById('uf_password').value,
+    role:      document.getElementById('uf_role').value,
+    zone:      parseInt(document.getElementById('uf_zone').value, 10) || 0
+  });
+  if (!j.ok) { showToast('❌ ' + j.error); return; }
+  showToast('✅ บันทึกผู้ใช้แล้ว');
+  await renderUsers();
+}
+
+async function removeUser(id) {
+  if (!confirm('ลบผู้ใช้ #' + id + ' ?')) return;
+  const j = await api('delete_user', { id });
+  if (!j.ok) { showToast('❌ ' + j.error); return; }
+  showToast('🗑️ ลบผู้ใช้แล้ว');
+  await renderUsers();
+}
+
+// admin ดูข้อมูลของ user คนอื่น (แทน ?view_user= ของ PHP)
+async function viewAsUser(id, username, zone) {
+  VIEW_USER_ID   = id;
+  VIEW_USER_INFO = { id, username, zone };
+  if (zone) { MY_ZONE = Number(zone); currentZone = Number(zone); }
+  for (let z = 1; z <= ZONE_COUNT; z++) store[z] = {};
+  loadedZones.clear();
+  bootstrap.Modal.getInstance(document.getElementById('usersModal')).hide();
+  renderZoneBar(); renderUserBadge();
+  await initData();
+  showToast(`👁️ กำลังดูข้อมูลของ ${username}`);
+}
+
+async function clearViewAs() {
+  VIEW_USER_ID = 0; VIEW_USER_INFO = null;
+  MY_ZONE = ME.zone ? Number(ME.zone) : 1;
+  currentZone = MY_ZONE;
+  for (let z = 1; z <= ZONE_COUNT; z++) store[z] = {};
+  loadedZones.clear();
+  renderZoneBar(); renderUserBadge();
+  await initData();
+  await renderUsers();
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Zone Switch
+   ═══════════════════════════════════════════════════════════════════════ */
+async function switchZone(z) {
+  z = parseInt(z, 10);
+  saveData();                                // keep current zone edits in memory
+  currentZone = z;
+  document.querySelectorAll('.zone-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.zone, 10) === z);
+  });
+
+  // Only fetch from Sheet the first time we open this zone.
+  if (!loadedZones.has(z)) {
+    await loadFromDB(z);
+    loadedZones.add(z);
+    showToast(`📍 ${ZONE_NAMES[z]} โหลดจาก Google Sheet`);
+  } else {
+    loadData(z);
+    showToast(`📍 ${ZONE_NAMES[z]} (ข้อมูลที่ค้างไว้)`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Calculators
+   ═══════════════════════════════════════════════════════════════════════ */
+function applyClvCount(n) {
+  n = parseInt(n) || 1;
+  if (n < 1) n = 1; if (n > 5) n = 5;
+  document.querySelectorAll('.clv-extra').forEach(el => {
+    const idx = parseInt(el.dataset.clvIdx);
+    el.style.display = (idx <= n) ? '' : 'none';
+  });
+  // Clear values for hidden boxes so they don't get saved
+  for (let i = 2; i <= 5; i++) {
+    if (i > n) {
+      ['clv_p','clv_q','clv_months'].forEach(k => {
+        const el = document.getElementById(k + i);
+        if (el) el.value = '';
+      });
+    }
+  }
+  calcCLV();
+}
+
+function calcCLV(n) {
+  // n = 1..5. If omitted, recalc all 5.
+  const nums = n ? [n] : [1,2,3,4,5];
+  nums.forEach(i => {
+    const suf = i === 1 ? '' : String(i);
+    const p = parseFloat(document.getElementById('clv_p'+suf)?.value)      || 0;
+    const q = parseFloat(document.getElementById('clv_q'+suf)?.value)      || 0;
+    const m = parseFloat(document.getElementById('clv_months'+suf)?.value) || 0;
+    const r = p * q * m;
+    const el = document.getElementById('clv_result'+suf);
+    if (el) el.textContent = r > 0 ? '฿'+r.toLocaleString('th-TH') : '—';
+  });
+}
+
+function calcTotalBudget() {
+  const ids  = ['ch_online_budget','ch_ads_budget','ch_kol_budget','ch_offline_budget'];
+  const total = ids.reduce((s,id) => s + (parseFloat(document.getElementById(id).value)||0), 0);
+  document.getElementById('totalBudgetDisplay').textContent =
+    total > 0 ? `(รวม ฿${total.toLocaleString('th-TH')})` : '';
+
+  // Auto-fill งบรวม (goal_budget) with sum of section 4 budgets
+  const gb = document.getElementById('goal_budget');
+  gb.value = total > 0 ? total : '';
+  gb.readOnly = true;
+  gb.style.background = '#e8f5f3';
+  gb.style.fontWeight = '700';
+  gb.style.color = '#145f56';
+
+  // Sync in-memory store so save picks it up
+  if (store[currentZone]) store[currentZone].goal_budget = String(total || '');
+
+  calcROI();
+}
+
+// ── Auto-calc ROI/ROAS = (รายได้รวม − งบรวม) / งบรวม × 100 ──────────
+function calcROI() {
+  const revenue = parseFloat(document.getElementById('goal_revenue').value) || 0;
+  const budget  = parseFloat(document.getElementById('goal_budget').value)  || 0;
+  const roiEl   = document.getElementById('goal_roi');
+
+  if (budget > 0 && revenue > 0) {
+    const roi = ((revenue - budget) / budget) * 100;
+    roiEl.value = roi.toFixed(2) + '%';
+  } else {
+    roiEl.value = '';
+  }
+  roiEl.readOnly = true;
+  roiEl.style.background = '#e8f5f3';
+  roiEl.style.fontWeight = '700';
+  roiEl.style.color = '#145f56';
+
+  if (store[currentZone]) store[currentZone].goal_roi = roiEl.value;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PDF Export with zone picker + live preview
+   ═══════════════════════════════════════════════════════════════════════ */
+function pdfZoneList() { return IS_ADMIN ? [1,2,3,4,5] : [MY_ZONE]; }
+
+async function exportPDF() {
+  saveData();
+  const box = document.getElementById('pdfZoneCheckboxes');
+  box.innerHTML = '';
+  pdfZoneList().forEach(z => {
+    const checked = (z === currentZone) ? 'checked' : '';
+    box.insertAdjacentHTML('beforeend', `
+      <div class="form-check border rounded p-2 ps-4" style="background:#fff">
+        <input class="form-check-input pdf-zone-cb" type="checkbox" value="${z}" id="pdfz${z}" ${checked} onchange="refreshPdfPreview()">
+        <label class="form-check-label fw-bold" for="pdfz${z}">📍 ${ZONE_NAMES[z]}</label>
+      </div>`);
+  });
+  // Pre-fetch all zones' latest data (so preview shows real data, not just current zone)
+  for (const z of pdfZoneList()) {
+    if (!store[z] || Object.keys(store[z]).length === 0) {
+      try {
+        const j = await api('load_latest', { zone: z });
+        if (j.ok) store[z] = j.data || {};
+      } catch {}
+    }
+  }
+  new bootstrap.Modal(document.getElementById('pdfModal')).show();
+  refreshPdfPreview();
+}
+
+function togglePdfZones(on) {
+  document.querySelectorAll('.pdf-zone-cb').forEach(cb => cb.checked = on);
+  refreshPdfPreview();
+}
+
+function refreshPdfPreview() {
+  const selected = [...document.querySelectorAll('.pdf-zone-cb:checked')].map(cb => parseInt(cb.value, 10));
+  const frame = document.getElementById('pdfPreviewFrame');
+  document.getElementById('pdfPreviewCount').textContent = selected.length * 2;  // 2 pages per zone
+  if (!selected.length) {
+    frame.srcdoc = `<html><body style="font-family:Sarabun,Arial;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;color:#888"><div style="text-align:center"><div style="font-size:48px">📄</div><div style="margin-top:10px">ยังไม่ได้เลือกโซน</div></div></body></html>`;
+    return;
+  }
+  frame.srcdoc = buildPrintHTML(selected);
+}
+
+async function doExportPDF() {
+  const selected = [...document.querySelectorAll('.pdf-zone-cb:checked')].map(cb => parseInt(cb.value, 10));
+  if (!selected.length) { showToast('⚠️ เลือกอย่างน้อย 1 โซน'); return; }
+
+  bootstrap.Modal.getInstance(document.getElementById('pdfModal')).hide();
+  showToast('กำลังเตรียมไฟล์ PDF...');
+
+  // Ensure all selected zones have data in store (fetch latest if missing)
+  for (const z of selected) {
+    if (!store[z] || Object.keys(store[z]).length === 0) {
+      try {
+        const j = await api('load_latest', { zone: z });
+        if (j.ok) store[z] = j.data || {};
+      } catch {}
+    }
+  }
+
+  const win = window.open('', '_blank');
+  if (!win) { showToast('❌ Browser block popup — เปิด popup ก่อน'); return; }
+  win.document.write(buildPrintHTML(selected));
+  win.document.close();
+  win.focus();
+  setTimeout(() => { win.print(); }, 600);
+}
+
+function buildPrintHTML(zones) {
+  const css = `
+    @page { size: A4 landscape; margin: 10mm; }
+    /* Force browsers to print background colors + images (default is to strip them) */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    body { font-family: 'Sarabun','Segoe UI',Arial,sans-serif; color:#1a1a1a; margin:0; padding:0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .doc-page { page-break-after: always; padding: 0; }
+    .doc-page:last-child { page-break-after: avoid; }
+    .doc-header { background:#1a7a6e; color:#fff; padding:16px 22px; }
+    .doc-title { font-size:20px; font-weight:800; }
+    .doc-sub { font-size:12px; opacity:.85; margin-top:3px; }
+    .meta { display:flex; gap:18px; margin-top:10px; font-size:13px; }
+    .meta div b { opacity:.7; font-weight:600; margin-right:6px; font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
+    .doc-body { padding:14px 18px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    .section { border:1.5px solid #b2d8d4; border-radius:8px; overflow:hidden; }
+    .section h3 { background:#1a7a6e; color:#fff; padding:6px 12px; font-size:13px; font-weight:700; margin:0; display:flex; align-items:center; gap:8px; }
+    .section h3 .num { background:rgba(255,255,255,.25); border-radius:50%; width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; font-size:11px; }
+    .section-body { padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
+    .field label { font-size:11px; color:#145f56; font-weight:700; display:block; margin-bottom:2px; }
+    .field .val { border:1px solid #b2d8d4; background:#e8f5f3; padding:5px 8px; border-radius:4px; font-size:12px; min-height:24px; }
+    .row2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: 1 / -1; }
+    table.tbl { width:100%; border-collapse:collapse; font-size:11.5px; }
+    table.tbl th { background:#1a7a6e; color:#fff; padding:6px 8px; font-weight:700; text-align:center; font-size:11px; }
+    table.tbl td { border:1px solid #b2d8d4; padding:5px 8px; vertical-align:top; }
+    table.tbl td.label { background:#e8f5f3; color:#145f56; font-weight:700; text-align:center; white-space:nowrap; }
+    table.tbl tbody tr:nth-child(even) td:not(.label) { background:#f9fdfc; }
+    .clv { background:linear-gradient(90deg,#145f56 0%,#2a9d8f 100%); color:#fff; padding:12px 16px; border-radius:8px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+    .clv .formula { font-weight:700; font-size:13px; }
+    .clv .formula b { color:#f4e04d; }
+    .clv .pqm { display:flex; gap:10px; flex:1; }
+    .clv .pqm .f { background:rgba(255,255,255,.18); padding:6px 10px; border-radius:5px; text-align:center; min-width:90px; }
+    .clv .pqm .f label { font-size:10px; opacity:.75; display:block; }
+    .clv .pqm .f .v { font-weight:800; font-size:14px; }
+    .clv .total { background:rgba(255,255,255,.18); padding:8px 14px; border-radius:6px; text-align:center; }
+    .clv .total label { font-size:10px; opacity:.75; }
+    .clv .total .v { font-size:18px; font-weight:900; color:#f4e04d; }
+    .sigs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin-top:14px; padding-top:12px; border-top:1.5px dashed #b2d8d4; }
+    .sig { text-align:center; }
+    .sig .line { border-bottom:1.5px solid #555; height:28px; margin-bottom:5px; }
+    .sig b { color:#145f56; font-size:11px; }
+    .sig .date { font-size:11px; color:#555; margin-top:3px; }
+    .note { background:#e8f5f3; color:#145f56; padding:8px 12px; border-radius:5px; font-size:11px; margin-top:10px; }
+    .zone-label { text-align:center; background:#145f56; color:#fff; padding:4px 14px; font-size:11px; font-weight:700; letter-spacing:1px; }
+  `;
+
+  let html = `<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">
+    <title>Action Plan — Export PDF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>${css}
+      /* Screen-only helper banner (hidden on print) */
+      @media screen {
+        .print-hint { position:fixed; top:10px; right:10px; background:#fef3c7; color:#92400e; padding:10px 14px; border-radius:6px; font-size:12px; border-left:4px solid #f59e0b; z-index:9999; box-shadow:0 2px 6px rgba(0,0,0,.15); max-width:280px; }
+        .print-hint b { display:block; margin-bottom:4px; }
+      }
+      @media print { .print-hint { display:none !important; } }
+    </style></head><body>
+    <div class="print-hint">
+      <b>💡 หากพิมพ์แล้วสีหาย</b>
+      ใน Print Dialog → กด <b>"More settings"</b> → เปิดเช็ค <b>"Background graphics"</b>
+    </div>`;
+
+  zones.forEach((z, idx) => {
+    const d = store[z] || {};
+    const v = k => escapeHtml(d[k] || '');
+    const dv = d.docDate || '';
+    const ds = dv ? new Date(dv).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}) : '—';
+
+    // Page 1
+    html += `
+      <div class="doc-page">
+        <div class="zone-label">📍 ${ZONE_NAMES[z]} — หน้า 1/2</div>
+        <div class="doc-header">
+          <div class="doc-title">Action Plan — แผนปฏิบัติการเจาะกลุ่มลูกค้า</div>
+          <div class="doc-sub">องค์กรตัวอย่าง (ORG) | ${ZONE_NAMES[z]}</div>
+          <div class="meta">
+            <div><b>สาขา</b>${v('branch')||'—'}</div>
+            <div><b>ผู้จัดทำ</b>${v('author')||'—'}</div>
+            <div><b>วันที่</b>${ds}</div>
+          </div>
+        </div>
+        <div class="doc-body">
+          <div class="section">
+            <h3><span class="num">1</span> กลุ่มลูกค้าเป้าหมาย</h3>
+            <div class="section-body">
+              <div class="field"><label>Personal หลัก</label><div class="val">${v('s1_personal')}</div></div>
+              <div class="field"><label>Pain Point</label><div class="val">${v('s1_pain')}</div></div>
+              <div class="field"><label>Insight + ที่มา</label><div class="val">${v('s1_insight')}</div></div>
+            </div>
+          </div>
+          <div class="section">
+            <h3><span class="num">2</span> Hook Product</h3>
+            <div class="section-body">
+              <div class="field"><label>ชื่อ Hook</label><div class="val">${v('s2_name')}</div></div>
+              <div class="row2">
+                <div class="field"><label>ราคา (ปกติ/ลด)</label><div class="val">${v('s2_price')}</div></div>
+                <div class="field"><label>ผลเห็นภายใน</label><div class="val">${v('s2_result')}</div></div>
+              </div>
+              <div class="field"><label>Script Upsell ไป Main</label><div class="val">${v('s2_script')}</div></div>
+            </div>
+          </div>
+          <div class="section">
+            <h3><span class="num">3</span> Main Product</h3>
+            <div class="section-body">
+              <div class="field"><label>ชื่อ Main</label><div class="val">${v('s3_name')}</div></div>
+              <div class="row2">
+                <div class="field"><label>ราคา/ครั้ง</label><div class="val">${v('s3_price')}</div></div>
+                <div class="field"><label>Package</label><div class="val">${v('s3_package')}</div></div>
+              </div>
+              <div class="field"><label>USP ต่างจากคู่แข่ง</label><div class="val">${v('s3_usp')}</div></div>
+            </div>
+          </div>
+          <div class="section span-2">
+            <h3><span class="num">4</span> ช่องทางการรับรู้ + งบประมาณ</h3>
+            <div class="section-body" style="padding:6px">
+              <table class="tbl">
+                <thead><tr><th style="width:70px">ช่องทาง</th><th>กิจกรรม / Content</th><th style="width:90px">งบ (บาท)</th><th style="width:100px">KPI</th></tr></thead>
+                <tbody>
+                  <tr><td class="label">Online</td><td>${v('ch_online_activity')}</td><td>${v('ch_online_budget')}</td><td>${v('ch_online_kpi')}</td></tr>
+                  <tr><td class="label">Paid Ads</td><td>${v('ch_ads_activity')}</td><td>${v('ch_ads_budget')}</td><td>${v('ch_ads_kpi')}</td></tr>
+                  <tr><td class="label">KOL</td><td>${v('ch_kol_activity')}</td><td>${v('ch_kol_budget')}</td><td>${v('ch_kol_kpi')}</td></tr>
+                  <tr><td class="label">Offline</td><td>${v('ch_offline_activity')}</td><td>${v('ch_offline_budget')}</td><td>${v('ch_offline_kpi')}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section">
+            <h3><span class="num">5</span> ระบบบอกต่อ</h3>
+            <div class="section-body">
+              <div class="row2">
+                <div class="field"><label>ผู้แนะนำได้</label><div class="val">${v('s5_referrer')}</div></div>
+                <div class="field"><label>ผู้ถูกแนะนำได้</label><div class="val">${v('s5_referred')}</div></div>
+              </div>
+              <div class="field"><label>กลไก + เป้า %</label><div class="val">${v('s5_mechanism')}</div></div>
+              <div class="field"><label>Tracking โดยใคร</label><div class="val">${v('s5_tracking')}</div></div>
+            </div>
+          </div>
+          ${(() => {
+            let clvN = parseInt(d.clv_count) || 0;
+            if (!clvN) { for (let i=5;i>=2;i--){ if(d['clv_p'+i]||d['clv_q'+i]||d['clv_months'+i]){clvN=i;break;} } if(!clvN) clvN=1; }
+            return Array.from({length: clvN}, (_, k) => k+1).map(i => {
+              const suf = i === 1 ? '' : String(i);
+              const p = parseFloat(d['clv_p'+suf])||0;
+              const q = parseFloat(d['clv_q'+suf])||0;
+              const m = parseFloat(d['clv_months'+suf])||0;
+              const r = p*q*m;
+              return `<div class="span-3 clv">
+                <div class="formula"><span style="background:rgba(255,255,255,.15);padding:2px 8px;border-radius:10px;font-size:11px;margin-right:6px">CLV #${i}</span> CLV = <b>P</b> × <b>Q</b> × <b>เดือน</b></div>
+                <div class="pqm">
+                  <div class="f"><label>P</label><div class="v">${v('clv_p'+suf)||'—'}</div></div>
+                  <div class="f"><label>Q</label><div class="v">${v('clv_q'+suf)||'—'}</div></div>
+                  <div class="f"><label>เดือน</label><div class="v">${v('clv_months'+suf)||'—'}</div></div>
+                </div>
+                <div class="total"><label>CLV รวม</label><div class="v">${r>0?'฿'+r.toLocaleString('th-TH'):'—'}</div></div>
+              </div>`;
+            }).join('');
+          })()}
+        </div>
+      </div>`;
+
+    // Page 2
+    html += `
+      <div class="doc-page">
+        <div class="zone-label">📍 ${ZONE_NAMES[z]} — หน้า 2/2</div>
+        <div class="doc-header">
+          <div class="doc-title">Action Plan — แผนปฏิบัติการ (ต่อ)</div>
+          <div class="doc-sub">Timeline · Risks · Goals — ${ZONE_NAMES[z]}</div>
+          <div class="meta">
+            <div><b>สาขา</b>${v('branch')||'—'}</div>
+            <div><b>ผู้จัดทำ</b>${v('author')||'—'}</div>
+            <div><b>วันที่</b>${ds}</div>
+          </div>
+        </div>
+        <div class="doc-body">
+          <div class="section span-2">
+            <h3><span class="num">6</span> Timeline + เกณฑ์ตัดสินใจ</h3>
+            <div class="section-body" style="padding:6px">
+              <table class="tbl">
+                <thead><tr><th style="width:70px">ช่วง</th><th>กิจกรรม + เป้า</th><th style="width:140px">Go / Stop / Adjust</th></tr></thead>
+                <tbody>
+                  <tr><td class="label">Wk 1-2</td><td>${v('tl_wk12_activity')}</td><td>${v('tl_wk12_decision')}</td></tr>
+                  <tr><td class="label">Wk 3-4</td><td>${v('tl_wk34_activity')}</td><td>${v('tl_wk34_decision')}</td></tr>
+                  <tr><td class="label">M 2-3</td><td>${v('tl_m23_activity')}</td><td>${v('tl_m23_decision')}</td></tr>
+                  <tr><td class="label">M 4-6</td><td>${v('tl_m46_activity')}</td><td>${v('tl_m46_decision')}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section">
+            <h3><span class="num">7</span> Top Risks + Plan B</h3>
+            <div class="section-body" style="padding:6px">
+              <table class="tbl">
+                <thead><tr><th>ความเสี่ยง</th><th>Plan B รับมือ</th></tr></thead>
+                <tbody>
+                  <tr><td>${v('risk1_risk')}</td><td>${v('risk1_planb')}</td></tr>
+                  <tr><td>${v('risk2_risk')}</td><td>${v('risk2_planb')}</td></tr>
+                  <tr><td>${v('risk3_risk')}</td><td>${v('risk3_planb')}</td></tr>
+                  <tr><td>${v('risk4_risk')}</td><td>${v('risk4_planb')}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section span-3">
+            <h3><span class="num">8</span> เป้าหมาย + อนุมัติ</h3>
+            <div class="section-body">
+              <div class="row2">
+                <div class="field"><label>รายได้รวม (บาท)</label><div class="val">${v('goal_revenue')}</div></div>
+                <div class="field"><label>ลูกค้าใหม่ (คน)</label><div class="val">${v('goal_newcust')}</div></div>
+                <div class="field"><label>ROI / ROAS (%)</label><div class="val">${v('goal_roi')}</div></div>
+                <div class="field"><label>งบรวม (บาท)</label><div class="val">${v('goal_budget')}</div></div>
+              </div>
+              <div class="sigs">
+                <div class="sig"><div class="line"></div><b>ผู้จัดทำ</b><div>${v('sig_maker')||'&nbsp;'}</div><div class="date">วันที่ ____/____/________</div></div>
+                <div class="sig"><div class="line"></div><b>ผู้จัดการ</b><div>${v('sig_manager')||'&nbsp;'}</div><div class="date">วันที่ ____/____/________</div></div>
+                <div class="sig"><div class="line"></div><b>ผู้อนุมัติ</b><div>${v('sig_approver')||'&nbsp;'}</div><div class="date">วันที่ ____/____/________</div></div>
+              </div>
+              <div class="note"><b>หมายเหตุ:</b> ตอบทุกช่องให้ละเอียด ระบุตัวเลข รับผิดชอบ/เกณฑ์วัดผล</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  html += '</body></html>';
+  return html;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PPTX Export
+   ═══════════════════════════════════════════════════════════════════════ */
+function exportPPTX() {
+  if (typeof PptxGenJS === 'undefined') {
+    alert('ไม่พบ pptxgen.bundle.js — โหลดจาก CDN อาจใช้เวลาสักครู่'); return;
+  }
+  saveData();
+  const d    = store[currentZone];
+  const zone = currentZone;
+  const get  = id => (d[id] || '').toString().trim();
+
+  const C = {
+    teal:'1a7a6e', tealDark:'145f56', tealMid:'1d8a7c',
+    tealLight:'e8f5f3', border:'b2d8d4', white:'FFFFFF',
+    text:'1a1a1a', textMid:'555555', yellow:'f4e04d',
+    rowAlt:'f2fbf9', metaBox:'1c8b7e'
+  };
+  const F = 'Sarabun';                  // nicer Thai font
+  const W = 13.33, H = 7.5;
+
+  const M   = 0.18, GAP = 0.11;
+  const COL = (W - 2*M - 2*GAP) / 3;
+  const HDR_H=1.05, SEC_H=0.35, PAD=0.10, LBL_H=0.22, TBL_HDR=0.32;
+
+  const R1_Y=HDR_H+0.12, R1_H=2.45;
+  const R2_Y=R1_Y+R1_H+GAP, R2_H=2.10;
+  const CLV_Y=R2_Y+R2_H+GAP, CLV_H=H-CLV_Y-0.08;
+  const C1X=M, C2X=M+COL+GAP, C3X=M+2*COL+2*GAP;
+  const SEC4W=2*COL+GAP;
+
+  const pptx = new PptxGenJS(); pptx.layout='LAYOUT_WIDE';
+
+  function hdr(sl,title,sub,branch,author,dateStr) {
+    sl.addShape(pptx.ShapeType.rect,{x:0,y:0,w:W,h:HDR_H,fill:{color:C.teal}});
+    sl.addText(title,{x:.22,y:.07,w:8.5,h:.50,fontSize:22,bold:true,color:C.white,fontFace:F});
+    sl.addText(sub,  {x:.22,y:.62,w:8.5,h:.30,fontSize:13,color:'c5e8e4',fontFace:F});
+    const metas=[['สาขา',branch],['ผู้จัดทำ',author],['วันที่',dateStr]];
+    const MW=1.55,MG=.1,MX0=W-3*MW-2*MG-.18;
+    metas.forEach(([l,v],i)=>{
+      const x=MX0+i*(MW+MG);
+      sl.addText(l,{x,y:.07,w:MW,h:.22,fontSize:11,color:'c5e8e4',fontFace:F,bold:true});
+      sl.addShape(pptx.ShapeType.rect,{x,y:.30,w:MW,h:.60,fill:{color:C.metaBox},line:{color:'a8d8d2',width:.5}});
+      sl.addText(v||'',{x,y:.30,w:MW,h:.60,fontSize:14,bold:true,color:C.white,fontFace:F,align:'center',valign:'middle'});
+    });
+  }
+  function sec(sl,num,title,x,y,w,h){
+    sl.addShape(pptx.ShapeType.rect,{x,y,w,h,fill:{color:C.white},line:{color:C.border,width:1}});
+    sl.addShape(pptx.ShapeType.rect,{x,y,w,h:SEC_H,fill:{color:C.teal},line:{color:C.teal,width:0}});
+    sl.addText(`${num}   ${title}`,{x:x+.1,y:y+.02,w:w-.15,h:SEC_H-.04,fontSize:14,bold:true,color:C.white,fontFace:F,valign:'middle'});
+    return y+SEC_H;
+  }
+  function fld(sl,label,value,x,y,w,h){
+    const vBoxH=h-LBL_H-.04;
+    sl.addText(label,{x:x+PAD,y:y+.02,w:w-PAD*2,h:LBL_H,fontSize:11,bold:true,color:C.tealDark,fontFace:F});
+    sl.addShape(pptx.ShapeType.rect,{x:x+PAD,y:y+LBL_H+.04,w:w-PAD*2,h:vBoxH,fill:{color:C.tealLight},line:{color:C.border,width:.5}});
+    if(value) sl.addText(value,{x:x+PAD+.06,y:y+LBL_H+.04,w:w-PAD*2-.1,h:vBoxH,fontSize:13,color:C.text,fontFace:F,valign:'middle',wrap:true});
+  }
+  function tHdr(sl,cols,x,y){
+    let cx=x; cols.forEach(col=>{
+      sl.addShape(pptx.ShapeType.rect,{x:cx,y,w:col.w,h:TBL_HDR,fill:{color:C.teal},line:{color:C.white,width:.5}});
+      sl.addText(col.label,{x:cx+.04,y,w:col.w-.06,h:TBL_HDR,fontSize:12,bold:true,color:C.white,fontFace:F,align:'center',valign:'middle'});
+      cx+=col.w;
+    });
+  }
+  function tRow(sl,cells,cols,x,y,rh,ri){
+    let cx=x; cols.forEach((col,ci)=>{
+      const bg=ci===0?C.tealLight:(ri%2===0?C.white:C.rowAlt);
+      sl.addShape(pptx.ShapeType.rect,{x:cx,y,w:col.w,h:rh,fill:{color:bg},line:{color:C.border,width:.5}});
+      if(cells[ci]) sl.addText(cells[ci],{x:cx+.06,y:y+.02,w:col.w-.1,h:rh-.04,fontSize:12,color:ci===0?C.tealDark:C.text,fontFace:F,valign:'middle',bold:ci===0,wrap:true});
+      cx+=col.w;
+    });
+  }
+
+  // Slide 1
+  const s1=pptx.addSlide();
+  const branch=get('branch'),author=get('author'),dv=get('docDate');
+  const dateStr=dv?new Date(dv).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}):'';
+  hdr(s1,'Action Plan — แผนปฏิบัติการเจาะกลุ่มลูกค้า',`องค์กรตัวอย่าง (ORG)  |  One-Page Summary  |  โซน ${zone}`,branch,author,dateStr);
+  sec(s1,'1','กลุ่มลูกค้าเป้าหมาย',C1X,R1_Y,COL,R1_H);
+  const s1fy=R1_Y+SEC_H+PAD,fh1=.52,fh2=.67;
+  fld(s1,'Personal หลัก',get('s1_personal'),C1X,s1fy,COL,fh1);
+  fld(s1,'Pain Point',get('s1_pain'),C1X,s1fy+fh1+.05,COL,fh2);
+  fld(s1,'Insight + ที่มา',get('s1_insight'),C1X,s1fy+fh1+fh2+.10,COL,fh2);
+  sec(s1,'2','Hook Product',C2X,R1_Y,COL,R1_H);
+  const s2fy=R1_Y+SEC_H+PAD,hw=(COL-GAP*.5)/2;
+  fld(s1,'ชื่อ Hook',get('s2_name'),C2X,s2fy,COL,fh1);
+  fld(s1,'ราคา (ปกติ/ลด)',get('s2_price'),C2X,s2fy+fh1+.05,hw,fh1);
+  fld(s1,'ผลเห็นภายใน',get('s2_result'),C2X+hw+GAP*.5,s2fy+fh1+.05,hw,fh1);
+  fld(s1,'Script Upsell ไป Main',get('s2_script'),C2X,s2fy+fh1*2+.10,COL,.78);
+  sec(s1,'3','Main Product',C3X,R1_Y,COL,R1_H);
+  const s3fy=R1_Y+SEC_H+PAD;
+  fld(s1,'ชื่อ Main',get('s3_name'),C3X,s3fy,COL,fh1);
+  fld(s1,'ราคา/ครั้ง',get('s3_price'),C3X,s3fy+fh1+.05,hw,fh1);
+  fld(s1,'Package',get('s3_package'),C3X+hw+GAP*.5,s3fy+fh1+.05,hw,fh1);
+  fld(s1,'USP ต่างจากคู่แข่ง',get('s3_usp'),C3X,s3fy+fh1*2+.10,COL,.78);
+  sec(s1,'4','ช่องทางการรับรู้ + งบประมาณ',C1X,R2_Y,SEC4W,R2_H);
+  const s4tx=C1X+PAD,s4tw=SEC4W-PAD*2;
+  const chCols=[{label:'ช่องทาง',w:.84},{label:'กิจกรรม / Content',w:s4tw-.84-1.02-1.30},{label:'งบ (บาท)',w:1.02},{label:'KPI',w:1.30}];
+  const chHY=R2_Y+SEC_H+PAD,chRH=(R2_H-SEC_H-PAD-TBL_HDR-.04)/4;
+  tHdr(s1,chCols,s4tx,chHY);
+  [['Online',get('ch_online_activity'),get('ch_online_budget'),get('ch_online_kpi')],
+   ['Paid Ads',get('ch_ads_activity'),get('ch_ads_budget'),get('ch_ads_kpi')],
+   ['KOL',get('ch_kol_activity'),get('ch_kol_budget'),get('ch_kol_kpi')],
+   ['Offline',get('ch_offline_activity'),get('ch_offline_budget'),get('ch_offline_kpi')]
+  ].forEach((row,ri)=>tRow(s1,row,chCols,s4tx,chHY+TBL_HDR+ri*chRH,chRH,ri));
+  sec(s1,'5','ระบบบอกต่อ',C3X,R2_Y,COL,R2_H);
+  const s5fy=R2_Y+SEC_H+PAD;
+  fld(s1,'ผู้แนะนำได้',get('s5_referrer'),C3X,s5fy,hw,fh1);
+  fld(s1,'ผู้ถูกแนะนำได้',get('s5_referred'),C3X+hw+GAP*.5,s5fy,hw,fh1);
+  fld(s1,'กลไก + เป้า %',get('s5_mechanism'),C3X,s5fy+fh1+.05,COL,fh1);
+  fld(s1,'Tracking โดยใคร',get('s5_tracking'),C3X,s5fy+fh1*2+.10,COL,fh1);
+  // Determine how many CLV boxes to render
+  let clvN = parseInt(get('clv_count')) || 0;
+  if (!clvN) { for (let i=5;i>=2;i--){ if(get('clv_p'+i)||get('clv_q'+i)||get('clv_months'+i)){clvN=i;break;} } if(!clvN) clvN=1; }
+
+  // Divide CLV strip into clvN vertical bands, each with its own P/Q/M + total
+  const bandW = (W - 2*M) / clvN;
+  const bandH = CLV_H;
+  for (let bi = 0; bi < clvN; bi++) {
+    const suf = bi === 0 ? '' : String(bi+1);
+    const bx = M + bi*bandW;
+    const p = parseFloat(get('clv_p'+suf))||0, q = parseFloat(get('clv_q'+suf))||0, m = parseFloat(get('clv_months'+suf))||0;
+    const v = p*q*m;
+
+    // Band background
+    s1.addShape(pptx.ShapeType.rect,{x:bx,y:CLV_Y,w:bandW,h:bandH,fill:{color:C.tealDark},line:{color:C.yellow,width:.5}});
+    // Label
+    s1.addText(`CLV #${bi+1}`,{x:bx+.06,y:CLV_Y+.04,w:bandW-.12,h:.22,fontSize:10,bold:true,color:C.yellow,fontFace:F,align:'center'});
+    // P, Q, M mini-boxes (3 across inside the band)
+    const inW = (bandW - .30) / 3;
+    ['P','Q','ด'].forEach((lbl,i)=>{
+      const val = [get('clv_p'+suf),get('clv_q'+suf),get('clv_months'+suf)][i];
+      const fx = bx + .10 + i*(inW+.02);
+      s1.addShape(pptx.ShapeType.rect,{x:fx,y:CLV_Y+.30,w:inW,h:.50,fill:{color:C.metaBox},line:{color:'a8d8d2',width:.4}});
+      s1.addText(lbl,{x:fx,y:CLV_Y+.30,w:inW,h:.16,fontSize:8,color:'c5e8e4',fontFace:F,align:'center'});
+      s1.addText(val||'—',{x:fx,y:CLV_Y+.44,w:inW,h:.34,fontSize:12,bold:true,color:C.white,fontFace:F,align:'center',valign:'middle'});
+    });
+    // Total
+    s1.addText(v>0?'฿'+v.toLocaleString('th-TH'):'—',
+      {x:bx+.06,y:CLV_Y+.84,w:bandW-.12,h:bandH-.86,fontSize:14,bold:true,color:C.yellow,fontFace:F,align:'center',valign:'middle'});
+  }
+
+  // Slide 2
+  const s2=pptx.addSlide();
+  hdr(s2,'Action Plan (ต่อ) — Timeline · Risks · Goals',`องค์กรตัวอย่าง (ORG)  |  โซน ${zone}`,branch,author,dateStr);
+  const P2R1_Y=HDR_H+.12,P2R1_H=4.05,P2R2_Y=P2R1_Y+P2R1_H+GAP,P2R2_H=H-P2R2_Y-.08;
+  sec(s2,'6','Timeline + เกณฑ์ตัดสินใจ',C1X,P2R1_Y,SEC4W,P2R1_H);
+  const tlX=C1X+PAD,tlW=SEC4W-PAD*2;
+  const tlCols=[{label:'ช่วง',w:.68},{label:'กิจกรรม + เป้า',w:tlW-.68-1.82},{label:'Go / Stop / Adjust',w:1.82}];
+  const tlHY=P2R1_Y+SEC_H+PAD,tlRH=(P2R1_H-SEC_H-PAD-TBL_HDR-.04)/4;
+  tHdr(s2,tlCols,tlX,tlHY);
+  [['Wk 1-2',get('tl_wk12_activity'),get('tl_wk12_decision')],
+   ['Wk 3-4',get('tl_wk34_activity'),get('tl_wk34_decision')],
+   ['M 2-3', get('tl_m23_activity'), get('tl_m23_decision')],
+   ['M 4-6', get('tl_m46_activity'), get('tl_m46_decision')]
+  ].forEach((row,ri)=>tRow(s2,row,tlCols,tlX,tlHY+TBL_HDR+ri*tlRH,tlRH,ri));
+  sec(s2,'7','Top Risks + Plan B',C3X,P2R1_Y,COL,P2R1_H);
+  const rkX=C3X+PAD,rkW=COL-PAD*2;
+  const rkCols=[{label:'ความเสี่ยง',w:rkW/2},{label:'Plan B รับมือ',w:rkW/2}];
+  const rkHY=P2R1_Y+SEC_H+PAD,rkRH=(P2R1_H-SEC_H-PAD-TBL_HDR-.04)/4;
+  tHdr(s2,rkCols,rkX,rkHY);
+  [[get('risk1_risk'),get('risk1_planb')],[get('risk2_risk'),get('risk2_planb')],
+   [get('risk3_risk'),get('risk3_planb')],[get('risk4_risk'),get('risk4_planb')]
+  ].forEach((row,ri)=>tRow(s2,row,rkCols,rkX,rkHY+TBL_HDR+ri*rkRH,rkRH,ri));
+  sec(s2,'8','เป้าหมาย + อนุมัติ',C1X,P2R2_Y,W-2*M,P2R2_H);
+  const s8cy=P2R2_Y+SEC_H+PAD,s8ch=P2R2_H-SEC_H-PAD-.06;
+  const GOAL_FW=2.30;
+  [['รายได้รวม (บาท)',get('goal_revenue')],['ลูกค้าใหม่ (คน)',get('goal_newcust')],
+   ['ROI / ROAS (%)',get('goal_roi')],['งบรวม (บาท)',get('goal_budget')]
+  ].forEach(([l,v],i)=>{
+    const gx=C1X+PAD+i*(GOAL_FW+GAP);
+    s2.addText(l,{x:gx,y:s8cy+.02,w:GOAL_FW,h:LBL_H,fontSize:11,bold:true,color:C.tealDark,fontFace:F});
+    s2.addShape(pptx.ShapeType.rect,{x:gx,y:s8cy+LBL_H+.04,w:GOAL_FW,h:s8ch-LBL_H-.04,fill:{color:C.tealLight},line:{color:C.border,width:.5}});
+    s2.addText(v||'',{x:gx+.06,y:s8cy+LBL_H+.04,w:GOAL_FW-.1,h:s8ch-LBL_H-.04,fontSize:18,bold:true,color:C.tealDark,fontFace:F,align:'center',valign:'middle'});
+  });
+  const sigAreaX=C1X+PAD+(4*(GOAL_FW)+3*GAP)+.25;
+  const sigAreaW=W-2*M-PAD-(4*(GOAL_FW)+3*GAP)-.25-PAD;
+  const sigFW=(sigAreaW-2*GAP)/3;
+  ['ผู้จัดทำ','ผู้จัดการ','ผู้อนุมัติ'].forEach((l,i)=>{
+    const sx=sigAreaX+i*(sigFW+GAP),lineY=s8cy+s8ch-.50;
+    s2.addShape(pptx.ShapeType.line,{x:sx,y:lineY,w:sigFW,h:0,line:{color:'888888',width:.75}});
+    s2.addText(l,{x:sx,y:lineY+.05,w:sigFW,h:.24,fontSize:12,bold:true,color:C.tealDark,fontFace:F,align:'center'});
+    const v=get(['sig_maker','sig_manager','sig_approver'][i]);
+    if(v) s2.addText(v,{x:sx,y:lineY+.30,w:sigFW,h:.20,fontSize:11,color:C.textMid,fontFace:F,align:'center'});
+  });
+
+  pptx.writeFile({fileName:`ActionPlan_Zone${zone}_${branch||'สาขา'}.pptx`});
+  showToast(`ดาวน์โหลด PPTX โซน ${zone} สำเร็จ!`);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Data Table
+   ═══════════════════════════════════════════════════════════════════════ */
+async function openDataTable() {
+  saveData();
+  await loadAllFromDB();
+  buildTable();
+  new bootstrap.Modal(document.getElementById('tableModal')).show();
+}
+
+function fmtDate(v) {
+  if (!v) return '—';
+  try { return new Date(v).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'}); } catch { return v; }
+}
+function calcCLVValN(d, n) {
+  const suf = n === 1 ? '' : String(n);
+  const p=parseFloat(d['clv_p'+suf])||0, q=parseFloat(d['clv_q'+suf])||0, m=parseFloat(d['clv_months'+suf])||0;
+  return p&&q&&m?(p*q*m).toLocaleString('th-TH')+' บาท':'—';
+}
+function calcCLVVal(d)  { return calcCLVValN(d, 1); }   // backward compat
+function calcCLVVal2(d) { return calcCLVValN(d, 2); }
+function calcCLVVal3(d) { return calcCLVValN(d, 3); }
+function calcCLVVal4(d) { return calcCLVValN(d, 4); }
+function calcCLVVal5(d) { return calcCLVValN(d, 5); }
+function calcCLVValTotal(d) {
+  const t = [1,2,3,4,5].reduce((s,n) => {
+    const suf = n===1?'':String(n);
+    const p=parseFloat(d['clv_p'+suf])||0, q=parseFloat(d['clv_q'+suf])||0, m=parseFloat(d['clv_months'+suf])||0;
+    return s + p*q*m;
+  }, 0);
+  return t>0?t.toLocaleString('th-TH')+' บาท':'—';
+}
+function calcBudgetTotal(d) {
+  const s=['ch_online_budget','ch_ads_budget','ch_kol_budget','ch_offline_budget']
+    .reduce((t,k)=>t+(parseFloat(d[k])||0),0);
+  return s>0?s.toLocaleString('th-TH')+' บาท':'—';
+}
+
+const TABLE_ROWS = [
+  {label:'สาขา',key:'branch'},{label:'ผู้จัดทำ',key:'author'},{label:'วันที่',key:'docDate',fmt:fmtDate},
+  {label:'─── กลุ่มลูกค้าเป้าหมาย ───',key:null},
+  {label:'Personal',key:'s1_personal'},{label:'Pain Point',key:'s1_pain'},{label:'Insight + ที่มา',key:'s1_insight'},
+  {label:'─── Hook Product ───',key:null},
+  {label:'ชื่อ Hook',key:'s2_name'},{label:'ราคา Hook',key:'s2_price'},{label:'ผลภายใน',key:'s2_result'},{label:'Script Upsell',key:'s2_script'},
+  {label:'─── Main Product ───',key:null},
+  {label:'ชื่อ Main',key:'s3_name'},{label:'ราคา/ครั้ง',key:'s3_price'},{label:'Package',key:'s3_package'},{label:'USP',key:'s3_usp'},
+  {label:'─── ช่องทางการรับรู้ ───',key:null},
+  {label:'Online – กิจกรรม',key:'ch_online_activity'},{label:'Online – งบ',key:'ch_online_budget'},{label:'Online – KPI',key:'ch_online_kpi'},
+  {label:'Paid Ads – กิจกรรม',key:'ch_ads_activity'},{label:'Paid Ads – งบ',key:'ch_ads_budget'},{label:'Paid Ads – KPI',key:'ch_ads_kpi'},
+  {label:'KOL – กิจกรรม',key:'ch_kol_activity'},{label:'KOL – งบ',key:'ch_kol_budget'},{label:'KOL – KPI',key:'ch_kol_kpi'},
+  {label:'Offline – กิจกรรม',key:'ch_offline_activity'},{label:'Offline – งบ',key:'ch_offline_budget'},{label:'Offline – KPI',key:'ch_offline_kpi'},
+  {label:'💰 งบรวมทุกช่องทาง',key:'__budget__',computed:calcBudgetTotal},
+  {label:'─── ระบบบอกต่อ ───',key:null},
+  {label:'ผู้แนะนำได้รับ',key:'s5_referrer'},{label:'ผู้ถูกแนะนำได้รับ',key:'s5_referred'},{label:'กลไก + เป้า',key:'s5_mechanism'},{label:'Tracking',key:'s5_tracking'},
+  {label:'─── CLV #1 ───',key:null,clv:1},
+  {label:'P ราคา/ครั้ง #1',key:'clv_p',clv:1},{label:'Q ครั้ง/เดือน #1',key:'clv_q',clv:1},{label:'ระยะเวลา (เดือน) #1',key:'clv_months',clv:1},{label:'💰 CLV #1',key:'__clv1__',computed:calcCLVVal,clv:1},
+  {label:'─── CLV #2 ───',key:null,clv:2},
+  {label:'P ราคา/ครั้ง #2',key:'clv_p2',clv:2},{label:'Q ครั้ง/เดือน #2',key:'clv_q2',clv:2},{label:'ระยะเวลา (เดือน) #2',key:'clv_months2',clv:2},{label:'💰 CLV #2',key:'__clv2__',computed:calcCLVVal2,clv:2},
+  {label:'─── CLV #3 ───',key:null,clv:3},
+  {label:'P ราคา/ครั้ง #3',key:'clv_p3',clv:3},{label:'Q ครั้ง/เดือน #3',key:'clv_q3',clv:3},{label:'ระยะเวลา (เดือน) #3',key:'clv_months3',clv:3},{label:'💰 CLV #3',key:'__clv3__',computed:calcCLVVal3,clv:3},
+  {label:'─── CLV #4 ───',key:null,clv:4},
+  {label:'P ราคา/ครั้ง #4',key:'clv_p4',clv:4},{label:'Q ครั้ง/เดือน #4',key:'clv_q4',clv:4},{label:'ระยะเวลา (เดือน) #4',key:'clv_months4',clv:4},{label:'💰 CLV #4',key:'__clv4__',computed:calcCLVVal4,clv:4},
+  {label:'─── CLV #5 ───',key:null,clv:5},
+  {label:'P ราคา/ครั้ง #5',key:'clv_p5',clv:5},{label:'Q ครั้ง/เดือน #5',key:'clv_q5',clv:5},{label:'ระยะเวลา (เดือน) #5',key:'clv_months5',clv:5},{label:'💰 CLV #5',key:'__clv5__',computed:calcCLVVal5,clv:5},
+  {label:'💰 CLV รวม (ทุกกล่อง)',key:'__clv_total__',computed:calcCLVValTotal},
+  {label:'─── Timeline ───',key:null},
+  {label:'Wk 1-2 กิจกรรม',key:'tl_wk12_activity'},{label:'Wk 1-2 Go/Stop',key:'tl_wk12_decision'},
+  {label:'Wk 3-4 กิจกรรม',key:'tl_wk34_activity'},{label:'Wk 3-4 Go/Stop',key:'tl_wk34_decision'},
+  {label:'M 2-3 กิจกรรม',key:'tl_m23_activity'},{label:'M 2-3 Go/Stop',key:'tl_m23_decision'},
+  {label:'M 4-6 กิจกรรม',key:'tl_m46_activity'},{label:'M 4-6 Go/Stop',key:'tl_m46_decision'},
+  {label:'─── Top Risks ───',key:null},
+  {label:'Risk 1',key:'risk1_risk'},{label:'Plan B 1',key:'risk1_planb'},
+  {label:'Risk 2',key:'risk2_risk'},{label:'Plan B 2',key:'risk2_planb'},
+  {label:'Risk 3',key:'risk3_risk'},{label:'Plan B 3',key:'risk3_planb'},
+  {label:'Risk 4',key:'risk4_risk'},{label:'Plan B 4',key:'risk4_planb'},
+  {label:'─── เป้าหมาย ───',key:null},
+  {label:'🎯 รายได้รวม',key:'goal_revenue'},{label:'🎯 ลูกค้าใหม่',key:'goal_newcust'},{label:'🎯 ROI/ROAS',key:'goal_roi'},{label:'🎯 งบรวม',key:'goal_budget'},
+  {label:'─── ลายเซ็น ───',key:null},
+  {label:'ผู้จัดทำ',key:'sig_maker'},{label:'ผู้จัดการ',key:'sig_manager'},{label:'ผู้อนุมัติ',key:'sig_approver'}
+];
+
+function getCellVal(row, d) {
+  if (row.key === null) return null;
+  if (row.computed) return row.computed(d);
+  const v = d[row.key] || '';
+  return row.fmt ? row.fmt(v) : (v || '—');
+}
+
+// Compute max clv_count across all zones for summary table filtering
+function maxClvCount() {
+  let max = 1;
+  for (let z = 1; z <= 5; z++) {
+    const d = store[z] || {};
+    let c = parseInt(d.clv_count) || 0;
+    if (!c) { for (let i=5;i>=2;i--){ if(d['clv_p'+i]||d['clv_q'+i]||d['clv_months'+i]){c=i;break;} } }
+    if (c > max) max = c;
+  }
+  return max;
+}
+
+function buildTable() {
+  const zoneList=[1,2,3,4,5];
+  const maxClv = maxClvCount();
+  let html=`<thead><tr style="position:sticky;top:0">
+    <th style="min-width:200px;position:sticky;left:0;z-index:3">หัวข้อ</th>`;
+  zoneList.forEach(z=>{
+    // admin ดูภาพรวม → บอกด้วยว่าข้อมูลโซนนี้ใครเป็นคนบันทึกล่าสุด
+    const own = (IS_ADMIN && !VIEW_USER_ID && zoneOwner[z])
+      ? `<div style="font-size:10px;opacity:.65;font-weight:400;margin-top:2px">👤 ${escapeHtml(zoneOwner[z])}</div>` : '';
+    html+=`<th style="min-width:170px"><div style="font-size:11px;opacity:.7">โซน ${z}</div>${ZONE_NAMES[z]}${own}</th>`;
+  });
+  html+='</tr></thead><tbody>';
+  TABLE_ROWS.forEach((row,ri)=>{
+    // Skip CLV rows beyond the max count across zones
+    if (row.clv && row.clv > maxClv) return;
+    if(row.key===null){
+      html+=`<tr><td colspan="6" class="tbl-section-row">${row.label}</td></tr>`; return;
+    }
+    const isHL=row.label.startsWith('🎯')||row.label.startsWith('💰');
+    const bg=isHL?'#fffbeb':(ri%2===0?'#fff':'#f9fafb');
+    html+=`<tr style="background:${bg}"><td style="font-weight:500;position:sticky;left:0;background:${bg}">${row.label}</td>`;
+    zoneList.forEach(z=>{
+      const d=store[z]||{},val=getCellVal(row,d),empty=!val||val==='—';
+      html+=`<td style="${isHL&&!empty?'font-weight:700;color:#1a6b4a':''}color:${empty?'#ccc':'#111'}">${escapeHtml(val||'—')}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  document.getElementById('summaryTable').innerHTML=html;
+}
+
+// Strip emojis and box-drawing chars; keep plain text only
+function plainLabel(s) {
+  return String(s)
+    .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '') // emoji ranges
+    .replace(/─/g, '')
+    .trim();
+}
+
+function downloadTableCSV() {
+  const zoneList=[1,2,3,4,5];
+  const maxClv = maxClvCount();
+  const rows=[['หัวข้อ',...zoneList.map(z=>`โซน ${z} - ${ZONE_NAMES[z]}`)]];
+  TABLE_ROWS.forEach(row=>{
+    if (row.clv && row.clv > maxClv) return;
+    const label = plainLabel(row.label);
+    if(row.key===null){rows.push([label,...zoneList.map(()=>'')]);return;}
+    rows.push([label,...zoneList.map(z=>{const v=getCellVal(row,store[z]||{});return v==='—'?'':v;})]);
+  });
+  const csv=rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const a=Object.assign(document.createElement('a'),{
+    href:URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'})),
+    download:`ActionPlan_${new Date().toISOString().slice(0,10)}.csv`
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+  showToast('ดาวน์โหลด CSV สำเร็จ!');
+}
+
+function downloadTableExcel() {
+  if(typeof XLSX==='undefined'){
+    showToast('กำลังโหลด Excel library...');
+    const s=document.createElement('script');
+    s.src='https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';
+    s.onload=()=>_doExcel(); document.head.appendChild(s);
+  } else _doExcel();
+}
+
+// ── Summary Table PDF Export (teal theme) ────────────────────────────
+function downloadTablePDF() {
+  saveData();
+  const zoneList = [1,2,3,4,5];
+  const now = new Date().toLocaleString('th-TH');
+
+  const maxClv = maxClvCount();
+  let rowsHtml = '';
+  TABLE_ROWS.forEach((row, ri) => {
+    if (row.clv && row.clv > maxClv) return;
+    const label = plainLabel(row.label);
+    if (row.key === null) {
+      // Section divider
+      rowsHtml += `<tr class="sec"><td colspan="${zoneList.length+1}">${label}</td></tr>`;
+      return;
+    }
+    const isHL = row.label.startsWith('🎯') || row.label.startsWith('💰');
+    rowsHtml += `<tr class="${isHL?'hl':''}">
+      <td class="lbl">${escapeHtml(label)}</td>`;
+    zoneList.forEach(z => {
+      const d = store[z] || {};
+      const v = getCellVal(row, d);
+      const empty = !v || v === '—';
+      rowsHtml += `<td class="${empty?'empty':''}">${empty?'—':escapeHtml(String(v))}</td>`;
+    });
+    rowsHtml += '</tr>';
+  });
+
+  const css = `
+    @page { size: A4 landscape; margin: 10mm; }
+    /* Force browsers to print background colors + images */
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    body { font-family: 'Sarabun','Segoe UI',Arial,sans-serif; color:#1a1a1a; margin:0; padding:0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .header { background:#1a7a6e; color:#fff; padding:14px 22px; display:flex; justify-content:space-between; align-items:center; }
+    .header h1 { font-size:20px; font-weight:800; margin:0; }
+    .header .sub { font-size:12px; opacity:.85; margin-top:3px; }
+    .header .meta { font-size:11px; opacity:.85; text-align:right; }
+    .content { padding:12px 18px; }
+    table { width:100%; border-collapse:collapse; font-size:11px; }
+    thead th { background:#1a7a6e; color:#fff; padding:8px 10px; text-align:left; font-weight:700; border:1px solid #145f56; }
+    thead th.zone { text-align:center; min-width:110px; }
+    thead th .zone-sub { font-size:9px; opacity:.7; display:block; margin-top:2px; font-weight:600; }
+    tbody td { padding:6px 10px; border:1px solid #d4e8e4; vertical-align:top; }
+    tbody td.lbl { background:#f0f7f6; color:#145f56; font-weight:700; font-size:11px; position:sticky; left:0; min-width:200px; }
+    tbody tr.sec td { background:#e8f5f3; color:#0f4a32; font-weight:800; font-size:11px; letter-spacing:.5px; padding:7px 10px; border-top:2px solid #1a7a6e; }
+    tbody tr.hl td { background:#fffbeb; font-weight:700; color:#1a6b4a; }
+    tbody tr.hl td.lbl { background:#fef3c7; }
+    tbody td.empty { color:#cbd5e0; text-align:center; }
+    .footer { padding:10px 22px; font-size:10px; color:#666; border-top:1px solid #ddd; }
+    @media print {
+      .no-print { display:none !important; }
+    }
+  `;
+
+  const html = `<!DOCTYPE html><html lang="th"><head><meta charset="utf-8">
+    <title>Action Plan — Summary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>${css}
+      @media screen {
+        .print-hint { position:fixed; top:10px; right:10px; background:#fef3c7; color:#92400e; padding:10px 14px; border-radius:6px; font-size:12px; border-left:4px solid #f59e0b; z-index:9999; box-shadow:0 2px 6px rgba(0,0,0,.15); max-width:280px; }
+        .print-hint b { display:block; margin-bottom:4px; }
+      }
+      @media print { .print-hint { display:none !important; } }
+    </style></head><body>
+    <div class="print-hint">
+      <b>💡 หากพิมพ์แล้วสีหาย</b>
+      ใน Print Dialog → กด <b>"More settings"</b> → เปิดเช็ค <b>"Background graphics"</b>
+    </div>
+    <div class="header">
+      <div>
+        <h1>📋 ตารางสรุปข้อมูล Action Plan — ทุกเขต</h1>
+        <div class="sub">องค์กรตัวอย่าง (ORG) | One-Page Summary</div>
+      </div>
+      <div class="meta">
+        วันที่พิมพ์: ${now}<br>
+        ${zoneList.length} โซน · ${TABLE_ROWS.filter(r=>r.key!==null).length} หัวข้อ
+      </div>
+    </div>
+    <div class="content">
+      <table>
+        <thead><tr>
+          <th>หัวข้อ</th>
+          ${zoneList.map(z => `<th class="zone">${ZONE_NAMES[z]}<span class="zone-sub">โซน ${z}</span></th>`).join('')}
+        </tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
+    </div>
+    <div class="footer">
+      องค์กรตัวอย่าง (ORG) — Action Plan Summary · Generated ${now}
+    </div>
+    </body></html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) { showToast('❌ Browser block popup'); return; }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 500);
+  showToast('📄 เปิดหน้าพิมพ์ PDF แล้ว');
+}
+
+function _doExcel() {
+  const zoneList=[1,2,3,4,5];
+  const maxClv = maxClvCount();
+  const wb=XLSX.utils.book_new();
+  const wsData=[['หัวข้อ',...zoneList.map(z=>`โซน ${z} – ${ZONE_NAMES[z]}`)]];
+  TABLE_ROWS.forEach(row=>{
+    if (row.clv && row.clv > maxClv) return;
+    const label = plainLabel(row.label);
+    if(row.key===null){wsData.push([label,...zoneList.map(()=>'')]);return;}
+    wsData.push([label,...zoneList.map(z=>{const v=getCellVal(row,store[z]||{});return v==='—'?'':v;})]);
+  });
+  const ws=XLSX.utils.aoa_to_sheet(wsData);
+  ws['!cols']=[{wch:32},{wch:28},{wch:28},{wch:28},{wch:28},{wch:28}];
+  XLSX.utils.book_append_sheet(wb,ws,'สรุปทุกเขต');
+  zoneList.forEach(z=>{
+    const d=store[z]||{};
+    let zClv = parseInt(d.clv_count) || 0;
+    if (!zClv) { for (let i=5;i>=2;i--){ if(d['clv_p'+i]||d['clv_q'+i]||d['clv_months'+i]){zClv=i;break;} } if(!zClv) zClv=1; }
+    const sd=[['หัวข้อ','ข้อมูล']];
+    TABLE_ROWS.forEach(row=>{
+      if (row.clv && row.clv > zClv) return;
+      const label = plainLabel(row.label);
+      if(row.key===null){sd.push([label,'']);return;}
+      const v=getCellVal(row,d); sd.push([label,v==='—'?'':v]);
+    });
+    const wsZ=XLSX.utils.aoa_to_sheet(sd);
+    wsZ['!cols']=[{wch:32},{wch:50}];
+    XLSX.utils.book_append_sheet(wb,wsZ,`โซน${z}`);
+  });
+  XLSX.writeFile(wb,`ActionPlan_${new Date().toISOString().slice(0,10)}.xlsx`);
+  showToast('ดาวน์โหลด Excel สำเร็จ!');
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Toast
+   ═══════════════════════════════════════════════════════════════════════ */
+function showToast(msg) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// Warn if leaving page with unsaved edits
+let dirty = false;
+document.addEventListener('input', () => { if (ME) dirty = true; }, true);
+window.addEventListener('beforeunload', (e) => {
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Init
+   ═══════════════════════════════════════════════════════════════════════ */
+async function initData() {
+  document.getElementById('docDate').value = new Date().toISOString().split('T')[0];
+  saveData();
+  showToast('กำลังโหลดข้อมูลจาก Google Sheet...');
+  await loadAllFromDB();
+  // Mark all zones that came back with data as "already loaded"
+  for (let z = 1; z <= ZONE_COUNT; z++) {
+    if (store[z] && Object.keys(store[z]).length) loadedZones.add(z);
+  }
+  loadedZones.add(currentZone);     // current zone is now considered loaded
+  loadData(currentZone);
+  dirty = false;                    // initial load doesn't count
+  showToast(`📍 โหลดฟอร์ม ${ZONE_NAMES[currentZone]} เรียบร้อย`);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('loginHint').innerHTML =
+    'หากต้องการเปลี่ยนรหัสผ่าน กรุณาติดต่อ ' +
+    '<a href="mailto:' + SUPPORT_EMAIL + '">' + SUPPORT_EMAIL + '</a>';
+
+  // โลโก้ (ฝังอยู่ในไฟล์ ไม่ต้องโหลดจากที่ไหน)
+  ['cardLogo','brandLogo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.src = LOGO_URI;
+  });
+
+  startCommandChrome();     // นาฬิกา + แถบข้อความวิ่งของหน้าจอบัญชาการ
+  ShipCursor.start();       // ยานอวกาศบินตามเมาส์
+
+  // Restore session ก่อน — ถ้ากลับเข้าใช้งานต่อได้ ก็ไม่ต้องเปลือง CPU สร้างฉาก 3D
+  try {
+    const t = sessionStorage.getItem('ap_token');
+    const u = sessionStorage.getItem('ap_user');
+    if (t && u) {
+      TOKEN = t; ME = JSON.parse(u);
+      const check = await api('me', {});
+      if (check.ok) { ME = check.user; await startApp(); return; }
+      sessionStorage.removeItem('ap_token'); sessionStorage.removeItem('ap_user');
+      TOKEN = ''; ME = null;
+    }
+  } catch (_) {}
+
+  // ต้องเข้าสู่ระบบ → เริ่มฉากอนิเมชัน 3D ต้อนรับ
+  MMI3D.init();
+  document.getElementById('loginUser').focus();
+});
+</script>
+
+<script>
+/* โหมดสาธิตสำหรับพอร์ตโฟลิโอ — กรอกบัญชีผู้ดูแลและส่งฟอร์มให้เอง
+   คนดูงานจะได้เห็นหน้าจริงทันทีโดยไม่ต้องหารหัสก่อน */
+(function () {
+    function autoLogin() {
+        var u = document.getElementById("loginUser");
+        var p = document.getElementById("loginPass");
+        var f = u && u.form;
+        if (!u || !p || !f) return;
+        u.value = "admin";
+        p.value = "demo1234";
+        if (typeof f.requestSubmit === "function") f.requestSubmit();
+        else f.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    }
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () { setTimeout(autoLogin, 400); });
+    } else { setTimeout(autoLogin, 400); }
+})();
+</script>
+</body>
+</html>

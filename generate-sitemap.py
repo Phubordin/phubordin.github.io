@@ -18,7 +18,11 @@ SITE = "https://phubordin.github.io"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ไฟล์ที่ไม่ต้องการให้ Google เก็บ (ไฟล์ทดสอบ / ชิ้นส่วนที่ไม่ใช่หน้าเว็บจริง)
+# ไฟล์ mmt-app-*.html คือ "ตัวงาน" ที่ถูกฝังใน iframe ของหน้า mmt-*.html อีกที
+# ไม่ใช่หน้าเว็บที่ตั้งใจให้คนเข้าตรง จึงไม่ควรให้ Google เก็บแยก
 EXCLUDE = {"_check.html", "_check2.html"}
+# ตัดตามชื่อขึ้นต้นแทนการไล่ชื่อทีละไฟล์ เพิ่มงานชิ้นใหม่แล้วจะได้ไม่หลุดเข้าไปเอง
+EXCLUDE_PREFIX = ("mmt-app-", "_")
 
 # ความสำคัญของแต่ละหน้า (Google ใช้เป็นน้ำหนักเทียบกันภายในเว็บเดียวกัน)
 PRIORITY = {
@@ -29,6 +33,9 @@ PRIORITY = {
     "experience.html": "0.8",
     "certificate.html": "0.8",
     "contact.html": "0.7",
+    "experience_mmt.html": "0.8",
+    "mmt-dashboard.html": "0.7",
+    "mmt-rights-switching.html": "0.7",
 }
 PRIORITY_DEFAULT = "0.6"   # หน้ารายละเอียดโปรเจกต์ / ประสบการณ์
 
@@ -59,6 +66,7 @@ def main():
     pages = sorted(
         f for f in os.listdir(HERE)
         if f.lower().endswith(".html") and f not in EXCLUDE
+        and not f.startswith(EXCLUDE_PREFIX)
     )
     if not pages:
         raise SystemExit("ไม่พบไฟล์ .html ในโฟลเดอร์นี้")

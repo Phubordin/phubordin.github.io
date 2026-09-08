@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MKCCGG3QF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0MKCCGG3QF');
+    </script>
+    <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Phubordin Phanyosri">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, Dashboard">
+    <title>วิเคราะห์ลูกค้าเปลี่ยนสิทธิ์ + Line OA — มิตรไมตรีการแพทย์</title>
+    <meta name="description" content="วิเคราะห์พฤติกรรมการเปลี่ยนสิทธิ์การชำระของลูกค้า พร้อมกลยุทธ์ Line OA รายบุคคล (ข้อมูลจำลอง)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body class="fade-slide-in">
+    <header>
+        <div class="header-background"></div>
+        <span class="link-cursor strong1">Customer Right-Switching</span>
+    </header>
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <a style="text-decoration: none;" href="experience_mmt.html">
+        <button class="back-button">⬅︎ ผลงานที่ มิตรไมตรีการแพทย์</button>
+    </a>
+
+    <section>
+        <div class="demo-banner">
+            <span aria-hidden="true">🔒</span>
+            <span><b>ข้อมูลในหน้านี้เป็นข้อมูลจำลองทั้งหมด</b> — ชื่อองค์กร ชื่อสาขา ชื่อผู้รับบริการ
+                และตัวเลขทุกตัว ถูกสร้างขึ้นใหม่เพื่อการนำเสนอ ไม่มีข้อมูลจริงของบริษัทหรือผู้รับบริการอยู่เลย
+                ส่วนโครงสร้างข้อมูล ตรรกะการคำนวณ และรูปแบบการนำเสนอ คงไว้ตามงานจริงทุกอย่าง</span>
+        </div>
+
+        <h2 class="link-cursor">วิเคราะห์ลูกค้าเปลี่ยนสิทธิ์ และกลยุทธ์ Line OA</h2>
+        <p class="hero-lede">ตามรอยว่าลูกค้าคนเดียวกันเปลี่ยนสิทธิ์การชำระไปมาอย่างไรใน 4 ครั้งล่าสุด แล้วแปลงเป็นรายการที่ทีมหน้าร้านหยิบไปทำต่อได้เป็นรายคน</p>
+
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>โจทย์</h3>
+                <p>ทีมการตลาดรู้ว่ามีลูกค้ากลุ่มหนึ่งสลับไปมาระหว่างสิทธิ์การชำระคนละแบบ แต่ไม่มีใครบอกได้ว่ากลุ่มนี้ใหญ่แค่ไหน หน้าตาเป็นอย่างไร และควรคุยด้วยข้อความแบบไหน</p>
+            </div>
+            <div class="brief">
+                <h3>ข้อมูล</h3>
+                <p>ประวัติการรับบริการรายครั้งกว่าสามแสนบรรทัด จับคู่กับทะเบียนผู้สมัคร Line OA แล้วยุบเป็นเส้นทางรายคน 4 จุด เกิดเป็นรูปแบบการเปลี่ยนสิทธิ์ 165 แบบ</p>
+            </div>
+            <div class="brief">
+                <h3>สิ่งที่ทำ</h3>
+                <p>ทำ Sankey ให้เห็นการไหลของสิทธิ์ ตารางจัดอันดับรูปแบบที่พบบ่อย แผนภาพช่วงวัย และหน้ารายบุคคลที่ระบุว่าควรเสนออะไรกับใคร พร้อมส่งออกเป็น CSV และ Excel</p>
+            </div>
+            <div class="brief">
+                <h3>ผลลัพธ์</h3>
+                <p>เปลี่ยนจากความรู้สึกว่าน่าจะมีคนกลุ่มนี้ เป็นรายชื่อที่หยิบไปติดต่อได้จริง พร้อมเหตุผลกำกับว่าทำไมถึงเลือกคนนี้</p>
+            </div>
+        </div>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="mmt-app-rights.html" target="_blank" rel="noopener">เปิดแบบเต็มจอ ↗</a>
+            <a class="btn btn-ghost" href="experience_mmt.html">ดูผลงานชิ้นอื่น</a>
+        </div>
+
+        <div class="app-stage">
+            <iframe src="mmt-app-rights.html" title="วิเคราะห์ลูกค้าเปลี่ยนสิทธิ์ และกลยุทธ์ Line OA" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

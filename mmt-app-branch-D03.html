@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>รายงานรายวัน · สาขา D03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mmi-teal-900:#052e2a; --mmi-teal-800:#06413b; --mmi-teal-700:#0a564e;
+  --mmi-teal-600:#0e7a70; --mmi-teal-500:#12a094; --mmi-teal-400:#2ec4b6; --mmi-teal-300:#7ae7dc;
+  --mmi-orange:#f5a623; --mmi-orange-soft:#ffc45f;
+  --font:'Anuphan','Inter','Segoe UI',Tahoma,sans-serif;
+  --mono:'Inter','Anuphan',ui-monospace,Consolas,monospace;
+  --r-sm:8px; --r-md:14px; --r-lg:22px;
+  --nav-w:190px; --kpi-num:29px; --pad:18px; --chart-h:300px;
+}
+:root[data-theme="light"]{
+  --page:#fcf8e6; --surface:#fffef9; --surface-2:#faf5e2; --surface-3:#f5eed6;
+  --sb-track:#f3ecd4; --sb-thumb:#d8cba4; --sb-thumb-h:#0e7a70;
+  --line:#e7ddba; --line-hot:var(--mmi-teal-600);
+  --ink:#2b2718; --ink-dim:#5f5738; --ink-faint:#8d8259;
+  --brand:var(--mmi-teal-600); --brand-soft:#e4f0ea;
+  --pos:var(--mmi-teal-600); --neg:#bf4a17;
+  --shadow:0 12px 34px rgba(120,100,40,.10); --shadow-lg:0 20px 54px rgba(120,100,40,.16);
+  --chart-ink:#2b2718; --chart-ink2:#7d7350; --chart-axis:#ddd0a5;
+  --c1:#0e7a70; --c2:#12a094; --c3:#d97706; --c4:#2ec4b6; --c5:#b45309; --c6:#0a564e;
+  --bar-grad-a:#2ec4b6; --bar-grad-b:#0e7a70;
+  --nav-bg:linear-gradient(180deg,#06413b,#052e2a); --nav-ink:#e6f2ef; --nav-ink-faint:#9dbbb5;
+  --tip-bg:#12312c; --tip-ink:#f2fbf9;
+}
+:root[data-theme="dark"]{
+  --page:#052e2a; --surface:rgba(6,46,42,.82); --surface-2:rgba(2,21,19,.55); --surface-3:rgba(3,34,31,.96);
+  --sb-track:rgba(2,21,19,.45); --sb-thumb:rgba(46,196,182,.34); --sb-thumb-h:#2ec4b6;
+  --line:rgba(46,196,182,.28); --line-hot:rgba(46,196,182,.60);
+  --ink:#eafffb; --ink-dim:#9dc9c2; --ink-faint:#5f8b85;
+  --brand:var(--mmi-teal-400); --brand-soft:rgba(46,196,182,.14);
+  --pos:var(--mmi-teal-400); --neg:var(--mmi-orange);
+  --shadow:0 22px 60px rgba(0,0,0,.44); --shadow-lg:0 30px 70px rgba(0,0,0,.6);
+  --chart-ink:#cdeeea; --chart-ink2:rgba(160,214,208,.7); --chart-axis:rgba(122,231,220,.4);
+  --c1:#2ec4b6; --c2:#12a094; --c3:#f5a623; --c4:#7ae7dc; --c5:#ffc45f; --c6:#0e7a70;
+  --bar-grad-a:#7ae7dc; --bar-grad-b:#12a094;
+  --nav-bg:linear-gradient(180deg,rgba(7,51,47,.94),rgba(3,24,22,.96)); --nav-ink:#9dc9c2; --nav-ink-faint:#5f8b85;
+  --tip-bg:#031f1c; --tip-ink:#eafffb;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
+html,body{max-width:100%}
+body{background:var(--page); color:var(--ink); font-family:var(--font);
+     font-size:13.5px; line-height:1.6; -webkit-font-smoothing:antialiased}
+.num,table,.kpi b,.kpi small,.mono{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1}
+svg text{font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1}
+
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--sb-track)}
+::-webkit-scrollbar-thumb{background:var(--sb-thumb);border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:var(--sb-thumb-h)}
+
+/* ---------- แถบเมนูซ้าย ---------- */
+.nav{--nav-ink:#e6f2ef;--nav-ink-faint:#9dbbb5;position:fixed;left:0;top:0;bottom:0;width:var(--nav-w);background:var(--nav-bg);
+     color:var(--nav-ink);padding:20px 14px;display:flex;flex-direction:column;gap:18px;z-index:50}
+.nav .mark{font-family:var(--mono);font-weight:800;font-size:15px;letter-spacing:.14em;
+     text-transform:uppercase;color:var(--mmi-teal-300)}
+.nav .bname{font-size:15px;font-weight:700;color:var(--nav-ink);line-height:1.35;margin-top:2px}
+.nav .bmeta{font-size:10.5px;color:var(--nav-ink-faint);letter-spacing:.04em}
+.nav .sect{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--nav-ink-faint);
+     margin-bottom:6px}
+.nav a{display:block;color:var(--nav-ink);text-decoration:none;font-size:12.5px;
+     padding:6px 9px;border-radius:var(--r-sm);border-left:2px solid transparent}
+.nav a:hover,.nav a:focus-visible{background:rgba(46,196,182,.14);border-left-color:var(--mmi-teal-400);color:var(--mmi-teal-300)}
+.nav .foot{margin-top:auto;display:grid;gap:8px}
+.btn{font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;border:0;
+     padding:8px 12px;border-radius:var(--r-sm);background:var(--mmi-teal-400);color:#04211f;
+     letter-spacing:.06em}
+.btn.ghost{background:rgba(46,196,182,.14);color:var(--nav-ink);border:1px solid rgba(46,196,182,.3)}
+.btn:hover{background:var(--mmi-teal-300);color:#04211f}
+
+/* ---------- พื้นที่เนื้อหา ---------- */
+.main{margin-left:var(--nav-w);padding:20px 22px 46px;display:grid;gap:14px;
+  grid-template-columns:minmax(0,1fr)}
+/* grid item ตั้งต้นเป็น min-width:auto คือหดต่ำกว่าเนื้อหาไม่ได้
+   ถ้าไม่ปลดตรงนี้ ลูกตัวเดียวที่กว้างเกินจะดันให้พี่น้องทุกตัวกว้างตาม */
+.main > *{min-width:0}
+.split{display:grid;grid-template-columns:7fr 5fr;gap:14px}
+.split > *{min-width:0}
+section{scroll-margin-top:16px}
+
+.panel{padding:var(--pad); border-radius:var(--r-lg); background:var(--surface);
+       border:1px solid var(--line); box-shadow:var(--shadow)}
+:root[data-theme="dark"] .panel{backdrop-filter:blur(14px);
+  background:linear-gradient(165deg,rgba(6,46,42,.82),rgba(3,26,24,.90))}
+
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h2{font-size:14.5px;font-weight:700;letter-spacing:.01em}
+.lbl{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);font-weight:700}
+.hint{font-size:11.5px; color:var(--ink-faint); line-height:1.6}
+
+.pill{display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px;
+      font-size:11px; font-weight:700; color:#04211f; background:var(--mmi-teal-400)}
+.pill.warn{background:var(--mmi-orange)}
+
+/* ---------- หัวเรื่อง ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.topbar .asof{text-align:right}
+/* ---------- แบรนด์บนแถบเมนูสีเขียว (วางแบบเดียวกับแดชบอร์ดรวม) ---------- */
+.nav .hbrand{display:flex;align-items:center;gap:8px;padding:2px 0 14px;
+  border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:12px}
+.nav .hbrand .logo{width:38px;height:30px;flex:0 0 auto;
+  background:#fff;border-radius:7px;padding:2px}
+.nav .hbrand .logo svg{display:block;width:100%;height:100%}
+.nav .hbrand b{display:block;font-size:12px;font-weight:800;line-height:1.3;color:#fff}
+.nav .hbrand .dept{display:block;font-size:9px;line-height:1.4;color:var(--nav-ink-faint)}
+/* ---------- หัวรายงานสองเขต: ชื่อสาขาซ้าย · วันที่ขวา ---------- */
+.topbar{align-items:center}
+.hbname .bn{display:block;font-size:19px;font-weight:800;line-height:1.2;
+  color:var(--mmi-teal-700,#0a564e)}
+.hbname .bm{display:block;font-size:11px;color:var(--ink-faint);letter-spacing:.04em;margin-top:3px}
+.topbar .asof{text-align:right}
+.topbar .asof b{display:block;font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ink)}
+
+/* ---------- สรุปอัตโนมัติ ---------- */
+.tipsBtn{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:61;
+  background:var(--mmi-teal-400);color:#04211f;border:0;border-radius:var(--r-md);
+  padding:11px 13px;font:inherit;font-size:12px;font-weight:700;letter-spacing:.06em;
+  cursor:pointer;box-shadow:var(--shadow-lg)}
+.tipsBtn:hover{background:var(--mmi-teal-300)}
+.tipsBtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.tips{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:62;
+  width:min(440px,92vw);max-height:82vh;overflow:auto;box-shadow:var(--shadow-lg)}
+.tipsClose{background:var(--surface-2);border:1px solid var(--line);color:var(--ink-dim);
+  border-radius:var(--r-sm);width:30px;height:30px;font:inherit;font-size:13px;cursor:pointer;flex:none}
+.tipsClose:hover{border-color:var(--line-hot);color:var(--brand)}
+.insight{display:grid;gap:11px}
+.insight li{list-style:none;font-size:13px;color:var(--ink-dim);padding-left:2px;
+  border-left:2px solid var(--line);padding:2px 0 2px 11px}
+.insight li b{color:var(--ink)}
+.insight .n{font-family:var(--mono);font-weight:800;color:var(--brand);margin-right:4px}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{padding:11px 14px; text-align:center; background:var(--surface);
+     border:1px solid var(--line); border-radius:var(--r-md); box-shadow:var(--shadow)}
+.kpi-label{font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-faint)}
+.kpi b{font-family:var(--mono); font-size:var(--kpi-num); font-weight:700; color:var(--brand);
+       display:block; line-height:1.2; margin:3px 0 2px}
+.kpi b .u{font-size:13px;font-weight:600;color:var(--ink-dim)}
+.kpi small{font-family:var(--mono); font-size:10px; color:var(--ink-faint); display:block}
+.kpi .sub{font-size:11.5px;color:var(--ink-dim);margin-top:3px}
+.delta{font-weight:700;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--pos)} .delta.down{color:var(--neg)} .delta.flat{color:var(--ink-faint)}
+
+/* ---------- แถบเป้า ---------- */
+.track{position:relative;height:30px;background:var(--surface-3);border-radius:var(--r-sm);
+       border:1px solid var(--line);margin-top:26px}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r-sm);
+      background:linear-gradient(90deg,var(--bar-grad-a),var(--bar-grad-b))}
+.track .pct{position:absolute;right:10px;top:5px;font-family:var(--mono);font-size:13px;
+            font-weight:800;color:var(--ink)}
+.marker{position:absolute;top:-8px;bottom:-8px;width:2px;background:var(--ink)}
+.marker span{position:absolute;top:-24px;left:50%;transform:translateX(-50%);white-space:nowrap;
+   font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
+   background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:2px 7px}
+.tlegend{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+.tlegend .it{border-left:1px solid var(--line);padding-left:12px}
+.tlegend .it:first-child{border-left:0;padding-left:0}
+.tlegend b{display:block;font-family:var(--mono);font-size:15px;font-weight:700;margin-top:2px}
+
+/* ---------- ตาราง ---------- */
+.wrap{max-height:54vh; overflow:auto; border:1px solid var(--line); border-radius:var(--r-sm)}
+table{border-collapse:collapse; width:100%; font-size:12.5px; background:var(--surface)}
+th{position:sticky; top:0; z-index:2; padding:9px 10px; text-align:left; font-size:10px;
+   font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim);
+   background:var(--surface-3); border-bottom:1px solid var(--line); white-space:nowrap}
+th.num,td.num{text-align:right}
+td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody tr:hover{background:var(--surface-2)}
+tfoot td{position:sticky;bottom:0;background:var(--surface-3);font-weight:700;border-top:1px solid var(--line)}
+.pname{display:flex;align-items:center;gap:7px;white-space:normal}
+.dot{width:9px;height:9px;border-radius:999px;flex:none}
+.mbar{display:inline-block;height:8px;border-radius:999px;vertical-align:middle;margin-right:7px;
+      background:linear-gradient(90deg,var(--bar-grad-a),var(--bar-grad-b))}
+
+/* ---------- ปุ่มสลับ ---------- */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;flex:none}
+.seg button{border:0;background:var(--surface-2);padding:6px 12px;font:inherit;font-size:11.5px;
+            color:var(--ink-dim);cursor:pointer;letter-spacing:.02em}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--mmi-teal-400);color:#04211f;font-weight:700}
+
+/* ---------- กล่องหมวด (คลิกเพื่อกรอง) ---------- */
+.chips{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.chip{text-align:left;font:inherit;cursor:pointer;padding:11px 13px 7px;border-radius:var(--r-md);
+      background:var(--surface-2);border:1px solid var(--line);color:var(--ink);display:block}
+.chip:hover{border-color:var(--line-hot)}
+.chip .cn{display:block;font-size:12px;font-weight:600;color:var(--ink-dim);line-height:1.3;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip .cv{display:block;font-family:var(--mono);font-size:19px;font-weight:700;color:var(--ink);margin-top:3px}
+.chip .cd{display:block;font-size:10.5px;font-weight:700;margin-bottom:2px}
+.chip svg{display:block;width:100%;height:34px;overflow:visible}
+.chip[aria-pressed="true"]{background:var(--brand-soft);border-color:var(--line-hot);
+      box-shadow:inset 0 0 0 1px var(--line-hot)}
+.chip[aria-pressed="true"] .cn{color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--line-hot);outline-offset:2px}
+
+/* ---------- โดนัทแบบคลิกได้ ---------- */
+.slice{cursor:pointer}
+.slice:focus-visible{outline:2px solid var(--line-hot)}
+.legend .it button.lgbtn{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  width:100%;font:inherit;background:none;border:0;padding:5px 7px;border-radius:var(--r-sm);
+  cursor:pointer;color:inherit;text-align:left}
+.legend .it button.lgbtn:hover{background:var(--surface-2)}
+.legend .it button.lgbtn[aria-pressed="true"]{background:var(--brand-soft);
+  box-shadow:inset 0 0 0 1px var(--line-hot)}
+.legend .it{display:block}
+#donutDetail{margin-top:8px}
+.dt{border:1px solid var(--line-hot);background:var(--brand-soft);border-radius:var(--r-md);
+    padding:9px 12px;font-size:12.5px;color:var(--ink-dim)}
+.dt b{color:var(--ink)}
+
+/* ---------- หัวตารางที่คลิกเรียงได้ ---------- */
+.sortbtn{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:none;
+         border:0;padding:0;cursor:pointer;display:inline-flex;align-items:center;gap:5px;width:100%}
+th.num .sortbtn{justify-content:flex-end}
+.sortbtn:hover{color:var(--brand)}
+.sortbtn .ar{font-size:8px;opacity:.35}
+th[aria-sort] .sortbtn{color:var(--brand)}
+th[aria-sort] .sortbtn .ar{opacity:1}
+.sortbtn:focus-visible{outline:2px solid var(--line-hot);outline-offset:2px;border-radius:var(--r-sm)}
+.empty{padding:26px;text-align:center;color:var(--ink-faint);font-size:12.5px}
+
+.legend{display:grid;gap:8px;margin-top:12px;font-size:12.5px}
+.legend .it{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.legend .nm{display:flex;align-items:center;gap:7px;color:var(--ink-dim)}
+.legend .vl{font-family:var(--mono);white-space:nowrap}
+.legend .vl b{font-size:13px}
+
+.chart svg{display:block;width:100%;height:auto}
+footer{font-size:11px;color:var(--ink-faint);text-align:center;line-height:1.9;padding-top:6px}
+
+/* iPad ตั้ง และจอแคบกว่านั้น — สองคอลัมน์ไม่พอให้กราฟหายใจ ตัดเหลือคอลัมน์เดียว */
+@media (max-width:1000px){
+  .split{grid-template-columns:minmax(0,1fr)}
+}
+/* มือถือ — ลดระยะขอบ ย่อตัวเลขให้พอดีบรรทัด และเตี้ยกราฟลงให้เห็นได้ในหน้าจอเดียว */
+@media (max-width:600px){
+  :root{--pad:13px;--kpi-num:25px;--chart-h:235px}
+  .main{padding:12px 12px 40px}
+  /* หัวรายงานเป็น flex แนวนอน พอจอแคบวันที่กับป้ายสถานะโดนบีบจนอ่านไม่ออก
+     บนมือถือให้เรียงลงมาเป็นชั้น ๆ แทน จะได้เห็นครบทุกบรรทัด */
+  .topbar{flex-direction:column;align-items:stretch;gap:12px}
+  .topbar .asof{text-align:left}
+  .topbar .asof b{display:inline-block;margin-right:8px}
+  .nav .hbrand{padding:0;margin:0;border-bottom:0;flex:1 1 100%}
+  .nav .hbrand .dept{display:none}
+  .hbname{width:100%}
+  .hbname .bn{font-size:17px}
+  .wrap{max-height:62vh}
+  table{font-size:12px}
+  .seg button{padding:6px 9px;font-size:11.5px}
+  .tipsBtn{right:10px;bottom:10px}
+  .tips{right:8px;left:8px;bottom:8px;max-height:76vh}
+}
+/* จอแคบมาก (iPhone SE) — ตารางยาวให้เลื่อนในกล่องตัวเอง อย่าดันทั้งหน้า */
+@media (max-width:380px){
+  :root{--kpi-num:22px}
+  .main{padding:10px 10px 36px}
+}
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .chips{grid-template-columns:repeat(3,1fr)}
+  .tlegend{grid-template-columns:repeat(2,1fr)}
+  .tlegend .it{border-left:0;padding-left:0}
+}
+@media (max-width:860px){
+  .tipsBtn{top:auto;bottom:14px;transform:none}
+  .tips{top:auto;bottom:14px;transform:none;max-height:70vh}
+  .nav{position:static;width:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px}
+  .nav .links{display:none}
+  .nav .foot{margin-top:0;grid-auto-flow:column}
+  .main{margin-left:0;padding:14px}
+}
+@media (max-width:600px){
+  .kpis{grid-template-columns:1fr}
+  .chips{grid-template-columns:repeat(2,1fr)}
+}
+@media print{
+  .nav,.tipsBtn,.tips{display:none} .main{margin-left:0}
+  .seg{display:none} .panel{box-shadow:none;break-inside:avoid}
+  .wrap{max-height:none;overflow:visible}
+  @page{size:A4 landscape;margin:8mm}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="hbrand">
+      <div class="logo"><svg viewBox="0 0 114 73" xmlns="http://www.w3.org/2000/svg" aria-label="โลโก้"><rect x="14" y="8" width="86" height="57" rx="10" fill="#0f766e"/><rect x="29" y="38" width="10" height="16" rx="2" fill="#f5b301"/><rect x="46" y="28" width="10" height="26" rx="2" fill="#f5b301"/><rect x="63" y="19" width="10" height="35" rx="2" fill="#fff"/></svg></div>
+      <div>
+        <b>องค์กรตัวอย่าง (ORG)</b>
+        <span class="dept">ฝ่ายวิเคราะห์และวางแผน<br>ข้อมูลทางการเงิน</span>
+      </div>
+    </div>
+  <div class="links">
+    <a href="#top" class="on">ภาพรวม</a>
+  </div>
+  <div class="foot">
+    <button class="btn" id="themeBtn" type="button">โหมดมืด</button>
+    <button class="btn ghost" id="printBtn" type="button">พิมพ์ / บันทึก PDF</button>
+  </div>
+</nav>
+
+<main class="main">
+
+  <section class="panel topbar" id="top">
+    <div class="hbname">
+      <span class="bn" id="bname">—</span>
+      <span class="bm" id="bmeta">—</span>
+    </div>
+    <div class="asof">
+      <div class="lbl">รายงานยอดขายรายวัน · ข้อมูล ณ วันที่ (ปิดยอดเมื่อวาน)</div>
+      <b id="asof">—</b>
+      <span class="pill" id="statusPill">—</span>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="panel" id="s-target">
+    <div class="head">
+      <div>
+        <h2>ความคืบหน้าเป้าเดือนนี้ <span class="hint" id="monthLabel"></span></h2>
+        <div class="hint">แถบ = ยอดที่ทำได้จริง · เส้นแนวตั้ง = จังหวะที่ควรทำได้ ณ วันนี้</div>
+      </div>
+    </div>
+    <div class="track" id="track"></div>
+    <div class="tlegend" id="tlegend"></div>
+  </section>
+
+  <section id="s-trend" class="split">
+    <div class="panel">
+      <div class="head">
+        <div>
+          <h2>แนวโน้มยอดขาย</h2>
+          <div class="hint" id="trendHint">—</div>
+        </div>
+      </div>
+      <div class="chart" id="trendChart"></div>
+    </div>
+    <div class="panel">
+      <div class="head">
+        <div>
+          <h2>อะไรทำให้ยอดขึ้น / ลง</h2>
+          <div class="hint" id="contribHint">—</div>
+        </div>
+      </div>
+      <div class="chart" id="contribChart"></div>
+    </div>
+  </section>
+
+  <section id="s-product" class="split">
+    <div class="panel">
+      <div class="head">
+        <div>
+          <h2>ยอดขายเมื่อวาน แยกตามหมวด</h2>
+          <div class="hint">1 บรรทัด = 1 หมวด · เรียงตามยอดขาย · เทียบกับฐานที่เลือก</div>
+        </div>
+        <div class="seg" id="cmpSeg">
+          <button type="button" data-cmp="d1" class="on">เทียบเมื่อวานก่อน</button>
+          <button type="button" data-cmp="d7">เทียบเฉลี่ย 7 วัน</button>
+        </div>
+      </div>
+      <div class="wrap"><table id="prodTable"></table></div>
+    </div>
+    <div class="panel">
+      <div class="head">
+        <div>
+          <h2>สัดส่วนสิทธิ์การชำระเงิน</h2>
+          <div class="hint">คลิกที่วงหรือรายการด้านล่างเพื่อเจาะดูทีละสิทธิ์</div>
+        </div>
+        <div class="seg" id="rightSeg">
+          <button type="button" data-scope="d" class="on">เมื่อวาน</button>
+          <button type="button" data-scope="m">สะสมเดือนนี้</button>
+        </div>
+      </div>
+      <div class="chart" id="donut"></div>
+      <div id="donutDetail"></div>
+      <div class="legend" id="donutLegend"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="s-items">
+    <div class="head">
+      <div>
+        <h2>รายการสินค้าที่ขายเมื่อวาน</h2>
+        <div class="hint">เส้นในกล่อง = ยอดขาย 30 วันล่าสุดของหมวดนั้น · คลิกกล่องเพื่อกรองตาราง · คลิกหัวคอลัมน์เพื่อเรียงลำดับ</div>
+      </div>
+      <div class="hint" id="itemCount">—</div>
+    </div>
+    <div class="chips" id="groupChips"></div>
+    <div class="wrap"><table id="itemTable"></table></div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<button class="tipsBtn" id="tipsBtn" type="button" aria-expanded="false" aria-controls="tipsPanel">
+  <span aria-hidden="true">◆</span> Tips</button>
+<aside class="tips panel" id="tipsPanel" hidden aria-label="ข้อสรุปและข้อสังเกตประจำวัน">
+  <div class="head" style="margin-bottom:10px">
+    <div><div class="lbl">อ่าน 15 วินาที</div><h2>ข้อสรุป &amp; Tips ของวันนี้</h2></div>
+    <button class="tipsClose" id="tipsClose" type="button" aria-label="ปิดข้อสรุป">✕</button>
+  </div>
+  <ul class="insight" id="insight"></ul>
+</aside>
+
+<script>
+const DATA = {"branch":{"code":"D03","name":"สาขา D03","region":"Zone D"},"as_of":"2026-08-27","generated_at":"2026-08-28 07:30","source":"ข้อมูลจำลองเพื่อการนำเสนอ","target":875000.0,"categories":[{"name":"บริการ A","groups":["บริการ A-1","บริการ A-2"]},{"name":"บริการ B","groups":["บริการ B-1","บริการ B-2"]},{"name":"บริการ C","groups":["บริการ C-1","บริการ C-2"]},{"name":"บริการ D","groups":["บริการ D-1"]},{"name":"บริการ E","groups":["บริการ E-1"]}],"products":["บริการ A-1","บริการ A-2","บริการ B-1","บริการ B-2","บริการ C-1","บริการ C-2","บริการ D-1","บริการ E-1"],"rights":["สิทธิ์ A","สิทธิ์ B","สิทธิ์ C","สิทธิ์ D","สิทธิ์ E","อื่นๆ"],"daily":[{"date":"2026-06-14","rev":14639.17,"bills":12,"prod":{"บริการ A-1":1664.82,"บริการ A-2":1442.31,"บริการ B-1":1817.82,"บริการ B-2":1735.68,"บริการ C-1":1549.08,"บริการ C-2":2174.46,"บริการ D-1":2145.05,"บริการ E-1":2109.95},"qty":{"บริการ A-1":4,"บริการ A-2":2,"บริการ B-1":2,"บริการ B-2":7,"บริการ C-1":3,"บริการ C-2":7,"บริการ D-1":4,"บริการ E-1":5},"right":{"สิทธิ์ A":4183.66,"สิทธิ์ B":3154.28,"สิทธิ์ C":3469.56,"สิทธิ์ D":1737.87,"สิทธิ์ E":1267.82,"อื่นๆ":825.97}},{"date":"2026-06-15","rev":24279.07,"bills":20,"prod":{"บริการ A-1":2574.82,"บริการ A-2":3610.46,"บริการ B-1":3352.53,"บริการ B-2":3517.77,"บริการ C-1":2121.46,"บริการ C-2":2926.77,"บริการ D-1":3831.13,"บริการ E-1":2344.13},"qty":{"บริการ A-1":5,"บริการ A-2":13,"บริการ B-1":8,"บริการ B-2":9,"บริการ C-1":7,"บริการ C-2":6,"บริการ D-1":5,"บริการ E-1":5},"right":{"สิทธิ์ A":6752.27,"สิทธิ์ B":5366.81,"สิทธิ์ C":5877.16,"สิทธิ์ D":2758.7,"สิทธิ์ E":2193.86,"อื่นๆ":1330.29}},{"date":"2026-06-16","rev":26964.52,"bills":33,"prod":{"บริการ A-1":2592.64,"บริการ A-2":2253.0,"บริการ B-1":4048.82,"บริการ B-2":4401.37,"บริการ C-1":3359.35,"บริการ C-2":2907.24,"บริการ D-1":3047.61,"บริการ E-1":4354.49},"qty":{"บริการ A-1":5,"บริการ A-2":3,"บริการ B-1":8,"บริการ B-2":9,"บริการ C-1":4,"บริการ C-2":4,"บริการ D-1":3,"บริการ E-1":9},"right":{"สิทธิ์ A":7648.16,"สิทธิ์ B":7053.68,"สิทธิ์ C":6093.41,"สิทธิ์ D":2705.56,"สิทธิ์ E":2256.47,"อื่นๆ":1207.25}},{"date":"2026-06-17","rev":28594.35,"bills":26,"prod":{"บริการ A-1":2992.45,"บริการ A-2":2991.58,"บริการ B-1":4478.13,"บริการ B-2":4278.67,"บริการ C-1":4521.68,"บริการ C-2":1894.15,"บริการ D-1":2503.92,"บริการ E-1":4933.77},"qty":{"บริการ A-1":4,"บริการ A-2":5,"บริการ B-1":7,"บริการ B-2":8,"บริการ C-1":10,"บริการ C-2":5,"บริการ D-1":4,"บริการ E-1":6},"right":{"สิทธิ์ A":9822.13,"สิทธิ์ B":5821.8,"สิทธิ์ C":5052.76,"สิทธิ์ D":3322.53,"สิทธิ์ E":2892.22,"อื่นๆ":1682.91}},{"date":"2026-06-18","rev":28874.16,"bills":29,"prod":{"บริการ A-1":4248.34,"บริการ A-2":3973.29,"บริการ B-1":4288.59,"บริการ B-2":4004.65,"บริการ C-1":4178.43,"บริการ C-2":4518.15,"บริการ D-1":1819.1,"บริการ E-1":1843.61},"qty":{"บริการ A-1":5,"บริการ A-2":9,"บริการ B-1":5,"บริการ B-2":5,"บริการ C-1":5,"บริการ C-2":6,"บริการ D-1":2,"บริการ E-1":3},"right":{"สิทธิ์ A":8538.69,"สิทธิ์ B":7762.48,"สิทธิ์ C":4993.13,"สิทธิ์ D":3696.44,"สิทธิ์ E":2517.34,"อื่นๆ":1366.09}},{"date":"2026-06-19","rev":27750.61,"bills":33,"prod":{"บริการ A-1":4162.57,"บริการ A-2":2406.73,"บริการ B-1":2764.4,"บริการ B-2":4382.77,"บริการ C-1":4696.81,"บริการ C-2":3297.22,"บริการ D-1":3415.75,"บริการ E-1":2624.36},"qty":{"บริการ A-1":6,"บริการ A-2":6,"บริการ B-1":3,"บริการ B-2":6,"บริการ C-1":6,"บริการ C-2":5,"บริการ D-1":6,"บริการ E-1":8},"right":{"สิทธิ์ A":8173.7,"สิทธิ์ B":6990.3,"สิทธิ์ C":4406.65,"สิทธิ์ D":4096.25,"สิทธิ์ E":2455.73,"อื่นๆ":1627.97}},{"date":"2026-06-20","rev":20687.1,"bills":18,"prod":{"บริการ A-1":2859.0,"บริการ A-2":2626.02,"บริการ B-1":1721.39,"บริการ B-2":2897.12,"บริการ C-1":2761.95,"บริการ C-2":3362.94,"บริการ D-1":1625.42,"บริการ E-1":2833.26},"qty":{"บริการ A-1":9,"บริการ A-2":3,"บริการ B-1":2,"บริการ B-2":9,"บริการ C-1":3,"บริการ C-2":6,"บริการ D-1":5,"บริการ E-1":4},"right":{"สิทธิ์ A":6158.78,"สิทธิ์ B":4504.57,"สิทธิ์ C":4481.23,"สิทธิ์ D":2119.4,"สิทธิ์ E":2229.04,"อื่นๆ":1194.09}},{"date":"2026-06-21","rev":16655.03,"bills":14,"prod":{"บริการ A-1":1986.44,"บริการ A-2":2209.12,"บริการ B-1":2742.99,"บริการ B-2":1841.5,"บริการ C-1":2068.0,"บริการ C-2":2366.72,"บริการ D-1":1109.84,"บริการ E-1":2330.42},"qty":{"บริการ A-1":6,"บริการ A-2":3,"บริการ B-1":10,"บริการ B-2":3,"บริการ C-1":2,"บริการ C-2":4,"บริการ D-1":1,"บริการ E-1":3},"right":{"สิทธิ์ A":3881.11,"สิทธิ์ B":3921.81,"สิทธิ์ C":3422.41,"สิทธิ์ D":2615.68,"สิทธิ์ E":1765.42,"อื่นๆ":1048.61}},{"date":"2026-06-22","rev":21361.37,"bills":19,"prod":{"บริการ A-1":2590.94,"บริการ A-2":1779.66,"บริการ B-1":2596.24,"บริการ B-2":3745.4,"บริการ C-1":2064.59,"บริการ C-2":2405.42,"บริการ D-1":4032.13,"บริการ E-1":2146.99},"qty":{"บริการ A-1":4,"บริการ A-2":4,"บริการ B-1":3,"บริการ B-2":8,"บริการ C-1":3,"บริการ C-2":3,"บริการ D-1":5,"บริการ E-1":3},"right":{"สิทธิ์ A":6463.95,"สิทธิ์ B":4534.6,"สิทธิ์ C":4916.15,"สิทธิ์ D":2519.26,"สิทธิ์ E":1816.6,"อื่นๆ":1110.81}},{"date":"2026-06-23","rev":24500.79,"bills":27,"prod":{"บริการ A-1":4501.18,"บริการ A-2":2208.53,"บริการ B-1":4019.83,"บริการ B-2":2363.61,"บริการ C-1":2605.63,"บริการ C-2":3636.59,"บริการ D-1":1954.42,"บริการ E-1":3211.0},"qty":{"บริการ A-1":8,"บริการ A-2":3,"บริการ B-1":6,"บริการ B-2":6,"บริการ C-1":6,"บริการ C-2":4,"บริการ D-1":3,"บริการ E-1":9},"right":{"สิทธิ์ A":7382.26,"สิทธิ์ B":6122.0,"สิทธิ์ C":4727.24,"สิทธิ์ D":2632.84,"สิทธิ์ E":2200.65,"อื่นๆ":1435.8}},{"date":"2026-06-24","rev":24980.79,"bills":23,"prod":{"บริการ A-1":2082.4,"บริการ A-2":3962.36,"บริการ B-1":3644.32,"บริการ B-2":2925.84,"บริการ C-1":2016.23,"บริการ C-2":3700.88,"บริการ D-1":2831.07,"บริการ E-1":3817.69},"qty":{"บริการ A-1":4,"บริการ A-2":8,"บริการ B-1":6,"บริการ B-2":3,"บริการ C-1":4,"บริการ C-2":8,"บริการ D-1":6,"บริการ E-1":6},"right":{"สิทธิ์ A":8226.71,"สิทธิ์ B":5616.91,"สิทธิ์ C":5385.54,"สิทธิ์ D":2922.09,"สิทธิ์ E":1830.14,"อื่นๆ":999.38}},{"date":"2026-06-25","rev":21013.77,"bills":20,"prod":{"บริการ A-1":3306.04,"บริการ A-2":2095.96,"บริการ B-1":2441.38,"บริการ B-2":2052.21,"บริการ C-1":2452.6,"บริการ C-2":1806.07,"บริการ D-1":3451.85,"บริการ E-1":3407.66},"qty":{"บริการ A-1":11,"บริการ A-2":7,"บริการ B-1":4,"บริการ B-2":3,"บริการ C-1":9,"บริการ C-2":7,"บริการ D-1":4,"บริการ E-1":13},"right":{"สิทธิ์ A":7150.93,"สิทธิ์ B":5125.83,"สิทธิ์ C":3164.02,"สิทธิ์ D":2228.59,"สิทธิ์ E":2317.13,"อื่นๆ":1027.28}},{"date":"2026-06-26","rev":30823.13,"bills":34,"prod":{"บริการ A-1":3389.76,"บริการ A-2":4803.98,"บริการ B-1":2941.29,"บริการ B-2":3515.99,"บริการ C-1":4605.99,"บริการ C-2":3247.21,"บริการ D-1":5179.39,"บริการ E-1":3139.52},"qty":{"บริการ A-1":7,"บริการ A-2":8,"บริการ B-1":4,"บริการ B-2":12,"บริการ C-1":6,"บริการ C-2":4,"บริการ D-1":6,"บริการ E-1":4},"right":{"สิทธิ์ A":7145.0,"สิทธิ์ B":8717.12,"สิทธิ์ C":7209.4,"สิทธิ์ D":3434.21,"สิทธิ์ E":2603.92,"อื่นๆ":1713.48}},{"date":"2026-06-27","rev":19878.71,"bills":26,"prod":{"บริการ A-1":3061.95,"บริการ A-2":3480.23,"บริการ B-1":2424.92,"บริการ B-2":2154.69,"บริการ C-1":1969.5,"บริการ C-2":1388.79,"บริการ D-1":2121.93,"บริการ E-1":3276.7},"qty":{"บริการ A-1":5,"บริการ A-2":13,"บริการ B-1":6,"บริการ B-2":4,"บริการ C-1":6,"บริการ C-2":3,"บริการ D-1":2,"บริการ E-1":8},"right":{"สิทธิ์ A":4726.69,"สิทธิ์ B":5608.82,"สิทธิ์ C":4128.05,"สิทธิ์ D":2930.18,"สิทธิ์ E":1663.65,"อื่นๆ":821.3}},{"date":"2026-06-28","rev":16427.92,"bills":15,"prod":{"บริการ A-1":2617.66,"บริการ A-2":2291.32,"บริการ B-1":2082.86,"บริการ B-2":1538.5,"บริการ C-1":1499.93,"บริการ C-2":2077.07,"บริการ D-1":1873.6,"บริการ E-1":2446.98},"qty":{"บริการ A-1":5,"บริการ A-2":3,"บริการ B-1":3,"บริการ B-2":3,"บริการ C-1":2,"บริการ C-2":5,"บริการ D-1":2,"บริการ E-1":6},"right":{"สิทธิ์ A":4505.68,"สิทธิ์ B":4465.45,"สิทธิ์ C":3005.04,"สิทธิ์ D":2220.39,"สิทธิ์ E":1676.24,"อื่นๆ":555.11}},{"date":"2026-06-29","rev":24487.34,"bills":20,"prod":{"บริการ A-1":2292.84,"บริการ A-2":2704.43,"บริการ B-1":2086.15,"บริการ B-2":2102.41,"บริการ C-1":4822.56,"บริการ C-2":4541.26,"บริการ D-1":3737.52,"บริการ E-1":2200.17},"qty":{"บริการ A-1":3,"บริการ A-2":7,"บริการ B-1":3,"บริการ B-2":3,"บริการ C-1":6,"บริการ C-2":7,"บริการ D-1":5,"บริการ E-1":6},"right":{"สิทธิ์ A":8021.78,"สิทธิ์ B":5994.55,"สิทธิ์ C":4104.37,"สิทธิ์ D":2831.79,"สิทธิ์ E":2606.88,"อื่นๆ":927.98}},{"date":"2026-06-30","rev":25774.24,"bills":23,"prod":{"บริการ A-1":3847.36,"บริการ A-2":3058.13,"บริการ B-1":3777.65,"บริการ B-2":3023.25,"บริการ C-1":2630.06,"บริการ C-2":2674.71,"บริการ D-1":4181.61,"บริการ E-1":2581.47},"qty":{"บริการ A-1":13,"บริการ A-2":8,"บริการ B-1":7,"บริการ B-2":6,"บริการ C-1":4,"บริการ C-2":4,"บริการ D-1":8,"บริการ E-1":8},"right":{"สิทธิ์ A":7462.98,"สิทธิ์ B":6810.08,"สิทธิ์ C":4818.81,"สิทธิ์ D":3131.87,"สิทธิ์ E":2543.59,"อื่นๆ":1006.91}},{"date":"2026-07-01","rev":28811.52,"bills":30,"prod":{"บริการ A-1":2268.03,"บริการ A-2":4715.13,"บริการ B-1":2381.62,"บริการ B-2":2996.87,"บริการ C-1":3618.45,"บริการ C-2":3166.52,"บริการ D-1":4487.88,"บริการ E-1":5177.02},"qty":{"บริการ A-1":4,"บริการ A-2":10,"บริการ B-1":3,"บริการ B-2":6,"บริการ C-1":5,"บริการ C-2":8,"บริการ D-1":5,"บริการ E-1":15},"right":{"สิทธิ์ A":7865.33,"สิทธิ์ B":6764.05,"สิทธิ์ C":4637.83,"สิทธิ์ D":4703.96,"สิทธิ์ E":3014.06,"อื่นๆ":1826.28}},{"date":"2026-07-02","rev":21233.35,"bills":18,"prod":{"บริการ A-1":2796.73,"บริการ A-2":1796.27,"บริการ B-1":3559.48,"บริการ B-2":2089.96,"บริการ C-1":3157.86,"บริการ C-2":3172.52,"บริการ D-1":1566.48,"บริการ E-1":3094.05},"qty":{"บริการ A-1":3,"บริการ A-2":2,"บริการ B-1":6,"บริการ B-2":2,"บริการ C-1":8,"บริการ C-2":9,"บริการ D-1":2,"บริการ E-1":10},"right":{"สิทธิ์ A":7669.19,"สิทธิ์ B":4180.59,"สิทธิ์ C":3445.21,"สิทธิ์ D":2873.72,"สิทธิ์ E":1848.71,"อื่นๆ":1215.94}},{"date":"2026-07-03","rev":27132.92,"bills":25,"prod":{"บริการ A-1":2176.63,"บริการ A-2":2734.11,"บริการ B-1":4655.62,"บริการ B-2":4430.4,"บริการ C-1":4731.48,"บริการ C-2":2255.89,"บริการ D-1":3119.65,"บริการ E-1":3029.14},"qty":{"บริการ A-1":6,"บริการ A-2":5,"บริการ B-1":13,"บริการ B-2":9,"บริการ C-1":10,"บริการ C-2":4,"บริการ D-1":8,"บริการ E-1":7},"right":{"สิทธิ์ A":7157.84,"สิทธิ์ B":7146.21,"สิทธิ์ C":6086.84,"สิทธิ์ D":3198.12,"สิทธิ์ E":2423.96,"อื่นๆ":1119.95}},{"date":"2026-07-04","rev":18805.26,"bills":17,"prod":{"บริการ A-1":3402.08,"บริการ A-2":1973.41,"บริการ B-1":2375.32,"บริการ B-2":1317.64,"บริการ C-1":3142.38,"บริการ C-2":1872.03,"บริการ D-1":1323.87,"บริการ E-1":3398.53},"qty":{"บริการ A-1":5,"บริการ A-2":5,"บริการ B-1":3,"บริการ B-2":2,"บริการ C-1":5,"บริการ C-2":5,"บริการ D-1":2,"บริการ E-1":9},"right":{"สิทธิ์ A":4167.41,"สิทธิ์ B":4959.04,"สิทธิ์ C":4508.94,"สิทธิ์ D":2128.09,"สิทธิ์ E":1989.65,"อื่นๆ":1052.15}},{"date":"2026-07-05","rev":14131.0,"bills":14,"prod":{"บริการ A-1":1073.2,"บริการ A-2":1508.0,"บริการ B-1":1036.36,"บริการ B-2":2080.23,"บริการ C-1":2384.3,"บริการ C-2":2067.42,"บริการ D-1":1875.88,"บริการ E-1":2105.61},"qty":{"บริการ A-1":3,"บริการ A-2":2,"บริการ B-1":2,"บริการ B-2":5,"บริการ C-1":4,"บริการ C-2":3,"บริการ D-1":4,"บริการ E-1":3},"right":{"สิทธิ์ A":4841.58,"สิทธิ์ B":2830.38,"สิทธิ์ C":3155.4,"สิทธิ์ D":1181.52,"สิทธิ์ E":1401.74,"อื่นๆ":720.4}},{"date":"2026-07-06","rev":28973.36,"bills":30,"prod":{"บริการ A-1":5394.94,"บริการ A-2":2426.44,"บริการ B-1":4288.84,"บริการ B-2":3041.16,"บริการ C-1":2610.69,"บริการ C-2":3042.31,"บริการ D-1":5240.91,"บริการ E-1":2928.07},"qty":{"บริการ A-1":10,"บริการ A-2":5,"บริการ B-1":14,"บริการ B-2":6,"บริการ C-1":3,"บริการ C-2":4,"บริการ D-1":6,"บริการ E-1":4},"right":{"สิทธิ์ A":10861.7,"สิทธิ์ B":6542.14,"สิทธิ์ C":4261.5,"สิทธิ์ D":2884.9,"สิทธิ์ E":3186.52,"อื่นๆ":1236.6}},{"date":"2026-07-07","rev":21912.12,"bills":24,"prod":{"บริการ A-1":1963.46,"บริการ A-2":3197.79,"บริการ B-1":2281.54,"บริการ B-2":3554.23,"บริการ C-1":3016.14,"บริการ C-2":1988.5,"บริการ D-1":3479.54,"บริการ E-1":2430.92},"qty":{"บริการ A-1":5,"บริการ A-2":9,"บริการ B-1":6,"บริการ B-2":4,"บริการ C-1":12,"บริการ C-2":3,"บริการ D-1":6,"บริการ E-1":5},"right":{"สิทธิ์ A":6679.18,"สิทธิ์ B":6027.24,"สิทธิ์ C":3482.63,"สิทธิ์ D":3131.06,"สิทธิ์ E":1511.17,"อื่นๆ":1080.82}},{"date":"2026-07-08","rev":20683.79,"bills":25,"prod":{"บริการ A-1":2632.32,"บริการ A-2":2964.49,"บริการ B-1":2690.42,"บริการ B-2":3073.38,"บริการ C-1":1506.69,"บริการ C-2":2403.64,"บริการ D-1":2396.6,"บริการ E-1":3016.25},"qty":{"บริการ A-1":5,"บริการ A-2":10,"บริการ B-1":8,"บริการ B-2":8,"บริการ C-1":2,"บริการ C-2":7,"บริการ D-1":3,"บริการ E-1":4},"right":{"สิทธิ์ A":5514.35,"สิทธิ์ B":5752.09,"สิทธิ์ C":4913.51,"สิทธิ์ D":2420.7,"สิทธิ์ E":1344.75,"อื่นๆ":738.4}},{"date":"2026-07-09","rev":25793.4,"bills":21,"prod":{"บริการ A-1":2297.68,"บริการ A-2":4187.08,"บริการ B-1":2403.61,"บริการ B-2":1893.68,"บริการ C-1":3707.32,"บริการ C-2":4060.63,"บริการ D-1":4552.94,"บริการ E-1":2690.46},"qty":{"บริการ A-1":4,"บริการ A-2":15,"บริการ B-1":7,"บริการ B-2":5,"บริการ C-1":4,"บริการ C-2":12,"บริการ D-1":14,"บริการ E-1":5},"right":{"สิทธิ์ A":6346.11,"สิทธิ์ B":7883.36,"สิทธิ์ C":4826.72,"สิทธิ์ D":3643.56,"สิทธิ์ E":1918.68,"อื่นๆ":1174.97}},{"date":"2026-07-10","rev":32390.45,"bills":39,"prod":{"บริการ A-1":5580.81,"บริการ A-2":5640.96,"บริการ B-1":2691.38,"บริการ B-2":4793.02,"บริการ C-1":3067.77,"บริการ C-2":3816.19,"บริการ D-1":2273.98,"บริการ E-1":4526.34},"qty":{"บริการ A-1":9,"บริการ A-2":15,"บริการ B-1":7,"บริการ B-2":6,"บริการ C-1":4,"บริการ C-2":7,"บริการ D-1":3,"บริการ E-1":5},"right":{"สิทธิ์ A":10195.33,"สิทธิ์ B":8934.58,"สิทธิ์ C":5125.99,"สิทธิ์ D":4372.72,"สิทธิ์ E":2273.27,"อื่นๆ":1488.55}},{"date":"2026-07-11","rev":19161.99,"bills":22,"prod":{"บริการ A-1":1870.83,"บริการ A-2":1973.66,"บริการ B-1":3942.8,"บริการ B-2":1743.06,"บริการ C-1":2894.31,"บริการ C-2":1951.62,"บริการ D-1":2361.54,"บริการ E-1":2424.17},"qty":{"บริการ A-1":5,"บริการ A-2":3,"บริการ B-1":10,"บริการ B-2":6,"บริการ C-1":5,"บริการ C-2":3,"บริการ D-1":3,"บริการ E-1":3},"right":{"สิทธิ์ A":5898.31,"สิทธิ์ B":5133.78,"สิทธิ์ C":3463.72,"สิทธิ์ D":2061.49,"สิทธิ์ E":1581.94,"อื่นๆ":1022.76}},{"date":"2026-07-12","rev":18033.57,"bills":23,"prod":{"บริการ A-1":1993.92,"บริการ A-2":1901.75,"บริการ B-1":2895.4,"บริการ B-2":1258.7,"บริการ C-1":2750.41,"บริการ C-2":3061.91,"บริการ D-1":2888.72,"บริการ E-1":1282.76},"qty":{"บริการ A-1":4,"บริการ A-2":6,"บริการ B-1":4,"บริการ B-2":3,"บริการ C-1":4,"บริการ C-2":5,"บริการ D-1":5,"บริการ E-1":2},"right":{"สิทธิ์ A":5201.85,"สิทธิ์ B":4509.83,"สิทธิ์ C":3231.67,"สิทธิ์ D":2714.87,"สิทธิ์ E":1467.36,"อื่นๆ":907.99}},{"date":"2026-07-13","rev":30297.82,"bills":28,"prod":{"บริการ A-1":4452.44,"บริการ A-2":3748.84,"บริการ B-1":3303.21,"บริการ B-2":3833.89,"บริการ C-1":5199.11,"บริการ C-2":3475.84,"บริการ D-1":3999.26,"บริการ E-1":2285.23},"qty":{"บริการ A-1":5,"บริการ A-2":5,"บริการ B-1":9,"บริการ B-2":11,"บริการ C-1":8,"บริการ C-2":7,"บริการ D-1":7,"บริการ E-1":3},"right":{"สิทธิ์ A":8772.01,"สิทธิ์ B":7415.31,"สิทธิ์ C":6617.6,"สิทธิ์ D":3264.62,"สิทธิ์ E":2770.54,"อื่นๆ":1457.74}},{"date":"2026-07-14","rev":25848.99,"bills":22,"prod":{"บริการ A-1":2724.02,"บริการ A-2":2650.25,"บริการ B-1":3573.23,"บริการ B-2":4655.11,"บริการ C-1":2327.65,"บริการ C-2":3514.41,"บริการ D-1":4144.54,"บริการ E-1":2259.78},"qty":{"บริการ A-1":4,"บริการ A-2":4,"บริการ B-1":6,"บริการ B-2":5,"บริการ C-1":7,"บริการ C-2":4,"บริการ D-1":5,"บริการ E-1":3},"right":{"สิทธิ์ A":7410.06,"สิทธิ์ B":6682.58,"สิทธิ์ C":5134.85,"สิทธิ์ D":2783.09,"สิทธิ์ E":2742.59,"อื่นๆ":1095.82}},{"date":"2026-07-15","rev":21916.11,"bills":19,"prod":{"บริการ A-1":1613.93,"บริการ A-2":1731.91,"บริการ B-1":2946.52,"บริการ B-2":2415.1,"บริการ C-1":3516.86,"บริการ C-2":3851.45,"บริการ D-1":3376.1,"บริการ E-1":2464.24},"qty":{"บริการ A-1":2,"บริการ A-2":3,"บริการ B-1":10,"บริการ B-2":4,"บริการ C-1":4,"บริการ C-2":13,"บริการ D-1":5,"บริการ E-1":6},"right":{"สิทธิ์ A":6613.19,"สิทธิ์ B":5314.16,"สิทธิ์ C":4135.42,"สิทธิ์ D":2438.16,"สิทธิ์ E":2130.96,"อื่นๆ":1284.22}},{"date":"2026-07-16","rev":21705.95,"bills":25,"prod":{"บริการ A-1":2145.36,"บริการ A-2":1999.81,"บริการ B-1":2559.65,"บริการ B-2":3597.1,"บริการ C-1":2565.85,"บริการ C-2":2094.22,"บริการ D-1":3474.65,"บริการ E-1":3269.31},"qty":{"บริการ A-1":7,"บริการ A-2":3,"บริการ B-1":5,"บริการ B-2":6,"บริการ C-1":3,"บริการ C-2":3,"บริการ D-1":7,"บริการ E-1":9},"right":{"สิทธิ์ A":6731.44,"สิทธิ์ B":5192.85,"สิทธิ์ C":4272.8,"สิทธิ์ D":2721.63,"สิทธิ์ E":1485.96,"อื่นๆ":1301.27}},{"date":"2026-07-17","rev":28597.5,"bills":36,"prod":{"บริการ A-1":2967.05,"บริการ A-2":4061.84,"บริการ B-1":3506.56,"บริการ B-2":2080.58,"บริการ C-1":4429.61,"บริการ C-2":4691.56,"บริการ D-1":4852.4,"บริการ E-1":2007.9},"qty":{"บริการ A-1":10,"บริการ A-2":9,"บริการ B-1":4,"บริการ B-2":3,"บริการ C-1":6,"บริการ C-2":6,"บริการ D-1":8,"บริการ E-1":3},"right":{"สิทธิ์ A":9810.23,"สิทธิ์ B":5932.1,"สิทธิ์ C":4619.78,"สิทธิ์ D":3490.62,"สิทธิ์ E":3015.45,"อื่นๆ":1729.32}},{"date":"2026-07-18","rev":17527.45,"bills":17,"prod":{"บริการ A-1":2089.23,"บริการ A-2":2014.88,"บริการ B-1":1321.69,"บริการ B-2":2757.64,"บริการ C-1":2082.57,"บริการ C-2":2707.14,"บริการ D-1":2870.88,"บริการ E-1":1683.42},"qty":{"บริการ A-1":4,"บริการ A-2":3,"บริการ B-1":2,"บริการ B-2":6,"บริการ C-1":3,"บริการ C-2":7,"บริการ D-1":4,"บริการ E-1":5},"right":{"สิทธิ์ A":4673.95,"สิทธิ์ B":4907.23,"สิทธิ์ C":2686.55,"สิทธิ์ D":2522.67,"สิทธิ์ E":1862.87,"อื่นๆ":874.17}},{"date":"2026-07-19","rev":15886.86,"bills":13,"prod":{"บริการ A-1":2808.57,"บริการ A-2":2036.91,"บริการ B-1":1256.04,"บริการ B-2":2339.72,"บริการ C-1":2488.28,"บริการ C-2":2059.09,"บริการ D-1":1304.1,"บริการ E-1":1594.15},"qty":{"บริการ A-1":5,"บริการ A-2":5,"บริการ B-1":5,"บริการ B-2":3,"บริการ C-1":5,"บริการ C-2":4,"บริการ D-1":3,"บริการ E-1":3},"right":{"สิทธิ์ A":4138.67,"สิทธิ์ B":3837.15,"สิทธิ์ C":3374.23,"สิทธิ์ D":2328.99,"สิทธิ์ E":1556.19,"อื่นๆ":651.64}},{"date":"2026-07-20","rev":31038.1,"bills":36,"prod":{"บริการ A-1":3377.72,"บริการ A-2":3577.49,"บริการ B-1":3268.3,"บริการ B-2":3394.72,"บริการ C-1":4621.65,"บริการ C-2":2890.96,"บริการ D-1":4428.91,"บริการ E-1":5478.35},"qty":{"บริการ A-1":7,"บริการ A-2":7,"บริการ B-1":6,"บริการ B-2":7,"บริการ C-1":15,"บริการ C-2":8,"บริการ D-1":10,"บริการ E-1":7},"right":{"สิทธิ์ A":9068.18,"สิทธิ์ B":6868.31,"สิทธิ์ C":6040.07,"สิทธิ์ D":4284.9,"สิทธิ์ E":3068.08,"อื่นๆ":1708.55}},{"date":"2026-07-21","rev":23895.3,"bills":29,"prod":{"บริการ A-1":3776.75,"บริการ A-2":3950.37,"บริการ B-1":2940.11,"บริการ B-2":1790.4,"บริการ C-1":3728.57,"บริการ C-2":2061.84,"บริการ D-1":2311.06,"บริการ E-1":3336.2},"qty":{"บริการ A-1":5,"บริการ A-2":8,"บริการ B-1":4,"บริการ B-2":3,"บริการ C-1":10,"บริการ C-2":2,"บริการ D-1":3,"บริการ E-1":11},"right":{"สิทธิ์ A":7456.51,"สิทธิ์ B":5829.33,"สิทธิ์ C":4253.64,"สิทธิ์ D":3261.93,"สิทธิ์ E":1707.54,"อื่นๆ":1386.34}},{"date":"2026-07-22","rev":21573.74,"bills":27,"prod":{"บริการ A-1":2655.73,"บริการ A-2":1666.79,"บริการ B-1":3599.66,"บริการ B-2":3124.49,"บริการ C-1":1714.89,"บริการ C-2":3207.76,"บริการ D-1":2330.02,"บริการ E-1":3274.4},"qty":{"บริการ A-1":4,"บริการ A-2":5,"บริการ B-1":6,"บริการ B-2":6,"บริการ C-1":5,"บริการ C-2":6,"บริการ D-1":3,"บริการ E-1":10},"right":{"สิทธิ์ A":5939.27,"สิทธิ์ B":6342.58,"สิทธิ์ C":4023.33,"สิทธิ์ D":2696.89,"สิทธิ์ E":1711.4,"อื่นๆ":860.27}},{"date":"2026-07-23","rev":27071.98,"bills":36,"prod":{"บริการ A-1":2730.09,"บริการ A-2":2279.67,"บริการ B-1":3536.49,"บริการ B-2":3214.97,"บริการ C-1":3549.66,"บริการ C-2":4538.05,"บริการ D-1":4048.5,"บริการ E-1":3174.55},"qty":{"บริการ A-1":3,"บริการ A-2":3,"บริการ B-1":5,"บริการ B-2":8,"บริการ C-1":13,"บริการ C-2":11,"บริการ D-1":9,"บริการ E-1":5},"right":{"สิทธิ์ A":8752.62,"สิทธิ์ B":6694.75,"สิทธิ์ C":5714.55,"สิทธิ์ D":2431.32,"สิทธิ์ E":2247.83,"อื่นๆ":1230.9}},{"date":"2026-07-24","rev":32325.77,"bills":27,"prod":{"บริการ A-1":2988.61,"บริการ A-2":4743.71,"บริการ B-1":5688.8,"บริการ B-2":3801.67,"บริการ C-1":2627.6,"บริการ C-2":5025.36,"บริการ D-1":2638.78,"บริการ E-1":4811.24},"qty":{"บริการ A-1":3,"บริการ A-2":6,"บริการ B-1":10,"บริการ B-2":6,"บริการ C-1":3,"บริการ C-2":10,"บริการ D-1":4,"บริการ E-1":11},"right":{"สิทธิ์ A":10262.97,"สิทธิ์ B":6379.41,"สิทธิ์ C":6015.41,"สิทธิ์ D":4469.02,"สิทธิ์ E":3632.78,"อื่นๆ":1566.17}},{"date":"2026-07-25","rev":18084.53,"bills":19,"prod":{"บริการ A-1":2896.94,"บริการ A-2":1289.07,"บริการ B-1":2284.02,"บริการ B-2":1255.16,"บริการ C-1":2204.69,"บริการ C-2":2124.4,"บริการ D-1":3208.71,"บริการ E-1":2821.54},"qty":{"บริการ A-1":8,"บริการ A-2":1,"บริการ B-1":5,"บริการ B-2":2,"บริการ C-1":7,"บริการ C-2":7,"บริการ D-1":5,"บริการ E-1":8},"right":{"สิทธิ์ A":4651.99,"สิทธิ์ B":4507.98,"สิทธิ์ C":3199.51,"สิทธิ์ D":2761.14,"สิทธิ์ E":1833.58,"อื่นๆ":1130.35}},{"date":"2026-07-26","rev":17502.38,"bills":23,"prod":{"บริการ A-1":2145.01,"บริการ A-2":1654.79,"บริการ B-1":2592.23,"บริการ B-2":2001.25,"บริการ C-1":2268.04,"บริการ C-2":1673.93,"บริการ D-1":2547.83,"บริการ E-1":2619.3},"qty":{"บริการ A-1":2,"บริการ A-2":4,"บริการ B-1":8,"บริการ B-2":3,"บริการ C-1":4,"บริการ C-2":3,"บริการ D-1":6,"บริการ E-1":5},"right":{"สิทธิ์ A":5114.37,"สิทธิ์ B":4143.25,"สิทธิ์ C":3305.44,"สิทธิ์ D":2285.22,"สิทธิ์ E":1758.82,"อื่นๆ":895.28}},{"date":"2026-07-27","rev":31261.71,"bills":30,"prod":{"บริการ A-1":4141.16,"บริการ A-2":4205.32,"บริการ B-1":3841.81,"บริการ B-2":3699.45,"บริการ C-1":3759.38,"บริการ C-2":4461.55,"บริการ D-1":3385.76,"บริการ E-1":3767.28},"qty":{"บริการ A-1":5,"บริการ A-2":7,"บริการ B-1":5,"บริการ B-2":5,"บริการ C-1":14,"บริการ C-2":5,"บริการ D-1":7,"บริการ E-1":4},"right":{"สิทธิ์ A":8194.7,"สิทธิ์ B":9457.25,"สิทธิ์ C":5460.7,"สิทธิ์ D":3610.76,"สิทธิ์ E":2760.17,"อื่นๆ":1778.13}},{"date":"2026-07-28","rev":28152.52,"bills":37,"prod":{"บริการ A-1":5311.03,"บริการ A-2":3327.41,"บริการ B-1":3991.74,"บริการ B-2":3502.78,"บริการ C-1":2922.35,"บริการ C-2":3842.65,"บริการ D-1":2371.17,"บริการ E-1":2883.39},"qty":{"บริการ A-1":16,"บริการ A-2":5,"บริการ B-1":13,"บริการ B-2":5,"บริการ C-1":10,"บริการ C-2":9,"บริการ D-1":4,"บริการ E-1":7},"right":{"สิทธิ์ A":9398.2,"สิทธิ์ B":5724.65,"สิทธิ์ C":5368.03,"สิทธิ์ D":3006.39,"สิทธิ์ E":2914.72,"อื่นๆ":1740.52}},{"date":"2026-07-29","rev":21988.76,"bills":26,"prod":{"บริการ A-1":1940.56,"บริการ A-2":2534.02,"บริการ B-1":2672.47,"บริการ B-2":3316.2,"บริการ C-1":3367.74,"บริการ C-2":2204.92,"บริการ D-1":2153.67,"บริการ E-1":3799.18},"qty":{"บริการ A-1":4,"บริการ A-2":4,"บริการ B-1":5,"บริการ B-2":10,"บริการ C-1":13,"บริการ C-2":3,"บริการ D-1":5,"บริการ E-1":5},"right":{"สิทธิ์ A":5737.09,"สิทธิ์ B":6533.61,"สิทธิ์ C":4219.29,"สิทธิ์ D":2453.56,"สิทธิ์ E":1756.99,"อื่นๆ":1288.23}},{"date":"2026-07-30","rev":30352.79,"bills":32,"prod":{"บริการ A-1":4936.56,"บริการ A-2":3312.72,"บริการ B-1":2858.08,"บริการ B-2":2565.23,"บริการ C-1":3610.66,"บริการ C-2":3635.25,"บริการ D-1":3014.06,"บริการ E-1":6420.23},"qty":{"บริการ A-1":6,"บริการ A-2":4,"บริการ B-1":3,"บริการ B-2":4,"บริการ C-1":4,"บริการ C-2":6,"บริการ D-1":8,"บริการ E-1":10},"right":{"สิทธิ์ A":7083.95,"สิทธิ์ B":8308.16,"สิทธิ์ C":7664.77,"สิทธิ์ D":3598.13,"สิทธิ์ E":2491.96,"อื่นๆ":1205.82}},{"date":"2026-07-31","rev":25604.36,"bills":31,"prod":{"บริการ A-1":4344.78,"บริการ A-2":2740.55,"บริการ B-1":2840.02,"บริการ B-2":5002.78,"บริการ C-1":3817.58,"บริการ C-2":2551.38,"บริการ D-1":2179.66,"บริการ E-1":2127.61},"qty":{"บริการ A-1":17,"บริการ A-2":7,"บริการ B-1":4,"บริการ B-2":9,"บริการ C-1":6,"บริการ C-2":4,"บริการ D-1":4,"บริการ E-1":3},"right":{"สิทธิ์ A":8163.51,"สิทธิ์ B":7061.98,"สิทธิ์ C":3806.11,"สิทธิ์ D":2423.29,"สิทธิ์ E":2756.48,"อื่นๆ":1392.99}},{"date":"2026-08-01","rev":24271.7,"bills":28,"prod":{"บริการ A-1":3185.54,"บริการ A-2":3801.87,"บริการ B-1":3356.65,"บริการ B-2":3289.85,"บริการ C-1":2848.51,"บริการ C-2":2832.14,"บริการ D-1":3209.55,"บริการ E-1":1747.59},"qty":{"บริการ A-1":5,"บริการ A-2":15,"บริการ B-1":4,"บริการ B-2":4,"บริการ C-1":3,"บริการ C-2":3,"บริการ D-1":11,"บริการ E-1":3},"right":{"สิทธิ์ A":6608.73,"สิทธิ์ B":6818.51,"สิทธิ์ C":4138.3,"สิทธิ์ D":3214.64,"สิทธิ์ E":1962.55,"อื่นๆ":1528.96}},{"date":"2026-08-02","rev":15494.13,"bills":17,"prod":{"บริการ A-1":1555.95,"บริการ A-2":2331.88,"บริการ B-1":2113.09,"บริการ B-2":1772.32,"บริการ C-1":1013.1,"บริการ C-2":2227.85,"บริการ D-1":2248.2,"บริการ E-1":2231.74},"qty":{"บริการ A-1":5,"บริการ A-2":3,"บริการ B-1":3,"บริการ B-2":2,"บริการ C-1":3,"บริการ C-2":4,"บริการ D-1":7,"บริการ E-1":3},"right":{"สิทธิ์ A":3838.43,"สิทธิ์ B":4250.1,"สิทธิ์ C":3243.95,"สิทธิ์ D":1588.44,"สิทธิ์ E":1579.02,"อื่นๆ":994.2}},{"date":"2026-08-03","rev":29686.23,"bills":26,"prod":{"บริการ A-1":4170.74,"บริการ A-2":3308.16,"บริการ B-1":3833.25,"บริการ B-2":4708.29,"บริการ C-1":3254.57,"บริการ C-2":4161.0,"บริการ D-1":3697.08,"บริการ E-1":2553.14},"qty":{"บริการ A-1":7,"บริการ A-2":4,"บริการ B-1":5,"บริการ B-2":5,"บริการ C-1":12,"บริการ C-2":16,"บริการ D-1":6,"บริการ E-1":4},"right":{"สิทธิ์ A":8239.09,"สิทธิ์ B":7225.87,"สิทธิ์ C":6173.06,"สิทธิ์ D":3503.75,"สิทธิ์ E":2920.87,"อื่นๆ":1623.6}},{"date":"2026-08-04","rev":28455.92,"bills":33,"prod":{"บริการ A-1":3829.75,"บริการ A-2":3091.25,"บริการ B-1":3920.06,"บริการ B-2":3582.82,"บริการ C-1":3742.57,"บริการ C-2":3741.57,"บริการ D-1":3722.49,"บริการ E-1":2825.41},"qty":{"บริการ A-1":6,"บริการ A-2":7,"บริการ B-1":6,"บริการ B-2":6,"บริการ C-1":5,"บริการ C-2":5,"บริการ D-1":9,"บริการ E-1":7},"right":{"สิทธิ์ A":7624.42,"สิทธิ์ B":7822.51,"สิทธิ์ C":6026.98,"สิทธิ์ D":3884.06,"สิทธิ์ E":2054.64,"อื่นๆ":1043.32}},{"date":"2026-08-05","rev":21258.34,"bills":17,"prod":{"บริการ A-1":2179.73,"บริการ A-2":2845.86,"บริการ B-1":1512.6,"บริการ B-2":3289.59,"บริการ C-1":2558.55,"บริการ C-2":3476.91,"บริการ D-1":2869.14,"บริการ E-1":2525.96},"qty":{"บริการ A-1":4,"บริการ A-2":7,"บริการ B-1":3,"บริการ B-2":7,"บริการ C-1":3,"บริการ C-2":5,"บริการ D-1":6,"บริการ E-1":4},"right":{"สิทธิ์ A":5424.71,"สิทธิ์ B":5633.74,"สิทธิ์ C":4021.71,"สิทธิ์ D":3145.32,"สิทธิ์ E":1722.5,"อื่นๆ":1310.36}},{"date":"2026-08-06","rev":30827.03,"bills":26,"prod":{"บริการ A-1":5010.6,"บริการ A-2":3654.58,"บริการ B-1":3820.36,"บริการ B-2":5318.98,"บริการ C-1":2873.56,"บริการ C-2":3936.05,"บริการ D-1":2422.49,"บริการ E-1":3790.41},"qty":{"บริการ A-1":11,"บริการ A-2":6,"บริการ B-1":10,"บริการ B-2":12,"บริการ C-1":9,"บริการ C-2":6,"บริการ D-1":4,"บริการ E-1":6},"right":{"สิทธิ์ A":10561.85,"สิทธิ์ B":5632.64,"สิทธิ์ C":6542.49,"สิทธิ์ D":2787.24,"สิทธิ์ E":3381.74,"อื่นๆ":1921.09}},{"date":"2026-08-07","rev":31250.77,"bills":27,"prod":{"บริการ A-1":3769.1,"บริการ A-2":4014.71,"บริการ B-1":5119.86,"บริการ B-2":2414.75,"บริการ C-1":5396.65,"บริการ C-2":3074.5,"บริการ D-1":4777.31,"บริการ E-1":2683.89},"qty":{"บริการ A-1":7,"บริการ A-2":5,"บริการ B-1":18,"บริการ B-2":4,"บริการ C-1":18,"บริการ C-2":10,"บริการ D-1":7,"บริการ E-1":5},"right":{"สิทธิ์ A":11507.13,"สิทธิ์ B":5592.85,"สิทธิ์ C":6200.75,"สิทธิ์ D":4081.59,"สิทธิ์ E":2655.38,"อื่นๆ":1213.07}},{"date":"2026-08-08","rev":22153.75,"bills":21,"prod":{"บริการ A-1":1641.26,"บริการ A-2":3321.53,"บริการ B-1":1859.09,"บริการ B-2":2656.78,"บริการ C-1":1823.63,"บริการ C-2":4078.79,"บริการ D-1":3215.29,"บริการ E-1":3557.38},"qty":{"บริการ A-1":4,"บริการ A-2":4,"บริการ B-1":3,"บริการ B-2":4,"บริการ C-1":3,"บริการ C-2":12,"บริการ D-1":5,"บริการ E-1":5},"right":{"สิทธิ์ A":7656.56,"สิทธิ์ B":4444.47,"สิทธิ์ C":4155.58,"สิทธิ์ D":3088.4,"สิทธิ์ E":1845.6,"อื่นๆ":963.13}},{"date":"2026-08-09","rev":13630.8,"bills":14,"prod":{"บริการ A-1":2265.24,"บริการ A-2":2201.36,"บริการ B-1":1318.6,"บริการ B-2":2394.19,"บริการ C-1":1045.93,"บริการ C-2":1045.25,"บริการ D-1":1047.47,"บริการ E-1":2312.76},"qty":{"บริการ A-1":3,"บริการ A-2":3,"บริการ B-1":1,"บริการ B-2":3,"บริการ C-1":2,"บริการ C-2":2,"บริการ D-1":1,"บริการ E-1":3},"right":{"สิทธิ์ A":3603.57,"สิทธิ์ B":4184.52,"สิทธิ์ C":2772.32,"สิทธิ์ D":1390.61,"สิทธิ์ E":1104.55,"อื่นๆ":575.22}},{"date":"2026-08-10","rev":27358.43,"bills":34,"prod":{"บริการ A-1":3081.27,"บริการ A-2":3507.02,"บริการ B-1":2336.57,"บริการ B-2":2266.37,"บริการ C-1":4920.33,"บริการ C-2":4309.25,"บริการ D-1":4661.3,"บริการ E-1":2276.32},"qty":{"บริการ A-1":5,"บริการ A-2":6,"บริการ B-1":3,"บริการ B-2":3,"บริการ C-1":14,"บริการ C-2":16,"บริการ D-1":15,"บริการ E-1":4},"right":{"สิทธิ์ A":7722.55,"สิทธิ์ B":6993.19,"สิทธิ์ C":5461.87,"สิทธิ์ D":3442.0,"สิทธิ์ E":2741.37,"อื่นๆ":997.45}},{"date":"2026-08-11","rev":23576.8,"bills":20,"prod":{"บริการ A-1":3272.39,"บริการ A-2":3517.64,"บริการ B-1":2767.94,"บริการ B-2":2561.33,"บริการ C-1":2490.91,"บริการ C-2":1942.96,"บริการ D-1":3853.83,"บริการ E-1":3169.8},"qty":{"บริการ A-1":4,"บริการ A-2":8,"บริการ B-1":6,"บริการ B-2":6,"บริการ C-1":7,"บริการ C-2":2,"บริการ D-1":13,"บริการ E-1":10},"right":{"สิทธิ์ A":5460.98,"สิทธิ์ B":6658.28,"สิทธิ์ C":5180.05,"สิทธิ์ D":2593.01,"สิทธิ์ E":2600.33,"อื่นๆ":1084.16}},{"date":"2026-08-12","rev":23768.04,"bills":20,"prod":{"บริการ A-1":4311.43,"บริการ A-2":2685.97,"บริการ B-1":4570.53,"บริการ B-2":1907.84,"บริการ C-1":2773.96,"บริการ C-2":3037.14,"บริการ D-1":2293.63,"บริการ E-1":2187.54},"qty":{"บริการ A-1":8,"บริการ A-2":3,"บริการ B-1":9,"บริการ B-2":2,"บริการ C-1":5,"บริการ C-2":4,"บริการ D-1":6,"บริการ E-1":3},"right":{"สิทธิ์ A":5506.42,"สิทธิ์ B":6409.82,"สิทธิ์ C":6053.66,"สิทธิ์ D":2462.35,"สิทธิ์ E":2407.41,"อื่นๆ":928.37}},{"date":"2026-08-13","rev":30484.66,"bills":27,"prod":{"บริการ A-1":2389.71,"บริการ A-2":3157.55,"บริการ B-1":4976.84,"บริการ B-2":3950.48,"บริการ C-1":4002.05,"บริการ C-2":4991.66,"บริการ D-1":2422.5,"บริการ E-1":4593.87},"qty":{"บริการ A-1":4,"บริการ A-2":4,"บริการ B-1":9,"บริการ B-2":6,"บริการ C-1":10,"บริการ C-2":12,"บริการ D-1":3,"บริการ E-1":9},"right":{"สิทธิ์ A":8188.57,"สิทธิ์ B":6634.14,"สิทธิ์ C":7879.5,"สิทธิ์ D":3792.64,"สิทธิ์ E":2618.22,"อื่นๆ":1371.6}},{"date":"2026-08-14","rev":24929.74,"bills":24,"prod":{"บริการ A-1":3689.64,"บริการ A-2":3266.73,"บริการ B-1":1944.64,"บริการ B-2":4345.15,"บริการ C-1":3934.83,"บริการ C-2":2979.61,"บริการ D-1":2768.12,"บริการ E-1":2001.02},"qty":{"บริการ A-1":7,"บริการ A-2":12,"บริการ B-1":6,"บริการ B-2":7,"บริการ C-1":10,"บริการ C-2":4,"บริการ D-1":9,"บริการ E-1":5},"right":{"สิทธิ์ A":6920.97,"สิทธิ์ B":6380.87,"สิทธิ์ C":5507.66,"สิทธิ์ D":2656.2,"สิทธิ์ E":2562.68,"อื่นๆ":901.36}},{"date":"2026-08-15","rev":20207.44,"bills":20,"prod":{"บริการ A-1":2887.61,"บริการ A-2":1745.57,"บริการ B-1":2232.77,"บริการ B-2":2372.08,"บริการ C-1":2933.0,"บริการ C-2":3619.02,"บริการ D-1":2617.72,"บริการ E-1":1799.67},"qty":{"บริการ A-1":4,"บริการ A-2":3,"บริการ B-1":3,"บริการ B-2":5,"บริการ C-1":4,"บริการ C-2":4,"บริการ D-1":4,"บริการ E-1":3},"right":{"สิทธิ์ A":5411.05,"สิทธิ์ B":5127.65,"สิทธิ์ C":3780.3,"สิทธิ์ D":2501.82,"สิทธิ์ E":2297.93,"อื่นๆ":1088.69}},{"date":"2026-08-16","rev":16446.88,"bills":15,"prod":{"บริการ A-1":1933.21,"บริการ A-2":2491.5,"บริการ B-1":2273.68,"บริการ B-2":2747.77,"บริการ C-1":1391.75,"บริการ C-2":2054.98,"บริการ D-1":2417.83,"บริการ E-1":1136.16},"qty":{"บริการ A-1":3,"บริการ A-2":4,"บริการ B-1":5,"บริการ B-2":5,"บริการ C-1":2,"บริการ C-2":2,"บริการ D-1":3,"บริการ E-1":3},"right":{"สิทธิ์ A":4818.86,"สิทธิ์ B":4752.06,"สิทธิ์ C":2589.75,"สิทธิ์ D":1845.95,"สิทธิ์ E":1753.09,"อื่นๆ":687.18}},{"date":"2026-08-17","rev":25921.74,"bills":22,"prod":{"บริการ A-1":2913.1,"บริการ A-2":2277.63,"บริการ B-1":1876.24,"บริการ B-2":4218.32,"บริการ C-1":2096.67,"บริการ C-2":4288.31,"บริการ D-1":3840.47,"บริการ E-1":4411.0},"qty":{"บริการ A-1":8,"บริการ A-2":6,"บริการ B-1":4,"บริการ B-2":6,"บริการ C-1":5,"บริการ C-2":7,"บริการ D-1":9,"บริการ E-1":6},"right":{"สิทธิ์ A":6326.3,"สิทธิ์ B":5812.59,"สิทธิ์ C":5963.2,"สิทธิ์ D":4220.73,"สิทธิ์ E":2350.27,"อื่นๆ":1248.65}},{"date":"2026-08-18","rev":25333.24,"bills":25,"prod":{"บริการ A-1":2450.49,"บริการ A-2":4365.1,"บริการ B-1":3722.65,"บริการ B-2":3457.96,"บริการ C-1":2297.94,"บริการ C-2":2121.26,"บริการ D-1":2565.25,"บริการ E-1":4352.59},"qty":{"บริการ A-1":3,"บริการ A-2":13,"บริการ B-1":11,"บริการ B-2":4,"บริการ C-1":4,"บริการ C-2":3,"บริการ D-1":6,"บริการ E-1":13},"right":{"สิทธิ์ A":8705.09,"สิทธิ์ B":4855.34,"สิทธิ์ C":5188.45,"สิทธิ์ D":2900.24,"สิทธิ์ E":2227.15,"อื่นๆ":1456.96}},{"date":"2026-08-19","rev":27771.57,"bills":30,"prod":{"บริการ A-1":2032.9,"บริการ A-2":3349.07,"บริการ B-1":4223.04,"บริการ B-2":3287.13,"บริการ C-1":4181.96,"บริการ C-2":4855.13,"บริการ D-1":2327.85,"บริการ E-1":3514.49},"qty":{"บริการ A-1":3,"บริการ A-2":11,"บริการ B-1":7,"บริการ B-2":7,"บริการ C-1":8,"บริการ C-2":6,"บริการ D-1":6,"บริการ E-1":7},"right":{"สิทธิ์ A":6847.07,"สิทธิ์ B":7356.82,"สิทธิ์ C":6027.33,"สิทธิ์ D":3987.79,"สิทธิ์ E":2428.59,"อื่นๆ":1123.97}},{"date":"2026-08-20","rev":28342.42,"bills":25,"prod":{"บริการ A-1":4855.86,"บริการ A-2":2192.31,"บริการ B-1":2803.72,"บริการ B-2":4108.12,"บริการ C-1":3632.48,"บริการ C-2":5212.16,"บริการ D-1":2973.24,"บริการ E-1":2564.53},"qty":{"บริการ A-1":15,"บริการ A-2":6,"บริการ B-1":9,"บริการ B-2":11,"บริการ C-1":5,"บริการ C-2":11,"บริการ D-1":4,"บริการ E-1":4},"right":{"สิทธิ์ A":9272.97,"สิทธิ์ B":6149.06,"สิทธิ์ C":6656.34,"สิทธิ์ D":2742.67,"สิทธิ์ E":1862.77,"อื่นๆ":1658.58}},{"date":"2026-08-21","rev":30186.27,"bills":38,"prod":{"บริการ A-1":2868.49,"บริการ A-2":5568.5,"บริการ B-1":2639.47,"บริการ B-2":3299.64,"บริการ C-1":2860.75,"บริการ C-2":4216.14,"บริการ D-1":4979.59,"บริการ E-1":3753.69},"qty":{"บริการ A-1":3,"บริการ A-2":7,"บริการ B-1":5,"บริการ B-2":7,"บริการ C-1":4,"บริการ C-2":7,"บริการ D-1":13,"บริการ E-1":14},"right":{"สิทธิ์ A":7501.33,"สิทธิ์ B":7570.25,"สิทธิ์ C":6761.43,"สิทธิ์ D":4034.91,"สิทธิ์ E":3113.15,"อื่นๆ":1205.2}},{"date":"2026-08-22","rev":25899.55,"bills":27,"prod":{"บริการ A-1":4087.52,"บริการ A-2":3533.78,"บริการ B-1":2669.18,"บริการ B-2":2194.89,"บริการ C-1":2290.24,"บริการ C-2":4873.86,"บริการ D-1":2128.42,"บริการ E-1":4121.66},"qty":{"บริการ A-1":8,"บริการ A-2":4,"บริการ B-1":3,"บริการ B-2":3,"บริการ C-1":3,"บริการ C-2":13,"บริการ D-1":3,"บริการ E-1":5},"right":{"สิทธิ์ A":7459.75,"สิทธิ์ B":5195.48,"สิทธิ์ C":6117.14,"สิทธิ์ D":3778.56,"สิทธิ์ E":2030.68,"อื่นๆ":1317.95}},{"date":"2026-08-23","rev":14463.51,"bills":16,"prod":{"บริการ A-1":2086.85,"บริการ A-2":1347.61,"บริการ B-1":1569.1,"บริการ B-2":2448.51,"บริการ C-1":1828.86,"บริการ C-2":1291.69,"บริการ D-1":1954.83,"บริการ E-1":1936.06},"qty":{"บริการ A-1":5,"บริการ A-2":3,"บริการ B-1":3,"บริการ B-2":3,"บริการ C-1":4,"บริการ C-2":2,"บริการ D-1":2,"บริการ E-1":3},"right":{"สิทธิ์ A":4625.36,"สิทธิ์ B":3257.8,"สิทธิ์ C":3277.47,"สิทธิ์ D":1563.11,"สิทธิ์ E":954.86,"อื่นๆ":784.91}},{"date":"2026-08-24","rev":26369.84,"bills":29,"prod":{"บริการ A-1":3479.86,"บริการ A-2":3938.27,"บริการ B-1":2257.47,"บริการ B-2":3881.03,"บริการ C-1":2511.3,"บริการ C-2":3918.21,"บริการ D-1":3248.41,"บริการ E-1":3135.29},"qty":{"บริการ A-1":13,"บริการ A-2":13,"บริการ B-1":3,"บริการ B-2":10,"บริการ C-1":4,"บริการ C-2":5,"บริการ D-1":6,"บริการ E-1":5},"right":{"สิทธิ์ A":6163.23,"สิทธิ์ B":7316.72,"สิทธิ์ C":5995.08,"สิทธิ์ D":3103.2,"สิทธิ์ E":2121.09,"อื่นๆ":1670.51}},{"date":"2026-08-25","rev":24533.21,"bills":27,"prod":{"บริการ A-1":4114.34,"บริการ A-2":2521.79,"บริการ B-1":3789.84,"บริการ B-2":3817.73,"บริการ C-1":2047.3,"บริการ C-2":2693.3,"บริการ D-1":2019.06,"บริการ E-1":3529.85},"qty":{"บริการ A-1":8,"บริการ A-2":4,"บริการ B-1":5,"บริการ B-2":13,"บริการ C-1":5,"บริการ C-2":8,"บริการ D-1":4,"บริการ E-1":7},"right":{"สิทธิ์ A":7992.9,"สิทธิ์ B":5569.84,"สิทธิ์ C":4274.18,"สิทธิ์ D":2645.49,"สิทธิ์ E":2567.48,"อื่นๆ":1483.33}},{"date":"2026-08-26","rev":29528.04,"bills":37,"prod":{"บริการ A-1":4076.5,"บริการ A-2":2693.05,"บริการ B-1":2306.47,"บริการ B-2":2527.11,"บริการ C-1":4968.9,"บริการ C-2":4880.91,"บริการ D-1":4893.63,"บริการ E-1":3181.47},"qty":{"บริการ A-1":7,"บริการ A-2":4,"บริการ B-1":3,"บริการ B-2":4,"บริการ C-1":11,"บริการ C-2":11,"บริการ D-1":7,"บริการ E-1":4},"right":{"สิทธิ์ A":10440.38,"สิทธิ์ B":5962.87,"สิทธิ์ C":5838.62,"สิทธิ์ D":3228.3,"สิทธิ์ E":2969.47,"อื่นๆ":1088.43}},{"date":"2026-08-27","rev":27982.72,"bills":23,"prod":{"บริการ A-1":2144.9,"บริการ A-2":2433.92,"บริการ B-1":2184.18,"บริการ B-2":2843.99,"บริการ C-1":4252.47,"บริการ C-2":4677.61,"บริการ D-1":4699.2,"บริการ E-1":4746.45},"qty":{"บริการ A-1":3,"บริการ A-2":6,"บริการ B-1":5,"บริการ B-2":4,"บริการ C-1":8,"บริการ C-2":8,"บริการ D-1":7,"บริการ E-1":9},"right":{"สิทธิ์ A":8346.2,"สิทธิ์ B":7748.14,"สิทธิ์ C":4288.86,"สิทธิ์ D":3066.09,"สิทธิ์ E":2932.43,"อื่นๆ":1601.0}}],"items":[{"name":"รายการ 039","group":"บริการ E-1","yst":1843.96,"prv":975.95},{"name":"รายการ 001","group":"บริการ C-2","yst":1740.64,"prv":1332.72},{"name":"รายการ 013","group":"บริการ C-1","yst":1660.68,"prv":2855.54},{"name":"รายการ 016","group":"บริการ C-2","yst":1584.56,"prv":1698.52},{"name":"รายการ 005","group":"บริการ E-1","yst":1578.6,"prv":717.1},{"name":"รายการ 019","group":"บริการ D-1","yst":1559.19,"prv":1917.04},{"name":"รายการ 030","group":"บริการ C-1","yst":1442.34,"prv":1600.26},{"name":"รายการ 003","group":"บริการ C-1","yst":1406.32,"prv":1436.92},{"name":"รายการ 014","group":"บริการ C-1","yst":1155.44,"prv":2040.58},{"name":"รายการ 038","group":"บริการ B-2","yst":1059.84,"prv":908.04},{"name":"รายการ 008","group":"บริการ D-1","yst":1058.67,"prv":1142.29},{"name":"รายการ 004","group":"บริการ C-2","yst":986.04,"prv":1567.21},{"name":"รายการ 029","group":"บริการ A-2","yst":942.97,"prv":709.27},{"name":"รายการ 020","group":"บริการ B-2","yst":901.92,"prv":1054.41},{"name":"รายการ 034","group":"บริการ D-1","yst":869.71,"prv":1409.62},{"name":"รายการ 035","group":"บริการ A-1","yst":797.77,"prv":2411.84},{"name":"รายการ 037","group":"บริการ D-1","yst":782.01,"prv":811.71},{"name":"รายการ 032","group":"บริการ B-1","yst":731.46,"prv":670.03},{"name":"รายการ 022","group":"บริการ A-1","yst":720.59,"prv":1678.35},{"name":"รายการ 017","group":"บริการ B-1","yst":635.83,"prv":452.12},{"name":"รายการ 002","group":"บริการ B-2","yst":551.61,"prv":464.86},{"name":"รายการ 028","group":"บริการ C-2","yst":474.39,"prv":353.59},{"name":"รายการ 007","group":"บริการ A-1","yst":462.36,"prv":917.9},{"name":"รายการ 012","group":"บริการ A-2","yst":406.46,"prv":332.7},{"name":"รายการ 015","group":"บริการ A-2","yst":379.8,"prv":386.57}]};
+
+/* ============ theme ============ */
+(function(){
+  const root=document.documentElement, btn=document.getElementById('themeBtn');
+  let saved=null; try{saved=localStorage.getItem('mmt-theme');}catch(e){}
+  if(saved) root.setAttribute('data-theme',saved);
+  const sync=()=>btn.textContent = root.getAttribute('data-theme')==='dark'?'โหมดสว่าง':'โหมดมืด';
+  sync();
+  btn.addEventListener('click',()=>{
+    const t=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',t); try{localStorage.setItem('mmt-theme',t);}catch(e){} sync();
+  });
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+})();
+
+/* ============ helpers ============ */
+const TH_M=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const TH_D=['อา','จ','อ','พ','พฤ','ศ','ส'];
+const P_COLORS=['var(--c1)','var(--c4)','var(--c3)','var(--c6)','var(--c2)','var(--c5)',
+  'color-mix(in srgb,var(--c4) 58%,var(--page))','color-mix(in srgb,var(--c3) 58%,var(--page))'];
+const R_COLORS={'สิทธิ์ A':'var(--c1)','สิทธิ์ B':'var(--c3)','สิทธิ์ C':'var(--c4)',
+  'สิทธิ์ D':'var(--c5)','สิทธิ์ E':'var(--c2)','อื่นๆ':'var(--c6)'};
+const R_LABEL={'สิทธิ์ A':'สิทธิ์ A','สิทธิ์ B':'สิทธิ์ B',
+  'สิทธิ์ C':'สิทธิ์ C','สิทธิ์ D':'สิทธิ์ D',
+  'สิทธิ์ E':'สิทธิ์ E','อื่นๆ':'อื่นๆ'};
+
+const d=s=>new Date(s+'T00:00:00');
+const thDate=s=>{const x=d(s);return x.getDate()+' '+TH_M[x.getMonth()]+' '+(x.getFullYear()+543);};
+const thShort=s=>{const x=d(s);return x.getDate()+'/'+(x.getMonth()+1);};
+const B=n=>(n<0?'-':'')+'฿'+Math.round(Math.abs(n)).toLocaleString('en-US');
+const Bk=n=>{const a=Math.abs(n);
+  if(a>=1e6) return (n<0?'-':'')+'฿'+(a/1e6).toFixed(2)+'ล.';
+  if(a>=1e4) return (n<0?'-':'')+'฿'+(a/1e3).toFixed(0)+'K';
+  return (n<0?'-':'')+'฿'+Math.round(a).toLocaleString('en-US');};
+const pct=n=>(n>0?'+':'')+n.toFixed(1)+'%';
+const cls=n=>n>0.5?'up':(n<-0.5?'down':'flat');
+const arrow=n=>n>0.5?'▲':(n<-0.5?'▼':'—');
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const el=id=>document.getElementById(id);
+
+/* ============ derive ============ */
+const days=DATA.daily, N=days.length;
+const yst=days[N-1], prv=days[N-2];
+const last7=days.slice(N-7), prev7=days.slice(N-14,N-7);
+const avg7=sum(last7.map(r=>r.rev))/7;
+const PRODUCTS=DATA.products, RIGHTS=DATA.rights;
+
+const asof=d(DATA.as_of);
+const mStart=new Date(asof.getFullYear(),asof.getMonth(),1);
+const daysInMonth=new Date(asof.getFullYear(),asof.getMonth()+1,0).getDate();
+const elapsed=asof.getDate(), daysLeft=daysInMonth-elapsed;
+const mtdRows=days.filter(r=>{const x=d(r.date);return x>=mStart&&x<=asof;});
+const MTD=sum(mtdRows.map(r=>r.rev));
+const TARGET=DATA.target;
+const paceAmt=TARGET*elapsed/daysInMonth;
+const attain=MTD/TARGET*100;
+const paceGap=MTD-paceAmt;
+const forecast=MTD/elapsed*daysInMonth;
+const needPerDay=daysLeft>0?Math.max(0,(TARGET-MTD)/daysLeft):0;
+const avgDaily=MTD/elapsed;
+/* หมวดหลัก 5 หมวด */
+const CATS=DATA.categories||[];
+const G2C={}; CATS.forEach(c=>c.groups.forEach(g=>G2C[g]=c.name));
+const CIDX={}; CATS.forEach((c,i)=>CIDX[c.name]=i);
+const C_COLORS=['var(--c1)','var(--c4)','var(--c3)','var(--c2)','var(--c6)'];
+const catRev=(row,c)=>sum(c.groups.map(g=>row.prod[g]||0));
+const catQty=(row,c)=>sum(c.groups.map(g=>row.qty[g]||0));
+const catAgg=(rows,c)=>sum(rows.map(r=>catRev(r,c)));
+const catSeries=c=>days.slice(-30).map(r=>catRev(r,c));
+
+const prodAgg=(rows,p)=>sum(rows.map(r=>r.prod[p]||0));
+const rightAgg=(rows,r0)=>sum(rows.map(r=>r.right[r0]||0));
+
+/* ============ header ============ */
+el('bname').textContent=DATA.branch.name;
+el('bmeta').textContent=DATA.branch.code+' · '+DATA.branch.region;
+el('asof').textContent=thDate(DATA.as_of)+' ('+TH_D[asof.getDay()]+')';
+const sp=el('statusPill');
+sp.className='pill'+(paceGap>=0?'':' warn');
+sp.textContent=(paceGap>=0?'เร็วกว่าจังหวะเป้า ':'ช้ากว่าจังหวะเป้า ')+Bk(Math.abs(paceGap));
+
+/* ============ KPI ============ */
+const dod=(yst.rev-prv.rev)/prv.rev*100;
+const vs7=(yst.rev-avg7)/avg7*100;
+const apc=yst.rev/yst.bills;
+const apc7=sum(last7.map(r=>r.rev))/sum(last7.map(r=>r.bills));
+const apcCh=(apc-apc7)/apc7*100;
+el('kpis').innerHTML=`
+<div class="kpi">
+  <div class="kpi-label">ยอดขายเมื่อวาน</div>
+  <b>${B(yst.rev)}</b>
+  <small>vs เมื่อวานก่อน ${B(prv.rev)}</small>
+  <div class="sub"><span class="delta ${cls(dod)}">${arrow(dod)} ${pct(dod)}</span> วันต่อวัน ·
+    <span class="delta ${cls(vs7)}">${pct(vs7)}</span> vs เฉลี่ย 7 วัน</div>
+</div>
+<div class="kpi">
+  <div class="kpi-label">จำนวนบิล / ยอดต่อบิล</div>
+  <b>${yst.bills.toLocaleString()}<span class="u"> บิล</span></b>
+  <small>${B(apc)} ต่อบิล</small>
+  <div class="sub"><span class="delta ${cls(apcCh)}">${arrow(apcCh)} ${pct(apcCh)}</span> ยอดต่อบิล vs เฉลี่ย 7 วัน</div>
+</div>
+<div class="kpi">
+  <div class="kpi-label">ยอดสะสมเดือนนี้</div>
+  <b>${Bk(MTD)}</b>
+  <small>จากเป้า ${Bk(TARGET)}</small>
+  <div class="sub">ทำได้ <span class="delta ${paceGap>=0?'up':'down'}">${attain.toFixed(1)}%</span>
+    ขณะที่เวลาผ่านไป ${(elapsed/daysInMonth*100).toFixed(0)}%</div>
+</div>
+<div class="kpi">
+  <div class="kpi-label">ต้องทำอีก · เหลือ ${daysLeft} วัน</div>
+  <b>${Bk(Math.max(0,TARGET-MTD))}</b>
+  <small>เฉลี่ยวันละ ${Bk(needPerDay)}</small>
+  <div class="sub">ตอนนี้ทำได้วันละ <span class="delta ${cls(avgDaily-needPerDay)}">${Bk(avgDaily)}</span></div>
+</div>`;
+
+/* ============ target ============ */
+el('monthLabel').textContent='· '+TH_M[asof.getMonth()]+' '+(asof.getFullYear()+543)+' · ผ่านไป '+elapsed+'/'+daysInMonth+' วัน';
+el('track').innerHTML=
+  `<div class="fill" style="width:${Math.min(100,attain)}%"></div>
+   <div class="pct">${attain.toFixed(1)}%</div>
+   <div class="marker" style="left:${Math.min(100,elapsed/daysInMonth*100)}%">
+     <span>จังหวะ ${(elapsed/daysInMonth*100).toFixed(0)}%</span></div>`;
+el('tlegend').innerHTML=`
+  <div class="it"><span class="lbl">เป้าเดือนนี้</span><b>${B(TARGET)}</b></div>
+  <div class="it"><span class="lbl">ทำได้แล้ว</span><b style="color:var(--brand)">${B(MTD)}</b></div>
+  <div class="it"><span class="lbl">ควรทำได้ ณ วันนี้</span><b>${B(paceAmt)}</b></div>
+  <div class="it"><span class="lbl">ส่วนต่างจากจังหวะ</span>
+    <b class="delta ${paceGap>=0?'up':'down'}">${(paceGap>=0?'+':'')+B(paceGap)}</b></div>
+  <div class="it"><span class="lbl">คาดการณ์สิ้นเดือน</span>
+    <b>${B(forecast)}</b>
+    <span class="delta ${cls((forecast-TARGET)/TARGET*100)}" style="font-size:11.5px">${pct((forecast-TARGET)/TARGET*100)} vs เป้า</span></div>`;
+
+/* ============ ตารางหมวด (1 บรรทัด = 1 หมวด) ============ */
+let CMP='d1';
+function baseForCat(c){return CMP==='d1'?catRev(prv,c):catAgg(last7,c)/7;}
+function renderTable(){
+  const rows=CATS.map((c,i)=>{
+    const v=catRev(yst,c), b=baseForCat(c);
+    return {p:c.name, i:CIDX[c.name], v, b, diff:v-b, pc:b>0?(v-b)/b*100:(v>0?100:0), qty:catQty(yst,c)};
+  }).sort((a,b)=>b.v-a.v);
+  const tot=sum(rows.map(r=>r.v)), totB=sum(rows.map(r=>r.b));
+  const mx=Math.max(...rows.map(r=>r.v),1);
+  const baseName=CMP==='d1'?'เมื่อวานก่อน':'เฉลี่ย 7 วัน';
+  el('prodTable').innerHTML=`
+    <thead><tr><th>หมวด</th><th class="num">จำนวน</th><th class="num">ยอดขาย</th>
+      <th class="num">สัดส่วน</th><th class="num">${esc(baseName)}</th><th class="num">ส่วนต่าง</th><th class="num">%</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr>
+      <td><div class="pname"><span class="dot" style="background:${C_COLORS[r.i%C_COLORS.length]}"></span>${esc(r.p)}</div></td>
+      <td class="num">${r.qty.toLocaleString()}</td>
+      <td class="num"><span class="mbar" style="width:${(r.v/mx*44).toFixed(1)}px"></span><b>${B(r.v)}</b></td>
+      <td class="num">${tot?(r.v/tot*100).toFixed(1):'0.0'}%</td>
+      <td class="num" style="color:var(--ink-faint)">${B(r.b)}</td>
+      <td class="num delta ${cls(r.diff)}">${(r.diff>=0?'+':'')+Bk(r.diff)}</td>
+      <td class="num delta ${cls(r.pc)}">${arrow(r.pc)} ${pct(r.pc)}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>รวมทั้งสาขา</td><td class="num">${sum(rows.map(r=>r.qty)).toLocaleString()}</td>
+      <td class="num">${B(tot)}</td><td class="num">100%</td><td class="num">${B(totB)}</td>
+      <td class="num delta ${cls(tot-totB)}">${(tot-totB>=0?'+':'')+Bk(tot-totB)}</td>
+      <td class="num delta ${cls((tot-totB)/totB*100)}">${pct((tot-totB)/totB*100)}</td></tr></tfoot>`;
+  renderContrib(rows,baseName);
+}
+
+/* ============ โดนัทสิทธิ์การชำระ (คลิกเลือกได้) ============ */
+let SCOPE='d', SEL=null;
+function renderDonut(){
+  const rows=SCOPE==='d'?[yst]:mtdRows;
+  const vals=RIGHTS.map(r=>({r,v:rightAgg(rows,r)}));
+  const tot=sum(vals.map(v=>v.v))||1;
+  const mtdTot=sum(RIGHTS.map(x=>rightAgg(mtdRows,x)))||1;
+  const cx=110,cy=110,R=90,r=58;
+  let a0=-Math.PI/2,paths='';
+  vals.forEach(v=>{
+    const a1=a0+v.v/tot*Math.PI*2, big=(a1-a0)>Math.PI?1:0, mid=(a0+a1)/2;
+    const off=SEL===v.r?7:0, ox=off*Math.cos(mid), oy=off*Math.sin(mid);
+    const x0=cx+R*Math.cos(a0),y0=cy+R*Math.sin(a0),x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1);
+    const X0=cx+r*Math.cos(a1),Y0=cy+r*Math.sin(a1),X1=cx+r*Math.cos(a0),Y1=cy+r*Math.sin(a0);
+    paths+=`<path class="slice" data-r="${v.r}" role="button" tabindex="0"
+      aria-label="${esc(R_LABEL[v.r]||v.r)} ${(v.v/tot*100).toFixed(1)}%"
+      transform="translate(${ox.toFixed(2)} ${oy.toFixed(2)})"
+      d="M${x0} ${y0} A${R} ${R} 0 ${big} 1 ${x1} ${y1} L${X0} ${Y0} A${r} ${r} 0 ${big} 0 ${X1} ${Y1} Z"
+      style="fill:${R_COLORS[v.r]||'var(--c2)'};stroke:var(--surface);stroke-width:2.5;
+             opacity:${SEL&&SEL!==v.r?0.28:1}">
+      <title>${esc(R_LABEL[v.r]||v.r)}: ${B(v.v)} (${(v.v/tot*100).toFixed(1)}%)</title></path>`;
+    a0=a1;});
+  const selV=SEL?vals.find(v=>v.r===SEL):null;
+  const capTop=SEL?SEL:(SCOPE==='d'?'เมื่อวาน':'สะสมเดือนนี้');
+  const capVal=SEL?Bk(selV.v):Bk(tot);
+  const capSub=SEL?(selV.v/tot*100).toFixed(1)+'% ของยอดรวม':'';
+  el('donut').innerHTML=`<svg viewBox="0 0 220 220" style="max-width:240px;margin:0 auto">${paths}
+    <text x="110" y="${SEL?98:103}" text-anchor="middle" style="font-size:9px;letter-spacing:1.4px;fill:var(--ink-faint);font-weight:700">${esc(capTop)}</text>
+    <text x="110" y="${SEL?122:127}" text-anchor="middle" style="font-size:20px;font-weight:800;fill:var(--ink)">${capVal}</text>
+    ${SEL?`<text x="110" y="138" text-anchor="middle" style="font-size:10px;fill:var(--ink-faint)">${capSub}</text>`:''}</svg>`;
+
+  el('donutDetail').innerHTML = SEL ? (()=>{
+    const shareNow=selV.v/tot*100, shareM=rightAgg(mtdRows,SEL)/mtdTot*100, dd=shareNow-shareM;
+    const dAmt=rightAgg([yst],SEL)-rightAgg([prv],SEL);
+    return `<div class="dt"><b>${esc(R_LABEL[SEL]||SEL)}</b> — ${SCOPE==='d'?'เมื่อวาน':'สะสมเดือนนี้'} <b>${B(selV.v)}</b>
+      คิดเป็น <b>${shareNow.toFixed(1)}%</b> ของยอดรวม<br>
+      สัดส่วนเฉลี่ยทั้งเดือน ${shareM.toFixed(1)}%
+      <span class="delta ${cls(dd)}">(${(dd>=0?'+':'')+dd.toFixed(1)}pp)</span> ·
+      ยอดเมื่อวานเทียบเมื่อวานก่อน <span class="delta ${cls(dAmt)}">${(dAmt>=0?'+':'')+B(dAmt)}</span></div>`;})() : '';
+
+  el('donutLegend').innerHTML=vals.slice().sort((a,b)=>b.v-a.v).map(v=>{
+    const shareNow=v.v/tot*100, dd=SCOPE==='d'?shareNow-rightAgg(mtdRows,v.r)/mtdTot*100:0;
+    return `<div class="it"><button type="button" class="lgbtn" data-r="${v.r}" aria-pressed="${SEL===v.r}">
+      <span class="nm"><span class="dot" style="background:${R_COLORS[v.r]}"></span>${esc(R_LABEL[v.r]||v.r)}</span>
+      <span class="vl"><b>${shareNow.toFixed(1)}%</b> <span style="color:var(--ink-faint)">${Bk(v.v)}</span>
+      ${SCOPE==='d'?` <span class="delta ${cls(dd)}">${(dd>=0?'+':'')+dd.toFixed(1)}pp</span>`:''}</span>
+    </button></div>`;}).join('')
+    +`<div class="hint">${SEL?'คลิกซ้ำที่รายการเดิมเพื่อยกเลิกการเลือก':'pp = ส่วนต่างสัดส่วนของเมื่อวาน เทียบค่าเฉลี่ยเดือนนี้'}</div>`;
+}
+function pickRight(r){ SEL=(SEL===r)?null:r; renderDonut(); }
+el('donut').addEventListener('click',e=>{const t=e.target.closest('.slice');if(t)pickRight(t.dataset.r);});
+el('donut').addEventListener('keydown',e=>{const t=e.target.closest('.slice');
+  if(t&&(e.key==='Enter'||e.key===' ')){e.preventDefault();pickRight(t.dataset.r);}});
+el('donutLegend').addEventListener('click',e=>{const t=e.target.closest('.lgbtn');if(t)pickRight(t.dataset.r);});
+
+/* ============ แนวโน้มยอดขายรายวัน (กราฟเส้น) ============ */
+function renderTrend(){
+  const s30=days.slice(-30);
+  const W=880,H=290,mL=58,mR=16,mT=18,mB=34;
+  const vals=s30.map(r=>r.rev);
+  const ma=s30.map((r,i)=>{const idx=N-30+i,w=days.slice(Math.max(0,idx-6),idx+1);return sum(w.map(x=>x.rev))/w.length;});
+  const mx=Math.max(...vals,...ma)*1.12, mn=Math.min(...vals)*0.80;
+  const X=i=>mL+i*(W-mL-mR)/(s30.length-1);
+  const Y=v=>mT+(H-mT-mB)*(1-(v-mn)/((mx-mn)||1));
+  let g='';
+  for(let i=0;i<=4;i++){const v=mn+(mx-mn)*i/4;
+    g+=`<line x1="${mL}" x2="${W-mR}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--chart-axis);opacity:.4"/>
+        <text x="${mL-9}" y="${Y(v)+4}" text-anchor="end" style="font-size:10.5px;fill:var(--chart-ink2)">${Bk(v)}</text>`;}
+  const maLine=`<polyline points="${ma.map((v,i)=>X(i)+','+Y(v)).join(' ')}"
+    style="fill:none;stroke:var(--ink-dim);stroke-width:1.6;stroke-dasharray:5 4;opacity:.7"/>`;
+  const area=`<polygon points="${X(0)},${H-mB} ${vals.map((v,i)=>X(i)+','+Y(v)).join(' ')} ${X(vals.length-1)},${H-mB}"
+    style="fill:var(--c1);opacity:.08"/>`;
+  const line=`<polyline points="${vals.map((v,i)=>X(i)+','+Y(v)).join(' ')}"
+    style="fill:none;stroke:var(--c1);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round"/>`;
+  const dots=vals.map((v,i)=>{const last=i===vals.length-1;
+    return `<circle cx="${X(i)}" cy="${Y(v)}" r="${last?5:3}"
+      style="fill:${last?'var(--c1)':'var(--surface)'};stroke:var(--c1);stroke-width:${last?0:1.8}">
+      <title>${thDate(s30[i].date)} (${TH_D[d(s30[i].date).getDay()]}): ${B(v)}</title></circle>`;}).join('');
+  const lastLbl=`<text x="${X(vals.length-1)}" y="${Y(vals[vals.length-1])-13}" text-anchor="end"
+    style="font-size:11.5px;font-weight:700;fill:var(--ink)">${Bk(vals[vals.length-1])}</text>`;
+  const lbl=s30.map((r,i)=>{const dt=d(r.date), last=i===s30.length-1;
+    if(!(i%3===0||last)) return '';
+    return `<text x="${X(i)}" y="${H-18}" text-anchor="middle" style="font-size:9.5px;fill:var(--chart-ink2)">${thShort(r.date)}</text>
+            <text x="${X(i)}" y="${H-7}" text-anchor="middle" style="font-size:9px;fill:var(--ink-faint)">${TH_D[dt.getDay()]}</text>`;}).join('');
+  el('trendChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">${g}${area}${maLine}${line}${dots}${lastLbl}${lbl}
+    <line x1="${mL}" x2="${W-mR}" y1="${H-mB}" y2="${H-mB}" style="stroke:var(--chart-axis)"/></svg>`;
+  el('trendHint').innerHTML='ยอดขายรายวัน 30 วันล่าสุด · เส้นประ = ค่าเฉลี่ยเคลื่อนที่ 7 วัน · แตะจุดเพื่อดูตัวเลขรายวัน';
+}
+
+/* ============ contribution ============ */
+function renderContrib(rows,baseName){
+  const s=[...rows].sort((a,b)=>b.diff-a.diff).filter(r=>Math.abs(r.diff)>0);
+  const W=440,rowH=28,H=s.length*rowH+30,cx=W*0.53;
+  const mx=Math.max(...s.map(r=>Math.abs(r.diff)),1), scale=(W*0.38)/mx;
+  const total=sum(s.map(r=>r.diff));
+  el('contribHint').innerHTML=`ยอดเมื่อวานเทียบ${esc(baseName)} รวม <b class="delta ${cls(total)}">${(total>=0?'+':'')+Bk(total)}</b> · แยกว่าตัวไหนดันขึ้น ตัวไหนฉุดลง`;
+  const bars=s.map((r,i)=>{
+    const y=14+i*rowH, w=Math.max(Math.abs(r.diff)*scale,2), x=r.diff>=0?cx:cx-w;
+    const c=r.diff>=0?'var(--pos)':'var(--neg)', tx=r.diff>=0?cx+w+7:cx-w-7;
+    return `<rect x="${x}" y="${y}" width="${w}" height="16" rx="3" style="fill:${c}">
+      <title>${esc(r.p)}: ${(r.diff>=0?'+':'')+B(r.diff)} (${pct(r.pc)})</title></rect>
+      <text x="${r.diff>=0?cx-7:cx+7}" y="${y+13}" text-anchor="${r.diff>=0?'end':'start'}"
+        style="font-size:11.5px;fill:var(--ink-dim)">${esc(r.p)}</text>
+      <text x="${tx}" y="${y+13}" text-anchor="${r.diff>=0?'start':'end'}"
+        style="font-size:11.5px;font-weight:700;fill:${c}">${(r.diff>=0?'+':'')+Bk(r.diff)}</text>`;}).join('');
+  el('contribChart').innerHTML=`<svg viewBox="0 0 ${W} ${H}">
+    <line x1="${cx}" x2="${cx}" y1="6" y2="${H-12}" style="stroke:var(--chart-axis)"/>${bars}</svg>`;
+}
+
+/* ============ หมวดสินค้า 5 หมวด + ตารางรายการ ============ */
+const ITEMS=(DATA.items||[]).map(r=>({...r, cat:G2C[r.group]||'อื่น ๆ', diff:r.yst-r.prv}));
+const ALL='ทั้งหมด';
+let CAT=ALL, SORT={key:'yst', dir:-1};
+
+const COLS=[
+  {key:'name', th:'รายการสินค้า',      num:false},
+  {key:'yst',  th:'ยอดขายเมื่อวาน',    num:true},
+  {key:'prv',  th:'ยอดขายเมื่อวานก่อน', num:true},
+  {key:'diff', th:'ผลต่าง',           num:true},
+];
+
+function spark(v,color){
+  const W=150,H=34,mx=Math.max(...v),mn=Math.min(...v);
+  const X=j=>j/(v.length-1)*W, Y=x=>H-3-(x-mn)/((mx-mn)||1)*(H-9);
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    <polyline points="${v.map((x,j)=>X(j)+','+Y(x)).join(' ')}"
+      style="fill:none;stroke:${color};stroke-width:1.8;stroke-linejoin:round;vector-effect:non-scaling-stroke"/>
+    <circle cx="${X(v.length-1)}" cy="${Y(v[v.length-1])}" r="3" style="fill:${color}"/></svg>`;
+}
+
+function renderChips(){
+  el('groupChips').innerHTML=CATS.map((c,i)=>{
+    const s30=catSeries(c), y=s30[s30.length-1], p=s30[s30.length-2];
+    const df=y-p, pc=p>0?df/p*100:0, color=C_COLORS[i%C_COLORS.length];
+    return `<button type="button" class="chip" data-c="${esc(c.name)}" aria-pressed="${CAT===c.name}"
+      title="${esc(c.name)} · คลิกเพื่อกรองตาราง">
+      <span class="cn">${esc(c.name)}</span>
+      <span class="cv">${Bk(y)}</span>
+      <span class="cd delta ${cls(df)}">${arrow(df)} ${(df>=0?'+':'')+Bk(df)} · ${pct(pc)}</span>
+      ${spark(s30,color)}</button>`;}).join('');
+}
+
+function renderItems(){
+  const rows=ITEMS.filter(r=>CAT===ALL||r.cat===CAT).sort((a,b)=>{
+    const k=SORT.key;
+    if(k==='name') return String(a.name).localeCompare(String(b.name),'th')*SORT.dir;
+    return (a[k]-b[k])*SORT.dir;
+  });
+  const tY=sum(rows.map(r=>r.yst)), tP=sum(rows.map(r=>r.prv));
+  el('itemCount').textContent=CAT===ALL
+    ? `แสดงทั้งหมด ${ITEMS.length} รายการ · คลิกกล่องหมวดเพื่อกรอง`
+    : `กรองเฉพาะ ${CAT} · ${rows.length} รายการ · คลิกกล่องเดิมซ้ำเพื่อล้างตัวกรอง`;
+  const head=COLS.map(c=>{
+    const on=SORT.key===c.key, ar=on?(SORT.dir===-1?'▼':'▲'):'▼';
+    return `<th class="${c.num?'num':''}"${on?` aria-sort="${SORT.dir===-1?'descending':'ascending'}"`:''}>
+      <button type="button" class="sortbtn" data-key="${c.key}">${esc(c.th)}<span class="ar">${ar}</span></button></th>`;
+  }).join('');
+  const body=rows.length? rows.map(r=>{
+    const pc=r.prv>0?r.diff/r.prv*100:(r.yst>0?100:0);
+    return `<tr>
+      <td><div class="pname"><span class="dot" style="background:${C_COLORS[(CIDX[r.cat]||0)%C_COLORS.length]}"></span>
+        <span>${esc(r.name)}<br><span class="hint">${esc(r.group)}${CAT===ALL?' · '+esc(r.cat):''}</span></span></div></td>
+      <td class="num"><b>${B(r.yst)}</b></td>
+      <td class="num" style="color:var(--ink-faint)">${B(r.prv)}</td>
+      <td class="num delta ${cls(r.diff)}">${(r.diff>=0?'+':'')+B(r.diff)}
+        <span style="font-size:10.5px;opacity:.75"> ${pct(pc)}</span></td></tr>`;}).join('')
+    : `<tr><td colspan="4" class="empty">ไม่มีรายการในหมวดนี้</td></tr>`;
+  el('itemTable').innerHTML=`<thead><tr>${head}</tr></thead><tbody>${body}</tbody>
+    <tfoot><tr><td>รวม ${rows.length} รายการ</td><td class="num">${B(tY)}</td>
+      <td class="num">${B(tP)}</td>
+      <td class="num delta ${cls(tY-tP)}">${(tY-tP>=0?'+':'')+B(tY-tP)}
+        <span style="font-size:10.5px;opacity:.75"> ${pct(tP>0?(tY-tP)/tP*100:0)}</span></td></tr></tfoot>`;
+}
+
+el('groupChips').addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c) return;
+  CAT = (CAT===c.dataset.c) ? ALL : c.dataset.c;   // คลิกหมวดเดิมซ้ำ = ล้างตัวกรอง
+  renderChips(); renderItems();
+});
+el('itemTable').addEventListener('click',e=>{
+  const b=e.target.closest('.sortbtn'); if(!b) return;
+  const k=b.dataset.key;
+  SORT = SORT.key===k ? {key:k, dir:SORT.dir*-1} : {key:k, dir:k==='name'?1:-1};
+  renderItems();
+});
+
+/* ============ insight ============ */
+function renderInsight(){
+  const rows=CATS.map(c=>({p:c.name,v:catRev(yst,c),b:catAgg(last7,c)/7})).map(r=>({...r,diff:r.v-r.b}));
+  const up=[...rows].sort((a,b)=>b.diff-a.diff)[0], dn=[...rows].sort((a,b)=>a.diff-b.diff)[0];
+  const w7=(sum(last7.map(r=>r.rev))-sum(prev7.map(r=>r.rev)))/sum(prev7.map(r=>r.rev))*100;
+  const mtdTot=sum(RIGHTS.map(x=>rightAgg(mtdRows,x)))||1;
+  const rs=RIGHTS.map(r=>({r,s:rightAgg([yst],r)/(yst.rev||1)*100,m:rightAgg(mtdRows,r)/mtdTot*100}))
+                 .sort((a,b)=>Math.abs(b.s-b.m)-Math.abs(a.s-a.m))[0];
+  const upTxt=up.diff>0?`ตัวที่ดันขึ้นมากสุดคือ <b>${esc(up.p)}</b> (+${Bk(up.diff)})`
+                       :`ไม่มีสินค้าตัวไหนโตขึ้น ตัวที่ทรงตัวที่สุดคือ <b>${esc(up.p)}</b> (${Bk(up.diff)})`;
+  const dnTxt=dn.diff<0?`ตัวที่ฉุดมากสุดคือ <b>${esc(dn.p)}</b> (${Bk(dn.diff)})`:`และทุกตัวโตขึ้นหมด`;
+  el('insight').innerHTML=`
+  <li><span class="n">01</span><b>เมื่อวานทำได้ ${B(yst.rev)}</b>
+    <span class="delta ${cls(vs7)}">${arrow(vs7)} ${pct(vs7)}</span> เทียบเฉลี่ย 7 วัน — ${upTxt} · ${dnTxt}</li>
+  <li><span class="n">02</span><b>เป้าเดือนนี้ ${Bk(TARGET)}</b> · ทำได้ ${attain.toFixed(1)}%
+    ขณะที่เวลาผ่านไป ${(elapsed/daysInMonth*100).toFixed(0)}% →
+    <b class="delta ${paceGap>=0?'up':'down'}">${paceGap>=0?'เร็วกว่าจังหวะ':'ช้ากว่าจังหวะ'} ${Bk(Math.abs(paceGap))}</b>
+    ${daysLeft>0?`· ต้องทำวันละ ${Bk(needPerDay)} ใน ${daysLeft} วันที่เหลือ`:''}</li>
+  <li><span class="n">03</span>ภาพรวม 7 วันล่าสุด <span class="delta ${cls(w7)}">${pct(w7)}</span> เทียบ 7 วันก่อนหน้า ·
+    สิทธิ์ที่สัดส่วนเปลี่ยนเด่นสุดเมื่อวานคือ <b>${esc(R_LABEL[rs.r]||rs.r)}</b> ${rs.s.toFixed(1)}%
+    <span class="delta ${cls(rs.s-rs.m)}">(${(rs.s-rs.m>=0?'+':'')+(rs.s-rs.m).toFixed(1)}pp เทียบค่าเฉลี่ยเดือนนี้)</span></li>`;
+}
+
+/* ============ events ============ */
+const seg=(id,fn)=>el(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove('on'));b.classList.add('on');fn(b);});
+seg('cmpSeg',b=>{CMP=b.dataset.cmp;renderTable();});
+seg('rightSeg',b=>{SCOPE=b.dataset.scope;SEL=null;renderDonut();});
+
+/* ลิ้นชักข้อสรุป & Tips */
+(function(){
+  const btn=el('tipsBtn'), panel=el('tipsPanel');
+  const open=v=>{panel.hidden=!v; btn.hidden=v; btn.setAttribute('aria-expanded',v);
+    if(v) el('tipsClose').focus(); else btn.focus();};
+  btn.addEventListener('click',()=>open(true));
+  el('tipsClose').addEventListener('click',()=>open(false));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)open(false);});
+  document.addEventListener('click',e=>{
+    if(panel.hidden) return;
+    if(!panel.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)) open(false);
+  });
+})();
+
+renderInsight();renderTable();renderDonut();renderTrend();renderChips();renderItems();
+el('foot').innerHTML=`ข้อมูลจริงจากระบบ · 1 ไฟล์ = 1 สาขา · สร้างเมื่อ ${DATA.generated_at}<br>
+  ที่มา: ${esc(DATA.source)} · เปิดได้ทั้งมือถือและคอมพิวเตอร์ · ต้องต่ออินเทอร์เน็ตครั้งแรกเพื่อโหลดฟอนต์ Anuphan เท่านั้น`;
+</script>
+</body>
+</html>

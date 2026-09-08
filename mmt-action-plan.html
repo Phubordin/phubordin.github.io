@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MKCCGG3QF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0MKCCGG3QF');
+    </script>
+    <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Phubordin Phanyosri">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, Dashboard">
+    <title>ฟอร์มแผนปฏิบัติการรายเขต — มิตรไมตรีการแพทย์</title>
+    <meta name="description" content="ฟอร์มกรอกแผนปฏิบัติการรายเขต บันทึกและส่งออกเป็น PDF, Excel และ PowerPoint (ข้อมูลจำลอง)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body class="fade-slide-in">
+    <header>
+        <div class="header-background"></div>
+        <span class="link-cursor strong1">Action Plan</span>
+    </header>
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <a style="text-decoration: none;" href="experience_mmt.html">
+        <button class="back-button">⬅︎ ผลงานที่ มิตรไมตรีการแพทย์</button>
+    </a>
+
+    <section>
+        <div class="demo-banner">
+            <span aria-hidden="true">🔒</span>
+            <span><b>ข้อมูลในหน้านี้เป็นข้อมูลจำลองทั้งหมด</b> — ชื่อองค์กร ชื่อสาขา ชื่อผู้รับบริการ
+                และตัวเลขทุกตัว ถูกสร้างขึ้นใหม่เพื่อการนำเสนอ ไม่มีข้อมูลจริงของบริษัทหรือผู้รับบริการอยู่เลย
+                ส่วนโครงสร้างข้อมูล ตรรกะการคำนวณ และรูปแบบการนำเสนอ คงไว้ตามงานจริงทุกอย่าง</span>
+        </div>
+
+        <h2 class="link-cursor">ฟอร์มแผนปฏิบัติการรายเขต</h2>
+        <p class="hero-lede">เปลี่ยนการทำแผนจากไฟล์เอกสารที่ส่งกันไปมา เป็นฟอร์มออนไลน์ที่กรอกเสร็จแล้วได้เอกสารพร้อมนำเสนอทันที</p>
+
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>โจทย์</h3>
+                <p>แต่ละเขตทำแผนคนละรูปแบบ หัวข้อไม่ตรงกันจนเอามาเทียบกันไม่ได้ และกว่าจะรวมเป็นเล่มเดียวต้องนั่งจัดหน้าใหม่ทุกครั้ง</p>
+            </div>
+            <div class="brief">
+                <h3>ข้อมูล</h3>
+                <p>ข้อมูลที่ผู้จัดการเขตกรอกเอง ตั้งแต่กลุ่มเป้าหมาย แพ็กเกจ ช่องทางและงบประมาณ ไปจนถึงไทม์ไลน์ ความเสี่ยง และการคำนวณมูลค่าลูกค้าตลอดช่วงเวลา</p>
+            </div>
+            <div class="brief">
+                <h3>สิ่งที่ทำ</h3>
+                <p>ออกแบบฟอร์มให้ทุกเขตใช้หัวข้อเดียวกัน บันทึกอัตโนมัติกันข้อมูลหาย เก็บประวัติทุกครั้งที่ส่ง และสร้างเอกสารสรุปเป็น PDF, Excel และ PowerPoint จากข้อมูลที่กรอก</p>
+            </div>
+            <div class="brief">
+                <h3>ผลลัพธ์</h3>
+                <p>แผนทุกเขตเทียบกันได้ในตารางเดียว และได้ไฟล์นำเสนอโดยไม่ต้องจัดหน้าเอง</p>
+            </div>
+        </div>
+
+        <p style="margin-bottom:var(--s3)">ลองล็อกอินด้วยบัญชีตัวอย่างได้เลย มีแผนตัวอย่างรออยู่ 10 รายการ ครบทั้ง 5 เขต</p>
+        <div class="demo-cred" style="margin-bottom:var(--s5)">
+            <span>admin / demo1234 — เห็นทุกเขต</span>
+            <span>zone1 … zone5 / demo1234 — เห็นเฉพาะเขตตัวเอง</span>
+        </div>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="mmt-app-actionplan.html" target="_blank" rel="noopener">เปิดแบบเต็มจอ ↗</a>
+            <a class="btn btn-ghost" href="experience_mmt.html">ดูผลงานชิ้นอื่น</a>
+        </div>
+
+        <div class="app-stage">
+            <iframe src="mmt-app-actionplan.html" title="ฟอร์มแผนปฏิบัติการรายเขต" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
