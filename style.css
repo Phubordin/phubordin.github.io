@@ -2634,3 +2634,33 @@ a.pcard:hover .pcard-thumb img {
     .wshots { grid-template-columns: 1fr 1fr; }
     .wshots .wshot:nth-child(3) { display: none; }
 }
+
+/* รูปตัวอย่างผลงานคลิกเข้าไปดูงานจริงได้ ไม่ใช่แค่ซูมรูป */
+.wshots .wshot a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.wshots .wshot a:hover img {
+    transform: scale(1.03);
+}
+
+.wshots .wshot a:hover figcaption {
+    color: var(--text);
+}
+
+.wshots .wshot:hover {
+    border-color: var(--accent-line);
+}
+
+.wshot-go {
+    color: var(--accent);
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+.wshots .wshot a:hover .wshot-go {
+    opacity: 1;
+}
