@@ -2635,18 +2635,18 @@ a.pcard:hover .pcard-thumb img {
     .wshots .wshot:nth-child(3) { display: none; }
 }
 
-/* รูปตัวอย่างผลงานคลิกเข้าไปดูงานจริงได้ ไม่ใช่แค่ซูมรูป */
-.wshots .wshot a {
+/* รูปกับชื่อทำคนละหน้าที่ — รูปคลิกเพื่อขยาย ชื่อคลิกเพื่อเข้าไปดูผลงาน */
+.wshots .wshot img {
+    cursor: zoom-in;
+}
+
+.wshots .wshot figcaption a {
     display: block;
     color: inherit;
     text-decoration: none;
 }
 
-.wshots .wshot a:hover img {
-    transform: scale(1.03);
-}
-
-.wshots .wshot a:hover figcaption {
+.wshots .wshot figcaption a:hover {
     color: var(--text);
 }
 
@@ -2661,6 +2661,6 @@ a.pcard:hover .pcard-thumb img {
     transition: opacity .18s ease;
 }
 
-.wshots .wshot a:hover .wshot-go {
+.wshots .wshot figcaption a:hover .wshot-go {
     opacity: 1;
 }
