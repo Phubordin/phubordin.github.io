@@ -18,11 +18,11 @@ SITE = "https://phubordin.github.io"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # ไฟล์ที่ไม่ต้องการให้ Google เก็บ (ไฟล์ทดสอบ / ชิ้นส่วนที่ไม่ใช่หน้าเว็บจริง)
-# ไฟล์ mmt-app-*.html คือ "ตัวงาน" ที่ถูกฝังใน iframe ของหน้า mmt-*.html อีกที
+# ไฟล์ mmt-app-*.html และ wnc-app-*.html คือ "ตัวงาน" ที่ถูกฝังใน iframe ของหน้าเรื่องเล่าอีกที
 # ไม่ใช่หน้าเว็บที่ตั้งใจให้คนเข้าตรง จึงไม่ควรให้ Google เก็บแยก
 EXCLUDE = {"_check.html", "_check2.html"}
 # ตัดตามชื่อขึ้นต้นแทนการไล่ชื่อทีละไฟล์ เพิ่มงานชิ้นใหม่แล้วจะได้ไม่หลุดเข้าไปเอง
-EXCLUDE_PREFIX = ("mmt-app-", "_")
+EXCLUDE_PREFIX = ("mmt-app-", "wnc-app-", "_")
 
 # ความสำคัญของแต่ละหน้า (Google ใช้เป็นน้ำหนักเทียบกันภายในเว็บเดียวกัน)
 PRIORITY = {

@@ -22,6 +22,8 @@ const NAV = [
         ["mmt-portal.html", "&nbsp;&nbsp;↳ ศูนย์รวมข้อมูลของฝ่าย"],
         ["mmt-action-plan.html", "&nbsp;&nbsp;↳ ฟอร์มแผนปฏิบัติการรายเขต"],
         ["mmt-area-survey.html", "&nbsp;&nbsp;↳ สำรวจพื้นที่รอบสาขา"],
+        ["mmt-review-case.html", "&nbsp;&nbsp;↳ เคสรีวิวสาขา"],
+        ["wnc-lead-tracker.html", "&nbsp;&nbsp;↳ Lead Tracker ศูนย์เวลเนส"],
         ["experience_leowood.html", `${ic("leowood_logo.png", 35)} Leowood Intertrade`],
     ]],
     ["project.html", "Project Overview", [

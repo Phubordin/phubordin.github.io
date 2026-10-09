@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0MKCCGG3QF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-0MKCCGG3QF');
+    </script>
+    <meta charset="UTF-8">
+    <!-- ตั้งธีมก่อนเบราว์เซอร์วาดหน้าแรก กันจอแฟลชตอนเปลี่ยนหน้า
+         ค่าเริ่มต้นคือโหมดมืด จะเป็นสว่างก็ต่อเมื่อผู้ใช้เลือกเองไว้ -->
+    <script>document.documentElement.classList.add("dark-mode");try{if(localStorage.getItem("theme")==="light")document.documentElement.classList.remove("dark-mode")}catch(e){}</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Phubordin Phanyosri">
+    <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, CRM, Lead Tracker, Sales Funnel, Google Apps Script, Google Sheets">
+    <title>Lead Tracker ศูนย์เวลเนส — มิตรไมตรีการแพทย์</title>
+    <meta name="description" content="ระบบ CRM บน Google Sheet + Apps Script ให้ทีมขายของศูนย์เวลเนสบันทึก ติดตาม นัดหมาย และวัดผลรายคน (ข้อมูลจำลอง)">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="certificate-style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body class="fade-slide-in">
+    <header>
+        <div class="header-background"></div>
+        <span class="link-cursor strong1">Lead Tracker</span>
+    </header>
+
+    <nav class="primary" aria-label="เมนูหลัก"></nav>
+
+    <a style="text-decoration: none;" href="experience_mmt.html">
+        <button class="back-button">⬅︎ ผลงานที่ มิตรไมตรีการแพทย์</button>
+    </a>
+
+    <section>
+        <div class="demo-banner">
+            <span aria-hidden="true">🔒</span>
+            <span><b>ข้อมูลในหน้านี้เป็นข้อมูลจำลองทั้งหมด</b> — ชื่อศูนย์ ที่อยู่ ชื่อลูกค้า เบอร์โทร
+                ชื่อผู้ดูแล และตัวเลขเป้าหมาย ถูกสร้างขึ้นใหม่เพื่อการนำเสนอ
+                ระบบจริงใช้ Google Sheet เป็นฐานข้อมูล ส่วนเดโมนี้เก็บข้อมูลไว้ในเบราว์เซอร์ของผู้ชมเท่านั้น</span>
+        </div>
+
+        <h2 class="link-cursor">ระบบติดตามลูกค้า (Lead Tracker) ของศูนย์เวลเนส</h2>
+        <p class="hero-lede">
+            CRM ขนาดเล็กที่ทีมขายของศูนย์เวลเนสในเครือใช้บันทึกทุกคนที่ติดต่อเข้ามา ประเมินสถานะ
+            นัดหมาย และดูผลงานรายคนเทียบเป้า — สร้างบน Google Sheet กับ Apps Script
+            ไม่ต้องซื้อระบบเพิ่ม และทีมใช้งานได้จากมือถือทันที
+        </p>
+
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>โจทย์</h3>
+                <p>รายชื่อลูกค้ากระจายอยู่ในแชตกับไฟล์ของแต่ละคน เบอร์ซ้ำ สถานะเรียกไม่ตรงกัน
+                    ผู้จัดการไม่รู้ว่าลูกค้าแต่ละคนไปถึงขั้นไหน และไม่รู้ว่าใครตามเป้าอยู่</p>
+            </div>
+            <div class="brief">
+                <h3>โครงข้อมูล</h3>
+                <p>Google Sheet 9 แท็บ สร้างให้อัตโนมัติด้วยคำสั่งเดียว — รายชื่อหลัก ตารางกลางของสถานะ
+                    ช่องทาง ความประสงค์ ผู้ดูแล สาเหตุที่ไม่ปิด เป้ารายคน และ Conversion รายวัน
+                    เพิ่มคอลัมน์ใหม่ได้โดยไม่ทับข้อมูลเดิม</p>
+            </div>
+            <div class="brief">
+                <h3>กติกาที่ระบบจัดให้เอง</h3>
+                <p>ผู้ใช้เลือกแค่สิ่งที่ได้ยินจากการคุย ระบบแปลงสถานะย่อย 9 แบบเป็นเกรด A+ ถึง F
+                    และจัดเข้า 4 กลุ่ม (Potential / Follow / Lost / Other) ทั้งทีมจึงใช้นิยามเดียวกัน</p>
+            </div>
+            <div class="brief">
+                <h3>เชื่อมกับคลินิกแม่</h3>
+                <p>รายชื่อกลุ่มเป้าหมายที่คัดจากฐานลูกค้าของคลินิกแม่ ถูกส่งต่อเข้ามาในหน้าเดียวกัน
+                    ไฟล์แดชบอร์ดใหญ่เกินกว่าจะฝังในเว็บแอป จึงดึงจาก Drive ทีละก้อนแล้วประกอบในเบราว์เซอร์</p>
+            </div>
+        </div>
+
+        <h3>ออกแบบมาเพื่อลดความผิดพลาดของคนกรอก</h3>
+        <div class="tags" style="margin-bottom:var(--s5)">
+            <span class="tag tag-accent">ตรวจเบอร์ซ้ำทันที</span>
+            <span class="tag tag-accent">วางรายชื่อหลายคนทีเดียว แยกชื่อ-เบอร์ให้เอง</span>
+            <span class="tag">ตัวเลือกเป็นปุ่ม ไม่มีพิมพ์ผิด</span>
+            <span class="tag">บังคับวันนัดเมื่อเลือกนัดหมาย</span>
+            <span class="tag">บังคับเหตุผลเมื่อไม่ปิด</span>
+            <span class="tag">เลิกทำได้ทันที</span>
+            <span class="tag">เตือน Follow ค้างเกิน 3 วัน</span>
+            <span class="tag">กันเขียนชนกันด้วย Lock</span>
+        </div>
+
+        <h3>วัดผลได้ทั้งทีมและรายคน</h3>
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>Dashboard</h3>
+                <p>ย่อหน้าสรุปที่อ่านจบในประโยคเดียว กรวย Journey จาก Lead ถึงกลับมาใช้บริการซ้ำ
+                    แยกช่องทางที่แปลงเป็นลูกค้าได้ดีสุด สาเหตุที่ไม่ปิด และรายชื่อที่ต้องติดต่อวันนี้</p>
+            </div>
+            <div class="brief">
+                <h3>Performance รายคน</h3>
+                <p>เทียบยอดกับเป้ารายวัน วันไหนได้ไม่ถึง ส่วนที่ขาดทบไปเป็นเป้าของวันถัดไปจนกว่าจะตามทัน
+                    คนดูจึงรู้ทันทีว่าวันนี้ต้องรับอีกกี่คน</p>
+            </div>
+            <div class="brief">
+                <h3>นัดหมาย</h3>
+                <p>ปฏิทิน 14 วันข้างหน้า แจ้งเตือนนัดภายใน 3 วัน กดมาแล้ว / เลื่อนนัด / ไม่มา
+                    แล้วสถานะลูกค้าเปลี่ยนตามให้เอง</p>
+            </div>
+            <div class="brief">
+                <h3>ใบสั่งทรีตเมนต์</h3>
+                <p>ฟอร์มสั่งงานพร้อม Body Map แบบ 3 มิติ หมุนดูได้รอบตัว คลิกระบุตำแหน่งบนร่างกาย
+                    แล้วพิมพ์เป็นเอกสารได้ทันที</p>
+            </div>
+        </div>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="wnc-app-welcome.html" target="_blank" rel="noopener">เปิดเดโมเต็มจอ ↗</a>
+            <a class="btn btn-ghost" href="wnc-app-tracking.html" target="_blank" rel="noopener">Tracking Lead ↗</a>
+            <a class="btn btn-ghost" href="wnc-app-order.html" target="_blank" rel="noopener">ใบสั่งทรีตเมนต์ ↗</a>
+        </div>
+
+        <div class="app-stage">
+            <iframe src="wnc-app-tracking.html" title="Lead Tracker ของศูนย์เวลเนส" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

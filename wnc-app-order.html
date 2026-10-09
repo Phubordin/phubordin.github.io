@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellness Center — Treatment Order</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* หน้านี้เป็นแบบฟอร์มกระดาษ → โทนสว่างแบบเดียวโดยตั้งใจ (พิมพ์ได้เหมือนต้นฉบับ) */
+  :root{
+    color-scheme:light;
+    --paper:#FCFAF4; --paper-2:#F5F0E4; --line:#E4DCC9; --line-2:#CFC4A8;
+    --ink:#1C2420; --ink-2:#5B6660; --ink-3:#8A928C;
+    --teal-900:#12332C; --teal-700:#1F4D42; --teal-500:#2E6B5C; --teal-100:#E1EEE9;
+    --gold-700:#8C6E34; --gold-500:#C6A15B; --gold-300:#DEC48A; --gold-100:#F4EBD6; --band:#B9A483;
+    --danger:#B4452F;
+    --r:10px; --shadow:0 18px 40px -24px rgba(28,36,32,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper-2);color:var(--ink);font-family:'Noto Sans Thai',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  input,textarea,button{font:inherit;color:inherit}
+  .sheet{max-width:1380px;margin:22px auto;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* ---------- หัวกระดาษ ---------- */
+  .head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;padding:24px 32px 18px}
+  .addr{font-size:12.5px;color:var(--ink-2);line-height:1.6}
+  .addr b{display:block;color:var(--ink);font-weight:600;font-size:13px}
+  .brand{text-align:center}
+  .brand .mark{width:96px;margin:0 auto 6px;color:var(--gold-500)}
+  .brand .mark svg{width:100%;height:auto;display:block}
+  .brand h1{margin:0;font-family:'Noto Serif Thai',serif;font-weight:500;font-size:40px;letter-spacing:.02em;color:var(--gold-500);line-height:1.05}
+  .brand small{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
+  .meta{justify-self:end;display:grid;gap:8px;text-align:right}
+  .meta label{display:flex;align-items:center;gap:8px;justify-content:flex-end;font-size:12.5px;color:var(--ink-2)}
+  .meta input{border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;background:#fff;width:150px}
+  .meta .no{font-family:'Noto Serif Thai',serif;font-size:13px;color:var(--ink-3)}
+  .band{height:10px;background:var(--band)}
+
+  /* ---------- ตัวฟอร์ม ---------- */
+  .grid{display:grid;grid-template-columns:300px 1fr 380px;gap:0;padding:8px 0}
+  .col{padding:22px 26px}
+  .col + .col{border-left:1px solid var(--line)}
+  .f{display:grid;gap:5px;margin-bottom:14px}
+  .f > span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);font-weight:600}
+  .f input[type=text],.f input[type=number],.f textarea{width:100%;border:0;border-bottom:1px dotted var(--line-2);background:transparent;padding:6px 2px;outline:none;transition:border-color .15s}
+  .f textarea{border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;background:#fff;resize:vertical;min-height:74px;line-height:1.55}
+  .f input:focus,.f textarea:focus{border-color:var(--teal-500);box-shadow:0 0 0 3px rgba(46,107,92,.12)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .seg{display:flex;gap:8px}
+  .seg label{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line-2);border-radius:8px;padding:7px 10px;cursor:pointer;background:#fff;user-select:none}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg label:has(input:checked){border-color:var(--teal-700);background:var(--teal-100);color:var(--teal-900);font-weight:600}
+  .seg .box{width:16px;height:16px;border:1.5px solid var(--ink-3);border-radius:3px;display:inline-block}
+  .seg label:has(input:checked) .box{background:var(--teal-700);border-color:var(--teal-700)}
+
+  /* ส่วนสั่งการ (ขวา) */
+  .sec{margin-bottom:14px}
+  .sec > span{display:flex;align-items:baseline;gap:8px;font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:600;color:var(--teal-900);margin-bottom:6px}
+  .sec > span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold-500);align-self:center}
+  .sec > span small{font-family:'Noto Sans Thai',sans-serif;font-size:12.5px;font-weight:400;color:var(--ink-2)}
+  .sec textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;background:var(--paper-2);resize:vertical;min-height:72px;line-height:1.55;outline:none}
+  .sec textarea:focus{background:#fff;border-color:var(--teal-500);box-shadow:0 0 0 3px rgba(46,107,92,.12)}
+  .sec.nurse textarea{background:var(--gold-100);border-color:#E9DDBD}
+
+  /* ---------- Body map 3D ---------- */
+  .bodycol{display:flex;flex-direction:column;gap:10px;min-width:0}
+  .bodycol .t{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .bodycol .t b{font-family:'Noto Serif Thai',serif;font-size:17px;font-weight:600;color:var(--teal-900)}
+  .bodycol .t small{color:var(--ink-3);font-size:12px}
+  .views{display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:3px}
+  .views button{border:0;background:transparent;border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--ink-2);font-size:12.5px}
+  .views button.on{background:var(--teal-900);color:#F8F4EA}
+  .stage{position:relative;height:520px;border-radius:14px;overflow:hidden;background:radial-gradient(90% 70% at 50% 40%, #FFFFFF 0%, #F3EEE1 60%, #E8E1CF 100%);border:1px solid var(--line);cursor:grab}
+  .stage.grabbing{cursor:grabbing}
+  .stage canvas{display:block;width:100%;height:100%}
+  .stage .hint{position:absolute;left:12px;bottom:10px;font-size:11.5px;color:var(--ink-3);pointer-events:none}
+  .stage .side{position:absolute;right:12px;top:10px;font-size:12px;color:var(--teal-900);background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:999px;padding:3px 10px;pointer-events:none}
+  .marks{border:1px solid var(--line);border-radius:var(--r);background:#fff;overflow:hidden}
+  .marks .mh{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--paper-2);font-size:12.5px;color:var(--ink-2);border-bottom:1px solid var(--line)}
+  .marks .mh button{border:0;background:transparent;color:var(--danger);cursor:pointer;font-size:12px}
+  .marks .empty{padding:14px;color:var(--ink-3);font-size:12.5px;text-align:center}
+  .mk{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid var(--line)}
+  .mk:last-child{border-bottom:0}
+  .mk .n{width:22px;height:22px;border-radius:50%;background:var(--gold-500);color:#1C2420;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .mk .r{font-size:11.5px;color:var(--ink-3)}
+  .mk input{width:100%;border:0;border-bottom:1px dotted var(--line-2);background:transparent;padding:2px 0;outline:none;font-size:13px}
+  .mk input:focus{border-color:var(--teal-500)}
+  .mk button{border:0;background:transparent;color:var(--ink-3);cursor:pointer;font-size:16px;line-height:1}
+  .mk button:hover{color:var(--danger)}
+
+  /* ---------- ลายเซ็น ---------- */
+  .sigs{display:grid;gap:12px;margin-top:6px}
+  .sig{display:grid;gap:4px}
+  .sig .lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--ink-2)}
+  .sig .lbl b{color:var(--ink);font-weight:600}
+  .sig .lbl button{border:0;background:transparent;color:var(--ink-3);cursor:pointer;font-size:12px}
+  .sig canvas{width:100%;height:84px;border:1px dashed var(--line-2);border-radius:8px;background:#fff;touch-action:none;cursor:crosshair}
+  .sig .name{border:0;border-bottom:1px dotted var(--line-2);background:transparent;padding:4px 2px;outline:none;font-size:13px;width:100%}
+
+  /* ---------- แถบปุ่ม ---------- */
+  .bar{display:flex;align-items:center;gap:10px;padding:14px 32px;border-top:1px solid var(--line);background:var(--paper-2)}
+  .bar .sp{flex:1}
+  .bar .st{font-size:12.5px;color:var(--ink-3)}
+  .btn{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600;transition:.15s}
+  .btn:hover{border-color:var(--teal-700);color:var(--teal-900)}
+  .btn.primary{background:var(--teal-900);border-color:var(--teal-900);color:#F8F4EA}
+  .btn.primary:hover{background:var(--teal-700)}
+  .btn.ghost{background:transparent}
+  .foot{height:34px;background:var(--band)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--teal-900);color:#F8F4EA;padding:10px 18px;border-radius:999px;font-size:13px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);transition:.25s;pointer-events:none;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%)}
+
+  @media (max-width:1100px){ .grid{grid-template-columns:1fr 1fr} .col.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)} }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr} .col + .col{border-left:0;border-top:1px solid var(--line)} .head{grid-template-columns:1fr;text-align:center} .meta{justify-self:center} .meta label{justify-content:center} .stage{height:420px} }
+
+  /* ---------- พิมพ์: A4 แนวนอน 1 หน้า — สร้างหน้ากระดาษแยก (#print) จากค่าที่กรอก ---------- */
+  #print{display:none}
+  @media print{
+    @page{size:A4 landscape;margin:7mm 8mm}
+    html,body{background:#fff}
+    .sheet,.toast{display:none !important}
+    #print{display:block;width:281mm;height:196mm;color:#1C2420;font-size:9.5pt;line-height:1.4;font-family:'Noto Sans Thai',sans-serif;position:relative;overflow:hidden}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .p-head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:26mm;padding:0 2mm}
+    .p-addr{font-size:8.5pt;color:#5B6660;line-height:1.5}
+    .p-addr b{display:block;color:#1C2420;font-weight:600;font-size:9.5pt}
+    .p-brand{text-align:center}
+    .p-brand .mark{width:20mm;height:auto;margin:0 auto 1mm;border:0;color:#C6A15B}
+    .p-brand .mark svg{width:100%;height:auto;display:block}
+    .p-brand h1{margin:0;font-family:'Noto Serif Thai',serif;font-weight:500;font-size:22pt;color:#C6A15B;line-height:1;letter-spacing:.02em}
+    .p-brand small{display:block;font-size:6.5pt;letter-spacing:.22em;text-transform:uppercase;color:#8A928C;margin-top:1mm}
+    .p-meta{justify-self:end;text-align:right;font-size:9pt;color:#5B6660;line-height:1.7}
+    .p-meta b{color:#1C2420;font-weight:600}
+    .p-band{height:2.5mm;background:#B9A483}
+    .p-body{display:grid;grid-template-columns:66mm 84mm 1fr;height:162mm}
+    .p-col{padding:3.5mm 3.5mm 0}
+    .p-body > .p-col:last-child{display:flex;flex-direction:column;padding-bottom:4mm}
+    .p-col + .p-col{border-left:.3mm solid #1C2420}
+    .p-f{margin-bottom:2.2mm}
+    .p-f .l{font-size:7pt;letter-spacing:.08em;text-transform:uppercase;color:#5B6660;font-weight:600}
+    .p-f .v{border-bottom:.25mm dotted #8A928C;min-height:5.2mm;padding:.5mm 0 .3mm;font-size:10pt;white-space:pre-wrap;word-break:break-word}
+    .p-f .v.tall{min-height:22mm;border:.25mm solid #CFC4A8;border-radius:1.5mm;padding:1.2mm 1.8mm;font-size:9pt;background:repeating-linear-gradient(transparent 0 5.4mm,#E4DCC9 5.4mm 5.6mm)}
+    .p-f .v.taller{min-height:62mm}
+    .p-row{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+    .p-sex{display:flex;gap:6mm;font-size:10pt;padding-top:.6mm}
+    .p-sex i{display:inline-block;width:4mm;height:4mm;border:.3mm solid #1C2420;border-radius:.6mm;vertical-align:-.7mm;margin-right:1.5mm;text-align:center;line-height:3.6mm;font-style:normal;font-size:8pt}
+    .p-sex i.on{background:#12332C;color:#fff;border-color:#12332C}
+    .p-snaps{display:grid;grid-template-columns:1fr 1fr;gap:2mm}
+    .p-snaps figure{margin:0;text-align:center}
+    .p-snaps img{width:100%;height:82mm;object-fit:contain;background:#F8F5EC;border-radius:2mm}
+    .p-snaps figcaption{font-size:8pt;color:#5B6660;margin-top:.6mm;letter-spacing:.06em}
+    .p-marks{margin-top:2.5mm;font-size:8pt}
+    .p-marks .t{font-size:7pt;letter-spacing:.08em;text-transform:uppercase;color:#5B6660;font-weight:600;margin-bottom:1mm}
+    .p-mk{display:grid;grid-template-columns:5mm 1fr;gap:1.5mm;align-items:start;padding:.6mm 0;border-bottom:.2mm dotted #CFC4A8}
+    .p-mk .n{width:4.2mm;height:4.2mm;border-radius:50%;background:#C6A15B;color:#1C2420;font-weight:700;font-size:7pt;display:flex;align-items:center;justify-content:center}
+    .p-mk .r{color:#5B6660;font-size:7.2pt}
+    .p-mk .note{white-space:pre-wrap}
+    .p-marks .none{color:#8A928C;font-size:8pt}
+    .p-sec{margin-bottom:2.4mm}
+    .p-sec .t{display:flex;align-items:baseline;gap:1.5mm;font-family:'Noto Serif Thai',serif;font-size:11pt;font-weight:600;color:#12332C;margin-bottom:1mm}
+    .p-sec .t::before{content:"";width:2mm;height:2mm;border-radius:50%;background:#C6A15B;align-self:center}
+    .p-sec .t small{font-family:'Noto Sans Thai',sans-serif;font-size:8pt;font-weight:400;color:#5B6660}
+    .p-sec .box{min-height:21mm;border:.25mm solid #CFC4A8;border-radius:1.5mm;padding:1.2mm 1.8mm;background:#F5F0E4;font-size:9.5pt;white-space:pre-wrap;word-break:break-word}
+    .p-sec.nurse .box{background:#F4EBD6;border-color:#E9DDBD}
+    .p-sigs{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-top:auto;padding-top:4mm}
+    .p-sig{display:grid;gap:1mm}
+    .p-sig .lbl{font-size:8.5pt;font-weight:600;white-space:nowrap}
+    .p-sig .line{border-bottom:.3mm solid #1C2420;height:15mm;position:relative}
+    .p-sig .line img{position:absolute;left:0;bottom:0;height:15mm;width:100%;object-fit:contain;object-position:center bottom}
+    .p-sig .sub{font-size:7.5pt;color:#5B6660;display:flex;justify-content:space-between}
+    .p-foot{position:absolute;left:0;right:0;bottom:0;height:5mm;background:#B9A483}
+    .p-foot span{position:absolute;right:2mm;bottom:5.8mm;font-size:6.5pt;color:#8A928C}
+  }
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+
+  <header class="head">
+    <div class="addr"><b>Wellness Center (ตัวอย่าง)</b>99 Demo Road, Sample Sub-district,<br>Sample District, Bangkok 10000</div>
+    <div class="brand"><div class="mark"><svg stroke-linecap="round" class="lm" viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" aria-hidden="true"><path d="M60 68 V30"/><path d="M60 46 C44 46 31 37 27 18 C45 18 58 28 60 46 Z"/><path d="M60 38 C76 38 89 29 93 10 C75 10 62 20 60 38 Z"/></svg></div><h1>Wellness Center</h1><small>Treatment Order</small></div>
+    <div class="meta">
+      <label>DATE <input type="date" id="fDate"></label>
+      <label>TIME <input type="time" id="fTime"></label>
+      <span class="no">No. <span id="fNo">—</span></span>
+    </div>
+  </header>
+  <div class="band"></div>
+
+  <main class="grid">
+    <!-- ซ้าย: ข้อมูลผู้รับบริการ -->
+    <section class="col">
+      <div class="f"><span>Name · ชื่อ-นามสกุล</span><input type="text" id="fName" placeholder="ชื่อผู้รับบริการ" autocomplete="off"></div>
+      <div class="row2">
+        <div class="f"><span>ID / HN</span><input type="text" id="fHN" placeholder="HN" autocomplete="off"></div>
+        <div class="f"><span>Age · อายุ</span><input type="number" id="fAge" min="0" max="120" placeholder="ปี"></div>
+      </div>
+      <div class="f"><span>Sex · เพศ</span>
+        <div class="seg">
+          <label><input type="radio" name="sex" value="M"><span class="box"></span>M · ชาย</label>
+          <label><input type="radio" name="sex" value="W"><span class="box"></span>W · หญิง</label>
+        </div>
+      </div>
+      <div class="f"><span>Allergy / Precautions · แพ้ยา-ข้อควรระวัง</span><textarea id="fAllergy" rows="4" placeholder="เช่น แพ้ยา NSAIDs, ตั้งครรภ์, ใส่เครื่องกระตุ้นหัวใจ"></textarea></div>
+      <div class="f"><span>Additional Note / Special · หมายเหตุเพิ่มเติม</span><textarea id="fNote" rows="6" placeholder="ข้อมูลเพิ่มเติม / ความต้องการพิเศษ"></textarea></div>
+    </section>
+
+    <!-- กลาง: หุ่นร่างกาย 3D -->
+    <section class="col bodycol">
+      <div class="t">
+        <div><b>Body Map</b> <small>ลากเพื่อหมุน · คลิกบนร่างกายเพื่อระบุตำแหน่ง</small></div>
+        <div class="views" id="views">
+          <button data-v="front" class="on">Front</button><button data-v="back">Back</button><button data-v="left">L</button><button data-v="right">R</button>
+        </div>
+      </div>
+      <div class="stage" id="stage">
+        <canvas id="body3d"></canvas>
+        <div class="side" id="sideLbl">ด้านหน้า</div>
+        <div class="hint">เลื่อนลูกกลิ้งเพื่อซูม · ดับเบิลคลิกที่จุด = ลบ</div>
+      </div>
+      <div class="marks">
+        <div class="mh"><span>ตำแหน่งที่ระบุ <span id="mkCount">0</span> จุด</span><button type="button" id="mkClear">ล้างทั้งหมด</button></div>
+        <div id="mkList"><div class="empty">ยังไม่มีตำแหน่ง — คลิกบนหุ่นเพื่อเพิ่ม</div></div>
+      </div>
+    </section>
+
+    <!-- ขวา: คำสั่งการรักษา + ลายเซ็น -->
+    <section class="col right">
+      <div class="sec"><span>Therapy <small>การบำบัด</small></span><textarea id="fTherapy" placeholder="รายการหัตถการ / โปรแกรม"></textarea></div>
+      <div class="sec nurse"><span>Nurses Only <small>ดำเนินการโดยพยาบาลเท่านั้น</small></span><textarea id="fNurse" placeholder="คำสั่งสำหรับพยาบาล"></textarea></div>
+      <div class="sec"><span>Beauty <small>ด้านความงาม</small></span><textarea id="fBeauty" placeholder="รายการด้านความงาม"></textarea></div>
+      <div class="sec"><span>Physical <small>ด้านกายภาพ</small></span><textarea id="fPhysical" placeholder="รายการกายภาพ / ฟื้นฟู"></textarea></div>
+
+      <div class="sigs">
+        <div class="sig">
+          <div class="lbl"><b>Practitioner / Doctor Order</b><span>ลงชื่อแพทย์ผู้สั่ง <button type="button" data-clear="sigDoc">ล้าง</button></span></div>
+          <canvas id="sigDoc"></canvas>
+          <input class="name" id="fDocName" type="text" placeholder="ชื่อแพทย์ / ผู้สั่ง">
+        </div>
+        <div class="sig">
+          <div class="lbl"><b>Client Acknowledgment</b><span>ลงชื่อผู้รับบริการ <button type="button" data-clear="sigClient">ล้าง</button></span></div>
+          <canvas id="sigClient"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="bar">
+    <span class="st" id="status">แบบร่างจะถูกเก็บในเครื่องอัตโนมัติ</span>
+    <span class="sp"></span>
+    <button class="btn ghost" id="btnNew" type="button">ฟอร์มใหม่</button>
+    <button class="btn" id="btnPrint" type="button">พิมพ์</button>
+    <button class="btn primary" id="btnSave" type="button">บันทึก</button>
+  </div>
+  <div class="foot"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- หน้ากระดาษสำหรับพิมพ์ — สร้างจากค่าที่กรอกตอนกดพิมพ์ -->
+<div id="print">
+  <div class="p-head">
+    <div class="p-addr"><b>Wellness Center (ตัวอย่าง)</b>99 Demo Road, Sample Sub-district,<br>Sample District, Bangkok 10000</div>
+    <div class="p-brand"><div class="mark"><svg stroke-linecap="round" class="lm" viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" aria-hidden="true"><path d="M60 68 V30"/><path d="M60 46 C44 46 31 37 27 18 C45 18 58 28 60 46 Z"/><path d="M60 38 C76 38 89 29 93 10 C75 10 62 20 60 38 Z"/></svg></div><h1>Wellness Center</h1><small>Treatment Order</small></div>
+    <div class="p-meta">DATE : <b id="pDate"></b><br>TIME : <b id="pTime"></b><br>No. <b id="pNo"></b></div>
+  </div>
+  <div class="p-band"></div>
+  <div class="p-body">
+    <div class="p-col">
+      <div class="p-f"><div class="l">Name · ชื่อ-นามสกุล</div><div class="v" id="pName"></div></div>
+      <div class="p-row"><div class="p-f"><div class="l">ID / HN</div><div class="v" id="pHN"></div></div><div class="p-f"><div class="l">Age · อายุ</div><div class="v" id="pAge"></div></div></div>
+      <div class="p-f"><div class="l">Sex · เพศ</div><div class="p-sex"><span><i id="pSexM"></i>M · ชาย</span><span><i id="pSexW"></i>W · หญิง</span></div></div>
+      <div class="p-f"><div class="l">Allergy / Precautions</div><div class="v tall" id="pAllergy"></div></div>
+      <div class="p-f"><div class="l">Additional Note / Special</div><div class="v tall taller" id="pNote"></div></div>
+    </div>
+    <div class="p-col">
+      <div class="p-snaps"><figure><img id="snapF" alt=""><figcaption>FRONT · ด้านหน้า</figcaption></figure><figure><img id="snapB" alt=""><figcaption>BACK · ด้านหลัง</figcaption></figure></div>
+      <div class="p-marks"><div class="t">ตำแหน่งที่ระบุ</div><div id="pMarks"></div></div>
+    </div>
+    <div class="p-col">
+      <div class="p-sec"><div class="t">Therapy <small>การบำบัด</small></div><div class="box" id="pTherapy"></div></div>
+      <div class="p-sec nurse"><div class="t">Nurses Only <small>ดำเนินการโดยพยาบาลเท่านั้น</small></div><div class="box" id="pNurse"></div></div>
+      <div class="p-sec"><div class="t">Beauty <small>ด้านความงาม</small></div><div class="box" id="pBeauty"></div></div>
+      <div class="p-sec"><div class="t">Physical <small>ด้านกายภาพ</small></div><div class="box" id="pPhysical"></div></div>
+      <div class="p-sigs">
+        <div class="p-sig"><div class="lbl">Practitioner / Doctor Order:</div><div class="line"><img id="pSigDoc" alt=""></div><div class="sub"><span id="pDocName"></span><span>(ลงชื่อแพทย์ผู้สั่ง)</span></div></div>
+        <div class="p-sig"><div class="lbl">Client Acknowledgment:</div><div class="line"><img id="pSigClient" alt=""></div><div class="sub"><span id="pClientName"></span><span>(ลงชื่อผู้รับบริการ)</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="p-foot"><span id="pStamp"></span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============================================================ ฟอร์ม */
+const $ = id => document.getElementById(id);
+const DRAFT_KEY = 'wellness.order.draft';
+const pad = n => String(n).padStart(2, '0');
+const now = new Date();
+$('fDate').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+$('fTime').value = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+$('fNo').textContent = `TO-${String(now.getFullYear() + 543).slice(2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+
+let toastT;
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2600); }
+
+/* ============================================================ ลายเซ็น */
+function sigPad(canvas) {
+  const ctx = canvas.getContext('2d'); let drawing = false, dirty = false, last = null;
+  function fit() { const r = canvas.getBoundingClientRect(), d = devicePixelRatio || 1; const img = dirty ? canvas.toDataURL() : null;
+    canvas.width = r.width * d; canvas.height = r.height * d; ctx.setTransform(d, 0, 0, d, 0, 0); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1C2420';
+    if (img) { const im = new Image(); im.onload = () => ctx.drawImage(im, 0, 0, r.width, r.height); im.src = img; } }
+  const pt = e => { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  canvas.addEventListener('pointerdown', e => { drawing = true; last = pt(e); canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', e => { if (!drawing) return; const p = pt(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p; dirty = true; });
+  const end = () => { drawing = false; if (dirty) saveDraftSoon(); };
+  canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+  addEventListener('resize', fit); fit();
+  return { clear() { ctx.clearRect(0, 0, canvas.width, canvas.height); dirty = false; }, get() { return dirty ? canvas.toDataURL('image/png') : ''; },
+    set(url) { if (!url) return; const im = new Image(); im.onload = () => { const r = canvas.getBoundingClientRect(); ctx.drawImage(im, 0, 0, r.width, r.height); dirty = true; }; im.src = url; } };
+}
+const SIG = { sigDoc: sigPad($('sigDoc')), sigClient: sigPad($('sigClient')) };
+document.querySelectorAll('[data-clear]').forEach(b => b.onclick = () => { SIG[b.dataset.clear].clear(); saveDraftSoon(); });
+
+/* ============================================================ Body map 3D (three.js) */
+const MARKS = [];               // { n, pos:[x,y,z], nrm:[x,y,z], region, side, note }
+const stage = $('stage'), canvas = $('body3d');
+let renderer, scene, camera, body, pick = [], markerGroup, has3d = false;
+let theta = 0, phi = 1.48, dist = 3.4, target = new (window.THREE ? THREE.Vector3 : Object)(0, 0.92, 0);
+
+function initBody() {
+  if (!window.THREE) return;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { return; }
+  has3d = true;
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+  scene.add(new THREE.HemisphereLight(0xFFFFFF, 0xC9BFA6, 0.85));
+  const key = new THREE.DirectionalLight(0xFFF6E4, 0.9); key.position.set(2.5, 4, 3); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xC6A15B, 0.35); rim.position.set(-3, 2, -2.5); scene.add(rim);
+
+  const skin = new THREE.MeshStandardMaterial({ color: 0xEFE7D6, roughness: 0.62, metalness: 0.02 });
+  body = new THREE.Group(); scene.add(body);
+  const add = (geo, x, y, z, sx, sy, sz) => { const m = new THREE.Mesh(geo, skin); m.position.set(x, y, z); if (sx) m.scale.set(sx, sy, sz); body.add(m); pick.push(m); return m; };
+  const sph = new THREE.SphereGeometry(1, 36, 28);
+  const limb = (a, b, r1, r2) => {                                // ท่อนแขน/ขา ระหว่างจุด a → b
+    const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), len = d.length();
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r2, r1, len, 24, 1), skin);
+    m.position.copy(A).add(B).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize());
+    body.add(m); pick.push(m); return m;
+  };
+  // ศีรษะ-คอ
+  add(sph, 0, 1.70, 0, 0.105, 0.125, 0.11);
+  add(new THREE.CylinderGeometry(0.048, 0.058, 0.11, 24), 0, 1.56, 0);
+  // ลำตัว (Lathe → บีบด้านข้างให้แบน)
+  const prof = [[0.13, 0.86], [0.17, 0.93], [0.165, 1.02], [0.15, 1.13], [0.155, 1.24], [0.175, 1.36], [0.2, 1.45], [0.17, 1.51], [0.09, 1.535]].map(p => new THREE.Vector2(p[0], p[1]));
+  const torso = new THREE.Mesh(new THREE.LatheGeometry(prof, 40), skin); torso.scale.set(1, 1, 0.62); body.add(torso); pick.push(torso);
+  add(sph, 0, 0.93, 0, 0.19, 0.11, 0.115);                            // สะโพก
+  [-1, 1].forEach(s => {
+    add(sph, s * 0.215, 1.47, 0, 0.065, 0.06, 0.06);                    // หัวไหล่
+    limb([s * 0.235, 1.45, 0], [s * 0.285, 1.19, 0.01], 0.052, 0.044);   // ต้นแขน
+    add(sph, s * 0.285, 1.19, 0.01, 0.045, 0.045, 0.045);               // ข้อศอก
+    limb([s * 0.285, 1.19, 0.01], [s * 0.31, 0.95, 0.05], 0.042, 0.033); // ปลายแขน
+    add(sph, s * 0.315, 0.87, 0.06, 0.045, 0.085, 0.024);              // มือ
+    limb([s * 0.095, 0.92, 0], [s * 0.105, 0.52, 0.01], 0.078, 0.058);  // ต้นขา
+    add(sph, s * 0.105, 0.52, 0.01, 0.06, 0.06, 0.06);                  // เข่า
+    limb([s * 0.105, 0.52, 0.01], [s * 0.105, 0.09, 0], 0.056, 0.038);  // หน้าแข้ง
+    add(sph, s * 0.105, 0.04, 0.045, 0.05, 0.035, 0.115);              // เท้า
+  });
+  // เงาพื้น
+  const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.42, 48), new THREE.MeshBasicMaterial({ color: 0x8C7A58, transparent: true, opacity: 0.13 }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.002; scene.add(shadow);
+  markerGroup = new THREE.Group(); scene.add(markerGroup);
+
+  // ---- กล้อง / หมุน / ซูม
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let down = null, moved = false;
+  stage.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, th: theta, ph: phi }; moved = false; stage.classList.add('grabbing'); stage.setPointerCapture(e.pointerId); });
+  stage.addEventListener('pointermove', e => {
+    if (!down) return; const dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+    theta = down.th - dx * 0.008; phi = Math.min(2.6, Math.max(0.5, down.ph - dy * 0.006)); updateSide(); render();
+  });
+  stage.addEventListener('pointerup', e => {
+    stage.classList.remove('grabbing');
+    if (down && !moved) {
+      const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(ndc, camera);
+      const hm = ray.intersectObjects(markerGroup.children, true)[0];
+      if (hm) { const n = hm.object.userData.n || hm.object.parent.userData.n; if (e.detail >= 2) removeMark(n); }
+      else { const hit = ray.intersectObjects(pick)[0]; if (hit) addMark(hit); }
+    }
+    down = null;
+  });
+  stage.addEventListener('wheel', e => { e.preventDefault(); dist = Math.min(5.5, Math.max(1.4, dist + e.deltaY * 0.0015)); render(); }, { passive: false });
+  addEventListener('resize', resize); resize(); updateSide();
+}
+function resize() { if (!has3d) return; const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render(); }
+function render() {
+  if (!has3d) return;
+  camera.position.set(target.x + dist * Math.sin(phi) * Math.sin(theta), target.y + dist * Math.cos(phi), target.z + dist * Math.sin(phi) * Math.cos(theta));
+  camera.lookAt(target); renderer.render(scene, camera);
+}
+const VIEW = { front: 0, back: Math.PI, left: Math.PI / 2, right: -Math.PI / 2 };   // left = มองเห็นด้านซ้ายของผู้ป่วย
+function setView(v) { theta = VIEW[v]; phi = 1.48; document.querySelectorAll('#views button').forEach(b => b.classList.toggle('on', b.dataset.v === v)); updateSide(); render(); }
+$('views').onclick = e => { const b = e.target.closest('button'); if (b) setView(b.dataset.v); };
+function updateSide() { const c = Math.cos(theta), s = Math.sin(theta); $('sideLbl').textContent = Math.abs(c) >= Math.abs(s) ? (c > 0 ? 'ด้านหน้า' : 'ด้านหลัง') : (s > 0 ? 'ด้านซ้าย' : 'ด้านขวา'); }
+
+// ---- ระบุตำแหน่งบนร่างกาย (ชื่อบริเวณจากพิกัด)
+function regionOf(p, nrm) {
+  const side = nrm.z >= 0 ? 'หน้า' : 'หลัง';
+  const lr = Math.abs(p.x) < 0.06 ? '' : (p.x < 0 ? 'ขวา' : 'ซ้าย');        // หุ่นหันหน้าเข้าหาเรา → x ลบ = ด้านขวาของผู้ป่วย
+  const ax = Math.abs(p.x), y = p.y; let part;
+  if (y > 1.58) part = 'ศีรษะ';
+  else if (y > 1.5) part = ax > 0.12 ? 'ไหล่' : 'คอ';
+  else if (ax > 0.22) part = y > 1.15 ? 'ต้นแขน' : y > 0.92 ? 'ปลายแขน' : 'มือ';
+  else if (y > 1.28) part = side === 'หน้า' ? 'อก' : 'หลังส่วนบน';
+  else if (y > 1.02) part = side === 'หน้า' ? 'ท้อง' : 'หลังส่วนล่าง';
+  else if (y > 0.86) part = side === 'หน้า' ? 'สะโพก/หน้าท้องล่าง' : 'สะโพก/ก้น';
+  else if (y > 0.56) part = 'ต้นขา';
+  else if (y > 0.46) part = 'เข่า';
+  else if (y > 0.1) part = 'น่อง/หน้าแข้ง';
+  else part = 'เท้า';
+  return { region: [part, lr].filter(Boolean).join(' '), side };
+}
+function makeLabel(n) {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  x.beginPath(); x.arc(32, 32, 28, 0, Math.PI * 2); x.fillStyle = '#C6A15B'; x.fill(); x.lineWidth = 4; x.strokeStyle = '#FFFFFF'; x.stroke();
+  x.fillStyle = '#1C2420'; x.font = 'bold 30px sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(n), 32, 34);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false })); sp.scale.setScalar(0.11); return sp;
+}
+function addMark(hit, saved) {
+  const p = hit.point, nrm = saved ? new THREE.Vector3(...saved.nrm) : hit.face.normal.clone().transformDirection(hit.object.matrixWorld);
+  const n = saved ? saved.n : (MARKS.length ? Math.max(...MARKS.map(m => m.n)) + 1 : 1);
+  const meta = saved || Object.assign({ n, pos: [p.x, p.y, p.z], nrm: [nrm.x, nrm.y, nrm.z], note: '' }, regionOf(p, nrm));
+  const g = new THREE.Group(); g.userData.n = n;
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 16), new THREE.MeshBasicMaterial({ color: 0xC6A15B })); dot.position.set(...meta.pos); g.add(dot);
+  const lb = makeLabel(n); lb.position.set(...meta.pos).add(nrm.clone().multiplyScalar(0.09)); g.add(lb);
+  markerGroup.add(g); if (!saved) MARKS.push(meta);
+  renderMarks(); render(); if (!saved) saveDraftSoon();
+}
+function removeMark(n) { const i = MARKS.findIndex(m => m.n === n); if (i < 0) return; MARKS.splice(i, 1); rebuildMarkers(); renderMarks(); saveDraftSoon(); }
+function rebuildMarkers() { if (!has3d) return; while (markerGroup.children.length) markerGroup.remove(markerGroup.children[0]); MARKS.forEach(m => addMark({ point: new THREE.Vector3(...m.pos) }, m)); render(); }
+function renderMarks() {
+  $('mkCount').textContent = MARKS.length;
+  const box = $('mkList');
+  if (!MARKS.length) { box.innerHTML = '<div class="empty">ยังไม่มีตำแหน่ง — คลิกบนหุ่นเพื่อเพิ่ม</div>'; return; }
+  box.innerHTML = MARKS.map(m => `<div class="mk"><span class="n">${m.n}</span><div><input data-n="${m.n}" value="${(m.note || '').replace(/"/g, '&quot;')}" placeholder="รายละเอียด / หัตถการที่ตำแหน่งนี้"><div class="r">${m.region} · ด้าน${m.side}</div></div><button type="button" title="ลบ" data-del="${m.n}">×</button></div>`).join('');
+  box.querySelectorAll('input').forEach(i => i.oninput = () => { const m = MARKS.find(x => x.n == i.dataset.n); if (m) m.note = i.value; saveDraftSoon(); });
+  box.querySelectorAll('[data-del]').forEach(b => b.onclick = () => removeMark(+b.dataset.del));
+}
+$('mkClear').onclick = () => { if (!MARKS.length || confirm('ล้างตำแหน่งทั้งหมด?')) { MARKS.length = 0; rebuildMarkers(); renderMarks(); saveDraftSoon(); } };
+
+/* ============================================================ เก็บ / โหลดข้อมูล */
+const FIELDS = ['fDate', 'fTime', 'fName', 'fHN', 'fAge', 'fAllergy', 'fNote', 'fTherapy', 'fNurse', 'fBeauty', 'fPhysical', 'fDocName'];
+function collect() {
+  const d = { no: $('fNo').textContent, sex: (document.querySelector('input[name=sex]:checked') || {}).value || '' };
+  FIELDS.forEach(id => d[id.slice(1).toLowerCase()] = $(id).value);
+  d.marks = MARKS.map(m => ({ n: m.n, region: m.region, side: m.side, note: m.note, pos: m.pos, nrm: m.nrm }));
+  d.sigdoc = SIG.sigDoc.get(); d.sigclient = SIG.sigClient.get();
+  return d;
+}
+function restore(d) {
+  if (!d) return;
+  FIELDS.forEach(id => { const k = id.slice(1).toLowerCase(); if (d[k] != null && !(id === 'fDate' || id === 'fTime')) $(id).value = d[k]; });
+  if (d.sex) { const r = document.querySelector(`input[name=sex][value=${d.sex}]`); if (r) r.checked = true; }
+  MARKS.length = 0; (d.marks || []).forEach(m => MARKS.push(m)); rebuildMarkers(); renderMarks();
+  SIG.sigDoc.set(d.sigdoc || d.sigDoc); SIG.sigClient.set(d.sigclient || d.sigClient);
+}
+let draftT;
+function saveDraftSoon() { clearTimeout(draftT); draftT = setTimeout(() => { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collect())); $('status').textContent = 'เก็บแบบร่างในเครื่องแล้ว ' + new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }); } catch (e) {} }, 400); }
+document.querySelectorAll('input,textarea').forEach(el => el.addEventListener('input', saveDraftSoon));
+
+$('btnSave').onclick = () => {
+  const d = collect();
+  if (!d.name.trim()) { toast('กรุณากรอกชื่อผู้รับบริการ'); $('fName').focus(); return; }
+  if (window.google && google.script) {                                  // เมื่อผูก Apps Script แล้ว: google.script.run.saveOrder(d)
+    google.script.run.withSuccessHandler(r => toast('บันทึกลง Google Sheet แล้ว')).withFailureHandler(e => toast('บันทึกไม่สำเร็จ: ' + e.message)).saveOrder(d);
+  } else { console.log('ORDER JSON', d); toast('เดโม — เก็บแบบร่างไว้ในเครื่องนี้แล้ว'); saveDraftSoon(); }
+};
+$('btnNew').onclick = () => { if (!confirm('เริ่มฟอร์มใหม่? ข้อมูลที่กรอกอยู่จะถูกล้าง')) return; try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} location.reload(); };
+
+/* พิมพ์: ถ่ายภาพหุ่นด้านหน้า/หลังเป็นภาพแนวตั้ง แล้วเติมค่าทุกช่องลงหน้ากระดาษ #print */
+function snapshot(v) {
+  const t0 = theta, p0 = phi, d0 = dist, W = 560, H = 1000;
+  renderer.setSize(W, H, false); camera.aspect = W / H; camera.updateProjectionMatrix();
+  theta = VIEW[v]; phi = 1.52; dist = 3.05; render();
+  const u = renderer.domElement.toDataURL('image/png');
+  theta = t0; phi = p0; dist = d0; resize(); return u;
+}
+const esc = t => String(t ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const thDate = iso => { if (!iso) return ''; const [y, m, d] = iso.split('-'); return `${+d} ${['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'][+m - 1]} ${+y + 543}`; };
+function buildPrint() {
+  const d = collect();
+  $('pDate').textContent = thDate(d.date); $('pTime').textContent = d.time ? d.time + ' น.' : ''; $('pNo').textContent = d.no;
+  $('pName').textContent = d.name; $('pHN').textContent = d.hn; $('pAge').textContent = d.age ? d.age + ' ปี' : '';
+  $('pSexM').textContent = d.sex === 'M' ? '✓' : ''; $('pSexM').classList.toggle('on', d.sex === 'M');
+  $('pSexW').textContent = d.sex === 'W' ? '✓' : ''; $('pSexW').classList.toggle('on', d.sex === 'W');
+  $('pAllergy').textContent = d.allergy; $('pNote').textContent = d.note;
+  $('pTherapy').textContent = d.therapy; $('pNurse').textContent = d.nurse; $('pBeauty').textContent = d.beauty; $('pPhysical').textContent = d.physical;
+  $('pMarks').innerHTML = d.marks.length
+    ? d.marks.map(m => `<div class="p-mk"><span class="n">${m.n}</span><div><span class="note">${esc(m.note) || '<span class="r">—</span>'}</span> <span class="r">· ${esc(m.region)} · ด้าน${esc(m.side)}</span></div></div>`).join('')
+    : '<div class="none">ไม่ได้ระบุตำแหน่งบนร่างกาย</div>';
+  $('pSigDoc').src = d.sigdoc || ''; $('pSigDoc').style.display = d.sigdoc ? '' : 'none';
+  $('pSigClient').src = d.sigclient || ''; $('pSigClient').style.display = d.sigclient ? '' : 'none';
+  $('pDocName').textContent = d.docname || ''; $('pClientName').textContent = d.name || '';
+  $('pStamp').textContent = 'พิมพ์ ' + new Date().toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+  if (has3d) { $('snapF').src = snapshot('front'); $('snapB').src = snapshot('back'); }
+}
+$('btnPrint').onclick = () => { buildPrint(); setTimeout(print, 200); };   // รอรูปหุ่นถอดรหัสก่อนเปิดหน้าต่างพิมพ์
+addEventListener('beforeprint', buildPrint);                               // เผื่อกด Ctrl+P
+
+/* ============================================================ เริ่มทำงาน */
+initBody();
+try { restore(JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null')); } catch (e) {}
+render();
+</script>
+</body>
+</html>

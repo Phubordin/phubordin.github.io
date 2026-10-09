@@ -18,7 +18,7 @@
     <meta name="author" content="Phubordin Phanyosri">
     <meta name="keywords" content="Phubordin, Phanyosri, Data Analyst, Portfolio, Power BI, SQL, Dashboard">
     <title>Performance Dashboard — มิตรไมตรีการแพทย์</title>
-    <meta name="description" content="แดชบอร์ดติดตามผลประกอบการรายสาขา 8 หน้า เขียนด้วย HTML และ JavaScript ล้วน (ข้อมูลจำลอง)">
+    <meta name="description" content="แดชบอร์ดติดตามผลประกอบการรายสาขา 9 หน้า พร้อมโหมดสาขาและการกระจายของ Bill Size เขียนด้วย HTML และ JavaScript ล้วน (ข้อมูลจำลอง)">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="certificate-style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -46,7 +46,7 @@
         </div>
 
         <h2 class="link-cursor">แดชบอร์ดติดตามผลประกอบการรายสาขา</h2>
-        <p class="hero-lede">แดชบอร์ด 8 หน้าในไฟล์เดียว เปิดจากเบราว์เซอร์ได้เลยโดยไม่ต้องมีเซิร์ฟเวอร์ ครอบคลุมตั้งแต่เทียบเป้ารายเดือน ไปจนถึงการวิเคราะห์ลูกค้าเก่า–ใหม่ และเวลารอรับบริการ</p>
+        <p class="hero-lede">แดชบอร์ด 9 หน้าในไฟล์เดียว ครอบคลุมตั้งแต่เทียบเป้ารายเดือน การวิเคราะห์ลูกค้าเก่า–ใหม่ เวลารอรับบริการ ไปจนถึงภาระงานรายวันและการกระจายของยอดต่อบิล ไฟล์เดียวกันนี้ยังเปิดเป็น "แดชบอร์ดสาขาของฉัน" ที่เห็นเฉพาะสาขาตัวเองได้ด้วย</p>
 
         <div class="grid-2" style="margin-bottom:var(--s5)">
             <div class="brief">
@@ -67,8 +67,34 @@
             </div>
         </div>
 
+        <h3>เวอร์ชันล่าสุดเพิ่มอะไรบ้าง</h3>
+        <div class="grid-2" style="margin-bottom:var(--s5)">
+            <div class="brief">
+                <h3>ภาระงาน &amp; หัตถการ</h3>
+                <p>หน้าใหม่ที่ดูจำนวน visit ต่อวันแยกตามประเภทหัตถการ เทียบกับปีก่อน
+                    ใช้คุยเรื่องกำลังคนกับปริมาณงานจริงของแต่ละสาขา แทนการดูแค่ยอดขาย</p>
+            </div>
+            <div class="brief">
+                <h3>การกระจายของ Bill Size</h3>
+                <p>กดรูปตาข้างแต่ละหมวดบริการ จะเห็นว่ายอดต่อบิลกระจายตัวแบบไหน ทั้งค่ากลาง ช่วง Q1–Q3
+                    ช่วง P10–P90 และสัดส่วนรายได้จากบิลกลุ่มบนสุด 10% เลือกดูทั้งบริษัท รายเขต หรือรายสาขา
+                    พร้อมเทียบปีก่อนได้</p>
+            </div>
+            <div class="brief">
+                <h3>โหมดสาขา</h3>
+                <p>ผู้จัดการสาขาเปิดจากพอร์ทัลแล้วเห็นเฉพาะสาขาตัวเอง ฝั่งเซิร์ฟเวอร์หั่นข้อมูลให้เหลือสาขาเดียว
+                    ก่อนส่งมาที่เบราว์เซอร์ ผู้ใช้จึงขอข้อมูลสาขาอื่นไม่ได้เลย</p>
+            </div>
+            <div class="brief">
+                <h3>โหลดเฉพาะที่ใช้</h3>
+                <p>ข้อมูลทั้งหมดใหญ่เกินจะส่งทีเดียว จึงแบ่งเป็นก้อนเก็บบน Drive แล้วโหลดเฉพาะตารางที่หน้านั้นต้องใช้
+                    หน้าแรกเปิดได้เร็วขึ้น และหน้าอื่นค่อยโหลดตามเมื่อกดเข้าไป</p>
+            </div>
+        </div>
+
         <div class="hero-actions">
             <a class="btn btn-primary" href="mmt-app-dashboard.html" target="_blank" rel="noopener">เปิดแบบเต็มจอ ↗</a>
+            <a class="btn btn-ghost" href="mmt-app-dashboard-branch.html" target="_blank" rel="noopener">เปิดโหมดสาขา ↗</a>
             <a class="btn btn-ghost" href="experience_mmt.html">ดูผลงานชิ้นอื่น</a>
         </div>
 

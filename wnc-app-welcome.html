@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Wellness Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* หน้านี้เป็นโทนมืดแบบเดียวโดยตั้งใจ (ฉาก 3D) — ไม่สลับตามระบบ */
+  :root{
+    color-scheme:dark;
+    --teal-950:#08160F; --teal-900:#12332C; --teal-700:#1F4D42; --gold-500:#C6A15B; --gold-300:#DEC48A;
+    --cream-50:#FCFAF4; --text:#F1ECDF; --text-2:rgba(241,236,223,.78); --text-3:rgba(241,236,223,.55);
+    --glass:rgba(18,51,44,.55); --glass-line:rgba(222,196,138,.28); --glow:rgba(198,161,91,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{background:radial-gradient(120% 90% at 50% 20%, #1B4A3F 0%, var(--teal-900) 45%, var(--teal-950) 100%);color:var(--text);font-family:'Noto Sans Thai',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  #scene{position:fixed;inset:0;width:100%;height:100%;display:block}
+  @supports (height:100dvh){ .wrap{min-height:100dvh} }
+  .veil{position:fixed;inset:0;pointer-events:none;background:radial-gradient(60% 55% at 50% 45%, rgba(8,22,15,0) 0%, rgba(8,22,15,.35) 70%, rgba(8,22,15,.7) 100%)}
+  .wrap{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    padding:clamp(24px,5vh,56px) clamp(16px,4vw,32px);
+    padding-left:max(clamp(16px,4vw,32px),env(safe-area-inset-left));padding-right:max(clamp(16px,4vw,32px),env(safe-area-inset-right));
+    padding-bottom:max(clamp(24px,5vh,56px),env(safe-area-inset-bottom));
+    gap:clamp(18px,3.5vh,32px)}
+  .mark{width:clamp(104px,15vw,150px);display:flex;align-items:center;justify-content:center;color:var(--gold-300);
+    filter:drop-shadow(0 0 30px rgba(198,161,91,.42))}
+  .mark svg{width:100%;height:auto;display:block}
+  .kicker{font-size:clamp(10px,1.4vw,12px);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-300);margin:clamp(10px,2vh,14px) 0 8px}
+  h1{font-family:'Noto Serif Thai',serif;font-weight:600;font-size:clamp(23px,5.2vw,42px);margin:0;color:#fff;text-wrap:balance;text-shadow:0 2px 30px rgba(0,0,0,.35)}
+  .sub{color:var(--text-2);margin:8px 0 0;font-size:clamp(13px,1.6vw,15px)}
+  .choices{display:flex;gap:clamp(12px,2vw,20px);flex-wrap:wrap;justify-content:center;align-items:flex-start;width:100%;max-width:660px}
+  .choice{
+    width:100%;display:flex;flex-direction:column;gap:10px;text-align:left;text-decoration:none;color:inherit;
+    background:var(--glass);border:1px solid var(--glass-line);border-radius:14px;padding:clamp(16px,2.2vw,22px) clamp(16px,2.2vw,22px) clamp(14px,1.8vw,18px);
+    backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+    box-shadow:0 20px 50px -24px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06);
+    transition:transform .2s,box-shadow .2s,border-color .2s;
+  }
+  .choice:hover,.choice:focus-visible{transform:translateY(-4px);border-color:var(--gold-500);box-shadow:0 26px 60px -24px rgba(0,0,0,.8),0 0 0 1px rgba(198,161,91,.35),0 0 36px -6px var(--glow);outline:none}
+  .choice .ico{width:clamp(38px,5vw,46px);height:clamp(38px,5vw,46px);flex:none;border-radius:12px;background:rgba(222,196,138,.14);border:1px solid rgba(222,196,138,.25);color:var(--gold-300);display:flex;align-items:center;justify-content:center}
+  .choice .ico svg{width:clamp(20px,2.6vw,24px);height:clamp(20px,2.6vw,24px)}
+  .choice h2{font-family:'Noto Serif Thai',serif;font-weight:600;font-size:clamp(18px,2.4vw,22px);margin:0;color:#fff}
+  .choice p{margin:0;color:var(--text-2);font-size:clamp(12.5px,1.5vw,13.5px);line-height:1.5}
+  .choice .go{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--gold-300);font-size:13.5px;margin-top:4px}
+  .choice .go svg{width:16px;height:16px;transition:transform .2s}
+  .choice:hover .go svg{transform:translateX(4px)}
+  /* dropdown เลือก Target group ของ Lead ORG */
+  .choice-wrap{position:relative;flex:1 1 280px;min-width:0;max-width:320px}
+  .choices > .choice{flex:1 1 280px;min-width:0;max-width:320px}
+  .choice-wrap .choice{width:100%;cursor:pointer;font:inherit}
+  .choice-wrap.open .choice{border-color:var(--gold-500);box-shadow:0 0 0 1px rgba(198,161,91,.35),0 0 36px -6px var(--glow)}
+  .choice .go .chev{transition:transform .2s}
+  .choice-wrap.open .go .chev{transform:rotate(180deg)}
+  .menu{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:5;display:none;flex-direction:column;padding:6px;
+    background:rgba(12,36,30,.92);border:1px solid var(--glass-line);border-radius:12px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    box-shadow:0 24px 50px -20px rgba(0,0,0,.8)}
+  .choice-wrap.open .menu{display:flex}
+  .menu .head{text-align:left;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-300);padding:8px 12px 4px}
+  .menu a{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;padding:10px 12px;border-radius:8px;text-decoration:none;color:var(--text)}
+  .menu a b{font-weight:600;font-size:14px}
+  .menu a small{color:var(--text-3);font-size:12px}
+  .menu a:hover,.menu a:focus-visible{background:rgba(222,196,138,.12);outline:none}
+  .foot{color:var(--text-3);font-size:clamp(11.5px,1.4vw,12.5px);word-break:break-word}
+
+  /* ---------- หน้าจอระหว่างรอ 3D พร้อม ---------- */
+  #boot{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:radial-gradient(120% 90% at 50% 25%, #1B4A3F 0%, var(--teal-900) 45%, var(--teal-950) 100%);
+    transition:opacity .7s ease, visibility .7s}
+  #boot.done{opacity:0;visibility:hidden;pointer-events:none}
+  .boot-mark{position:relative;width:96px;height:96px;display:flex;align-items:center;justify-content:center}
+  .boot-mark .lm{width:58px;height:auto;color:var(--gold-300);animation:bootPulse 2.4s ease-in-out infinite}
+  .boot-mark i{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;
+    border-top-color:var(--gold-300);border-right-color:rgba(222,196,138,.35);animation:bootSpin 1.7s cubic-bezier(.65,.05,.36,1) infinite}
+  .boot-mark i:nth-of-type(2){inset:11px;border-top-color:rgba(47,164,120,.9);border-right-color:transparent;animation-duration:2.6s;animation-direction:reverse}
+  .boot-mark::after{content:"";position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle, var(--glow) 0%, transparent 68%);
+    opacity:.5;animation:bootGlow 2.4s ease-in-out infinite}
+  .boot-txt{text-align:center;color:var(--text-2);font-size:13.5px;letter-spacing:.02em}
+  .boot-txt b{display:block;font-family:'Noto Serif Thai',serif;font-weight:600;font-size:clamp(17px,2.4vw,20px);color:#fff;margin-bottom:5px}
+  .boot-bar{width:min(220px,52vw);height:3px;border-radius:99px;background:rgba(222,196,138,.16);overflow:hidden}
+  .boot-bar i{display:block;height:100%;width:38%;border-radius:99px;background:linear-gradient(90deg,transparent,var(--gold-300),transparent);
+    animation:bootSweep 1.4s ease-in-out infinite}
+  @keyframes bootSpin{to{transform:rotate(360deg)}}
+  @keyframes bootPulse{0%,100%{opacity:.75;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+  @keyframes bootGlow{0%,100%{opacity:.35;transform:scale(.94)}50%{opacity:.7;transform:scale(1.08)}}
+  @keyframes bootSweep{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}
+
+  /* ---------- อินโทร: เนื้อหาไล่กันขึ้นมาหลังฉากพร้อม ---------- */
+  .wrap > *{opacity:0;transform:translateY(14px);animation:rise .9s cubic-bezier(.22,.9,.3,1) forwards}
+  body.ready .wrap > *:nth-child(1){animation-delay:.05s}
+  body.ready .wrap > *:nth-child(2){animation-delay:.2s}
+  body.ready .wrap > *:nth-child(3){animation-delay:.35s}
+  .wrap > *{animation-play-state:paused}
+  body.ready .wrap > *{animation-play-state:running}
+  @keyframes rise{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion: reduce){
+    .wrap > *{opacity:1;transform:none;animation:none}
+    .boot-mark i,.boot-mark .lm,.boot-mark::after,.boot-bar i{animation:none}
+  }
+  .foot span{color:var(--text-2)}
+  @media (prefers-reduced-motion: reduce){ .choice{transition:none} }
+  /* จอแคบ: การ์ดเรียงลงมาเต็มความกว้าง เมนูกางในบรรทัด (ไม่ลอยออกนอกจอ) */
+  @media (max-width:640px){
+    .wrap{justify-content:flex-start;padding-top:clamp(28px,7vh,56px)}
+    .choices{flex-direction:column;max-width:380px}
+    .choice-wrap,.choices > .choice{flex:none;width:100%;max-width:none}
+    .menu{position:static;margin-top:8px}
+    .choice:hover,.choice:focus-visible{transform:none}
+  }
+  /* จอเตี้ย (แนวนอนบนมือถือ / หน้าต่างเตี้ย): บีบระยะห่างให้พอดีหน้าเดียว */
+  @media (max-height:560px) and (min-width:641px){
+    .wrap{gap:14px;padding-top:20px;padding-bottom:20px}
+    .mark{width:46px;height:46px;font-size:18px} .kicker{margin:8px 0 4px}
+    .choice p{display:none}
+  }
+  /* จอใหญ่มาก: ไม่ให้ยืดจนดูโล่ง */
+  @media (min-width:1600px){ .choices{max-width:760px} .choice-wrap,.choices > .choice{max-width:360px} }
+  /* อุปกรณ์สัมผัส: ไม่ต้องมีเอฟเฟกต์ hover ค้าง */
+  @media (hover:none){ .choice:hover{transform:none;box-shadow:0 20px 50px -24px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.06)} }
+</style>
+</head>
+<body>
+  <div id="boot" role="status" aria-live="polite">
+    <div class="boot-mark"><i></i><i></i><svg stroke-linecap="round" class="lm" viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" aria-hidden="true"><path d="M60 68 V30"/><path d="M60 46 C44 46 31 37 27 18 C45 18 58 28 60 46 Z"/><path d="M60 38 C76 38 89 29 93 10 C75 10 62 20 60 38 Z"/></svg></div>
+    <div class="boot-txt"><b>Wellness Center</b>กำลังเตรียมพื้นที่ทำงาน…</div>
+    <div class="boot-bar"><i></i></div>
+  </div>
+  <canvas id="scene"></canvas>
+  <div class="veil"></div>
+
+  <div class="wrap">
+    <div>
+      <div class="mark"><svg stroke-linecap="round" class="lm" viewBox="0 0 120 72" fill="none" stroke="currentColor" stroke-width="6" stroke-linejoin="round" aria-hidden="true"><path d="M60 68 V30"/><path d="M60 46 C44 46 31 37 27 18 C45 18 58 28 60 46 Z"/><path d="M60 38 C76 38 89 29 93 10 C75 10 62 20 60 38 Z"/></svg></div>
+      <div class="kicker">Wellness Center</div>
+      <h1>ยินดีต้อนรับเข้าสู่ Wellness Center</h1>
+      <p class="sub">เลือกระบบที่ต้องการใช้งาน</p>
+    </div>
+
+    <div class="choices">
+      <div class="choice-wrap" id="mmtWrap">
+        <button class="choice" type="button" id="mmtBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="mmtMenu">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M12 7v6M9 10h6"/><path d="M10 21v-4h4v4"/></svg></div>
+          <h2>Lead ORG</h2>
+          <p>คนไข้ที่ส่งต่อมาจาก ORG — เลือก Target group</p>
+          <span class="go">เลือกกลุ่ม <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
+        <div class="menu" id="mmtMenu" role="menu">
+          <div class="head">Target group</div>
+          <a role="menuitem" href="wnc-app-leadorg.html?group=a" target="_top"><b>กลุ่มเป้าหมาย A · ตรวจสุขภาพ / เวลเนส / วัคซีน</b><small>ลูกค้าเงินสด Zone A ปี 2026</small></a><a role="menuitem" href="wnc-app-leadorg.html?group=b" target="_top"><b>กลุ่มเป้าหมาย B · วินิจฉัยตรงด้วย ICD-10</b><small>จับคู่รหัสโรค → บริการของศูนย์</small></a>
+        </div>
+      </div>
+      <a class="choice" href="wnc-app-tracking.html" target="_top">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h2>Tracking Lead</h2>
+        <p>บันทึกรายชื่อลูกค้า ประเมินสถานะ นัดหมาย Dashboard และ Performance รายคน</p>
+        <span class="go">เข้าใช้งาน <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+
+    <div class="foot">เข้าใช้ด้วยบัญชี <span>demo@example.com</span></div>
+  </div>
+
+<script>
+(function(){
+  const wrap = document.getElementById('mmtWrap'), btn = document.getElementById('mmtBtn');
+  const set = o => { wrap.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); if (o) { const f = wrap.querySelector('.menu a'); f && f.focus(); } };
+  btn.addEventListener('click', () => set(!wrap.classList.contains('open')));
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) set(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+/* ============================================================================
+   ฉาก 3D พื้นหลัง — "การฟื้นฟูระดับเซลล์" เล่นต่อเนื่องเหมือนวิดีโอ
+   ชั้นภาพ: 1) ม่านพลังงาน (shader noise ไหลช้าๆ)  2) เกลียว DNA คู่ที่ลอยผ่านกล้อง
+            3) สายพลังงานเรืองแสง  4) เซลล์โปร่งแสง  5) ฝุ่นทองลอยเป็นชั้นลึก
+   กล้องเคลื่อนเองตลอดเวลา (orbit ช้า + ลอยขึ้นลง) และขยับตามเมาส์เล็กน้อย
+   ============================================================================ */
+  const canvas = document.getElementById('scene');
+  /* ปิดหน้าจอรอโหลด — เรียกเมื่อฉากเฟรมแรกพร้อม หรือเมื่อ 3D ใช้ไม่ได้ (จะเหลือพื้นหลัง gradient) */
+  let booted = false;
+  function bootDone() {
+    if (booted) return; booted = true;
+    document.body.classList.add('ready');
+    const b = document.getElementById('boot');
+    if (b) { b.classList.add('done'); setTimeout(() => b.remove(), 800); }
+  }
+  setTimeout(bootDone, 3500);                                       // failsafe: ไม่ว่าอะไรเกิดขึ้น หน้าต้องเข้าได้เสมอ
+  if (!window.THREE) { bootDone(); return; }                        // โหลดไลบรารีไม่ได้ → เหลือพื้นหลัง gradient ของ CSS
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); }
+  catch (e) { bootDone(); return; }
+
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const small  = Math.min(innerWidth, innerHeight) < 700 || navigator.hardwareConcurrency <= 4;   // มือถือ/เครื่องเบา → ลดรายละเอียด
+  const Q = small ? { cells: 12, dust: 360, ribbon: 3, tube: 50 } : { cells: 22, dust: 660, ribbon: 5, tube: 90 };
+
+  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0a2019, 0.03);
+  const camera = new THREE.PerspectiveCamera(52, 1, 0.1, 120);
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  /* ---------- 1) ม่านพลังงานด้านหลังสุด (shader) ---------- */
+  const veilMat = new THREE.ShaderMaterial({
+    depthWrite: false, depthTest: false, transparent: true,
+    uniforms: { uTime: { value: 0 }, uAspect: { value: 1 } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.999, 1.0); }',
+    fragmentShader: [
+      'precision mediump float;',
+      'varying vec2 vUv; uniform float uTime; uniform float uAspect;',
+      'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }',
+      'float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);',
+      '  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y); }',
+      'float fbm(vec2 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 5; i++){ v += a * noise(p); p *= 2.03; a *= 0.5; } return v; }',
+      'void main(){',
+      '  vec2 uv = vUv; vec2 p = vec2((uv.x - 0.5) * uAspect, uv.y - 0.5);',
+      '  float t = uTime * 0.035;',
+      '  vec2 q = vec2(fbm(p * 2.2 + t), fbm(p * 2.2 - t + 4.7));',          // โดเมนบิด → ม่านไหลเป็นริ้ว
+      '  float n = fbm(p * 3.0 + q * 1.6 + vec2(0.0, t * 1.4));',
+      '  vec3 deep = vec3(0.027, 0.078, 0.055);',
+      '  vec3 teal = vec3(0.105, 0.325, 0.272);',
+      '  vec3 lift = vec3(0.196, 0.482, 0.392);',
+      '  vec3 col = mix(deep, teal, smoothstep(0.25, 0.75, n));',
+      '  col = mix(col, lift, smoothstep(0.62, 0.95, n) * 0.55);',
+      '  col += vec3(0.086, 0.063, 0.031) * pow(smoothstep(0.55, 1.0, fbm(p * 1.4 - t * 0.8)), 2.0);',   // เหลือบทองจางๆ
+      '  float vig = smoothstep(1.15, 0.25, length(p) * 1.35);',
+      '  gl_FragColor = vec4(col * (0.55 + 0.45 * vig), 1.0);',
+      '}'
+    ].join('\n')
+  });
+  const veil = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), veilMat);
+  veil.frustumCulled = false; veil.renderOrder = -10; scene.add(veil);
+
+  /* ---------- แสง ---------- */
+  scene.add(new THREE.AmbientLight(0x9fd9c4, 0.5));
+  const key = new THREE.PointLight(0xdec48a, 1.5, 70); key.position.set(7, 9, 12); scene.add(key);
+  const rim = new THREE.PointLight(0x37b394, 1.1, 70); rim.position.set(-9, -5, 6); scene.add(rim);
+
+  /* ---------- พื้นผิวจุดเรืองแสง (ใช้กับฝุ่นทอง) ---------- */
+  function glowTexture() {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d').createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, 'rgba(255,240,205,1)'); g.addColorStop(0.35, 'rgba(222,196,138,.55)'); g.addColorStop(1, 'rgba(222,196,138,0)');
+    const x = c.getContext('2d'); x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c);
+  }
+  const DOT = glowTexture();
+
+  /* ---------- 2) เกลียว DNA คู่ — หมุนและลอยผ่านกล้องไปเรื่อยๆ ---------- */
+  const beadGeo = new THREE.SphereGeometry(0.1, 10, 10);
+  const matGold = new THREE.MeshStandardMaterial({ color: 0xdec48a, emissive: 0x6a5220, emissiveIntensity: 0.8, roughness: 0.35 });
+  const matMint = new THREE.MeshStandardMaterial({ color: 0x9fd9c4, emissive: 0x1d5a48, emissiveIntensity: 0.8, roughness: 0.35 });
+  const rungMat = new THREE.MeshStandardMaterial({ color: 0x7fb8a6, transparent: true, opacity: 0.45 });
+  const rungGeo = new THREE.CylinderGeometry(0.026, 0.026, 1, 6); rungGeo.rotateZ(Math.PI / 2);
+  function makeHelix(turns) {
+    const g = new THREE.Group(), n = small ? 34 : 56;
+    for (let i = 0; i < n; i++) {
+      const t = i / n * Math.PI * turns, y = (i - n / 2) * 0.33;
+      const a = new THREE.Mesh(beadGeo, matGold); a.position.set(Math.cos(t) * 1.5, y, Math.sin(t) * 1.5); g.add(a);
+      const b = new THREE.Mesh(beadGeo, matMint); b.position.set(-Math.cos(t) * 1.5, y, -Math.sin(t) * 1.5); g.add(b);
+      if (i % 2 === 0) { const r = new THREE.Mesh(rungGeo, rungMat); r.position.y = y; r.scale.x = 3.0; r.rotation.y = -t; g.add(r); }
+    }
+    return g;
+  }
+  const helices = [];
+  [[8.5, 1.5, -14, 0.34], [-9.5, -2.5, -22, -0.28]].forEach((h, i) => {
+    const g = makeHelix(6 + i * 2);
+    g.position.set(h[0], h[1], h[2]); g.rotation.z = h[3];
+    scene.add(g); helices.push({ g, spin: i ? -0.10 : 0.13, drift: i ? 0.09 : 0.06, baseY: h[1] });
+  });
+
+  /* ---------- 3) สายพลังงานเรืองแสง (โค้งไหลผ่านฉาก) ---------- */
+  const ribbons = [];
+  for (let i = 0; i < Q.ribbon; i++) {
+    const pts = [];
+    for (let k = 0; k < 6; k++) pts.push(new THREE.Vector3(rnd(-16, 16), rnd(-8, 8), rnd(-26, 2)));
+    const curve = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.6);
+    const mat = new THREE.MeshBasicMaterial({
+      color: i % 2 ? 0x2fa478 : 0xc6a15b, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false
+    });
+    const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, Q.tube, 0.035, 6, false), mat);
+    scene.add(tube);
+    ribbons.push({ tube, mat, phase: rnd(0, Math.PI * 2), speed: rnd(0.4, 0.9), base: 0.22 });
+  }
+
+  /* ---------- 4) เซลล์โปร่งแสง — ลอยเข้าหากล้องแล้ววนกลับ ---------- */
+  const sphereGeo = new THREE.SphereGeometry(1, 22, 16);
+  const memMat = new THREE.MeshPhysicalMaterial({
+    color: 0x8fd3bd, transparent: true, opacity: 0.26, roughness: 0.16, metalness: 0,
+    clearcoat: 1, clearcoatRoughness: 0.3, depthWrite: false
+  });
+  const nucMat = new THREE.MeshStandardMaterial({ color: 0xc6a15b, emissive: 0x5a4218, emissiveIntensity: 0.75, roughness: 0.4 });
+  const cells = [];
+  for (let i = 0; i < Q.cells; i++) {
+    const r = rnd(0.3, 1.45), g = new THREE.Group();
+    const mem = new THREE.Mesh(sphereGeo, memMat); mem.scale.setScalar(r); g.add(mem);
+    const nuc = new THREE.Mesh(sphereGeo, nucMat); nuc.scale.setScalar(r * rnd(0.2, 0.34));
+    nuc.position.set(rnd(-0.25, 0.25) * r, rnd(-0.25, 0.25) * r, 0); g.add(nuc);
+    g.position.set(rnd(-15, 15), rnd(-8, 8), rnd(-30, 3));
+    scene.add(g);
+    cells.push({ g, mem, r, phase: rnd(0, Math.PI * 2), spin: rnd(0.05, 0.16), fwd: rnd(0.25, 0.75), sway: rnd(0.2, 0.7) });
+  }
+
+  /* ---------- 5) ฝุ่นทอง 3 ชั้นความลึก (พารัลแลกซ์) ---------- */
+  const dustLayers = [];
+  [[0.45, 0.10, -8], [0.28, 0.07, -18], [0.16, 0.05, -30]].forEach(([size, op, z], li) => {
+    const n = Math.round(Q.dust / 3), pos = new Float32Array(n * 3), spd = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      pos[i * 3] = rnd(-24, 24); pos[i * 3 + 1] = rnd(-14, 14); pos[i * 3 + 2] = z + rnd(-6, 6);
+      spd[i] = rnd(0.15, 0.6);
+    }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    const pts = new THREE.Points(geo, new THREE.PointsMaterial({
+      map: DOT, color: 0xdec48a, size: size, transparent: true, opacity: op + 0.35,
+      blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+    }));
+    scene.add(pts); dustLayers.push({ pts, geo, spd, n, li });
+  });
+
+  /* ---------- กล้อง: เคลื่อนเองตลอดเวลา + ตามเมาส์ ---------- */
+  let mx = 0, my = 0, tx = 0, ty = 0;
+  addEventListener('pointermove', e => { tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; }, { passive: true });
+  addEventListener('deviceorientation', e => {                                    // มือถือ: เอียงเครื่องแทนเมาส์
+    if (e.gamma == null) return; tx = Math.max(-1, Math.min(1, e.gamma / 35)); ty = Math.max(-1, Math.min(1, (e.beta - 45) / 45));
+  }, { passive: true });
+
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    veilMat.uniforms.uAspect.value = w / h;
+  }
+  addEventListener('resize', resize); resize();
+
+  /* ---------- ลูปเล่นต่อเนื่อง ---------- */
+  const clock = new THREE.Clock();
+  let raf = 0, running = false;
+  function frame() {
+    raf = requestAnimationFrame(frame);
+    const t = clock.getElapsedTime(), dt = Math.min(clock.getDelta(), 0.05);
+
+    veilMat.uniforms.uTime.value = t;
+
+    helices.forEach(h => {
+      h.g.rotation.y = t * h.spin;
+      h.g.position.y = h.baseY + Math.sin(t * h.drift) * 1.6;
+      h.g.position.z += dt * 0.35;                                   // ลอยเข้าหากล้อง
+      if (h.g.position.z > 6) h.g.position.z = -30;                  // วนกลับไปไกลสุด
+    });
+
+    ribbons.forEach(r => { r.mat.opacity = r.base + Math.sin(t * r.speed + r.phase) * 0.14; r.tube.rotation.z = Math.sin(t * 0.05 + r.phase) * 0.1; });
+
+    cells.forEach(c => {
+      c.g.position.z += dt * c.fwd;
+      c.g.position.x += Math.cos(t * 0.25 + c.phase) * dt * c.sway * 0.6;
+      c.g.position.y += Math.sin(t * 0.3 + c.phase) * dt * c.sway * 0.5;
+      c.g.rotation.y = t * c.spin + c.phase;
+      const pulse = 1 + Math.sin(t * 0.8 + c.phase) * 0.05;          // เซลล์หายใจ
+      c.mem.scale.setScalar(c.r * pulse);
+      if (c.g.position.z > 5) { c.g.position.set(rnd(-15, 15), rnd(-8, 8), -30); }
+    });
+
+    dustLayers.forEach(L => {
+      const a = L.geo.attributes.position.array;
+      for (let i = 0; i < L.n; i++) {
+        a[i * 3 + 1] += L.spd[i] * dt * 0.25;                        // ลอยขึ้น
+        a[i * 3 + 2] += L.spd[i] * dt * 0.55;                        // เข้าหากล้อง
+        if (a[i * 3 + 1] > 15) a[i * 3 + 1] = -15;
+        if (a[i * 3 + 2] > 4) { a[i * 3 + 2] = -34; a[i * 3] = rnd(-24, 24); }
+      }
+      L.geo.attributes.position.needsUpdate = true;
+      L.pts.rotation.z = Math.sin(t * 0.02 + L.li) * 0.05;
+    });
+
+    mx += (tx - mx) * 0.035; my += (ty - my) * 0.035;                // ตามเมาส์แบบหน่วง
+    const orbit = t * 0.045;                                          // กล้องโคจรช้าๆ เอง
+    camera.position.set(Math.sin(orbit) * 2.2 + mx * 2.0, Math.sin(t * 0.13) * 0.9 - my * 1.3, 14 + Math.cos(orbit) * 1.4);
+    camera.lookAt(0, Math.sin(t * 0.07) * 0.4, -4);
+    camera.rotation.z = Math.sin(t * 0.05) * 0.015;                   // เอียงกล้องนิดๆ ให้เหมือนถ่ายวิดีโอ
+
+    renderer.render(scene, camera);
+    if (!booted) bootDone();                                        // เฟรมแรกวาดเสร็จ → เปิดหน้าจริง
+  }
+  function start() { if (running) return; running = true; clock.getDelta(); frame(); }
+  function stop()  { running = false; cancelAnimationFrame(raf); }
+
+  if (reduce) { veilMat.uniforms.uTime.value = 6; renderer.render(scene, camera); bootDone(); }   // ผู้ใช้ปิดแอนิเมชัน → เฟรมนิ่ง 1 ภาพ
+  else {
+    start();
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());   // สลับแท็บแล้วหยุด (ประหยัดแบต)
+  }
+})();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
   <!-- Phubordin Phanyosri | Data Analyst Portfolio -->
   <url>
     <loc>https://phubordin.github.io/</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>1.0</priority>
   </url>
   <!-- Phubordin Phanyosri | Data Analyst Portfolio -->
@@ -15,7 +15,7 @@
   <!-- Project Overview -->
   <url>
     <loc>https://phubordin.github.io/project.html</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-06</lastmod>
     <priority>0.9</priority>
   </url>
   <!-- About Me - Phubordin -->
@@ -33,13 +33,13 @@
   <!-- Work Experience -->
   <url>
     <loc>https://phubordin.github.io/experience.html</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.8</priority>
   </url>
   <!-- Experience - มิตรไมตรีการแพทย์ -->
   <url>
     <loc>https://phubordin.github.io/experience_mmt.html</loc>
-    <lastmod>2026-09-08</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.8</priority>
   </url>
   <!-- Contact - Phubordin -->
@@ -51,7 +51,7 @@
   <!-- Performance Dashboard — มิตรไมตรีการแพทย์ -->
   <url>
     <loc>https://phubordin.github.io/mmt-dashboard.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.7</priority>
   </url>
   <!-- วิเคราะห์ลูกค้าเปลี่ยนสิทธิ์ + Line OA — มิตรไมตรีการแพทย์ -->
@@ -93,13 +93,19 @@
   <!-- ศูนย์รวมข้อมูลฝ่าย FPA — มิตรไมตรีการแพทย์ -->
   <url>
     <loc>https://phubordin.github.io/mmt-portal.html</loc>
-    <lastmod>2026-09-02</lastmod>
+    <lastmod>2026-10-10</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Voice of Customer — มิตรไมตรีการแพทย์ -->
+  <url>
+    <loc>https://phubordin.github.io/mmt-review-case.html</loc>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <!-- คัดกลุ่มเป้าหมายสินค้าราคาสูง — มิตรไมตรีการแพทย์ -->
   <url>
     <loc>https://phubordin.github.io/mmt-target-group.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
   <!-- Project - Pokemon Card -->
@@ -184,6 +190,12 @@
   <url>
     <loc>https://phubordin.github.io/project_vizdimond_dsb10.html</loc>
     <lastmod>2026-08-30</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <!-- Lead Tracker ศูนย์เวลเนส — มิตรไมตรีการแพทย์ -->
+  <url>
+    <loc>https://phubordin.github.io/wnc-lead-tracker.html</loc>
+    <lastmod>2026-10-10</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>
